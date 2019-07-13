@@ -28,3 +28,4 @@ branches:
 env:
     global:
         - GH_REF: github.com/1156721874/1156721874.github.io.git
+        - GH_TOKEN: 923fb545549d8383078594c2ad14bc5f7ccd3b58

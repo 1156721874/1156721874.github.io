@@ -12,7 +12,7 @@ categories: cloud
   所在团队做的是跨境电商的服务，海量的商品存在mysql集群当中，当商品上架的时刻，需要将mysql的数据同步到elasticsearch集群当中，目的是为了给用户提供快速的搜索服务，同步的最小单元是表，即将一张表同步到es集群，老的系统的做法是当随着业务的增长，表结构会变化，或者增加，修改表等等一些DDL操作，之前的做法是每当这些变化发生的时候，需要在搜索中心的工程当中编写正对于变化的表的同步代码，适配mysql的变化，比如新增加了一张表，需要对这张表的数据同步到es，就需要写一个正对于此表的同步任务，修改表也是如此，需要制定开发周期，排工作量，测试计划等等。
 
 ##### 之前的架构设计
-  针对于每一个mysql数据库实例都对接一个[https://github.com/alibaba/canal](canal)服务,canal监听mysql的binlog日志，然后将日志push到mq（canal支持kafka和rocketmq）里边，然后我们的app就是mq的消费者，消费mq的消息，消费的过程就是从mq的broker执行poll，拉取消息，然后将消息解析，得到消息里边的业务id，通过业务id去真实的mysql数据查询数据（重新查询一次mysql，这么做的原因是保证数据的强一致性），然后将数据刷新到es集群，完成消息的消费。
+  针对于每一个mysql数据库实例都对接一个[canal](https://github.com/alibaba/canal)服务,canal监听mysql的binlog日志，然后将日志push到mq（canal支持kafka和rocketmq）里边，然后我们的app就是mq的消费者，消费mq的消息，消费的过程就是从mq的broker执行poll，拉取消息，然后将消息解析，得到消息里边的业务id，通过业务id去真实的mysql数据查询数据（重新查询一次mysql，这么做的原因是保证数据的强一致性），然后将数据刷新到es集群，完成消息的消费。
   ![old_structure.png](old_structure.png)
 
 #### 现有系统存在的问题
@@ -49,7 +49,7 @@ categories: cloud
     - 前提是预先创建canal实例
   - 动态创建数据库
   - 动态创建表
-  - 支持es的[https://www.elastic.co/guide/cn/elasticsearch/guide/current/parent-child.html](Parent-child) 关系
+  - 支持es的[Parent-child](https://www.elastic.co/guide/cn/elasticsearch/guide/current/parent-child.html) 关系
   - 支持es映射的递归嵌套(支持nest嵌套)
   - 同步异常，支持断点续传
   - 表的一对多，一对一关联
@@ -58,7 +58,7 @@ categories: cloud
 
 ### 功能演示
 
-  - [https://1156721874.github.io/2018/09/28/ELK-ElasticSearch-Logstash-Kibana%E6%90%AD%E5%BB%BA%E5%AE%9E%E6%97%B6%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90%E5%B9%B3%E5%8F%B0/](es集群搭建)、[https://github.com/ctripcorp/apollo](apollo配置中心部署)此处不在熬述，参考官方和之前的博客。
+  - [es集群搭建](https://1156721874.github.io/2018/09/28/ELK-ElasticSearch-Logstash-Kibana%E6%90%AD%E5%BB%BA%E5%AE%9E%E6%97%B6%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90%E5%B9%B3%E5%8F%B0/)、[apollo配置中心部署](https://github.com/ctripcorp/apollo)此处不在熬述，参考官方和之前的博客。
 
   - 数据库脚本配置请使用工程里边的init.sql执行初始化.
 
@@ -153,7 +153,7 @@ categories: cloud
       - 获取jdbc驱动，jdbc驱动使用的c3p0数据库连接池，并且设置了不会让链接空闲失效，在SynchronizeFactory层面是模板模式。
       - 组装存储到es的JSON对象，这个对象是按照建立的mapping格式组装的，我们设置的父子关系，嵌套等设置，这个JSON对象都要遵守。
       - 检查索引和索引type，如果没有的话就会创建。
-      - 父子关系的检查，es当中规定parent type和child type必须在同一个es分片，否则就会产生查询混乱，当我们修改了一个child的pid的时候，这个时候pid对应的parent可能不和child在同一个分片，这个时候我们要将child删除，重新插入child，确保child和parent在同一个分片，[https://www.elastic.co/guide/cn/elasticsearch/guide/current/indexing-parent-child.html](parent-child扩展阅读)
+      - 父子关系的检查，es当中规定parent type和child type必须在同一个es分片，否则就会产生查询混乱，当我们修改了一个child的pid的时候，这个时候pid对应的parent可能不和child在同一个分片，这个时候我们要将child删除，重新插入child，确保child和parent在同一个分片，[parent-child扩展阅读](https://www.elastic.co/guide/cn/elasticsearch/guide/current/indexing-parent-child.html)
       - 调用es的java api刷新数据到es集群。
 #### 消息监听流程
   当一个索引创建成功处于available状态的时候，就会被消息监听流程使用，当mysql产生binlog，会被canal收到，然后canal将binlog推送到mq里边，然后我们的应用就是mq的消费者，我们的消费者是可以在界面上配置的，配置完毕之后就会在程序里边创建一个消费者实例，进入到监听，监听到消息之后消费的流程如下：
@@ -165,7 +165,7 @@ categories: cloud
     - 获取jdbc驱动，jdbc驱动使用的c3p0数据库连接池，并且设置了不会让链接空闲失效，在SynchronizeFactory层面是模板模式。
     - 组装存储到es的JSON对象，这个对象是按照建立的mapping格式组装的，我们设置的父子关系，嵌套等设置，这个JSON对象都要遵守。
     - 检查索引和索引type，如果没有的话就会创建。
-    - 父子关系的检查，es当中规定parent type和child type必须在同一个es分片，否则就会产生查询混乱，当我们修改了一个child的pid的时候，这个时候pid对应的parent可能不和child在同一个分片，这个时候我们要将child删除，重新插入child，确保child和parent在同一个分片，[https://www.elastic.co/guide/cn/elasticsearch/guide/current/indexing-parent-child.html](parent-child扩展阅读)
+    - 父子关系的检查，es当中规定parent type和child type必须在同一个es分片，否则就会产生查询混乱，当我们修改了一个child的pid的时候，这个时候pid对应的parent可能不和child在同一个分片，这个时候我们要将child删除，重新插入child，确保child和parent在同一个分片，[parent-child扩展阅读](https://www.elastic.co/guide/cn/elasticsearch/guide/current/indexing-parent-child.html)
     - 调用es的java api刷新数据到es集群。
 
 #### 类图

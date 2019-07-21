@@ -156,18 +156,21 @@ categories: cloud
       - 父子关系的检查，es当中规定parent type和child type必须在同一个es分片，否则就会产生查询混乱，当我们修改了一个child的pid的时候，这个时候pid对应的parent可能不和child在同一个分片，这个时候我们要将child删除，重新插入child，确保child和parent在同一个分片，[parent-child扩展阅读](https://www.elastic.co/guide/cn/elasticsearch/guide/current/indexing-parent-child.html)
       - 调用es的java api刷新数据到es集群。
 
+
 #### 消息监听流程
-    当一个索引创建成功处于available状态的时候，就会被消息监听流程使用，当mysql产生binlog，会被canal收到，然后canal将binlog推送到mq里边，然后我们的应用就是mq的消费者，我们的消费者是可以在界面上配置的，配置完毕之后就会在程序里边创建一个消费者实例，进入到监听，监听到消息之后消费的流程如下：
-      - 拿到应用的上下文
-      - 解析消息
-      - 数据库和消息匹配检查
-      - table和消息匹配检查
-      - 过滤不感兴趣的操作，只对插入，修改，删除感兴趣
-      - 获取jdbc驱动，jdbc驱动使用的c3p0数据库连接池，并且设置了不会让链接空闲失效，在SynchronizeFactory层面是模板模式。
-      - 组装存储到es的JSON对象，这个对象是按照建立的mapping格式组装的，我们设置的父子关系，嵌套等设置，这个JSON对象都要遵守。
-      - 检查索引和索引type，如果没有的话就会创建。
-      - 父子关系的检查，es当中规定parent type和child type必须在同一个es分片，否则就会产生查询混乱，当我们修改了一个child的pid的时候，这个时候pid对应的parent可能不和child在同一个分片，这个时候我们要将child删除，重新插入child，确保child和parent在同一个分片，[parent-child扩展阅读](https://www.elastic.co/guide/cn/elasticsearch/guide/current/indexing-parent-child.html)
-      - 调用es的java api刷新数据到es集群。
+
+  当一个索引创建成功处于available状态的时候，就会被消息监听流程使用，当mysql产生binlog，会被canal收到，然后canal将binlog推送到mq里边，然后我们的应用就是mq的消费者，我们的消费者是可以在界面上配置的，配置完毕之后就会在程序里边创建一个消费者实例，进入到监听，监听到消息之后消费的流程如下：
+
+  - 拿到应用的上下文
+  - 解析消息
+  - 数据库和消息匹配检查
+  - table和消息匹配检查
+  - 过滤不感兴趣的操作，只对插入，修改，删除感兴趣
+  - 获取jdbc驱动，jdbc驱动使用的c3p0数据库连接池，并且设置了不会让链接空闲失效，在SynchronizeFactory层面是模板模式。
+  - 组装存储到es的JSON对象，这个对象是按照建立的mapping格式组装的，我们设置的父子关系，嵌套等设置，这个JSON对象都要遵守。
+  - 检查索引和索引type，如果没有的话就会创建。
+  - 父子关系的检查，es当中规定parent type和child type必须在同一个es分片，否则就会产生查询混乱，当我们修改了一个child的pid的时候，这个时候pid对应的parent可能不和child在同一个分片，这个时候我们要将child删除，重新插入child，确保child和parent在同一个分片，[parent-child扩展阅读](https://www.elastic.co/guide/cn/elasticsearch/guide/current/indexing-parent-child.html)
+  - 调用es的java api刷新数据到es集群。
 
 #### 类图
   ![SearchCenterCLassDiagram.jpg](SearchCenterCLassDiagram.jpg)

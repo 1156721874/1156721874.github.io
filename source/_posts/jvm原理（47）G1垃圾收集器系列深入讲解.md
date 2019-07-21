@@ -118,8 +118,8 @@ young Gc 而发生的。
 
 #### G1在运行过程中主要模式
 - YGC（不同于CMS）
-- 并发阶段
-- 混合阶段
+- 并发阶段 (为混合阶段提供数据支持，对区域进行标记)
+- 混合阶段 （首先进行YGC，然后根据并发阶段标记出来的区域进行最优化回收）
 - Full GC（一般是G1出现问题时发生，G1出现问题时发生）
 - G1 YGC在Eden充满时触发，在回收后所有之前属于Eden的区块全部变成空白，即不属于任何一个分区（Eden、Survivor、old）
 
@@ -127,7 +127,7 @@ young Gc 而发生的。
 
 - 什么时候触发Mixed GC?
 - 由一些参数控制，另外也控制着那些老年代Region会被选入CSet（收集集合）
-- G1HeapWastePercent：在global concurrent marking结束之后，我们可以知道old gen regions中有多少空间要被回收，在每次YGC之后和再次发生Mixed GC之前，会检查垃圾占比是否达到才参数，主要达到了，下次才会发生Mixed GC
+- G1HeapWastePercent：在global concurrent marking结束之后，我们可以知道old gen regions中有多少空间要被回收，在每次YGC之后和再次发生Mixed GC之前，会检查垃圾占比是否达到此参数，只要达到了，下次才会发生Mixed GC
 - G1MixedGCLiveThresholdPercent：old generation region中的存活对象的占比，只有在此参数之下，才会被选入Cset（活着的对象比较少，就是垃圾比较多，才会纳入收集集合）。
 - G1MixedGCCountTarget：一次global concurrent marking之后，最多执行mixed gc的次数。
 - G1OldCSetRegionThresoldPercent：一次mixed Gc中能被选入CSet的最多old generation region数量。
@@ -166,7 +166,7 @@ https://www.oracle.com/technetwork/tutorials/tutorials-1876574.html
   - 检测从年轻代指向老年代的对象
 - 阶段4：对象拷贝
   - 拷贝存活的对象到survivor/old区域
-- jieduan5：处理引用队列
+- 阶段5：处理引用队列
   - 软引用，弱引用，虚引用处理
 
 #### 再谈Mised GC
@@ -240,10 +240,10 @@ https://www.oracle.com/technetwork/tutorials/tutorials-1876574.html
 - 漏标与误标
   - 误标没什么关系，顶多造成浮动垃圾，在下次gc还是可以回收的，但是漏标的后果是致命的，把本应该存活的对象给回收了，从而影响的程序的正确性。
 - 漏标情况只会发生在白色对象中，且满足以下任意一个条件
-    - 并发标记时，应用线程给一个黑色对象的引用类型字段赋值了该白色对象（黑色对象意味着自己和额孩子都被扫描了，而子啊黑色下边挂白色的，白色会被认为是垃圾）
+    - 并发标记时，应用线程给一个黑色对象的引用类型字段赋值了该白色对象（黑色对象意味着自己和孩子都被扫描了，而黑色下边挂白色的，白色会被认为是垃圾）
     - 并发标记时，应用线程删除所有灰色对象到该白色对象的引用（灰色的意味着孩子还没有被扫描，此时删除孩子的引用）。
     ![three-color6.png](three-color6.png)
-    三个灰色对象指向都一个白色对象，此时删除三个灰色对象到白色对象的引用，此时我们可能认为W会被当做垃圾回收，但是存在一种情况是一个黑色对象也引用了白色对象，这样 就回到了第一种情况。
+    三个灰色对象都指向一个白色对象，此时删除三个灰色对象到白色对象的引用，此时我们可能认为W会被当做垃圾回收，但是存在一种情况是一个黑色对象也引用了白色对象，这样 就回到了第一种情况。
 
 - 对于第一种情况，利用post-write- barrier，记录所有新增得引用关系，然后根据这些引用关系为根重新扫描一遍
 - 对于第二种情况，利用pre-write barrier，将所有即将删除的引用关系的旧引用记录下来，最后以这些引用为根重新扫描一遍。
@@ -254,7 +254,7 @@ https://www.oracle.com/technetwork/tutorials/tutorials-1876574.html
 - 设置的时间越短意味着 每次收集的CSet越小，导致垃圾逐步积累变多，最终不得不退化成Serial GC；停顿时间设置的过长，那么会导致每次都会产生长时间的停顿，影响了程序对外的响应时间。
 
 ### G1的收集模式
-- Young GC：收集年轻代里的Region
+- Young GC：收集年轻代里的Region+
 - Mixed gc :年轻代的所有Region + 全局并发标记阶段选出的收益高的Regionold（old Region）
 - 无无论是Young GC还是Mixed GC都只是并发拷贝的阶段。
 - 分代G1的模式下选择CSet有两种子模式，分别对应Young GC和Mixed GC
@@ -275,3 +275,109 @@ https://www.oracle.com/technetwork/tutorials/tutorials-1876574.html
   - 设置了新生代大小相当于放弃了G1为我们做的自动调优，我们需要做的只是设置整个堆内存的大小，剩下的交给G1自己去分配各个代的大小即可。
 - 关注Evacuation Failure
   - Evacuation Failure 类似于CMS里面的晋升失败，堆空间的垃圾太多导致无法完成Region之间的拷贝，于是不得不退化成Ful GC来做一次全局范围内的垃圾收集。
+
+### G1实例讲解
+  编写程序：
+  ```
+  /**
+  -verbose:gc
+  -Xms10m
+  -Xmx10m
+  -XX:+UseG1GC
+  -XX:+PrintGCDetails
+  -XX:+PrintGCDateStamps
+  -XX:MaxGCPauseMillis=200m
+  */
+  public class MyTest {
+      public static void main(String[] args) {
+          int size = 1024 * 1024;
+          byte[] myAlloc1 = new byte[size];
+          byte[] myAlloc2 = new byte[size];
+          byte[] myAlloc3 = new byte[size];
+          byte[] myAlloc4 = new byte[size];
+          System.out.println("hello world");
+      }
+  }
+
+  ```
+
+  运行结果：
+  ```
+  2019-07-21T09:56:58.080+0800: [GC pause (G1 Humongous Allocation) (young) (initial-mark), 0.0022068 secs]
+  【解释】：
+  Humongous大对象空间的申请，因为我们创建了一个1M大小的字节数组。
+  同时开始一次young GC，young GC会有一次初始标记。
+     [Parallel Time: 1.4 ms, GC Workers: 8]
+     【解释】：
+     并发时间是1.4 ms，一共有8个线程执行
+        [GC Worker Start (ms): Min: 293.7, Avg: 293.8, Max: 294.1, Diff: 0.4]
+        [Ext Root Scanning (ms): Min: 0.2, Avg: 0.7, Max: 1.3, Diff: 1.1, Sum: 5.9]
+        [Update RS (ms): Min: 0.0, Avg: 0.0, Max: 0.0, Diff: 0.0, Sum: 0.0]
+           [Processed Buffers: Min: 0, Avg: 0.0, Max: 0, Diff: 0, Sum: 0]
+        [Scan RS (ms): Min: 0.0, Avg: 0.0, Max: 0.0, Diff: 0.0, Sum: 0.0]
+        [Code Root Scanning (ms): Min: 0.0, Avg: 0.0, Max: 0.0, Diff: 0.0, Sum: 0.0]
+        [Object Copy (ms): Min: 0.0, Avg: 0.3, Max: 0.7, Diff: 0.7, Sum: 2.7]
+        [Termination (ms): Min: 0.0, Avg: 0.0, Max: 0.1, Diff: 0.1, Sum: 0.4]
+           [Termination Attempts: Min: 1, Avg: 4.5, Max: 9, Diff: 8, Sum: 36]
+        【解释】：
+        以上五个步骤对应之前的young GC理论;
+        - 阶段1：根扫描
+          - 静态和本地对象被扫描
+        - 阶段2：更新RS
+          - 处理dirty card队列更新RS
+        - 阶段3：处理RS
+          - 检测从年轻代指向老年代的对象
+        - 阶段4：对象拷贝
+          - 拷贝存活的对象到survivor/old区域
+        - 阶段5：处理引用队列
+          - 软引用，弱引用，虚引用处理        
+
+        [GC Worker Other (ms): Min: 0.0, Avg: 0.1, Max: 0.1, Diff: 0.1, Sum: 0.5]
+        [GC Worker Total (ms): Min: 1.0, Avg: 1.2, Max: 1.3, Diff: 0.4, Sum: 9.5]
+        [GC Worker End (ms): Min: 295.0, Avg: 295.0, Max: 295.0, Diff: 0.0]
+        【解释】：
+        GC线程在其他任务花费的时间，一些统计信息。
+     [Code Root Fixup: 0.0 ms]
+     [Code Root Purge: 0.0 ms]
+     [Clear CT: 0.2 ms]
+     【解释】：
+     CT：card table
+     [Other: 0.5 ms]
+        [Choose CSet: 0.0 ms]
+        【解释】：回收集合，选择那些回收集合
+        [Ref Proc: 0.2 ms]
+        【解释】：软引用，弱引用等花费的时间
+        [Ref Enq: 0.0 ms]
+        【解释】：引用的信息进入到队列当中
+        [Redirty Cards: 0.2 ms]
+        [Humongous Register: 0.0 ms]
+        [Humongous Reclaim: 0.0 ms]
+        [Free CSet: 0.0 ms]
+        【解释】：对回收集合进行释放，回收
+     [Eden: 3072.0K(4096.0K)->0.0B(2048.0K) Survivors: 0.0B->1024.0K Heap: 4291.8K(10.0M)->2900.1K(10.0M)]
+     【解释】：执行完young gc之后整个堆的一个状态；
+     Eden空间有原来的3072.0K变成了0，Survivors有原来的0变成了1024K，证明里边多了一个对象的大小，整个对象来自于eden，
+     Heap是堆的大小是10M，我们jvm参数指定的，释放完之后现在的大小是2900.1K
+   [Times: user=0.00 sys=0.00, real=0.00 secs]
+  2019-07-21T09:56:58.083+0800: [GC concurrent-root-region-scan-start]
+  2019-07-21T09:56:58.085+0800: [GC concurrent-root-region-scan-end, 0.0016524 secs]
+  2019-07-21T09:56:58.085+0800: [GC concurrent-mark-start]
+  【解释】：
+  并发的一些处理，root scan的开始和结束
+  并发标记的开始
+  hello world
+  2019-07-21T09:56:58.085+0800: [GC concurrent-mark-end, 0.0000945 secs]
+  2019-07-21T09:56:58.085+0800: [GC remark 2019-07-21T09:56:58.085+0800: [Finalize Marking, 0.0002648 secs] 2019-07-21T09:56:58.085+0800: [GC ref-proc, 0.0004676 secs] 2019-07-21T09:56:58.086+0800: [Unloading, 0.0004559 secs], 0.0015282 secs]
+   [Times: user=0.00 sys=0.00, real=0.00 secs]
+  2019-07-21T09:56:58.087+0800: [GC cleanup 5009K->5009K(10M), 0.0011514 secs]
+   [Times: user=0.00 sys=0.00, real=0.00 secs]
+  Heap
+   garbage-first heap   total 10240K, used 4948K [0x00000000ff600000, 0x00000000ff700050, 0x0000000100000000)
+    region size 1024K, 2 young (2048K), 1 survivors (1024K)
+   Metaspace       used 3491K, capacity 4498K, committed 4864K, reserved 1056768K
+    class space    used 387K, capacity 390K, committed 512K, reserved 1048576K
+    【解释】：
+    G1收集器，堆大小10240K，已经使用4948K，region的大小是1024K，这个很重要，同时也说明了为什么会创建Humongous，因为1024K超出了region的一半的大小，2个young，有2个region是young，一个survivors是1024K，其他就是old区域。
+    Metaspace是元空间的一些情况。
+
+  ```

@@ -567,9 +567,13 @@ public ConfigurableApplicationContext run(String... args) {
   //启动所有监听器，发布Application启动事件。
   listeners.starting();
   try {
+    //将参数封装为ApplicationArguments
     ApplicationArguments applicationArguments = new DefaultApplicationArguments(args);
+    //环境的准备
     ConfigurableEnvironment environment = prepareEnvironment(listeners,applicationArguments);
+    //配置忽略的bean信息
     configureIgnoreBeanInfo(environment);
+    //打印banner
     Banner printedBanner = printBanner(environment);
     context = createApplicationContext();
     exceptionReporters = getSpringFactoriesInstances(SpringBootExceptionReporter.class,
@@ -702,7 +706,7 @@ private void configureHeadlessProperty() {
 ```
 SYSTEM_PROPERTY_JAVA_AWT_HEADLESS属性表达意图：这是一个服务器应用，没有显示器，没有键盘，没有鼠标的应用。
 
-#### getRunListeners()方法
+#### getRunListeners()方法以及监听器模式的经典应用
 ```
 private SpringApplicationRunListeners getRunListeners(String[] args) {
   // SpringApplicationRunListener的构造器需要2个参数：SpringApplication和string数组。
@@ -822,3 +826,308 @@ ApplicationStartingEvent
 
 ##### 小结
 应用在启动的时候，会在某一些时间点发布一些事件，发对对象是所有注册的事件监听器，事件监听器自己决定是否感兴趣和处理这个事件，这是一种监听器设计模式的体现，监听器都有一个源，就是监听器的主题，源是Application本身，SpringApplicationRunListeners在不同的时间点发布不同的事件对象。
+
+
+#### environment组件的重要作用详解
+##### Environment doc解读
+我们走到了【ConfigurableEnvironment environment = prepareEnvironment(listeners,applicationArguments);】这行代码，首先理解下ConfigurableEnvironment,它的父类是Environment，看下Environment的doc：
+
+org.springframework.core.env
+public interface Environment extends PropertyResolver
+
+Interface representing the environment in which the current application is running. Models two key aspects of the application environment: profiles and properties. Methods related to property access are exposed via the PropertyResolver superinterface.
+A profile is a named, logical group of bean definitions to be registered with the container only if the given profile is active. Beans may be assigned to a profile whether defined in XML or via annotations; see the spring-beans 3.1 schema or the `@Profile` annotation for syntax details. The role of the Environment object with relation to profiles is in determining which profiles (if any) are currently active, and which profiles (if any) should be active by default.
+Properties play an important role in almost all applications, and may originate from a variety of sources: properties files, JVM system properties, system environment variables, JNDI, servlet context parameters, ad-hoc Properties objects, Maps, and so on. The role of the environment object with relation to properties is to provide the user with a convenient service interface for configuring property sources and resolving properties from them.
+Beans managed within an ApplicationContext may register to be EnvironmentAware or `@Inject` the Environment in order to query profile state or resolve properties directly.
+In most cases, however, application-level beans should not need to interact with the Environment directly but instead may have to have ${...} property values replaced by a property placeholder configurer such as PropertySourcesPlaceholderConfigurer, which itself is EnvironmentAware and as of Spring 3.1 is registered by default when using <context:property-placeholder/>.
+Configuration of the environment object must be done through the ConfigurableEnvironment interface, returned from all AbstractApplicationContext subclass getEnvironment() methods. See ConfigurableEnvironment Javadoc for usage examples demonstrating manipulation of property sources prior to application context refresh().
+
+代表了一种当前应用正在运行的环境，有两个很重要应用环境的方面：prifile和properties,访问属性的方法通过PropertyResolver父接口提供。
+profile是被具名的，逻辑的bean的分组，当给定的profile是活动的状态时，这些bean定义会被被注册到容器当中，bean无论是xml定义或者annotation的形式，bean会被关联一个profile，请看 spring-beans 3.1的schema了解Profile注解的语法详情，环境的角色用来决定它关联的profiles，那些profile当前是活动的，并且这些profiles默认情况下是活动的。
+在大多数的应用中，Properties扮演了一个重要的角色，它可能来自各种各样的来源，比如属性文件，jvm的系统属性，系统环境变量，jndi，servlet山下文参数，及时变更的属性对象，map，等等，关联属性的environment对象的这种角色，为用户提供了方便的属性配置属性解析的接口服务。
+ApplicationContext里边注册的这些bean可以是EnvironmentAware或者是 `@Inject`的，这些可以用来查询profile状态和属性解析。
+在大多数的情况下，应用级别的bean不需要直接和Environment交互，但是可以用一种 ${...}这种形式的占位符配置器的方式去配置，比如PropertySourcesPlaceholderConfigurer，他自己本身就是环境组件，在Spring 3.1当中，通过使用<context:property-placeholder/>进行注册。
+环境对象的配置必须通过ConfigurableEnvironment接口，从AbstractApplicationContext所有子类的getEnvironment方法返回。
+
+##### ConfigurableEnvironment doc解读
+接下来是ConfigurableEnvironment，也就是Environment的子类，看一下doc：
+org.springframework.core.env public interface ConfigurableEnvironment extends Environment, ConfigurablePropertyResolver
+
+Configuration interface to be implemented by most if not all Environment types. Provides facilities for setting active and default profiles and manipulating underlying property sources. Allows clients to set and validate required properties, customize the conversion service and more through the ConfigurablePropertyResolver superinterface.
+Manipulating property sources
+Property sources may be removed, reordered, or replaced; and additional property sources may be added using the MutablePropertySources instance returned from getPropertySources(). The following examples are against the StandardEnvironment implementation of ConfigurableEnvironment, but are generally applicable to any implementation, though particular default property sources may differ.
+Example: adding a new property source with highest search priority
+   ConfigurableEnvironment environment = new StandardEnvironment();
+   MutablePropertySources propertySources = environment.getPropertySources();
+   Map<String, String> myMap = new HashMap<>();
+   myMap.put("xyz", "myValue");
+   propertySources.addFirst(new MapPropertySource("MY_MAP", myMap));
+
+Example: removing the default system properties property source
+   MutablePropertySources propertySources = environment.getPropertySources();
+   propertySources.remove(StandardEnvironment.SYSTEM_PROPERTIES_PROPERTY_SOURCE_NAME)
+
+Example: mocking the system environment for testing purposes
+   MutablePropertySources propertySources = environment.getPropertySources();
+   MockPropertySource mockEnvVars = new MockPropertySource().withProperty("xyz", "myValue");
+   propertySources.replace(StandardEnvironment.SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME, mockEnvVars);
+
+When an Environment is being used by an ApplicationContext, it is important that any such PropertySource manipulations be performed before the context's refresh() method is called. This ensures that all property sources are available during the container bootstrap process, including use by property placeholder configurers.
+一个不是被所有也是被大多数Environment类型所实现的配置接口，提供了设置活动的默认的profiles，以及操作底层的属性元的基础设施，允许客户端设置和验证所要求的属性，定制转换服务，都是通过ConfigurablePropertyResolver这样的一个父接口进行的。
+如何操纵属性源？
+属性源可以被删除，重排序也可以被替换，并且额外的属性来源可以通过MutablePropertySources进行添加，通过getPropertySources方法进行获取，接下来的举例针对于ConfigurableEnvironment的标准环境的实现，不过和特定的默认的属性源有点不同。
+例子：添加了一个高搜索优先级的属性源：
+```
+ConfigurableEnvironment environment = new StandardEnvironment();
+MutablePropertySources propertySources = environment.getPropertySources();
+Map<String, String> myMap = new HashMap<>();
+myMap.put("xyz", "myValue");
+propertySources.addFirst(new MapPropertySource("MY_MAP", myMap));
+```
+举例：删除默认系统属性源：
+```
+MutablePropertySources propertySources = environment.getPropertySources();
+propertySources.remove(StandardEnvironment.SYSTEM_PROPERTIES_PROPERTY_SOURCE_NAME)
+```
+举例：针对测试的目的模拟系统的环境：
+```
+MutablePropertySources propertySources = environment.getPropertySources();
+MockPropertySource mockEnvVars = new MockPropertySource().withProperty("xyz", "myValue");
+propertySources.replace(StandardEnvironment.SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME, mockEnvVars);
+```
+##### prepareEnvironment方法
+它的逻辑如下：
+```
+private ConfigurableEnvironment prepareEnvironment(SpringApplicationRunListeners listeners,  ApplicationArguments applicationArguments) {
+  // Create and configure the environment
+  //存在环境就返回，不存在就创建
+  ConfigurableEnvironment environment = getOrCreateEnvironment();
+  configureEnvironment(environment, applicationArguments.getSourceArgs());
+  listeners.environmentPrepared(environment);
+  bindToSpringApplication(environment);
+  if (!this.isCustomEnvironment) {
+    environment = new EnvironmentConverter(getClassLoader())
+        .convertEnvironmentIfNecessary(environment, deduceEnvironmentClass());
+  }
+  ConfigurationPropertySources.attach(environment);
+  return environment;
+}
+```
+
+###### getOrCreateEnvironment()方法
+```
+private ConfigurableEnvironment getOrCreateEnvironment() {
+  //环境存在就返回
+  if (this.environment != null) {
+    return this.environment;
+  }
+  //根据应用类型返回对应应用类型的环境
+  switch (this.webApplicationType) {
+  case SERVLET:
+    return new StandardServletEnvironment();
+  case REACTIVE:
+    return new StandardReactiveWebEnvironment();
+  default:
+    return new StandardEnvironment();
+  }
+}
+```
+###### configureEnvironment()方法
+```
+protected void configureEnvironment(ConfigurableEnvironment environment,
+    String[] args) {
+  if (this.addConversionService) {
+    ConversionService conversionService = ApplicationConversionService
+        .getSharedInstance();
+    environment.setConversionService(
+        (ConfigurableConversionService) conversionService);
+  }
+  configurePropertySources(environment, args);
+  configureProfiles(environment, args);
+}
+```
+ConversionService:一个用来进行类型转换的服务接口，装换系统的入口点，调用convert实现线程安全的转换。
+ApplicationConversionService.getSharedInstance();用的单利模式，而且是线程安全的，这是经典的单利模式的使用，懒汉模式，注意配合volatile关键字。
+```
+private static volatile ApplicationConversionService sharedInstance;
+public static ConversionService getSharedInstance() {
+  ApplicationConversionService sharedInstance = ApplicationConversionService.sharedInstance;
+  if (sharedInstance == null) {
+    synchronized (ApplicationConversionService.class) {
+      sharedInstance = ApplicationConversionService.sharedInstance;
+      if (sharedInstance == null) {
+        sharedInstance = new ApplicationConversionService();
+        ApplicationConversionService.sharedInstance = sharedInstance;
+      }
+    }
+  }
+  return sharedInstance;
+}
+```
+
+【configurePropertySources(environment, args);】
+添加，移除，重排序属性源
+```
+protected void configurePropertySources(ConfigurableEnvironment environment,
+    String[] args) {
+  MutablePropertySources sources = environment.getPropertySources();
+  if (this.defaultProperties != null && !this.defaultProperties.isEmpty()) {
+    sources.addLast(
+        new MapPropertySource("defaultProperties", this.defaultProperties));
+  }
+  if (this.addCommandLineProperties && args.length > 0) {
+    String name = CommandLinePropertySource.COMMAND_LINE_PROPERTY_SOURCE_NAME;
+    if (sources.contains(name)) {
+      PropertySource<?> source = sources.get(name);
+      CompositePropertySource composite = new CompositePropertySource(name);
+      composite.addPropertySource(new SimpleCommandLinePropertySource(
+          "springApplicationCommandLineArgs", args));
+      composite.addPropertySource(source);
+      sources.replace(name, composite);
+    }
+    else {
+      sources.addFirst(new SimpleCommandLinePropertySource(args));
+    }
+  }
+}
+```
+【configureProfiles(environment, args);】
+针对于整个应用的环境，配置那些profile是活动的或者是默认的，其他额外的profile可以在配置文件处理过程中通过spring.profiles.active属性激活。
+
+######   listeners.environmentPrepared(environment)
+触发了一个新的事件------环境准备好的事件。
+```
+public void environmentPrepared(ConfigurableEnvironment environment) {
+  for (SpringApplicationRunListener listener : this.listeners) {
+    listener.environmentPrepared(environment);
+  }
+}
+```
+
+#### Banner
+在进行往下进行之前，我们先对banner做一个实验，我们在resources目录下新建一个banner.txt文件，里边输入一段文字，然后启动应用，会看到打印了我们输入的信息，banner自定义生效：
+![banner.png](banner.png)
+Banner是一个函数式接口，里边有一个枚举，用于配置banner的模式：
+```
+enum Mode {
+
+  /**
+   * Disable printing of the banner.
+   */
+  OFF,
+
+  /**
+   * Print the banner to System.out.
+   */
+  CONSOLE,
+
+  /**
+   * Print the banner to the log file.
+   */
+  LOG
+
+}
+```
+在主流程了printBanner()方法：
+```
+private Banner printBanner(ConfigurableEnvironment environment) {
+  //默认是CONSOLE
+  if (this.bannerMode == Banner.Mode.OFF) {
+    return null;
+  }
+  //获取资源加载器
+  ResourceLoader resourceLoader = (this.resourceLoader != null)
+      ? this.resourceLoader : new DefaultResourceLoader(getClassLoader());
+  SpringApplicationBannerPrinter bannerPrinter = new SpringApplicationBannerPrinter(
+      resourceLoader, this.banner);
+  //当前程序不会走这个if
+  if (this.bannerMode == Mode.LOG) {
+    return bannerPrinter.print(environment, this.mainApplicationClass, logger);
+  }
+  //当前程序会执行这个
+  return bannerPrinter.print(environment, this.mainApplicationClass, System.out);
+}
+```
+
+##### SpringApplicationBannerPrinter
+用来打印application的banner，其内部有一个成员变量【static final String DEFAULT_BANNER_LOCATION = "banner.txt";】
+即默认的banner文件。
+构造器：
+```
+SpringApplicationBannerPrinter(ResourceLoader resourceLoader, Banner fallbackBanner) {
+  //资源加载器，可能要使用resourceLoader加载banner文件
+  this.resourceLoader = resourceLoader;
+  //回退banner
+  this.fallbackBanner = fallbackBanner;
+}
+```
+看一下SpringApplicationBannerPrinter的print方法：
+```
+public Banner print(Environment environment, Class<?> sourceClass, PrintStream out) {
+  //获取banner
+  Banner banner = getBanner(environment);
+  //打印banner
+  banner.printBanner(environment, sourceClass, out);
+  return new PrintedBanner(banner, sourceClass);
+}
+```
+getBanner根据环境得到banner。
+```
+private Banner getBanner(Environment environment) {
+  Banners banners = new Banners();
+  //图像banner存在就会加载
+  banners.addIfNotNull(getImageBanner(environment));
+  //文字banner存在就会加载
+  banners.addIfNotNull(getTextBanner(environment));
+  if (banners.hasAtLeastOneBanner()) {
+    return banners;
+  }
+  if (this.fallbackBanner != null) {
+    return this.fallbackBanner;
+  }
+  //没有找到banner就会使用spring默认的banner（SpringBootBanner）
+  return DEFAULT_BANNER;
+}
+```
+
+其中看一下getTextBanner():
+```
+static final String DEFAULT_BANNER_LOCATION = "banner.txt";
+private Banner getTextBanner(Environment environment) {
+  String location = environment.getProperty(BANNER_LOCATION_PROPERTY,
+      DEFAULT_BANNER_LOCATION);
+  Resource resource = this.resourceLoader.getResource(location);
+  //如果文件banner.txt存在就会加载这个资源。
+  if (resource.exists()) {
+    return new ResourceBanner(resource);
+  }
+  return null;
+}
+```
+然后我们看一下SpringBootBanner的printBanner()方法：
+```
+private static final String[] BANNER = { "",
+    "  .   ____          _            __ _ _",
+    " /\\\\ / ___'_ __ _ _(_)_ __  __ _ \\ \\ \\ \\",
+    "( ( )\\___ | '_ | '_| | '_ \\/ _` | \\ \\ \\ \\",
+    " \\\\/  ___)| |_)| | | | | || (_| |  ) ) ) )",
+    "  '  |____| .__|_| |_|_| |_\\__, | / / / /",
+    " =========|_|==============|___/=/_/_/_/" };
+public void printBanner(Environment environment, Class<?> sourceClass,PrintStream printStream) {
+  for (String line : BANNER) {
+    printStream.println(line);
+  }
+  String version = SpringBootVersion.getVersion();
+  version = (version != null) ? " (v" + version + ")" : "";
+  StringBuilder padding = new StringBuilder();
+  while (padding.length() < STRAP_LINE_SIZE
+      - (version.length() + SPRING_BOOT.length())) {
+    padding.append(" ");
+  }
+
+  printStream.println(AnsiOutput.toString(AnsiColor.GREEN, SPRING_BOOT,
+      AnsiColor.DEFAULT, padding.toString(), AnsiStyle.FAINT, version));
+  printStream.println();
+}
+```
+可以看到之前我们没有配置banner.txt的时候打印就是这个"spring"输出，即输出了BANNER数组。

@@ -575,9 +575,12 @@ public ConfigurableApplicationContext run(String... args) {
     configureIgnoreBeanInfo(environment);
     //打印banner
     Banner printedBanner = printBanner(environment);
+    //根据应用类型实例化上下文
     context = createApplicationContext();
+    //之前介绍过的，加载接口的所有实现，context是它的实现类构造器的参数，这里会加载出一个异常报告器
     exceptionReporters = getSpringFactoriesInstances(SpringBootExceptionReporter.class,
         new Class[] { ConfigurableApplicationContext.class }, context);
+    //准备上下文
     prepareContext(context, environment, listeners, applicationArguments,printedBanner);
     refreshContext(context);
     afterRefresh(context, applicationArguments);
@@ -1131,3 +1134,229 @@ public void printBanner(Environment environment, Class<?> sourceClass,PrintStrea
 }
 ```
 可以看到之前我们没有配置banner.txt的时候打印就是这个"spring"输出，即输出了BANNER数组。
+
+#### createApplicationContext()方法
+一个用来创建上下文的策略方法。
+```
+protected ConfigurableApplicationContext createApplicationContext() {
+  //applicationContextClass默认是空的
+  Class<?> contextClass = this.applicationContextClass;
+  if (contextClass == null) {
+    try {
+      switch (this.webApplicationType) {
+        //我们的应用是SERVLET
+      case SERVLET:
+      /**
+      public static final String DEFAULT_SERVLET_WEB_CONTEXT_CLASS = "org.springframework.boot."
+    			+ "web.servlet.context.AnnotationConfigServletWebServerApplicationContext";
+      **/
+        contextClass = Class.forName(DEFAULT_SERVLET_WEB_CONTEXT_CLASS);
+        break;
+      case REACTIVE:
+        contextClass = Class.forName(DEFAULT_REACTIVE_WEB_CONTEXT_CLASS);
+        break;
+      default:
+        contextClass = Class.forName(DEFAULT_CONTEXT_CLASS);
+      }
+    }
+    catch (ClassNotFoundException ex) {
+      throw new IllegalStateException(
+          "Unable create a default ApplicationContext, "
+              + "please specify an ApplicationContextClass",
+          ex);
+    }
+  }
+  //通过反射创建contextClass
+  return (ConfigurableApplicationContext) BeanUtils.instantiateClass(contextClass);
+}
+```
+
+#### prepareContext(context, environment, listeners, applicationArguments,printedBanner)方法
+
+```
+private void prepareContext(ConfigurableApplicationContext context,
+    ConfigurableEnvironment environment, SpringApplicationRunListeners listeners,
+    ApplicationArguments applicationArguments, Banner printedBanner) {
+  context.setEnvironment(environment);
+  //处理上下文
+  postProcessApplicationContext(context);
+  applyInitializers(context);
+  //触发事件，上下文已经创建和准备完毕，但是资源还没有加载
+  listeners.contextPrepared(context);
+  if (this.logStartupInfo) {
+    logStartupInfo(context.getParent() == null);
+    //启动日志的处理
+    logStartupProfileInfo(context);
+  }
+  // Add boot specific singleton beans
+  ConfigurableListableBeanFactory beanFactory = context.getBeanFactory();
+  beanFactory.registerSingleton("springApplicationArguments", applicationArguments);
+  if (printedBanner != null) {
+    beanFactory.registerSingleton("springBootBanner", printedBanner);
+  }
+  if (beanFactory instanceof DefaultListableBeanFactory) {
+    ((DefaultListableBeanFactory) beanFactory)
+        .setAllowBeanDefinitionOverriding(this.allowBeanDefinitionOverriding);
+  }
+  // Load the sources 加载资源
+  Set<Object> sources = getAllSources();
+  Assert.notEmpty(sources, "Sources must not be empty");
+  load(context, sources.toArray(new Object[0]));
+  //触发事件，上下文已经被加载，但是还没有被刷新
+  listeners.contextLoaded(context);
+}
+```
+#### refreshContext()刷新上下文
+此方法按照规定的顺序执行， 这个方法做的事情非常多，不会过多介绍， 最终走到AbstractApplicationContext的refresh()方法：
+```
+public void refresh() throws BeansException, IllegalStateException {
+  synchronized (this.startupShutdownMonitor) {
+    // Prepare this context for refreshing.
+    prepareRefresh();
+
+    // Tell the subclass to refresh the internal bean factory.
+    ConfigurableListableBeanFactory beanFactory = obtainFreshBeanFactory();
+
+    // Prepare the bean factory for use in this context.
+    prepareBeanFactory(beanFactory);
+
+    try {
+      // Allows post-processing of the bean factory in context subclasses.
+      postProcessBeanFactory(beanFactory);
+
+      // Invoke factory processors registered as beans in the context.
+      invokeBeanFactoryPostProcessors(beanFactory);
+
+      // Register bean processors that intercept bean creation.
+      registerBeanPostProcessors(beanFactory);
+
+      // Initialize message source for this context.
+      initMessageSource();
+
+      // Initialize event multicaster for this context.
+      initApplicationEventMulticaster();
+
+      // Initialize other special beans in specific context subclasses.
+      onRefresh();
+
+      // Check for listener beans and register them.
+      registerListeners();
+
+      // Instantiate all remaining (non-lazy-init) singletons.
+      finishBeanFactoryInitialization(beanFactory);
+
+      // Last step: publish corresponding event.
+      finishRefresh();
+    }
+
+    catch (BeansException ex) {
+      if (logger.isWarnEnabled()) {
+        logger.warn("Exception encountered during context initialization - " +
+            "cancelling refresh attempt: " + ex);
+      }
+
+      // Destroy already created singletons to avoid dangling resources.
+      destroyBeans();
+
+      // Reset 'active' flag.
+      cancelRefresh(ex);
+
+      // Propagate exception to caller.
+      throw ex;
+    }
+
+    finally {
+      // Reset common introspection caches in Spring's core, since we
+      // might not ever need metadata for singleton beans anymore...
+      resetCommonCaches();
+    }
+  }
+}
+```
+
+#### afterRefresh(context, applicationArguments)方法
+这个方法没有做任何事情，目的是为了留给子类继承的想象空间的。
+
+#### stopWatch.stop()秒表计时结束
+不做过多解释。
+
+#### 打印启动信息
+![stopwatch.png](stopwatch.png)
+
+#### listeners.started(context)
+触发事件，上下文已经被刷新，应用已经启动，但是命令行运行器和应用运行器还没有被调用
+
+#### callRunners()方法
+看一下它的实现：
+```
+private void callRunners(ApplicationContext context, ApplicationArguments args) {
+  List<Object> runners = new ArrayList<>();
+  runners.addAll(context.getBeansOfType(ApplicationRunner.class).values());
+  runners.addAll(context.getBeansOfType(CommandLineRunner.class).values());
+  AnnotationAwareOrderComparator.sort(runners);
+  for (Object runner : new LinkedHashSet<>(runners)) {
+    if (runner instanceof ApplicationRunner) {
+      //启动应用运行器
+      callRunner((ApplicationRunner) runner, args);
+    }
+    if (runner instanceof CommandLineRunner) {
+      //启动命令行运行器
+      callRunner((CommandLineRunner) runner, args);
+    }
+  }
+}
+```
+##### ApplicationRunner
+Interface used to indicate that a bean should run when it is contained within a SpringApplication. Multiple ApplicationRunner beans can be defined within the same application context and can be ordered using the Ordered interface or @Order annotation.
+
+用于标示一个bean应该被运行，当它包含在一个SpringApplication当中，一个应用上下文可以有多个ApplicationRunner，可以使用Ordered接口或者`@Order`直接进行排序。
+
+```
+@FunctionalInterface
+public interface ApplicationRunner {
+
+	/**
+	 * Callback used to run the bean.
+	 * @param args incoming application arguments
+	 * @throws Exception on error
+	 */
+	void run(ApplicationArguments args) throws Exception;
+
+}
+```
+
+##### CommandLineRunner
+Interface used to indicate that a bean should run when it is contained within a SpringApplication. Multiple CommandLineRunner beans can be defined within the same application context and can be ordered using the Ordered interface or @Order annotation.
+If you need access to ApplicationArguments instead of the raw String array consider using ApplicationRunner.
+
+用于标示一个bean应该被运行，当它包含在一个SpringApplication当中，一个应用上下文可以有多个CommandLineRunner，可以使用Ordered接口或者`@Order`直接进行排序。
+如果你想访问ApplicationArguments而不是原生的字符串数组，请使用ApplicationRunner。
+
+```
+@FunctionalInterface
+public interface CommandLineRunner {
+
+	/**
+	 * Callback used to run the bean.
+	 * @param args incoming main method arguments
+	 * @throws Exception on error
+	 */
+	void run(String... args) throws Exception;
+
+}
+```
+
+#### listeners.running(context)
+run方法调用完毕之前立即会被触发和调用，应用上下文已经被刷新，CommandLineRunner和ApplicationRunner已经被调用。
+
+### 结束
+当listeners.running(context)调用完毕之后run也就结束了，run方法返回一个ConfigurableApplicationContext，会返回到我们的main方法,到此应用的启动过程分析完毕。
+
+```
+@SpringBootApplication
+public class MyApplication {
+    public static void main(String[] args) {
+      ConfigurableApplicationContext configurableApplicationContext =   SpringApplication.run(MyApplication.class,args);
+    }
+}
+```

@@ -40,7 +40,7 @@ public SpringApplication(Class<?>... primarySources) {
 }
 ```
 
-#### run方法的主流程
+#### SpringApplication构造器的主流程
 最终来到了这个构造器：
 ```
 /**
@@ -457,7 +457,7 @@ private <T> List<T> createSpringFactoriesInstances(Class<T> type,  Class<?>[] pa
 创建出来的对象：
 ![instance.png](instance.png)
 
-### setInitializers和排序
+#### setInitializers和排序
 回到getSpringFactoriesInstances，返回的map类型的result放到LinkedHashSet里边：
 Set<String> names = new LinkedHashSet<>(SpringFactoriesLoader.loadFactoryNames(type, classLoader));
 接下来是  List<T> instances = createSpringFactoriesInstances(type, parameterTypes,classLoader, args, names);
@@ -514,7 +514,7 @@ public interface ApplicationListener<E extends ApplicationEvent> extends EventLi
 9 = {LiquibaseServiceLocatorApplicationListener@1974}
 ```
 
-### 主应用类获取deduceMainApplicationClass
+#### 主应用类获取deduceMainApplicationClass
 SpringApplication的SpringApplication(ResourceLoader resourceLoader, Class<?>... primarySources) 方法最后一行代码：
 ```
 this.mainApplicationClass = deduceMainApplicationClass();

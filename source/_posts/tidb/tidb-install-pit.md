@@ -74,7 +74,7 @@ Disk identifier: 0x6ee43510
 /dev/sdb5            4096   209715199   104855552   83  Linux
 ```
 每台机器有2块硬盘，按照官方要求外挂的那块文件系统是ext4的。
-需要安装git。
+然后机器需要安装git。
 
 ### 官方安装doc
 https://pingcap.com/docs-cn/v3.0/how-to/deploy/orchestrated/ansible/
@@ -118,7 +118,7 @@ pd_min_cpu: 2
 monitor_min_cpu: 2
 ```
 其他的内存和硬盘的检查参数也在这个文件配置。
-- 参考： https://github.com/pingcap/tidb/issues/6423
+  - 参考： https://github.com/pingcap/tidb/issues/6423
 
 #### [坑]磁盘检查异常
 异常信息：
@@ -148,12 +148,18 @@ monitor_min_cpu: 2
 切换到部署目录/data/deploy/scripts
 手动执行: ./start_grafana.sh
 
+#### tidb在navicat下修改表结构问题
+tidb在navicat下修改表结构一次性不允许修改(添加或者修改)多个列，否则报错：
+![mutil-schema-error.png](mutil-schema-error.png)
+
+
+
 ### 登陆
 - 使用mysql客户端登陆
   - 使用tidb(密码：tidb)登陆开发机，注意：必须是tidb用户。
     - mysql -u root -proot  -h 192.168.138.18 -P 4000
     - mysql -u tnp_test -ptnp_test  -h 192.168.138.18 -P 4000
-
+    - PS:192.168.138.19 和 192.168.138.18都可以链接
 ### 修改集群配置之后重启步骤/集群启动/集群关闭
 - 配置
   对【/home/tidb/tidb-ansible/inventory.ini】进行修改后需要执行：

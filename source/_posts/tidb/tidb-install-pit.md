@@ -148,11 +148,11 @@ monitor_min_cpu: 2
 切换到部署目录/data/deploy/scripts
 手动执行: ./start_grafana.sh
 
-
 ### 登陆
 - 使用mysql客户端登陆
   - 使用tidb(密码：tidb)登陆开发机，注意：必须是tidb用户。
     - mysql -u root -proot  -h 192.168.138.18 -P 4000
+    - mysql -u tnp_test -ptnp_test  -h 192.168.138.18 -P 4000
 
 ### 修改集群配置之后重启步骤/集群启动/集群关闭
 - 配置

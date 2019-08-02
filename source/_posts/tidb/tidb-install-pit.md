@@ -8,7 +8,7 @@ categories: cloud
 <a name="df368884"></a>
 ### 前言
 
-近期随着公司的业务发展，现有的mysql分库分表，无缝动态扩容，分布式事物，分布式id等等一些问题得不到满足，为此我们做了一次对tidb的考察，此文是记录tidb的安装遇到的坑进行记录,详情按照官方doc进行。
+近期随着公司的业务发展，现有的mysql分库分表，无缝动态扩容，分布式事物，分布式id等等一些问题得不到满足，为此我们做了一次对tidb的考察，此文是记录tidb的安装遇到的坑进行记录,并做了一些功能性和性能方面的测试，详情按照官方doc进行。
 
 <a name="fa405f59"></a>
 ### 环境
@@ -452,7 +452,7 @@ nohup ./runSQL.sh props.mysql sql.mysql/indexCreates.sql 2>&1 &
 ```
 nohup ./runLoader.sh props.mysql 2>&1 &
 ```
-这个过程时间会有点长。<br />验证导入的数据：
+这个过程时间会有点长（我们的测试环境集群这条命令运行了6个小时，等的花儿都谢了。。。）。<br />验证导入的数据：
 
 ```
 nohup  ./runSQL.sh props.mysql  sql.common/test.sql 2>&1 &

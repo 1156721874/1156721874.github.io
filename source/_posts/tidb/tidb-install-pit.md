@@ -240,6 +240,18 @@ binlog监控：
 manager监控：
 ![manager.png](manager.png)
 
+### 全量备份与恢复
+https://pingcap.com/docs-cn/v3.0/how-to/maintain/backup-and-restore/
+### 增量备份与恢复
+#### TiDB Binlog从kafka收集binlog给Drainer
+https://pingcap.com/docs-cn/v3.0/reference/tidb-binlog-overview/
+#### Reparo从Drainer得到数据恢复到mysql/tidb
+https://pingcap.com/docs-cn/v3.0/reference/tools/tidb-binlog/reparo/
+#### 注意事项
+db-type = "file"是为了Reparo做恢复用，和官方文档不同的是要创建
+drainer_file_drainer-cluster.toml文件，而不是drainer_file_drainer.toml。
+相关问答：https://asktug.com/t/drainer-file-drainer-cluster-toml/406/3
+
 
 ### 定位慢查询
 

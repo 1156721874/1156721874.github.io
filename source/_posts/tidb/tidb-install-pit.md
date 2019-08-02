@@ -13,8 +13,13 @@ categories: cloud
 <a name="fa405f59"></a>
 ### 环境
 
-集群规模：<br />node1 192.168.138.18  PD1, TiDB1   4c16G 200GHHD<br />node2 192.168.138.19  PD2, TiDB2   4c16G 200GHHD<br />node3 192.168.138.21  PD3              2c16G 200GHHD<br />node4 192.168.138.22  TiKV1           2c16G 200GHHD<br />node5 192.168.138.23  TiKV2           2c16G 200GHHD<br />node6 192.168.138.24  TiKV3           2c16G 200GHHD
-
+集群规模：
+node1 192.168.138.18  PD1, TiDB1        4c16G 200GHHD
+node2 192.168.138.19  PD2, TiDB2        4c16G 200GHHD
+node3 192.168.138.21  PD3               2c16G 200GHHD
+node4 192.168.138.22  TiKV1,zk,kakfka   2c16G 200GHHD
+node5 192.168.138.23  TiKV2,zk,kakfka   2c16G 200GHHD
+node6 192.168.138.24  TiKV3,zk,kakfka   2c16G 200GHHD
 当前os环境：
 
 ```

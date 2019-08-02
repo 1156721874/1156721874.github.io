@@ -235,6 +235,10 @@ ansible-playbook stop.yml
 [http://192.168.138.18:3000](http://192.168.138.18:3000)<br />用户名/密码:admin/admin<br />![image.png](https://cdn.nlark.com/yuque/0/2019/png/186520/1564561812914-82ca10bb-9686-417e-af46-276341021cd9.png#align=left&display=inline&height=633&name=image.png&originHeight=633&originWidth=1360&size=88976&status=done&width=1360)<br />指标解释：[https://github.com/pingcap/docs-cn/blob/master/dev/reference/key-monitoring-metrics/tidb-dashboard.md](https://github.com/pingcap/docs-cn/blob/master/dev/reference/key-monitoring-metrics/tidb-dashboard.md)
 
 <a name="5f2e4fbc"></a>
+binlog监控：
+![binlog.png](binlog.png)
+
+
 ### 定位慢查询
 
 ```

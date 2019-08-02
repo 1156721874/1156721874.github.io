@@ -203,7 +203,8 @@ tidb在navicat下修改表结构一次性不允许修改(添加或者修改)多�
 - 启动集群<br />
 ansible-playbook start.yml
 - 关闭集群<br />
-ansible-playbook stop.yml
+ansible-playbook stop.yml <br/>
+
 | 启动集群 | ansible-playbook start.yml |
 | --- | --- |
 | 停止集群 | ansible-playbook stop.yml |

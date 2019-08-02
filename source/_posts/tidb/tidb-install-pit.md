@@ -237,6 +237,8 @@ ansible-playbook stop.yml
 <a name="5f2e4fbc"></a>
 binlog监控：
 ![binlog.png](binlog.png)
+manager监控：
+![manager.png](manager.png)
 
 
 ### 定位慢查询

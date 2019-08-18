@@ -197,3 +197,211 @@ Only one thread at a time can own an object's monitor.
 - 对于class类型的对象，调用class的静态的synchronized方法获取锁。
 
 在某一时刻只有一个线程才持有对象的锁。
+
+
+### notifyAll
+Wakes up all threads that are waiting on this object's monitor. A thread waits on an object's monitor by calling one of the wait methods.
+The awakened threads will not be able to proceed until the current thread relinquishes the lock on this object. The awakened threads will compete in the usual manner with any other threads that might be actively competing to synchronize on this object; for example, the awakened threads enjoy no reliable privilege or disadvantage in being the next thread to lock this object.
+This method should only be called by a thread that is the owner of this object's monitor. See the notify method for a description of the ways in which a thread can become the owner of a monitor.
+
+
+唤醒所有等待在对象锁的所有线程，每个线程都是一个等在对象的锁上，通过调用对象的wait方法。
+被释放的线程不能被继续处理，知道当前的线程释放了锁才可以。被唤醒的线程就会一种通常的方式和其他线程进行锁的竞争，比如，一个没有权限没有缺陷的线程都有可能成为获取到锁的线程。
+这个方法只能被持有锁的线程调用，请参见notify方法描述一个线程是怎么成为锁的持有者。
+
+
+### 总结
+
+- 但我们调用wait方法时，首先需要确保调用wait方法的线程已经持有了对象的锁。
+- 当调用wait后，该线程就会释放掉这个对象的锁，然后进入等待状态（wait set）。
+- 当线程调用了wait后进入等待状态时，他就可以等待其他线程调用相同对象的notify或notifyall方法使得自己被唤醒。
+- 一旦这个线程被其他线程唤醒后，该线程就会与其他线程一同开始竞争这个对象的锁（公平锁），只有当该线程获取到了对象的锁后，线程才会继续执行。
+- 调用wait方法的代码片段需要放在一个synchronized块或是synchronized方法中，，这样才可以确保线程在调用wait方法前已经获取了对象的锁。
+- 当调用对象的notify方法时，它会随机唤醒该对象等待集合（wait set）中的任意一个线程，当某个线程被唤醒后，它就会与其他线程一同竞争对象的锁。
+- 当调用对象的notifyall方法时，它会唤醒该对象等待集合（wait set）中的所有线程，这些线程被唤醒后，又会开始竞争对象的锁。
+- 在某一时刻，只有唯一一个线程可以拥有对象的锁。
+
+### 实践
+编写一个多线程程序，实现这样一个目标：
+1、存在一个对象，该对象有一个int类型的成员变量counter，该成员变量的初始值为0.
+2、创建2个线程，其中一个线程对你该对象的成员变量counter增1，另一个线程对该对象的成员变量减一。
+3、输出该对象成员变量counter每次变化后的值。
+4、最终输出的结果应为：10101010101010.
+
+#### 定义一个对象，管理锁的获取和释放，以及加减计数
+
+```
+public class MyObject {
+
+    private int counter;
+
+    public  synchronized  void increase(){
+        if(0 != this.counter){
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        this.counter++;
+        System.out.println(this.counter);
+        notify();
+    }
+
+    public synchronized  void  decrease(){
+        if(this.counter == 0){
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        this.counter--;
+        System.out.println(this.counter);
+        notify();
+    }
+}
+
+```
+
+#### 加一计数器
+```
+public class IncreaseThread extends Thread {
+
+    private MyObject myObject;
+
+    public  IncreaseThread(MyObject myObject){
+        this.myObject = myObject;
+    }
+
+    @Override
+    public void run() {
+        for(int i=0;i<30;i++){
+            try {
+                Thread.sleep((long)Math.random() *1000 );
+                myObject.increase();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+```
+
+#### 减一计数器
+```
+public class DecreaseThread extends Thread {
+
+    private MyObject myObject;
+
+    public DecreaseThread(MyObject myObject){
+        this.myObject  = myObject;
+    }
+
+    @Override
+    public void run() {
+        for(int i=0;i<30;i++){
+            try {
+                Thread.sleep((long)Math.random() *1000 );
+                myObject.decrease();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+}
+```
+
+#### 启动方法
+```
+public class Client {
+
+    public static void main(String[] args) {
+        MyObject myObject = new MyObject();
+
+        IncreaseThread increaseThread = new IncreaseThread(myObject);
+        DecreaseThread decreaseThread = new DecreaseThread(myObject);
+
+        increaseThread.start();
+        decreaseThread.start();
+    }
+}
+```
+
+输出：
+1
+0
+1
+0
+1
+略
+
+#### 多线程生产和消费
+现在我们打算由多个加法线程和多个减法线程同时运行，那么结果会是怎样的呢？
+修改main函数：
+```
+public class Client {
+
+    public static void main(String[] args) {
+        MyObject myObject = new MyObject();
+
+        IncreaseThread increaseThread = new IncreaseThread(myObject);
+        DecreaseThread decreaseThread = new DecreaseThread(myObject);
+
+        increaseThread.start();
+        decreaseThread.start();
+    }
+}
+```
+输出：
+1
+0
+1
+0
+-1
+-2
+-3
+-4
+-5
+-6
+略
+明显可以看到和之前的输出不一样，造成的这样的输出的原因是什么？
+原因：
+MyObject的increase和decrease，加入有2个减法线程都同时阻塞在decrease的wait方法上（wait会释放锁 ），这个时候有一个减法线程被加法线程唤醒，然后其中一个减法线程从wait方法返回，继续往下执行，使得counter变为0，然后同时执行了notify，但是被唤醒的是另一个减法线程，这个减法线程也从wait阻塞中返回，继续往下执行，这个时候counter是0又被减了一次变为-1，这就是出现负数的原因。
+即，调wait之前counter是一个值，但是wait返回之后，这个值可能已经变了，我们不能用if去判断counter的值，而应该用while循环，修改MyObject的加法和减法方法如下：
+```
+public  synchronized  void increase(){
+    while(0 != this.counter){
+        try {
+            wait();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+    this.counter++;
+    System.out.println(this.counter);
+    notify();
+}
+
+public synchronized  void  decrease(){
+    while (this.counter == 0){
+        try {
+            wait();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+    this.counter--;
+    System.out.println(this.counter);
+    notify();
+}
+```
+输出：
+1
+0
+1
+0
+1
+0
+略

@@ -62,7 +62,7 @@ ps：举例，老年代50G，新生代30G，使用cms收集器收集垃圾的时
 
 #### G1 vs CMS
 - 对比使用mark-sweep的CMS，G1使用的copying算法不会造成内存碎片；
-- 对比Parallel Scavange（基于copying）、Parallel Old收集器（基于mark-compact-sweep），Parallel会对整个区域做整理导致gc停顿时间会比较长，而g1只是特定地整理几个region。
+- 对比Parallel Scavange（基于copying）、Parallel Old收集器（基于mark-compact-sweep），Parallel会对整个区域做整理导致 gc停顿时间会比较长，而g1只是特定地整理几个region。
 - G1并不是一个实时的收集器，与parallel Scanvenge一样，对gc停顿时间的设置并不会绝对生效，只是g1有较高的几率保证不超过设定的gc停顿时间，与之前的gc收集器对比，g1会根据用户设定的gc停顿时间，智能评估那几个region需要被回收可以满足用户的设定。
 
 #### G1重要概念

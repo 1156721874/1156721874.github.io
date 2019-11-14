@@ -97,7 +97,7 @@ Base logback configuration provided for compatibility with Spring Boot 1.1
 
 ### 小结
 - 如果我们logback-spring.xml里边的springProfile的name设置为default，而且logback-spring.xml里面存在单独的logger配置，诸如
-【 <logger name="com.twodragonlake.boot" level="DEBUG"/>】，那么springProfile name为default的级别要高；
+【 `<logger name="com.twodragonlake.boot" level="DEBUG"/>`】，那么springProfile name为default的级别要高；
 如果我们把springProfile的name改为非default的，那么单独的logger配置的优先级要高。
 
 - 可以在application.yml里边指定profile，比如指定当前环境为test，相应的把springProfile的name也为test：

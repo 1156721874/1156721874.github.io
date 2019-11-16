@@ -451,3 +451,137 @@ WEB-INF/web.xml和WebApplicationInitializer在使用上并不是互斥的，比�
 1. SpringServletContainerInitializer对应TomcatStarter；
 	SpringServletContainerInitializer是通过spi机制，使用servlet 容器加载；TomcatStarter是spring容器new出来的。
 2. WebApplicationInitializer对应TomcatStarter里边的ServletContextInitializer；
+
+#### 为什么TomcatStarter不使用SpringServletContainerInitializer的方式加载？
+https://github.com/spring-projects/spring-boot/issues/321
+简而言之，当我们使用WAR包的时候，会有javax.servlet.ServletContainerInitializer自动加载，而当我们使用spring boot搞成jar包的时候，javax.servlet.ServletContainerInitializer的方式就不会生效，所以spring做了一个SpringServletContainerInitializer用来支持jar的方式运行app的支持。
+
+当使用spring boot时，我们所编写的Servlet、Filter、Listener都是如何被检测的，加载和执行的呢？
+1. 使用Servlet3.0+的注解，配合@ServletComponentScan。
+定义一个Servlet class：
+```
+@WebServlet("myServlet")
+public class MyServlet extends HttpServlet {
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        System.out.println("MyServlet Invoked");
+    }
+}
+```
+在启动类上加上@ServletComponentScan：
+```
+@SpringBootApplication
+@ServletComponentScan
+public class MyApplication  {
+    private static  final Logger logger = LoggerFactory.getLogger(MyApplication.class);
+    public static void main(String[] args) {
+        SpringApplication.run(MyApplication.class,args);
+    }
+}
+```
+@ServletComponentScan 说明：
+Enables scanning for Servlet components (filters, servlets, and listeners). Scanning is only performed when using an embedded web server.
+Typically, one of value, basePackages, or basePackageClasses should be specified to control the packages to be scanned for components. In their absence, scanning will be performed from the package of the class with the annotation.
+能够扫描Servlet组件（filters、servlets、listeners）。扫描只对嵌入式的web 服务器作起用。
+一般来说需要指定basePackages，basePackageClasses中的一个用来控制可以被扫描到组件的package。
+如果没有指定，那么就会从使用@ServletComponentScan注解的类所在的包开始扫描。
+2. 使用RegistrationBean（在spring boot内部得到了大量的应用）
+定义Servlet：
+```
+public class MyServlet2 extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        System.out.println("MyServlet2 Invoked");
+    }
+}
+```
+定义Filter：
+```
+public class MyFilter implements Filter {
+    @Override
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+        System.out.println("MyFilter Invoked");
+        filterChain.doFilter(servletRequest, servletResponse);
+    }
+}
+```
+注意在之前版本的servlet里边，Filter的三个方法init、doFilter、destroy都是必须要实现的，但是到了jdk1.8的时候提供了default method，我们可以不用强制去实现init和destroy，因为这两个方法变成default method了。
+定义配置类ServletRegistrationConfig：
+```
+@Configuration
+public class ServletRegistrationConfig {
+    @Bean
+    public ServletRegistrationBean  myServletRegistrationBean(){
+        ServletRegistrationBean servletRegistrationBean = new ServletRegistrationBean();
+        servletRegistrationBean.addUrlMappings("/myServlet2");
+        servletRegistrationBean.setServlet(new MyServlet2());
+        return servletRegistrationBean;
+    }
+		@Bean
+		public FilterRegistrationBean myFilterRegistrationBean(){
+				FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
+				filterRegistrationBean.addUrlPatterns("/mServlet/*");
+				filterRegistrationBean.setFilter(new MyFilter());
+				return  filterRegistrationBean;
+		}
+}
+```
+以下ServletRegistrationBean和FilterRegistrationBean的继承结构，
+![ServletRegistrationBean.png](ServletRegistrationBean.png)
+![FilterRegistrationBean.png](FilterRegistrationBean.png)
+找到最后的入口还是ServletContextInitializer，而ServletContextInitializer是内嵌服务的初始化入口。
+
+#### TomcatStarter启动过程
+首先我们在TomcatStarter的onStartup方法里边的for循环打一个断点：
+![tomcatStarter.png](tomcatStarter.png)
+可以看到TomcatStarter的成员变量initializers里边有三个元素，那么这三个元素是在什么时候初始化的呢？
+然后在【initializer.onStartup(servletContext);】f7进入到onStartup的实现类里边，这个时候会进入到AbstractServletWebServerFactory的mergeInitializers方法：
+```
+protected final ServletContextInitializer[] mergeInitializers(
+		ServletContextInitializer... initializers) {
+	List<ServletContextInitializer> mergedInitializers = new ArrayList<>();
+	// 这个lambda表达式就是代表一个ServletContextInitializer
+	mergedInitializers.add((servletContext) -> this.initParameters.forEach(servletContext::setInitParameter));
+	mergedInitializers.add(new SessionConfiguringInitializer(this.session));
+	mergedInitializers.addAll(Arrays.asList(initializers));
+	mergedInitializers.addAll(this.initializers);
+	return mergedInitializers.toArray(new ServletContextInitializer[0]);
+}
+```
+![tomcatStarter1.png](tomcatStarter1.png)
+此时mergedInitializers的三个元素和TomcatStarter里边的三个元素是一样的，那么我们就可以猜想TomcatStarter的成员变量initializers是由AbstractServletWebServerFactory初始化的，我们看一下AbstractServletWebServerFactory的层次结构，AbstractServletWebServerFactory看名字是抽象的web服务器工厂，就是生产web 服务的：
+![AbstractServletWebServerFactory.png](AbstractServletWebServerFactory.png)
+AbstractServletWebServerFactory下边有三个实现类，其中有一个是TomcatServletWebServerFactory，我们在TomcatServletWebServerFactory搜索TomcatStarter，找到了configureContext方法：
+```
+protected void configureContext(Context context,ServletContextInitializer[] initializers) {
+	TomcatStarter starter = new TomcatStarter(initializers);
+	if (context instanceof TomcatEmbeddedContext) {
+		TomcatEmbeddedContext embeddedContext = (TomcatEmbeddedContext) context;
+		embeddedContext.setStarter(starter);
+		embeddedContext.setFailCtxIfServletStartFails(true);
+	}
+	context.addServletContainerInitializer(starter, NO_CLASSES);
+	for (LifecycleListener lifecycleListener : this.contextLifecycleListeners) {
+		context.addLifecycleListener(lifecycleListener);
+	}
+	for (Valve valve : this.contextValves) {
+		context.getPipeline().addValve(valve);
+	}
+	for (ErrorPage errorPage : getErrorPages()) {
+		new TomcatErrorPage(errorPage).addToContext(context);
+	}
+	for (MimeMappings.Mapping mapping : getMimeMappings()) {
+		context.addMimeMapping(mapping.getExtension(), mapping.getMimeType());
+	}
+	configureSession(context);
+	new DisableReferenceClearingContextCustomizer().customize(context);
+	for (TomcatContextCustomizer customizer : this.tomcatContextCustomizers) {
+		customizer.customize(context);
+	}
+}
+```
+configureContext会被prepareContext方法调用，在prepareContext里边会首先调用mergeInitializers，提前完成初始化TomactStarter里边需要的的ServletContextInitializer[]数组，上边提到的。
+在这个方法里边，，调用了【	TomcatStarter starter = new TomcatStarter(initializers);】构造了TomcatStarter。
+![TomcatStarterPackage.png](TomcatStarterPackage.png)
+TomcatStarter没有使用public的原因就是因为TomcatStarter和TomcatServletWebServerFactory属于同一个package，不需要修饰为public，他不希望TomcatStarter被其他的包的类去使用，这是一种保护设计。

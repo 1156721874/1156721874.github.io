@@ -4,6 +4,7 @@ cache:
     directories:
         - node_modules
 before_install:
+  - npm config set bin-links false
   - npm install -g hexo
   - npm install -g hexo-cli
 install:

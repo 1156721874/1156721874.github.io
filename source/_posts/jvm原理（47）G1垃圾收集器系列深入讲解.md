@@ -379,5 +379,4 @@ https://www.oracle.com/technetwork/tutorials/tutorials-1876574.html
     【解释】：
     G1收集器，堆大小10240K，已经使用4948K，region的大小是1024K，这个很重要，同时也说明了为什么会创建Humongous，因为1024K超出了region的一半的大小，2个young，有2个region是young，一个survivors是1024K，其他就是old区域。
     Metaspace是元空间的一些情况。
-
   ```

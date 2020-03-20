@@ -130,6 +130,25 @@ categories: cloud
       表的抽象创建完毕之后状态是unavailable状态，表在创建新的索引之后，首先是changing状态，标识正在创建新的索引版本，版本会自动加一，上一个版本的索引会置为history，新的索引的状态是available状态，标识正在同步mysql。
       Reset：状态置为可用、版本号清空、索引任务删除、当前版本索引删除，如果当前索引正在创建将会被强制终止，主要作用是用于创建异常的人工恢复。
       AddDelayEffect: 当前表的变化不会立刻刷新到索引文档里边去，而是由调度任务去完成，一般元数据的表，并且这种元数据经常发生改变。
+    - 分布式治理
+      ![distribute.png](distribute.png)
+      refresh: 刷新列表
+      Rebalance: 重新执行负载均衡
+    - 延时刷新
+      - 打标了延迟处理的表：
+        ![delay-list.png](delay-list.png)
+      - 元数据影响的顶层表的关系维护
+        ![delay-top-view.png](delay-top-view.png)
+      - 添加的顶层表top黏连关系
+        ![delay-top-view.png](delay-top-view.png)
+      - 查询和管理快照列表
+        ![snapshot_list.png](snapshot_list.png)
+    - 动态词库
+        ![dynamic_words.png](dynamic_words.png)
+        词库状态分为初始化和发布完毕2种，只有发布完毕的才会进入es的动态词库。
+        词库分为扩展词库和停用词词库。
+        一个单词没有发布之前可以修改，发布完毕之后不可以修改，只能删除。
+        初始化和发布完成的都可以删除。
 
 ### 架构设计
 
@@ -272,7 +291,7 @@ categories: cloud
         private volatile Boolean breakByRebalance;
     }
     ```
-    负载均衡的过程：
+    负载均衡的过程[创建索引任务和延迟刷新任务同样的流程]：
       - 首先会加分布式锁;
       - 清除所有存活节点的任务数据，节点集群状态是REBALANCING，节点状态是CLEAN状态;
         - 对NodeJobEntity的indexJobs数组清空，nodeStatusENUM置为clean，将这个信息写到zk节点里边，节点通过zk数据变化事件得到变化的数据，检查本地线程池是否有存活的任务，如果有就等待，等待线程池执行完毕(同步阻塞等待)，如果线程池没有任务，那么将nodeStatusENUM置为cleanok，写到zk
@@ -282,7 +301,7 @@ categories: cloud
       - 任务下发到各个节点完毕;
         - 节点接到下发的任务后本地执行异步同步任务。
       - 解锁
-  - 节点异步执行同步任务
+  - 节点异步执行同步任务[创建索引任务和延迟刷新任务同样的流程]
     SynchronizeJobTask右侧的代码是SynchronizeJobTask的核心逻辑，在死循环当中，使用了CompletableFuture，而且是完全异步的，同步过程是异步，同步完毕（成功后者失败）之后也是异步的，一张表由于使用了CompletableFuture，就会对应使用2个线程分别去同步和处理同步结果。在supplyAsync当中做的工作有：
       - 将当前表的同步任务状态从init置为running状态
       - 表的状态置为changing状态
@@ -329,6 +348,7 @@ categories: cloud
       - 检查索引和索引type，如果没有的话就会创建。
       - 父子关系的检查，es当中规定parent type和child type必须在同一个es分片，否则就会产生查询混乱，当我们修改了一个child的pid的时候，这个时候pid对应的parent可能不和child在同一个分片，这个时候我们要将child删除，重新插入child，确保child和parent在同一个分片，[parent-child扩展阅读](https://www.elastic.co/guide/cn/elasticsearch/guide/current/indexing-parent-child.html)
       - 调用es的java api刷新数据到es集群。
+
 
 
 #### 消息监听流程
@@ -393,22 +413,49 @@ categories: cloud
 
 ###### 方案三【混合】
   新建表：
-  tnp_search_change_snapshot：
-  id , table_id, relation_data_base_id, relation_table_id, sql
+  ```
+  CREATE TABLE `tnp_search_change_snapshot` (
+    `id` varchar(64) COLLATE utf8_bin NOT NULL,
+    `database_id` varchar(64) COLLATE utf8_bin DEFAULT NULL COMMENT '数据库id',
+    `table_id` varchar(64) COLLATE utf8_bin DEFAULT NULL COMMENT '表id',
+    `c_table_name` varchar(45) COLLATE utf8_bin DEFAULT NULL COMMENT '表名称',
+    `operation_type` varchar(45) COLLATE utf8_bin DEFAULT NULL COMMENT '操作类型(update/delete)',
+    `business_id` varchar(64) COLLATE utf8_bin DEFAULT NULL COMMENT '业务id',
+    `change_datas` varchar(4096) COLLATE utf8_bin DEFAULT NULL COMMENT '发生变化的数据，用于删除额情况',
+    `c_status` varchar(45) COLLATE utf8_bin DEFAULT NULL COMMENT '状态：init,running,error,done',
+    `attach_date` date DEFAULT NULL COMMENT '数据进入搜索系统的时间',
+    `create_time` datetime DEFAULT NULL,
+    `modify_time` datetime DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `unit_index` (`database_id`,`table_id`,`operation_type`,`business_id`,`c_status`,`attach_date`)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='案发现场快照表'
+
+  CREATE TABLE `tnp_search_relation_top` (
+  `id` varchar(64) COLLATE utf8_bin NOT NULL,
+  `table_id` varchar(64) COLLATE utf8_bin DEFAULT NULL COMMENT ' 当前表id',
+  `relation_data_base_id` varchar(64) COLLATE utf8_bin DEFAULT NULL COMMENT '关联数据库id',
+  `relation_table_id` varchar(64) COLLATE utf8_bin DEFAULT NULL COMMENT '关联表id',
+  `relation_table_column_id` varchar(45) COLLATE utf8_bin DEFAULT NULL COMMENT '关联表的字段id',
+  `level_sql` varchar(2048) COLLATE utf8_bin DEFAULT NULL COMMENT '当前层级的sql',
+  `level_sql_output_business_column` varchar(64) COLLATE utf8_bin DEFAULT NULL COMMENT 'level_sql输出的业务id',
+  `level_sql_output_target_column` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `create_time` datetime DEFAULT NULL,
+  `modify_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `rt_unit_index` (`table_id`,`relation_table_id`)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='表关联的顶层表的关系'
+  ```
   A-(DB1-从快照表收集数据)-程序固定写死-调度任务发起的节点执行:
-  select database_id,table_id,business_id from tnp_search_change_snapshot where status="init" group by database_id,table_id
-  B-(DB2-中间数据-分桶-分页)-tnp_search_change_snapshot.sql字段-桶节点执行:
+  select database_id,table_id,business_id from tnp_search_change_snapshot where status="init"
+  B-(DB2-中间数据-分桶-分页)-tnp_search_relation_top.level_sql字段-桶节点执行:
   select lr.target_id,lr.target_type,label.label_name from tnp_label label right join tnp_label_relation lr on label.id=lr.label_id
   where lr.label_id in (A.business_id) and UNIX_TIMESTAMP(lr.create_time) mod 6 = 1 limit 1,20
-  风险：A的集合超出in的范围，需要进行二次分桶,二次rebalance。
   C-(DB3-业务数据刷新)-桶节点执行:
-  select * from tnp_product【tnp_search_change_snapshot.relation_table_id】 where id in (B.target_id) limit 1,20
+  select * from tnp_product【tnp_search_relation_top.relation_table_id】 where id in (B.target_id) limit 1,20
   程序复用性低，编写新的逻辑。
 
   风险：
-  1、tnp_change_snapshot表如果当天产生了大量的数据，需要多次rebalance，因为zk的节点存储容量上限是1M，查看过公司的zk测试环境是1M，没有扩容（扩容的话需要每台机器修改zk启动脚本）
-  多次rebalance造成调度任务执行的时间和复杂度以及不确定性上增高，系统熵变大。
-  2、只能支持跨2个业务数据库（支持同一个数据库水平拆分）。
+  1、只能支持跨2个业务数据库（支持同一个数据库水平拆分）。
 
 #### 调度
   - 调度任务扫描tnp_change_snapshot，得到调度列表。将每一个调度抽象为线程可运行的实体;
@@ -419,8 +466,8 @@ categories: cloud
   - 开始执行调度任务，设置当前任务的db状态是running，如果任务中断（断电），那么重启之后会重新拉起running的任务;
   - 当一个任务执行完毕之后，线程会删除这个任务的DB和zk里边的数据;
   - 到目前为止系统有2种调度：
-    - 复盘调度：当天发生变化的数据，晚上重新覆盖一次；
-    - 数据延迟生效调度：针对于引起蝴蝶效应的数据进行生效。
+    - 复盘调度：当天发生变化的数据，晚上重新覆盖一次;
+    - 数据延迟生效调度：针对于引起蝴蝶效应的数据进行生效;
 
 #### 类图
   ![SearchCenterCLassDiagram.jpg](SearchCenterCLassDiagram.jpg)
@@ -430,6 +477,17 @@ categories: cloud
   ![SerarchCenterJobSequenceDiagram.jpg](SerarchCenterJobSequenceDiagram.jpg)
 #### 消息消费流程图
   ![SerarchCenterConsumerSequenceDiagram.jpg](SerarchCenterConsumerSequenceDiagram.jpg)
-
+#### DDL-SQL
+  [tnp_search_tnp_kafka_offset.sql](sql/tnp_search_tnp_kafka_offset.sql)
+  [tnp_search_tnp_search_change_snapshot.sql](sql/tnp_search_tnp_search_change_snapshot.sql)
+  [tnp_search_tnp_search_column.sql](sql/tnp_search_tnp_search_column.sql)
+  [tnp_search_tnp_search_column_table.sql](sql/tnp_search_tnp_search_column_table.sql)
+  [tnp_search_tnp_search_database.sql](sql/tnp_search_tnp_search_database.sql)
+  [tnp_search_tnp_search_dynamic_word.sql](sql/tnp_search_tnp_search_dynamic_word.sql)
+  [tnp_search_tnp_search_job.sql](sql/tnp_search_tnp_search_job.sql)
+  [tnp_search_tnp_search_relation_top.sql](sql/tnp_search_tnp_search_relation_top.sql)
+  [tnp_search_tnp_search_table.sql](sql/tnp_search_tnp_search_table.sql)
+  [tnp_search_tnp_search_table_syns_log.sql](sql/tnp_search_tnp_search_table_syns_log.sql)
+  [tnp_search_tnp_search_topic.sql](sql/tnp_search_tnp_search_topic.sql)
 ### 结束
   代码正在脱敏。。。。稍后即来。。。。

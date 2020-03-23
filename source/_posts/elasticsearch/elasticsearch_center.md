@@ -153,7 +153,7 @@ categories: cloud
 ### 架构设计
 
 #### 整体架构图
-  ![structure.png](structure.png)
+  ![new_structure.png](new_structure.png)
   首先解释下searchContext，searchContext是这个上下文，里边存储了当前可以同步的主题，数据库，表，以及正在changing的tableId，还有同步线程的引用等等，ListenTopicTask会每隔三分钟刷新一次上下文；
   整个轮子有2条主线，以searchContext为中心，searchContext下面是索引创建流程，上面是消息监听流程（索引已经创建完毕，mysql数据变化监听，然后将变化推送到es集群）；
   索引创建流程将索引创建完毕之后，会更新上下文，然后消息监听流程会使用更新之后的上下文。

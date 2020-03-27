@@ -149,6 +149,7 @@ categories: cloud
         词库分为扩展词库和停用词词库。
         一个单词没有发布之前可以修改，发布完毕之后不可以修改，只能删除。
         初始化和发布完成的都可以删除。
+        es对Ik的动态词库配置参考：https://github.com/medcl/elasticsearch-analysis-ik
 
 ### 架构设计
 

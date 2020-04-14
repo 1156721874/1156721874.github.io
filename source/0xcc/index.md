@@ -5,6 +5,6 @@
 </div>
 
 <br/>
-
+<!-- 
 <img src="./index/Uchiha.jpg" alt="0110_0110_0110" />
-
+-->

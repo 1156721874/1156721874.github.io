@@ -220,3 +220,15 @@ public class com.twodragonlake.jvm.lock.MyTest1 {
           ((s = h.next) == null || s.thread != Thread.currentThread());
   }
   ```
+
+
+### 可重入锁与非可重入锁
+java中的reentrantLock与synchronized都是可重入锁，他最大的优势在于防止死锁的出现。
+
+### 共享锁和排它锁
+reentrantLock 是排它锁的典型实现，如果reentrantLock拿到锁之后，其他线程无论是读还是写都是拿不到这个对象的锁。
+
+ReentrantReadWriteLock 是共享锁的实现，里边有读锁和写锁，只有所有的线程度都是读取操作的时候，是共享的，如果都是
+写的操作，那么就是排他的。
+
+AQS中：状态字段，高16位表示读状态，低16位表示写状态。

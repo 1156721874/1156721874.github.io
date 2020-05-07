@@ -1,6 +1,7 @@
 {{ partial('_partials/header/brand.swig', {}, {cache: theme.cache.enable}) }}
-{% include 'menu.swig' %}
 
-{% for inject_item in theme.injects.header %}
-  {{ partial(inject_item.layout, inject_item.locals, inject_item.options) }}
-{% endfor %}
+{{ partial('_partials/header/menu.swig', {}, {cache: theme.cache.enable}) }}
+
+{{ partial('_partials/search/index.swig', {}, {cache: theme.cache.enable}) }}
+
+{{- next_inject('header') }}

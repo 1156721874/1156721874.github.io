@@ -6,9 +6,13 @@ categories: concurrency
 ---
 
 ### Future
+
 A Future represents the result of an asynchronous computation. Methods are provided to check if the computation is complete, to wait for its completion, and to retrieve the result of the computation. The result can only be retrieved using method get when the computation has completed, blocking if necessary until it is ready. Cancellation is performed by the cancel method. Additional methods are provided to determine if the task completed normally or was cancelled. Once a computation has completed, the computation cannot be cancelled. If you would like to use a Future for the sake of cancellability but not provide a usable result, you can declare types of the form Future<?> and return null as a result of the underlying task.
 Sample Usage (Note that the following classes are all made-up.)
 
+<!-- more -->
+
+```java
 interface ArchiveSearcher { String search(String target); }
 class App {
  ExecutorService executor = ...
@@ -26,18 +30,21 @@ class App {
    } catch (ExecutionException ex) { cleanup(); return; }
  }
 }
+```
+
 The FutureTask class is an implementation of Future that implements Runnable, and so may be executed by an Executor. For example, the above construction with submit could be replaced by:
 
-FutureTask<String> future =
- new FutureTask<String>(new Callable<String>() {
+```java
+FutureTask<String> future = new FutureTask<String>(new Callable<String>() {
    public String call() {
-     return searcher.search(target);
- }});
+       return searcher.search(target);
+}});
+```
 executor.execute(future);
 Memory consistency effects: Actions taken by the asynchronous computation happen-before actions following the corresponding Future.get() in another thread.
 代表一个异步计算的结果，提供的方法用来检查计算是否完成，等待计算完成，以及返回计算的结果，当计算完毕的时候只能通过get方法返回，如果没有计算完成那么get方法将会一直阻塞，cancel用来取消操作，此外提供了其他的方法用来检查是正常完成还是取消完成，如果一个 计算已经完成了，那么这个计算不能再进行取消操作，如果一个计算只是为了取消，而不想得到计算结果，你可以声明为Future<?>，那么底层执行任务就会返回一个null的计算结果。
 
-```
+```java
 //取消
  boolean cancel(boolean mayInterruptIfRunning);
  //是否被取消
@@ -53,8 +60,10 @@ Memory consistency effects: Actions taken by the asynchronous computation happen
 ```
 
 ### FutureTask
+
 #### 正常的使用
-```
+
+```java
 public class MyTest1 {
     public static void main(String[] args) {
         Callable<Integer> callable =  () -> {
@@ -84,7 +93,8 @@ post execute
 282
 
 #### get方法阻塞一段时间
-```
+
+```java
 public class MyTest1 {
     public static void main(String[] args) {
         Callable<Integer> callable =  () -> {
@@ -109,6 +119,7 @@ public class MyTest1 {
     }
 }
 ```
+
 输出：
 thread has started
 pre execute
@@ -117,8 +128,8 @@ post execute
 实际运行的时候会在get方法阻塞等待一段时间
 
 #### get等待超时
-```
 
+```java
 public class MyTest1 {
     public static void main(String[] args) {
         Callable<Integer> callable =  () -> {
@@ -142,8 +153,8 @@ public class MyTest1 {
         }
     }
 }
-
 ```
+
 输出：
 thread has started
 pre execute
@@ -155,12 +166,15 @@ post execute
 即超时会抛出异常
 
 ### CompletableFuture
+
 Future的不足就是get方法会阻塞。CompletableFuture解决了这个问题。
-```
+
+```java
 //实现了Future，所以具备Future的功能和特点，CompletionStage是说明：
 //A stage of a possibly asynchronous computation, that performs an action or computes a value when another //////////CompletionStage completes.
 // 异步计算的一个阶段，当一个阶段完成时，代表一个动作或者一个计算的值
 public class CompletableFuture<T> implements Future<T>, CompletionStage<T> {
+
 }
 ```
 CompletableFuture doc：
@@ -170,7 +184,8 @@ When two or more threads attempt to complete, completeExceptionally, or cancel a
 当有2个或以上的线程去完成，完成异常，取消CompletableFuture的时候，只有一个会成功。
 
 #### 实例1：
-```
+
+```java
 public class MyTest2 {
     public static void main(String[] args) {
         String result = CompletableFuture.supplyAsync(()->"hello" )
@@ -183,8 +198,10 @@ public class MyTest2 {
 helloworld
 
 #### 实例2：
+
 supplyAsync需要返回执行结果，runAsync不需要返回结果。
-```
+
+```java
 CompletableFuture.supplyAsync(() -> "hello")
         .thenAccept(value -> System.out.println("welcome" + value));
 ```
@@ -192,7 +209,8 @@ CompletableFuture.supplyAsync(() -> "hello")
 thenAccept不返回结果，直接把结果处理掉
 
 #### 实例3
-```
+
+```java
 String result2 = CompletableFuture.supplyAsync(() ->{
             try {
                 Thread.sleep(1000);
@@ -216,7 +234,8 @@ hello world
 thenCombine是对两个 CompletableFuture.supplyAsync执行结果的合并，CompletableFuture.supplyAsync都是异步的，他们之间可以并行执行。
 
 #### 实例4
-```
+
+```java
   CompletableFuture<Void> completableFuture = CompletableFuture.runAsync(() -> {
       try {
           TimeUnit.MILLISECONDS.sleep(2000);

@@ -1,5 +1,6 @@
 language: node_js   # 设置语言
-node_js: stable     # 设置相应的版本
+node_js: 
+  - '12.16.3'
 cache:
     directories:
         - node_modules

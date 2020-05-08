@@ -7,6 +7,7 @@ categories: spring_boot_cloud
 
 ### 什么是微服务
 - Martin Fowler:简而言之，微服务架构风格这种开发方法，是以开发一组小型服务的方式来开发一个独立的应用系统。其中每个小型服务都运行在自己的进程中，并经常采用http资源api这样轻量级的机制来互相通信。这些服务围绕业务功能进行构建，并能通过全量自动的部署机制来进行独立部署。这些微服务可以使用不同的语言来编写，并且可以使用不同的数据存储技术。对于这些微服务我们仅做最低限度的集中管理。
+<!-- more -->
 
 [Martin Fowler关于微服务的解读](https://martinfowler.com/articles/microservices.html)
 此处为了读者理解和阅读，引用二龙湖 [@Jerry xu](https://github.com/BladeCode)对此文的翻译给各位吃瓜群众，[【译】• 微服务](https://incoder.org/2019/06/01/microservices/)

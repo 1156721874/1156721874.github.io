@@ -7,6 +7,7 @@ categories: jvm
 
 ### java.lang.StackOverflowError
 
+<!-- more -->
 编写程序：
 ```
 //配置jvm参数：-Xss160k

@@ -7,6 +7,7 @@ categories: jvm
 
 新建类MyTest17_1：
 
+<!-- more -->
 ```
 public class MyTest17_1 {
     public static void main(String[] args)  throws Exception{

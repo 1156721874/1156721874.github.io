@@ -7,6 +7,7 @@ categories: spring_boot_cloud
 
 ### @SpringBootApplication
 有三个注解组成：
+<!-- more -->
 @SpringBootConfiguration
 @EnableAutoConfiguration
 @ComponentScan

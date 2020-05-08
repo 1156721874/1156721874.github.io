@@ -7,6 +7,7 @@ categories: git
 
 我们新建三个分支分别是master、dev、test,之后在dev分支的test.txt文件新建2个提交，在test分支的test.txt文件新建2个提交。
 切换到test分支，然后执行git rebase dev 我们要将dev分支的提交应用到test分支：
+<!-- more -->
 ![这里写图片描述](20170805204123755.png)
 然后在test分支执行git rebase dev
 

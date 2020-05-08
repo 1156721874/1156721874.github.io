@@ -7,6 +7,7 @@ categories: git
 
 新建标签，标签有两种：轻量量级标签（lightweight）与带有附注标签
 （annotated）
+<!-- more -->
 • 创建⼀一个轻量量级标签
 • git tag v1.0.1
 • 创建⼀一个带有附注的标签

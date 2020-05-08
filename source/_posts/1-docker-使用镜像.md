@@ -7,6 +7,7 @@ categories: docker
 
 # 获取docker 镜像
 ## docker pull
+<!-- more -->
 docker hub：https://hub.docker.com/explore/
   从 Docker 镜像仓库获取镜像的命令是 docker pull：
   docker pull [选项] [Docker Registry 地址[:端口号]/]仓库名[:标签]

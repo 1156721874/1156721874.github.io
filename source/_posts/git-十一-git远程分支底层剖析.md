@@ -7,6 +7,7 @@ categories: git
 
 标签的删除：
 git push origin :refs/tags/v1.0
+<!-- more -->
 git push origin --delete tag v5.0
 删除本地标签：
 git tag -d v1.0

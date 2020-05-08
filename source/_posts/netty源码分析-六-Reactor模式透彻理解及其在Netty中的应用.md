@@ -7,6 +7,7 @@ categories: netty
 
 前边讲了EventLoopGroup的一些知识，在netty的架构这块我们使用一种bossGroup加workerGroup的方式，bossGroup只负责请求的转发，workerGroup是具体的数据处理，其实netty整个框架使用的是Reactor(响应器)的设计模式。这方面知名的大佬就是Doug Lea，Java.util.current包的很多线程的API和工具都出自大佬之手。
 ![这里写图片描述](20170923142146979.jpg)
+<!-- more -->
 大佬的一片文章对这种模式做了非常细致的介绍,《[Scalable IO in Java](http://gee.cs.oswego.edu/dl/cpjslides/nio.pdf)》
 ![这里写图片描述](20170923142426064.png)  
 

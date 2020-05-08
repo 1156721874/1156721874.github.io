@@ -7,6 +7,7 @@ categories: spring_boot_cloud
 
 
 ### SpringApplication的初始化流程源码分析
+<!-- more -->
 
 #### SpringApplication入口
 ```

@@ -7,6 +7,7 @@ categories: git
 
 rebase：变基，意即改变分支的根基
 从某种程度来说，rebase和merge可以完成类似的工作，不过2者的工作方式有显著的差异。
+<!-- more -->
 **我们先从merge切入看看merge和rebase的差异。**
 ![这里写图片描述](20170805173058949.png)
 

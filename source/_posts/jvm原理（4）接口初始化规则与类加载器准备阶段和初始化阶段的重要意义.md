@@ -7,6 +7,7 @@ categories: jvm
 
 先看一段代码：
 
+<!-- more -->
 ```
 
 public class MyTest5 {

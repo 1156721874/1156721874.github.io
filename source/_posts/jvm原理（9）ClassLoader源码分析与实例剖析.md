@@ -7,6 +7,7 @@ categories: jvm
 
 https://docs.oracle.com/javase/8/docs/api/java/lang/ClassLoader.html
 
+<!-- more -->
 **public abstract class ClassLoader extends Object**
 
 A class loader is an object that is responsible for loading classes. The class ClassLoader is an abstract class. Given the binary name of a class, a class loader should attempt to locate or generate data that constitutes a definition for the class. A typical strategy is to transform the name into a file name and then read a "class file" of that name from a file system.

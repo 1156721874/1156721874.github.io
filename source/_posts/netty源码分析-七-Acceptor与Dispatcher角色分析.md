@@ -7,6 +7,7 @@ categories: netty
 
 理解Reactor模式的另外一篇文章是一篇论文：《[reactor-siemens](http://www.dre.vanderbilt.edu/~schmidt/PDF/reactor-siemens.pdf)》，论文的环境是日志服务器的例子：
 ![这里写图片描述](20170923190027064.png)
+<!-- more -->
 客户端将日志发送到日志服务器，日志服务器将日志通过各种设备输出。
 意图：
 The Reactor design pattern handles service requests that are

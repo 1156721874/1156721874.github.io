@@ -7,6 +7,7 @@ categories: spring_boot_cloud
 
 ### gradle 的打包task
 在使用gradle构建springboot的项目时，可以查看当前项目由那些gradle的任务，我们在[springboot的初始化页面](https://start.spring.io/) 构建一个简单的springboot项目，然后在本地我们用vscode打开，执行./gradlew task得到如下输出：
+<!-- more -->
 ```
 > Task :tasks
 

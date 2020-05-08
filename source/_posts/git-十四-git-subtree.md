@@ -7,6 +7,7 @@ categories: git
 
 git submodule弊端：
  这篇文章指出了submodule的一些问题： http://www.cocoachina.com/industry/20130509/6161.html
+<!-- more -->
 ，还有就是submodule的删除git没有直接的命令操作，需要开发者自己使用若干命令组合完成删除，因此在git的后续版本出现了subtree。
 
 subtree：

@@ -7,6 +7,7 @@ categories: jvm
 
 ### threadLocal内存溢出分析
 ![threadlocal-stack-heap.png](threadlocal-stack-heap.png)
+<!-- more -->
 我们使用ThreadLocal的方式一般是static的。
 public static ThreadLocal<String> threadlocal = new ThreadLocal();
 

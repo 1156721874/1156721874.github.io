@@ -7,6 +7,7 @@ categories: concurrency
 
 ### 变量在多线程之间的影响
 编写程序：
+<!-- more -->
 ```
 
 public class MyThreadTest{

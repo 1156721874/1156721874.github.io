@@ -7,6 +7,7 @@ categories: concurrency
 
 ### Condition
 Lock接口里边有一个方法【Condition newCondition();】，返回的是一个Condition实例；
+<!-- more -->
 看一下Condition的doc：
 Returns a new Condition instance that is bound to this Lock instance.
 Before waiting on the condition the lock must be held by the current thread. A call to Condition.await() will atomically release the lock before waiting and re-acquire the lock before the wait returns.

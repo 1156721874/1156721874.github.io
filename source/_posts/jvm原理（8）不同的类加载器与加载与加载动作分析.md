@@ -7,6 +7,7 @@ categories: jvm
 这段程序打印出系统类加载器到最上层的加载器的结构关系：
 ```
 public class MyTest13 {
+<!-- more -->
     public static void main(String[] args) {
         ClassLoader classLoader = ClassLoader.getSystemClassLoader();
         System.out.println(classLoader);

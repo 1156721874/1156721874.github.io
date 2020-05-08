@@ -7,6 +7,7 @@ categories: jvm
 
 ### metaspace
 jdk8当中class的元数据放在元空间里边，元空间是os的一部分内存，对元空间的管理会存在元空间不够会动态扩容，如果扩容还不够就会oomm异常，为了模拟这种错误，我们可以限制metaspace的大小，下面是
+<!-- more -->
 测试代码，我们使用cglib的api不断的动态生成class,限制metaspace的大小是10兆：
 ```
 /**

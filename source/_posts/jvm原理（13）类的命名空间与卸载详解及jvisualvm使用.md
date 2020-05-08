@@ -7,6 +7,7 @@ categories: jvm
 
 **类的命名空间**
 [上篇文章](http://blog.csdn.net/wzq6578702/article/details/79601719)的结尾到了命名空间的问题，我们接下来继续演进程序，我们删除当前工程的MyTest.class文件，然后修改main方法：
+<!-- more -->
 
 ```
     public static void main(String[] args) throws Exception {

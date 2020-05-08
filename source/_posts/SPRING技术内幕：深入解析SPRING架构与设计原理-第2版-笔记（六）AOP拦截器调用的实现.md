@@ -7,6 +7,7 @@ categories: spring
 **JdkDynamicAopProxy**
 JdkDynamicAopProxy代理对象的回调：
 JdkDynamicAopProxy通过ReflectiveMethodInvocation完成拦截器链的调用，
+<!-- more -->
 ```
 /**
 	 * Implementation of <code>InvocationHandler.invoke</code>.

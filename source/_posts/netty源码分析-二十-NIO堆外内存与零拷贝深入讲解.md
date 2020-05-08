@@ -7,6 +7,7 @@ categories: netty
 
 ![这里写图片描述](20171118184319019.png)
 
+<!-- more -->
 
 ByteBuffer byteBuffer = ByteBuffer.allocateDirect(512);
 直接内存：返回DirectByteBuffer对象，DirectByteBuffer的父类是MappedByteBuffer ，MappedByteBuffer 的父类是ByteBuffer ， 在ByteBuffer的上边是Buffer，在

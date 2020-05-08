@@ -7,6 +7,7 @@ categories: concurrency
 
 ### CountDownLatch
 exanple1:主线程等待3个子线程执行完毕，主线程才继续执行
+<!-- more -->
 ```
 public class MyTest1 {
     public static void main(String[] args) {

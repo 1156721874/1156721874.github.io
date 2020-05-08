@@ -7,6 +7,7 @@ categories: jvm
 
 * 1、invokeinterface:调用接口中的方法，实际上是在运行期决定的，决定到底调用实现该接口的那个对象的特定方法。4
 * 2、invokestatic : 调用静态方法
+<!-- more -->
 * 3、invokespecial: 调用自己的私有方法，构造方法(<init>)以及父类的方法。
 * 4、invokevirtual: 调用虚方法，运行期动态查找的过程。
 * 5、invokedynamic: 动态调用方法。

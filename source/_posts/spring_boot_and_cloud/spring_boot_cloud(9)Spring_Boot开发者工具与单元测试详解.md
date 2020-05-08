@@ -7,6 +7,7 @@ categories: spring_boot_cloud
 
 ### devtools准备
 
+<!-- more -->
 gradle加入依赖：
  "org.springframework.boot:spring-boot-devtools:2.1.3.RELEASE",
 

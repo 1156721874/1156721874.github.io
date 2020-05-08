@@ -7,6 +7,7 @@ categories: netty
 
 上一节我们讲到netty启动服务类AbstractBootstrap的doBind的方法：
 
+<!-- more -->
 ```
     private ChannelFuture doBind(final SocketAddress localAddress) {
         final ChannelFuture regFuture = initAndRegister();

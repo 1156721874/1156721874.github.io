@@ -7,6 +7,7 @@ categories: jvm
 
 ### G1
 Garage First Collector
+<!-- more -->
 
 #### 吞吐量
 - 吞吐量关注的是，在一个指定的时间内，最大化一个应用的工作量。

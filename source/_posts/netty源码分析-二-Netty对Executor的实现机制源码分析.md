@@ -7,6 +7,7 @@ categories: netty
 
 上一节说到NioEventLoopGroup 的初始化，到了他的父类MultithreadEventExecutorGroup的构造器：
 
+<!-- more -->
 ```
     protected MultithreadEventExecutorGroup(int nThreads, Executor executor,
                                             EventExecutorChooserFactory chooserFactory, Object... args) {

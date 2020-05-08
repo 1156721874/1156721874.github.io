@@ -7,6 +7,7 @@ categories: jvm
 
 ### jmap
 
+<!-- more -->
 jmap命令的doc如下：
 ```
 C:\Users\Administrator>jmap

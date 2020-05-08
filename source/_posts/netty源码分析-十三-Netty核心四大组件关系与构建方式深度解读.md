@@ -7,6 +7,7 @@ categories: netty
 
 上一节主要看了一下ChannelHandlerContext，中间我们走到DefaultChannelPipeline的addLast方法，这一节我们从addLast方法切入：
 其中group为null，name为null
+<!-- more -->
 ```
 public class DefaultChannelPipeline implements ChannelPipeline {
 ...略

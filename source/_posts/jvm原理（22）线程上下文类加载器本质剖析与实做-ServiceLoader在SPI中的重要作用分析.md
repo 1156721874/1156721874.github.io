@@ -7,6 +7,7 @@ categories: jvm
 
 
    **线程类上下文加载器的一般使用模式(获取-使用-还原)**
+<!-- more -->
 
 ```
     ClassLoader classLoader = Thread.currentThread().getContextClassLoader();

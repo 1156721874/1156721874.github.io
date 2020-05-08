@@ -7,6 +7,7 @@ categories: cloud
 
 **ACID是什么？**
 数据库事务的四个特征
+<!-- more -->
 Atomicity原子性：要么成功要么失败，不会残留一半的数据
 Consisitency一致性：一旦操作完成，后续的操作可以看到操作的结果
 Isolation隔离性：一个用户的未完成操作不会对其它用户产生影响

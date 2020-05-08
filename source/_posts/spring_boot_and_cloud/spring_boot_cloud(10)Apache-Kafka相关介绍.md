@@ -7,6 +7,7 @@ categories: spring_boot_cloud
 
 本片不对kafak原理做过多解释，只是介绍一下kafka和spring boot耦合的方式。
 
+<!-- more -->
 ### 依赖引入
 在gradle依赖配置当中引入以下依赖:
 ```

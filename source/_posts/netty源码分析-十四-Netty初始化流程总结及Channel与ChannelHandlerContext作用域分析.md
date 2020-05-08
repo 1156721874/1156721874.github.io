@@ -7,6 +7,7 @@ categories: netty
 我们回到ServerBootstrap的init方法，之前介绍过Attribute的设置，那么Attribute的具体设置是怎样的呢：
 ```
     void init(Channel channel) throws Exception {
+<!-- more -->
         final Map<ChannelOption<?>, Object> options = options0();
         synchronized (options) {
             setChannelOptions(channel, options, logger);

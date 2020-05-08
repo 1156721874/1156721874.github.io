@@ -7,6 +7,7 @@ categories: git
 
 gitk
 在命令模式输入gitk弹出git窗口页面;
+<!-- more -->
 ![这里写图片描述](20170731213836111.png)
 
 git gui

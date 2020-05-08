@@ -7,6 +7,7 @@ categories: javaBase
 
 收集器Collector是jdk8中最为重要的接口之一，一个Collector可分为5个部分（第五个是我自己加上的）：
 1、supplier
+<!-- more -->
 2、accumulator
 3、combiner
 4、finisher

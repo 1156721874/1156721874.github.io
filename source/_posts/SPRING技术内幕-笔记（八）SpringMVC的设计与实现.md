@@ -7,6 +7,7 @@ categories: spring
 8.1SPringMVC设置概览
 在web.xml文件里边配置的DispatcherServlet是web请求的入口，它的处理过程如下：
 ![这里写图片描述](20150613213240218.png)
+<!-- more -->
 
 DispatcherServlet的任务有2个：
 一个是 初始化部分，由initservletBean()启动，通过initWebApplicationContext方法最终调用DispatcherSevlet的initStrategies方法，在这个过程中DispatcherServlet对MVC模块的其他部分进行初始化，比如HandlerMapping、Viewresolver等，另一个是对HTTP请求进行响应，作为一个servlet,WEB容器会调用servlet的都跟他()和dopost()方法，在这个方法的调用封装了doDispatcher。

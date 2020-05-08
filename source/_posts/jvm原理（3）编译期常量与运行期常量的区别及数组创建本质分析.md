@@ -7,6 +7,7 @@ categories: jvm
 
 上一个[例子](http://blog.csdn.net/wzq6578702/article/details/79370149)我们用的final是一个字面量“hello world”，这次我们改一下使用UUID为常量赋值，注意：UUID是多少只有在运行期间才会被确定。
 
+<!-- more -->
 ```
 public class MyTest3 {
     public static void main(String[] args) {

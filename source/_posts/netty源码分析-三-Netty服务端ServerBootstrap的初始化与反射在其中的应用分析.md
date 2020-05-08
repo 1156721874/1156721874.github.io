@@ -7,6 +7,7 @@ categories: netty
 
 上一节说到EventLoopGroup只是对bossGroup和workerGroup的一些初始化，包括线程数量，执行器（命令模式），我们的服务端接下来使用ServerBootstrap对bossGroup和workerGroup进行了包装，整个过程是一个方法链的调用过程，每个方法返回调用者本身：
 ![这里写图片描述](20170916120817979.png)
+<!-- more -->
 然后进行了启动，先看一下ServerBootstrap的结构：
 
 ```

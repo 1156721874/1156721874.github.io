@@ -7,6 +7,7 @@ categories: spring
 **12.1设计原理**
 对ibatis的使用相对来说比较简单，在spring的封装中，有几个基本过程，首先需要创建sqlmapclient，这个sqlmapclient类似于在hibernate中的session，对于它的创建，在spring中设计sqlmapclientfactorybean，通过这个factorybean；哎读取sqlmapclient的配置和具体创建。在配置和创建好sqlmapclient之后，在spring中同样为sqlmapclient的使用封装了sqlmapclienttemplate，他同样作为一个模板，封装了通过sqlmapclient完成的主要操作。
 
+<!-- more -->
 **12.2创建sqlmapclient**
 在springIOC容器中，ibatis实例通常通过sqlmapclientfactorybean来设置，在sqlmapfactorybean中完成sqlmapclient的创建，sqlmapclient是用户使用ibatis操作数据库的主要类，这个创建过程包括一些对sqlmapclient的配置过程（比如对数据源打他source的配置），以及对参数的配置，宰割创建过程是在afterpropertiesset中完成，他在依赖注入完成以后被ioc容器回调。
 IOC调用回顾：

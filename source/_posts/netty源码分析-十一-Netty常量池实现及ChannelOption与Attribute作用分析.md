@@ -7,6 +7,7 @@ categories: netty
 
 ServerBootstrap的init方法是服务初始的关键逻辑：
 
+<!-- more -->
 ```
     void init(Channel channel) throws Exception {
         final Map<ChannelOption<?>, Object> options = options0();//是一个linkedHashMap

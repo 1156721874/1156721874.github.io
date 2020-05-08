@@ -7,6 +7,7 @@ categories: jvm
 
 看一个程序来一下感性的认识：
 
+<!-- more -->
 ```
 public class MyTest24 {
     public static void main(String[] args) {

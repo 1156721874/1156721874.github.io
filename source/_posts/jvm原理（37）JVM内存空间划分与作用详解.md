@@ -7,6 +7,7 @@ categories: jvm
 
 JVM内存区域分了如下几个区域：
 # 虚拟机栈(Stack Frame)
+<!-- more -->
 在执行一个方法的时候，会有一个栈帧，用来存储，方法里边的操作数的出栈入栈，当java文件编译完成的时候，max_stack(栈最大的深度),max_local(最大局部变量表有多少个元素)等都是确定的。
 
 # 程序计数器(Program Counter)

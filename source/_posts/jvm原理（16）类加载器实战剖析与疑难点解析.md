@@ -7,6 +7,7 @@ categories: jvm
 
 三大类加载器所加载的路径范围：
 
+<!-- more -->
 ```
 public class MyTest18 {
     public static void main(String[] args) {

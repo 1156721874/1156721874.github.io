@@ -7,6 +7,7 @@ categories: cloud
 **一、Hadoop2.5.1编译zlib的安装与使用**
 
 zlib是一个很好的压缩解压缩库，今天我们分别介绍如何在Linux与Windows上安装与使用：
+<!-- more -->
 **一：Linux平台**
 首先看看自己的机器上是不是已经安装好zlib了：
 whereis zlib

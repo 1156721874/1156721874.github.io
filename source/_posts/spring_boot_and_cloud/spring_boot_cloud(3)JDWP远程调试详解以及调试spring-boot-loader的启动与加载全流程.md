@@ -7,6 +7,7 @@ categories: spring_boot_cloud
 
 # JDWP
 Java Debug Wire Protocol, Java调试协议
+<!-- more -->
 
 命令： java -agentlib:jdwp=help
 ```

@@ -7,6 +7,7 @@ categories: spring
 **10.1事物处理拦截器的配置**
 首先看一下建立事物处理对象的时序图：
 ![这里写图片描述](20150714170841112.png)
+<!-- more -->
 
 首先从TransactionProxyFactoryBean 的createMainInterceptor()方法开始：
 

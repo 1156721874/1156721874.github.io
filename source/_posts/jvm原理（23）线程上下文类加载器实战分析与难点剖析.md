@@ -7,6 +7,7 @@ categories: jvm
 
 我们紧接着上一个例子的代码进行：
 
+<!-- more -->
 ```
 public class MyTest26 {
     public static void main(String[] args) {

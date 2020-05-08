@@ -7,6 +7,7 @@ categories: jvm
 
 我们在之前写过的一个[自定义类加载器](http://blog.csdn.net/wzq6578702/article/details/79548157):
 我们修改一下程序的findClass方法：
+<!-- more -->
 
 ```
     protected Class<?> findClass(String className) throws ClassNotFoundException {

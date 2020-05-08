@@ -7,6 +7,7 @@ categories: docker
 
 ## 仓库和注册服务器的区别
   举例说明：
+<!-- more -->
   tdlceaserwang/repository
   dl.dockerpool.com/ubuntu
   tdlceaserwang和dl.dockerpool.com都是注册服务器，repository和ubuntu都是仓库。

@@ -7,6 +7,7 @@ categories: netty
 
 ChannelPipeline的创建时机：
 我们从服务端的入口main程序开始：
+<!-- more -->
 1、
 ```
 ChannelFuture channelFuture = serverBootstrap.bind(8899).sync();

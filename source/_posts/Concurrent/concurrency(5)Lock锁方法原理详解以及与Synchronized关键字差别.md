@@ -7,6 +7,7 @@ categories: concurrency
 
 ### ReentrantLock
 
+<!-- more -->
 可重入锁的example：
 ```
 public class MyTest1 {

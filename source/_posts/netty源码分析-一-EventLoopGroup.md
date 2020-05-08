@@ -7,6 +7,7 @@ categories: netty
 
 首先我们使用netty建立一个服务端和客户端，功能是相互之间发消息，[代码](https://github.com/1156721874/netty_lecture/tree/master/src/main/java/com/ceaser/netty/secondexample)
 我们把服务端的主要代码贴出来：
+<!-- more -->
 
 ```
 package com.ceaser.netty.secondexample;

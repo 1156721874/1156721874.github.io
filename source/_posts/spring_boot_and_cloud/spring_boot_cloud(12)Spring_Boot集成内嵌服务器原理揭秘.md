@@ -7,6 +7,7 @@ categories: spring_boot_cloud
 
 ### 断点SpringServletContainerInitializer
 我们在SpringServletContainerInitializer的onStartup方法里边加一个断点，然后debug应用，让我们感到奇怪的是断点并不会进入到onStartup方法，那么我们看一下顶层接口ServletContainerInitializer的实现类有哪些：
+<!-- more -->
 ![ServletContainerInitializer.png](ServletContainerInitializer.png)
 会看到有TomcatStarter和还有我们的SpringServletContainerInitializer，这里不会进入断点的原因是如果我们是以jar包或者main方法的方式启动应用的时候会使用springboot内嵌的tomcat容器，如果我们使用传统的spring mvc或者war包的方式那么SpringServletContainerInitializer就会初始化，如果我们现在在TomcatStarter的onStartup方法加一个断点，那么断点一定会进入。
 

@@ -7,6 +7,7 @@ categories: cloud
 
 玩个游戏：
 执行：find . -name '*.java' | xargs grep --color 'main(' | awk '{print $1}' | uniq | grep -v test
+<!-- more -->
 找到cli的执行main方法：
 https://insight.io/github.com/apache/hive/blob/master/cli/src/java/org/apache/hadoop/hive/cli/CliDriver.java?line=685
 

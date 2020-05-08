@@ -7,6 +7,7 @@ categories: javaBase
 
 在jdk8中什么是函数式接口：
 1、被@FunctionalInterface注解修饰的。
+<!-- more -->
 2、接口里边只有一个非default的方法。
 满足以上2个条件的即为函数式接口，ps：即使一个接口没有被@FunctionalInterface修饰，但是满足2，那么这样的接口也会是函数式接口。
 **Supplier**

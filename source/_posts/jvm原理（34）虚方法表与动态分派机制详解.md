@@ -7,6 +7,7 @@ categories: jvm
 
 编写代码：
 
+<!-- more -->
 ```
 public class MyTest7 {
     public static void main(String[] args) {

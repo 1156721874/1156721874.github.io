@@ -7,6 +7,7 @@ categories: jvm
 
 上一节走读了类加载器的Java doc，这一节我们实现一个自定义的类加载器：
 ```
+<!-- more -->
 public class MyTest16 extends  ClassLoader {
 
     private String classLoaderName;

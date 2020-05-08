@@ -7,6 +7,7 @@ categories: jvm
 
 我们在使用spring这类框架的时候，基于动态代理的使用，比如AOP，会使得开发更加灵活，那么在字节码的层面动态代理是什么样子的呢，生成出来的代理类结构是什么，本次我们首先写一个动态代理的例子，然后得到生成的动态代理类。
 定义接口：
+<!-- more -->
 ```
 public interface SubJect {
     void request();

@@ -7,6 +7,7 @@ categories: jvm
 
 修改一下上一节的程序：
 
+<!-- more -->
 ```
 public class MyTest3 {
     public void test() throws FileNotFoundException,IOException,NullPointerException{

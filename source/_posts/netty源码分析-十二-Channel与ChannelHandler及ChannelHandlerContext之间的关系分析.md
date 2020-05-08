@@ -7,6 +7,7 @@ categories: netty
 
 还是之前的init代码入口，上一节我们介绍了ChannelOption和AttributeKey，本次我们说下Channel与ChannelHandler及ChannelHandlerContext之间的关系分析。
 ```
+<!-- more -->
 void init(Channel channel) throws Exception {
         final Map<ChannelOption<?>, Object> options = options0();
         synchronized (options) {

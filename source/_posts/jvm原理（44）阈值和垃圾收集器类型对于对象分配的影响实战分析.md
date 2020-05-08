@@ -7,6 +7,7 @@ categories: jvm
 
 ### 命令介绍：
 java -XX:+PrintCommandLineFlags -version
+<!-- more -->
 
 打印jvm默认启动参数，以及jvm的版本号
 运行结果：

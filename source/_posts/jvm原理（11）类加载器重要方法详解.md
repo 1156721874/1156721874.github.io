@@ -7,6 +7,7 @@ categories: jvm
 
 [上一节](http://blog.csdn.net/wzq6578702/article/details/79548157) 我们写了一个类加载器的实现，其中一个重要的方法是findClass，看一下它的介绍：
 https://docs.oracle.com/javase/7/docs/api/java/lang/ClassLoader.html#loadClass(java.lang.String,%20boolean)
+<!-- more -->
 **findClass：**
 ```
 /**

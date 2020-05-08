@@ -7,6 +7,7 @@ categories: cloud
 
 
 **一、linux基本操作**
+<!-- more -->
 	Linux系统下要和外界进行文件传输需要使用ftp，对此需要搭建ftp服务
 **(1)vsftp install :**
 		reference file :/mnt/linuxshare/RHEL 5.2下vsftp配置全教程 - 51CTO.COM.htm

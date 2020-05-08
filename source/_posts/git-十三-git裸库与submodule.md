@@ -7,6 +7,7 @@ categories: git
 
 **创建裸库：**
 girl init --bare
+<!-- more -->
 
 ```
 $ git init --bare

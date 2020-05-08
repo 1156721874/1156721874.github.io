@@ -7,6 +7,7 @@ categories: DesignPatterns
 ![这里写图片描述](20151010152832034.png)
 ![这里写图片描述](20151010145641255.png)
 状态模式用来改变对象的行为，当状态发生变化时，行为也随着发生变化，和switch分支语句有点类似，比如如下的代码：
+<!-- more -->
 
 ```
 public class Creature{

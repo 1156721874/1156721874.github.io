@@ -7,6 +7,7 @@ categories: jvm
 
 接着上次的[事例](https://blog.csdn.net/wzq6578702/article/details/79601719) 我们上次加载的类都是MyTest的这样的一个类，但是如果我们要加载的类里边还有其他的一些类，那么加载器对于这种嵌套的情况是怎么工作的呢？
 新建一个类MyCat
+<!-- more -->
 ```
 public class MyCat {
   public MyCat(){

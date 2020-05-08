@@ -7,6 +7,7 @@ categories: spring
 **9.1 DispatcherServlet视图呈现的设计**
 衔接上一章DisPatcherServlet的doDispatch,执行完handler之后得到ModelAndView对象，然后视图的展现交给了render方法：
 
+<!-- more -->
 ```
 	protected void render(ModelAndView mv, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		// Determine locale for request and apply it to the response.

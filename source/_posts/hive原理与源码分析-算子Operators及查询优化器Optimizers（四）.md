@@ -7,6 +7,7 @@ categories: cloud
 
 ![这里写图片描述](20170509211147684.png)
 
+<!-- more -->
 **Operator接口**
 https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java?line=66
 这个接口最重要的一个方法：

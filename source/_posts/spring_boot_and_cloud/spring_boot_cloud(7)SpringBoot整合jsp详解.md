@@ -7,6 +7,7 @@ categories: spring_boot_cloud
 
 ### Thymeleaf
 类似于freemarker的模板引擎
+<!-- more -->
 
 ### jsp demo
 #### 编写controller代码：

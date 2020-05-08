@@ -7,6 +7,7 @@ categories: netty
 
 1. 一个EventLoopGroup当中会包含一个或多个EventLoop。
 2. 一个EventLoop在它的整个生命周期当中都只会与唯一一个Thread进行绑定。
+<!-- more -->
 3. 所有由EventLoop所处理的各种I/O事件都将在它所关联的那个Thread上进行处理。
 4. 一个Channel在它的整个生命周期中只会注册在一个EventLoop上。
 5. 一个EventLoop在运行过程中，会被分配给一个或多个Channel。

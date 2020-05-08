@@ -7,6 +7,7 @@ categories: jvm
 
 ### CMS
 concurrent mark sweep
+<!-- more -->
 
 #### 枚举根节点
 - 当执行系统停顿下来后，并不需要一个不漏的检查完所有执行上下文呵呵全局的引用位置，虚拟机应当是由办法直接得知那些地方存放着对象引用。在hotspot

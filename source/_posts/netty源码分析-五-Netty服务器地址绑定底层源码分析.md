@@ -7,6 +7,7 @@ categories: netty
 
 AbstractBootstrapd的initAndRegister方法，完成 初始化和注册：
 
+<!-- more -->
 ```
  final ChannelFuture initAndRegister() {
         Channel channel = null;

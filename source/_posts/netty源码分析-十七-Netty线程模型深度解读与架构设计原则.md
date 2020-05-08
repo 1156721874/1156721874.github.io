@@ -7,6 +7,7 @@ categories: netty
 
 上次分析到：
 ```
+<!-- more -->
 public abstract class SingleThreadEventLoop extends SingleThreadEventExecutor implements EventLoop
   public ChannelFuture register(final ChannelPromise promise) {
       ObjectUtil.checkNotNull(promise, "promise");

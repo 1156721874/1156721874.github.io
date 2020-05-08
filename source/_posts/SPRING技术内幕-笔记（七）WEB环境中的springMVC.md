@@ -7,6 +7,7 @@ categories: spring
 **7.1Tomcat的web.XML对springMVC 的描述**：
 ![这里写图片描述](20150610221403198.png)
 
+<!-- more -->
 dispatcherServlet定义了对应的URL的映射，context-param制定了bean的定义文件的路径，contextLoaderListener作为简历IOC容器的入口，加载IOC容器到servletContext中，即上下文。
 
 **7.2上下文在？WEB容器中的启动**

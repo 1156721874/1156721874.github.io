@@ -7,6 +7,7 @@ categories: netty
 
 上一节说到注册的入口，即
 MultithreadEventLoopGroup:
+<!-- more -->
 
 ```
     public ChannelFuture register(Channel channel) {

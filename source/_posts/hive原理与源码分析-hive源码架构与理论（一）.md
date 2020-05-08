@@ -7,6 +7,7 @@ categories: cloud
 
 **什么是Hive？**
 数据仓库：存储、查询、分析大规模数据
+<!-- more -->
 SQL语言：简单易用的类SQL查询语言
 编程模型：允许开发者自定义UDF、Transform、Mapper、Reducer，来更简单地完成复杂MapReduce无法完成的工作
 数据格式：处理Hadoop上任意数据格式的数据，或者使用优化的格式存储Hadoop上的数据，RCFile，ORCFile，Parquest

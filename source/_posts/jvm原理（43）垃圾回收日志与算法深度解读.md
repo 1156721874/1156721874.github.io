@@ -7,6 +7,7 @@ categories: jvm
 
 编写测试程序：
 ```
+<!-- more -->
 /**
 jvm参数：
 * -verbose:gc 输出打印详细的GC日志

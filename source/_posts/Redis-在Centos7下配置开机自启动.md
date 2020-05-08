@@ -7,6 +7,7 @@ categories: redis
 
 来源：http://www.jianshu.com/p/20b761ae993c
 设置Redis开机启动需要如下几个步骤：
+<!-- more -->
 
 编写配置脚本 [ vim /etc/init.d/redis ]
 

@@ -7,6 +7,7 @@ categories: jvm
 
 上一节我们通过【ClassLoader.getSystemClassLoader()】得到系统类加载器，那么本节看一下这个方法的doc以及一些细节，方便我们更好的理解：
 <font color="#FF0000">
+<!-- more -->
 public static ClassLoader getSystemClassLoader()
 Returns the system class loader for delegation. This is the default delegation parent for new ClassLoader instances, and is typically the class loader used to start the application.
 </font>

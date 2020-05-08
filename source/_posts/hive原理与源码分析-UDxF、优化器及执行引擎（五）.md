@@ -7,6 +7,7 @@ tags:
 **什么是UDF？**
 UDF的全称是User-Defined-Functions
 Hive中一共有三种UDF
+<!-- more -->
 UDF（User-Defined Function）：输入一行，输入一行，1->1
 UDAF（User-Defined Aggregation Function）：输入N行，输出一行，N->1
 UDTF（User-Defined Table-generating Function)：输入一行，输出N行，1->N

@@ -7,6 +7,7 @@ categories: spring_boot_cloud
 
 ### 准备工作
 gradle引入相关依赖：
+<!-- more -->
 "org.springframework.boot:spring-boot-starter-websocket",
 "org.springframework.boot:spring-boot-starter-json"
 

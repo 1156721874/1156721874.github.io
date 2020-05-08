@@ -7,6 +7,7 @@ categories: netty
 
 在介绍ReplayingDecoder之前 想看一下它的用法，构建一个服务端和客户端的模型：
 服务端：
+<!-- more -->
 ```
 public class MyServer {
 

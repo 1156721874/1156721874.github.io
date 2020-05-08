@@ -7,6 +7,7 @@ categories: javaBase
 
 default方法的加入是为了兼容jdk8以前的版本的需要。
 （1）当前有两个接口MyInterface和MyInterface1，它们都有相同名字的default方法，之后实现类Myclass同时implements了MyInterface和MyInterface1，同时Myclass实现了default方法，此时Myclass调用default调的是谁的？
+<!-- more -->
 （2）一个接口I有一个default方法，另一个实现类A实现了了此接口，并且重写了default方法，之后另一个类B继承了实现类A并且实现了接口I，那么在这种情况下，实现类B调用的default方法又是谁的呢？针对这两种情况编写测试代码：
 
 接口MyInterface

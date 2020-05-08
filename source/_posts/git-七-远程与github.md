@@ -7,6 +7,7 @@ categories: git
 
 本地创建一个新的仓库，然后在github也创建一个新的仓库。
 此时需要在本地关联github的远程仓库的url地址之后，将本地仓库提交到github。
+<!-- more -->
 命令：
 一、https的方式
 git remote add origin https://github.com/user/gitrespory.git

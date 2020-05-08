@@ -7,6 +7,7 @@ categories: jvm
 
 ### CMS收集器
 - CMS (concurrent mark sweep)收集器，以获取最短回收停顿时间为目标，多数应用于互联网站或者b/s系统的服务器上。
+<!-- more -->
 - cms是基于“标记-清除”算法实现的，整个过程分为4个步骤：
   - 初始标记(cms initial mark)
   - 并发标记(cms concurrent mark)

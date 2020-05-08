@@ -7,6 +7,7 @@ categories: jvm
 
 我们在 [上一节](https://blog.csdn.net/wzq6578702/article/details/79829341)讲到实例基础上做一下改动：
 
+<!-- more -->
 ```
 public class MyTest21 {
     public static void main(String[] args)  throws Exception{

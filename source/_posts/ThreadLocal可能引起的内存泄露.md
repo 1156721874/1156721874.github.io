@@ -7,6 +7,7 @@ categories: Thread
 
 Threadlocal里面使用了一个存在弱引用的map,当释放掉threadlocal的强引用以后,map里面的value却没有被回收.而这块value永远不会被访问到了。 所以存在着内存泄露. 最好的做法是将调用threadlocal的remove方法。
 　 在threadlocal的生命周期中,都存在这些引用. 看下图: 实线代表强引用,虚线代表弱引用：
+<!-- more -->
 　　
 ![这里写图片描述](20160820211419288.png)
 　　

@@ -7,6 +7,7 @@ categories: jvm
 
 上一节解析完了常量池，接下来是**访问标记**，
 ![这里写图片描述](20180804134250848.png)
+<!-- more -->
 00 21 ： ACC_SUPPER + ACC_PUBLIC
 紧接着是**类的名字**，2个字节：00 05 是5号常量 【#5 = Class              #49            // com/twodragonlake/jvm/bytecode/MyTest2】
 **父类的名字**，占2个字节：00 0D 是13号常量：【#13 = Class              #59            // java/lang/Object】

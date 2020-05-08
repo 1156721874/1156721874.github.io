@@ -7,6 +7,7 @@ categories: Thread
 ArrayBlockQueue和ArrayBlockQueue属于Java.util.current包下的两个封装的线程安全的队列，主要讨论线程安全和阻塞操作的实现
 他们之间的关系如下：
 ![这里写图片描述](20161029145814547.png)
+<!-- more -->
 [复制图片地址，在新的浏览器器页面查看大图]
 **ArrayBlockingQueue:**
 线程安全和阻塞操作在入队列和取出队列元素都会涉及，先从线程安全进入：

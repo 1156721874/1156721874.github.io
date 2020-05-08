@@ -7,6 +7,7 @@ categories: Thread
 
 CopyOnWriteArrayList和CopyOnWriteArraySet应用场合一般 是在读多写少的情况，比如黑名单，他们之间的区别就是list和set的区别，但是在实现上CopyOnWriteArraySet使用CopyOnWriteArrayList来实现的，就像set使用了hashmap，treeset使用treemap，下面先看CopyOnWriteArrayList的添加操作.
 
+<!-- more -->
 ```
     /**
      * Inserts the specified element at the specified position in this

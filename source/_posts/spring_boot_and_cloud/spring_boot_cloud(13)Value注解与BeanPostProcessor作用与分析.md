@@ -7,6 +7,7 @@ categories: spring_boot_cloud
 
 ### @Value注解的使用方式
 
+<!-- more -->
 ```
 @RestController
 @RequestMapping(value = "/person", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)

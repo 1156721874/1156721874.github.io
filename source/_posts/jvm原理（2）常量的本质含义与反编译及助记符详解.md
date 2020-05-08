@@ -7,6 +7,7 @@ categories: jvm
 
 先运行一段程序：
 
+<!-- more -->
 ```
 public class MyTest2 {
 

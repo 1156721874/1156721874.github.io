@@ -7,6 +7,7 @@ categories: Thread
 **定义面包类：**
 
 ```
+<!-- more -->
 package ProducerAndConsumer;
 
 public class Bread {

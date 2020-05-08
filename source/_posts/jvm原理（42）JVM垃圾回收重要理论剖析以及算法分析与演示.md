@@ -7,6 +7,7 @@ categories: jvm
 
 ### 内存区域的回顾
 垃圾收集器和java的内存分布有着紧密的联系，因此我们要对jvm的内存布局回顾一下，jvm的内存布局大致分为如下：
+<!-- more -->
 ![memarea](memarea.png)
 ![memarea1](memarea1.png)
 

@@ -7,6 +7,7 @@ categories: cloud
 ---
 
 **使用IDE调试一条简单的SQL**
+<!-- more -->
 画出AST
 画出Operator Tree
 

@@ -7,6 +7,7 @@ categories: cloud
 
 **hive流程回顾**
 ![这里写图片描述](20170521124731490.png)
+<!-- more -->
 
 **LLAP**
 ![这里写图片描述](https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1495352230994&di=f355678bbabd6fe6962ff26d859987ad&imgtype=0&src=http://i.xxshe.com/HVyH5TFl.jpg)

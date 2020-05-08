@@ -7,6 +7,7 @@ categories: concurrency
 
 ### volatile关键字
 volatile英文翻译：易变的，挥发物，不稳定的
+<!-- more -->
 #### volatile的三个方面的作用：
 - 实现long/double类型变量的原子操作
   valatile double a = 1.0

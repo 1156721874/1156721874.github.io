@@ -7,6 +7,7 @@ categories: git
 
 题外话：
 echo 'hello world' >　test2.txt
+<!-- more -->
 如果此命令敲错了，想跳到开头快捷键：ctrl+A，跳到命令结尾：ctrl+E
 
 **删除操作**

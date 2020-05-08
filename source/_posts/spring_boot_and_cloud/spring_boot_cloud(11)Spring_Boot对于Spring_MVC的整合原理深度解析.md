@@ -7,6 +7,7 @@ categories: spring_boot_cloud
 
 ### 引言
 现在我们使用spring boot搭建的工程和之前spring mvc的方式有一个很大的不同点就是：web.xml已经不需要配置，而之前的spring mvc需要配置web.xml，在里边配置DsipatcherServlet，spring boot之所以不需要这个配置是一位servlet的升级，之前用的是servlet2.5的标准，现在boot的方式是servlet3.0，而servlet3.0允许以spi的方式去实现servlet的初始化。
+<!-- more -->
 
 ### ServletContainerInitializer
 我们打开我们项目依赖的jar包：

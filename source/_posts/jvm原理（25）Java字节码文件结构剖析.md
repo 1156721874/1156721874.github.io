@@ -7,6 +7,7 @@ categories: jvm
 
 编写java文件：
 ```
+<!-- more -->
 public class MyTest1 {
     private int a = 1;
 

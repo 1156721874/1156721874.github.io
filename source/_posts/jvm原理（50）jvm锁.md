@@ -7,6 +7,7 @@ categories: jvm
 
 
 ### synchronized关键字
+<!-- more -->
 ```
 /**
  * 当我们使用synchronized关键字来修饰同步代码块时，本质上在字节码层面上是通过monitorenter

@@ -7,6 +7,7 @@ categories: python
 
 安装包;
 ![这里写图片描述](20161201220019448.png)
+<!-- more -->
 
 python依赖环境安装：
 yum install openssl-devel -y

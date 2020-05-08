@@ -7,6 +7,7 @@ categories: jvm
 
 **通过字节码分析this关键字以及异常表的重要作用**
 编写代码：
+<!-- more -->
 
 ```
 public class MyTest3 {

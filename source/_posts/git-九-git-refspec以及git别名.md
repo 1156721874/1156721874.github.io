@@ -7,6 +7,7 @@ categories: git
 
 **别名：**
 我们在使用git命令的时候，有些命令使用的非常频繁，因此我们可以使用别名减少拼写，例如：
+<!-- more -->
 
 ```
 git config --global alias.br branch

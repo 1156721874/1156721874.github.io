@@ -7,6 +7,7 @@ categories: netty
 
 一、服务端在回写数据到客户端的时候可以有一下2中方式：
 ![这里写图片描述](20171118104445662.png)
+<!-- more -->
 在Netty中有22种发送消息的方式，可以直接写到Channel中，也可以写到与ChannelHandler所关联的那个ChannelHandlerContext中，对于前一种方式来说，消息会从ChannelPipeline的末尾开始流动，对于后一种方式来说，消息将从ChannelPipleline中的下一个ChannelG、Handler开始流动。
 图示：
 ![这里写图片描述](20171118105821855.png)

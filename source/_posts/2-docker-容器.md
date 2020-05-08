@@ -7,6 +7,7 @@ categories: docker
 
 ## 新建并启动
   ```
+<!-- more -->
   docker run ubuntu:14.04 /bin/echo 'Hello world'
   Hello world
 

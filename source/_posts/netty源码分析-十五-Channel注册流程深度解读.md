@@ -7,6 +7,7 @@ categories: netty
 
 前边的介绍是netty对一些组件初始化的过程，接下来是第二部分，注册，还是之前的initAndRegister方法：
 
+<!-- more -->
 ```
     final ChannelFuture initAndRegister() {
         Channel channel = null;

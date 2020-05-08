@@ -7,6 +7,7 @@ categories: jvm
 
 前边我们解析了一个字节码文件，现在我们做一个比较复杂的字节码文件的解析，程序如下：
 
+<!-- more -->
 ```
 package com.twodragonlake.jvm.bytecode;
 

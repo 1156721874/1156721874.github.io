@@ -7,6 +7,7 @@ categories: jvm
 
 首先写一段加载jdbc驱动的代码：
 ```
+<!-- more -->
 public class MyTest27 {
     public static void main(String[] args) throws Exception {
         Class.forName("com.mysql.jdbc.Driver");

@@ -7,6 +7,7 @@ categories: netty
 
 **ByteBuf**
 ByteBuf是Netty提供的代替jdk的ByteBuffer的一个容器，首先看一下他的具体用法：
+<!-- more -->
 
 ```
 public class ByteBufTest0 {

@@ -7,6 +7,7 @@ categories: spring_boot_cloud
 
 ### spring-boot官方简介
 https://github.com/spring-projects/spring-boot
+<!-- more -->
 
 ### Spring Boot日志处理详解
 

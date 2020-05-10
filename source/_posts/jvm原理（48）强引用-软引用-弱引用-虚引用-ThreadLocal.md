@@ -663,7 +663,15 @@ get方法里边也是首先得到当前线程，通过当前线程得到ThreadLo
 getEntry的key是ThreadLocal，那么ThreadLocalMap.Entry是什么？
 ThreadLocalMap.Entry是ThreadLocalMap内部静态类，看定义：
 ```
-static class Entry extends WeakReference<ThreadLocal<?>>
+static class Entry extends WeakReference<ThreadLocal<?>> {
+    /** The value associated with this ThreadLocal. */
+    Object value;
+
+    Entry(ThreadLocal<?> k, Object v) {
+        super(k);//key是弱引用的reference
+        value = v;
+    }
+}
 ```
 Entry继承了WeakReference。
 我们设置的value存储在ThreadLocalMap.Entry里边，得到ThreadLocalMap.Entry之后，得到里边的value。然后get方法返回。
@@ -684,5 +692,37 @@ world
 
 #### 详解
 ![ThreadLocal.png](ThreadLocal.png)
+![ThreadLocal2.png](ThreadLocal2.png)
 
 Entry为什么是WeakReference,是因为当线程执行完run方法之后，就会处于消亡的状态，也不会指向ThreadLocal对象，那么这个时候应该被回收，否则就会出现内存泄露。
+
+
+为什么Entry的key是一个弱引用，这样设计的目的是什么呢？
+我们从2个方向分别论证：
+- 假如key指向的ThreadLocal对象的引用是强引用，那么当栈里边的指向ThreadLocal对象的引用消失的时候，这个时候ThreadLocal对象还不能被GC，因为Entry的Key还有强引用指向它，但是这个ThreadLocal对象再也没法被访问到，Entry里边只会越来越大，最后会造成内存泄露。
+- 假如key指向的ThreadLocal对象的引用是弱引用，那么当栈里边的指向ThreadLocal对象的引用消失的时候，此时ThreadLocal对象只有Entry的key指向它，并且是弱引用，那么此时ThreadLocal对象就会被回收，不会造成内存泄露。
+
+综上所述，使用Entry使用弱引用是合理的。
+
+另外还有一个地方需要知道，key指向的ThreadLocal对象如果被回收或者被置成了null，那么这个key-value对就无法被访问，一直存在这个threadLocals数组里边，这种情况也会被造成内存泄露，因此针对于这种情况也需要进行特殊处理：
+- 在ThreadLocal的set或者get方法都会有一个清理的过程，这个方法是：expungeStaleEntry，这个方法会对key为null的键值对进行清除。
+- ThreadLocal的remove方法，显式的删除key-value对，但是也会调用expungeStaleEntry方法。
+
+应用程序开发角度：
+我们经常定义ThreadLocal：
+```
+public class Test{
+
+private static final ThreadLocal<String> tl = new ThreadLocal();
+
+  //不需要ThreadLocal的时候的使用方式
+  try{
+    .....
+  }catch(){
+
+  }finally{
+    //显式移除，防止内存泄露
+    tl.remove();
+  }
+}
+```

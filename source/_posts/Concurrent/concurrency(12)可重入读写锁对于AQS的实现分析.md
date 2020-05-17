@@ -29,8 +29,8 @@ public class MyTest2 {
         IntStream.range(0,10).forEach(i -> new Thread(myTest2::method).start());
     }
 }
-
 ```
+<!-- more -->
 输出：
 method
 method
@@ -176,7 +176,7 @@ protected final boolean tryAcquire(int acquires) {
 }
 ```
 
-##### ReentrantReadWriteLock的操作逻辑
+##### ReentrantReadWriteLock的lock操作逻辑
 读锁：
 1. 在获取读锁时，会尝试判断当前对象是否拥有了写锁，如果已经拥有，则直接失败。
 2. 如果没有写锁，，就表示当前对象没有排它锁，则当前线程会尝试给对象加锁。
@@ -186,3 +186,183 @@ protected final boolean tryAcquire(int acquires) {
 1. 在获取写锁时，会尝试判断当前对象是否拥有了锁（读锁和写锁），如果已经拥有并且持有的线程并非当前线程，直接失败。
 2. 如果当前对象没有被加锁，，那么写锁就会为了当前对象上锁，并且将写锁的个数+1.
 3. 将当前对象的排它锁线程持有者设为自己。
+
+##### ReadLock的unlock
+ReentrantReadWriteLock读锁的unlock：
+```
+//Attempts to release this lock. 尝试释放锁
+//If the number of readers is now zero then the lock is made available for write lock attempts
+// 读锁的数量是0，那么写锁操作可以尝试去获取锁
+public void unlock() {
+    sync.releaseShared(1);
+}
+```
+releaseShared的实现在AQS里边
+```
+// Releases in shared mode.   共享模式下释放锁
+public final boolean releaseShared(int arg) {
+    //读锁和写锁都被释放掉
+    if (tryReleaseShared(arg)) {
+        doReleaseShared();
+        return true;
+    }
+    return false;
+}
+```
+tryReleaseShared的实现在ReentrantReadWriteLock的Sync实现的：
+```
+protected final boolean tryReleaseShared(int unused) {
+    Thread current = Thread.currentThread();
+    if (firstReader == current) {// 当前线程是第一个获取读锁的线程
+        // assert firstReaderHoldCount > 0;
+        if (firstReaderHoldCount == 1)//firstReaderHoldCount是第一个获取读锁线程重入的次数
+            firstReader = null;//只有一个读线程(自己本身)，firstReader置空
+        else
+            firstReaderHoldCount--;//重入的情况，减一
+    } else {
+      //非第一个读取者
+        HoldCounter rh = cachedHoldCounter;//一个HoldCounter代表一个读线程的实例，记录了读线程持有锁的数量
+        if (rh == null || rh.tid != getThreadId(current))//如果当前线程不是最后一个获取读锁的线程
+            rh = readHolds.get();//从ThreadLocal里边获取当前线程持有锁的数量计数器
+        int count = rh.count;//得到当前线程持有锁的数量
+        if (count <= 1) {
+            readHolds.remove();//从ThreadLocal里边删除
+            if (count <= 0)//二次判断
+                throw unmatchedUnlockException();
+        }
+        --rh.count;//当前线程持有锁的数量减一
+    }
+    for (;;) {
+        int c = getState();
+        int nextc = c - SHARED_UNIT;
+        if (compareAndSetState(c, nextc))//CAS替换
+            // Releasing the read lock has no effect on readers,
+            // but it may allow waiting writers to proceed if
+            // both read and write locks are now free.
+            //对于读锁时无关紧要的
+            //状态为0的时候，让写和读有一个条件获取到写锁或者读锁，这里状态为0，会存在读锁和写锁的一块竞争
+            return nextc == 0;
+    }
+}
+```
+如果读锁和写锁都被释放掉，那么就会进入到AQS的doReleaseShared：
+```
+//Release action for shared mode 共享模式下释放锁的操作
+private void doReleaseShared() {
+    /*
+     * Ensure that a release propagates, even if there are other
+     * in-progress acquires/releases.  This proceeds in the usual
+     * way of trying to unparkSuccessor of head if it needs
+     * signal. But if it does not, status is set to PROPAGATE to
+     * ensure that upon release, propagation continues.
+     * Additionally, we must loop in case a new node is added
+     * while we are doing this. Also, unlike other uses of
+     * unparkSuccessor, we need to know if CAS to reset status
+     * fails, if so rechecking.
+     */
+
+    for (;;) {
+        Node h = head;
+        if (h != null && h != tail) {//队列里边是有元素的
+            int ws = h.waitStatus;//等待状态
+            if (ws == Node.SIGNAL) {//线程正在等待得到通知
+                if (!compareAndSetWaitStatus(h, Node.SIGNAL, 0))
+                    continue;            // loop to recheck cases
+                unparkSuccessor(h);//唤醒当前节点的下一个节点的线程
+            }
+            else if (ws == 0 &&
+                     !compareAndSetWaitStatus(h, 0, Node.PROPAGATE))
+                continue;                // loop on failed CAS
+        }
+        if (h == head)                   // loop if head changed
+            break;
+    }
+}
+//Wakes up node's successor, if one exists.
+//如果节点存在，那么将其唤醒
+private void unparkSuccessor(Node node) {
+    /*
+     * If status is negative (i.e., possibly needing signal) try
+     * to clear in anticipation of signalling.  It is OK if this
+     * fails or if status is changed by waiting thread.
+     */
+    int ws = node.waitStatus;
+    if (ws < 0)
+        compareAndSetWaitStatus(node, ws, 0);
+
+    /*
+     * Thread to unpark is held in successor, which is normally
+     * just the next node.  But if cancelled or apparently null,
+     * traverse backwards from tail to find the actual
+     * non-cancelled successor.
+     */
+     //当前节点的后继节点
+    Node s = node.next;
+    if (s == null || s.waitStatus > 0) {
+        s = null;
+        for (Node t = tail; t != null && t != node; t = t.prev)
+            if (t.waitStatus <= 0)
+                s = t;
+    }
+    if (s != null)
+        //唤醒线程
+        LockSupport.unpark(s.thread);
+}
+```
+
+### LockSupport
+LockSupport封装了线程的一些等待或者唤醒的操作，中间会调用 **sun.misc.Unsafe** 的native代码是实现，上一节的锁的释放，唤醒后继节点的动作就是使用了LockSupport.本次我们看一下方法，本次我们看一下unpark的openjdk的底层C++实现。
+具体实现代码：http://hg.openjdk.java.net/jdk8u/jdk8u/hotspot/file/6f33e450999c/src/os/linux/vm/os_linux.cpp
+park方法会调用pthread_mutex_trylock，这个是内核实现。
+因此不管是synchronized关键字还是AQS都是需要切换到内核态。
+
+#####  WriteLock的unlock
+实现:
+```
+//Attempts to release this lock.
+//尝试释放锁
+public void unlock() {
+    sync.release(1);
+}
+```
+sync.release(1)的实现在AQS里边：
+```
+//Releases in exclusive mode.
+// 在排他模式下释放锁
+public final boolean release(int arg) {
+    if (tryRelease(arg)) {//释放锁成功
+        Node h = head;
+        if (h != null && h.waitStatus != 0)
+            unparkSuccessor(h);//唤醒后继节点
+        return true;
+    }
+    return false;
+}
+```
+tryRelease的实现在ReentrantReadWriteLock里边:
+```
+protected final boolean tryRelease(int releases) {
+  //当前排它锁持有者的线程是不是当前线程，不是直接异常
+    if (!isHeldExclusively())
+        throw new IllegalMonitorStateException();
+    int nextc = getState() - releases;//释放锁，状态减一
+    boolean free = exclusiveCount(nextc) == 0;//exclusiveCount得到排它锁的数量，如果等于，意味着没有任何线程持有排它锁
+    if (free)
+        setExclusiveOwnerThread(null);//将持有排他锁的线程清空
+    setState(nextc);//保存状态
+    return free;
+}
+
+protected final boolean isHeldExclusively() {
+    // While we must in general read state before owner,
+    // we don't need to do so to check if current thread is owner
+    return getExclusiveOwnerThread() == Thread.currentThread();
+}
+```
+### AQS的锁获取直观图
+![aqs1.png](aqs1.png)
+上面的知识点介绍的是阻塞队列的部分，接下来是条件队列的介绍。
+
+#### 条件队列
+ReentrantReadWriteLock里边的读锁和写锁的条件队列都是使用的Condition来实现的。
+![condition.png](condition.png)

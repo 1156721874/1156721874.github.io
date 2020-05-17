@@ -14,7 +14,7 @@ AQS和synchronized关键字C++的实现原理相似度是80%左右。
 - static final class Node
   Node是对阻塞线程的封装，Node内部有一个Thread的引用。
 - private volatile int state; 同步状态,在不同的场景有不同的含义，精妙所在
-
+<!-- more -->
 #### 关键方法
 1. protected boolean tryAcquire(int arg)
 Attempts to acquire in exclusive mode

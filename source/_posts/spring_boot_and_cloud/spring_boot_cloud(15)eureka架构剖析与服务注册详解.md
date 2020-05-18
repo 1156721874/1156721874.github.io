@@ -1,7 +1,7 @@
 ---
 title: spring_boot_cloud(15)eureka架构剖析与服务注册详解
 date: 2020-05-16 16:45:32
-tags: [Condition]
+tags: [eureka]
 categories: spring_boot_cloud
 ---
 

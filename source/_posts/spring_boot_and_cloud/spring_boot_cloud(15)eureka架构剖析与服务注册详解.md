@@ -244,3 +244,5 @@ eureka:
   		this.serviceUrl.put(DEFAULT_ZONE, DEFAULT_URL);
   	}
 ```
+
+【本期代码：https://github.com/1156721874/spring_cloud_projects】

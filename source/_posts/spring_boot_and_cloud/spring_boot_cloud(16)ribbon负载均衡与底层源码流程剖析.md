@@ -70,6 +70,7 @@ ConditionalOnClass和ConditionalOnBean完成LoadBalancerAutoConfiguration的加�
 并且LoadBalancerClient实例存在才会加载LoadBalancerAutoConfiguration。
 
 #### LoadBalancerInterceptor拦截器
+LoadBalancerInterceptor存在LoadBalancerAutoConfiguration当中。
 ```
 public class LoadBalancerInterceptor implements ClientHttpRequestInterceptor {
 
@@ -101,7 +102,7 @@ public class LoadBalancerInterceptor implements ClientHttpRequestInterceptor {
 
 }
 ```
- this.loadBalancer.execute调用了LoadBalancerClient的execute方法：
+ this.loadBalancer.execute调用了LoadBalancerClient的execute方法:
  ```
  public interface LoadBalancerClient extends ServiceInstanceChooser {
 
@@ -198,7 +199,7 @@ public interface IRule{
 
 #### 实现类
 ![IRule.png](IRule.png)
-如果我们想指定使用某一个规则 怎么定义呢？
+如果我们想指定使用某一个规则 怎么定义呢?
 ```
 @Configuration
 public class RibbonConfig {
@@ -216,3 +217,5 @@ public class RibbonConfig {
 }
 ```
 这样配置就会全局生效。
+
+【本期代码：https://github.com/1156721874/spring_cloud_projects】

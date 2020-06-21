@@ -81,6 +81,13 @@ class_loader    classes bytes   parent_loader   alive?  type
 total = 3       591     1143069     N/A         alive=3, dead=0     N/A
 ```
 
+#### jstat -gcutil pid 3000
+用来查看当前线程的young gc、full gc的频率
+参数3000是多少时间刷新一次
+
+#### jmap -histo:live pid
+查看当前线程持有的对象及其数量。
+
 #### jmap -heap
 打印当前进程堆的情况：
 ```

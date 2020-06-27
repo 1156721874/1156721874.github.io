@@ -10,7 +10,7 @@ categories: spring_boot_cloud
 - 3pc
 - tcc
 - 事物的最终一致性
-
+<!-- more -->
 #### 2pc 2阶段提交
 ![2pc.png](2pc.png)
 - 角色：Transaction Manager、Resource Manager

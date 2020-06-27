@@ -366,3 +366,167 @@ protected final boolean isHeldExclusively() {
 #### 条件队列
 ReentrantReadWriteLock里边的读锁和写锁的条件队列都是使用的Condition来实现的。
 ![condition.png](condition.png)
+
+### AQS设计哲学解析及synchronized思想变迁
+#### Conditiond.await()实现：
+```
+/**
+ * Implements interruptible condition wait.
+ * <ol>
+ * <li> If current thread is interrupted, throw InterruptedException.
+ * <li> Save lock state returned by {@link #getState}.
+ * <li> Invoke {@link #release} with saved state as argument,
+ *      throwing IllegalMonitorStateException if it fails.
+ * <li> Block until signalled or interrupted.
+ * <li> Reacquire by invoking specialized version of
+ *      {@link #acquire} with saved state as argument.
+ * <li> If interrupted while blocked in step 4, throw InterruptedException.
+ * </ol>
+ */
+public final void await() throws InterruptedException {
+    if (Thread.interrupted())
+        throw new InterruptedException();
+    Node node = addConditionWaiter();
+    int savedState = fullyRelease(node);
+    int interruptMode = 0;
+    //中断的一些判断
+    while (!isOnSyncQueue(node)) {
+        LockSupport.park(this);
+        if ((interruptMode = checkInterruptWhileWaiting(node)) != 0)
+            break;
+    }
+    if (acquireQueued(node, savedState) && interruptMode != THROW_IE)
+        interruptMode = REINTERRUPT;
+    if (node.nextWaiter != null) // clean up if cancelled
+        unlinkCancelledWaiters();
+    if (interruptMode != 0)
+        reportInterruptAfterWait(interruptMode);
+}
+//构造一个等待节点加入到等待队列
+private Node addConditionWaiter() {
+    Node t = lastWaiter;
+    // If lastWaiter is cancelled, clean out.
+    if (t != null && t.waitStatus != Node.CONDITION) {
+        unlinkCancelledWaiters();
+        t = lastWaiter;
+    }
+    //包装了一个线程
+    Node node = new Node(Thread.currentThread(), Node.CONDITION);
+    if (t == null)
+        firstWaiter = node;
+    else
+        t.nextWaiter = node;
+    lastWaiter = node;
+    return node;
+}
+```
+![condition1.png](condition1.png)
+当我们newCondition()的时候就会在AQS上创建一个等待队列，当一个线程调用condation.await()的时候就会在等待队列里边创建一个Node节点。
+
+#### signal方法的实现
+```
+/**
+ * Moves the longest-waiting thread, if one exists, from the
+ * wait queue for this condition to the wait queue for the
+ * owning lock.
+ *
+ * @throws IllegalMonitorStateException if {@link #isHeldExclusively}
+ *         returns {@code false}
+ */
+ 将等待时间最长的线程移出去，放到阻塞队列
+public final void signal() {
+  //是不是排它锁
+    if (!isHeldExclusively())
+        throw new IllegalMonitorStateException();
+    Node first = firstWaiter;
+    //获取到阻塞队列的第一个等待者，如果不是空的，证明这个阻塞队列头部有一个node
+    if (first != null)
+        doSignal(first);
+}
+
+
+/**
+ * Removes and transfers nodes until hit non-cancelled one or
+ * null. Split out from signal in part to encourage compilers
+ * to inline the case of no waiters.
+ * @param first (non-null) the first node on condition queue
+ */
+private void doSignal(Node first) {
+  //
+    do {
+        if ( (firstWaiter = first.nextWaiter) == null)
+            lastWaiter = null;
+        first.nextWaiter = null;
+    } while (!transferForSignal(first) &&
+             (first = firstWaiter) != null);
+}
+
+/**
+ * Transfers a node from a condition queue onto sync queue.
+ * Returns true if successful.
+ * @param node the node
+ * @return true if successfully transferred (else the node was
+ * cancelled before signal)
+ */
+ 将一个node从等待队列当中移动到阻塞队列当中
+final boolean transferForSignal(Node node) {
+    /*
+     * If cannot change waitStatus, the node has been cancelled.
+     */
+    if (!compareAndSetWaitStatus(node, Node.CONDITION, 0))
+        return false;
+
+    /*
+     * Splice onto queue and try to set waitStatus of predecessor to
+     * indicate that thread is (probably) waiting. If cancelled or
+     * attempt to set waitStatus fails, wake up to resync (in which
+     * case the waitStatus can be transiently and harmlessly wrong).
+     */
+    Node p = enq(node);
+    int ws = p.waitStatus;
+    if (ws > 0 || !compareAndSetWaitStatus(p, ws, Node.SIGNAL))
+        LockSupport.unpark(node.thread);
+    return true;
+}
+// 具体的节点的处理
+/**
+ * Inserts node into queue, initializing if necessary. See picture above.
+ * @param node the node to insert
+ * @return node's predecessor
+ */
+private Node enq(final Node node) {
+    for (;;) {
+        Node t = tail;
+        if (t == null) { // Must initialize
+            if (compareAndSetHead(new Node()))
+                tail = head;
+        } else {
+            node.prev = t;
+            if (compareAndSetTail(t, node)) {
+                t.next = node;
+                return t;
+            }
+        }
+    }
+}
+```
+
+await就是在等待队列中创建一个节点，signal就是将等待队列里边的节点移动到阻塞队列。
+![condition2.png](condition2.png)
+
+#### AQS和synchronized关键字之间的关系
+synchronized：
+1. synchronized关键字在底层的c++实现中，存在2个重要的数据结构(集合)，WaitSet、EntryList。
+2. WaitSet中存放的是调用了Object的wait方法的线程对象（被封装成了c++的Node对象）
+3. EntryList中存在是陷入阻塞状态、需要获取monitor的那些线程对象。
+5. 进入到EntryList后，该线程依然需要与其他线程争抢Monitor对象。
+6. 如果争抢到，就表示该线程获取到了对象的锁，它就可以排他方式执行对应的同步代码。
+
+AQS
+1. AQS中存在两种队列，分别是Condition对象的条件队列，以及AQS本身的阻塞队列
+2. 这两个队列中的每一个对象都是Node实例(里面封装了线程对象)
+3. 当位于Condition条件队列中的线程被其他线程signal后，该线程就会从条件队列移动到AQS的阻塞队列中。
+4. 位于AQS阻塞队列中的Node对象本质上都是由一个双向链表来构成的。
+5. 在获取到AQS锁时，这些进入到阻塞队列中的线程会按照在队列中的排序先后尝试获取。
+6. 当AQS阻塞队列中的线程获取到锁后，就表示该线程已经可以正常执行了
+7. 陷入到阻塞状态的线程，依然需要进入到操作系统的内核态，进入阻塞(park方法实现)

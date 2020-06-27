@@ -9,6 +9,7 @@ categories: concurrency
 ### Executor
 
 An object that executes submitted Runnable tasks. This interface provides a way of decoupling task submission from the mechanics of how each task will be run, including details of thread use, scheduling, etc. An Executor is normally used instead of explicitly creating threads. For example, rather than invoking new Thread(new(RunnableTask())).start() for each of a set of tasks, you might use:
+<!-- more -->
 Executor是一个可运行提交任务的对象，这个接口提供了一种将任务的提交和每个任务的运行机制解耦的方式，包括线程的具体使用，调度等，一个Executor一般用于替代手动创建线程的方式，可以使用如下的方式：
    Executor executor = anExecutor;
    executor.execute(new RunnableTask1());

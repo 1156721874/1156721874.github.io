@@ -1,7 +1,7 @@
 ---
 title: concurrency(13)ThreadPool
 date: 2020-06-26 13:21:00
-tags: [ThreadPool]
+tags: [ThreadPool ForkJoinPool]
 categories: concurrency
 ---
 
@@ -967,7 +967,7 @@ public void shutdown() {
         checkShutdownAccess();
         //将线程池状态设置为shutdown状态
         advanceRunState(SHUTDOWN);
-        // 中断空闲的woker线程
+        // 中断空闲的worker线程
         interruptIdleWorkers();
         //回调函数，默认空实现
         onShutdown(); // hook for ScheduledThreadPoolExecutor
@@ -1085,4 +1085,243 @@ private void interruptWorkers() {
         mainLock.unlock();
     }
 }
+
+Blocks until all tasks have completed execution after a shutdown request, or the timeout occurs, or the current thread is interrupted, whichever happens first.
+//当调用了shutdown请求后，阻塞等待所有的任务完成，或者超时发生返回，或者当前线程被中断返回
+public boolean awaitTermination(long timeout, TimeUnit unit) throws InterruptedException {
+    long nanos = unit.toNanos(timeout);
+    final ReentrantLock mainLock = this.mainLock;
+    mainLock.lock();
+    try {
+        for (;;) {
+            if (runStateAtLeast(ctl.get(), TERMINATED))
+                return true;
+            if (nanos <= 0)
+                return false;
+            //tryTerminate方法里边 termination.signalAll()会唤醒这里的wait
+            nanos = termination.awaitNanos(nanos);
+        }
+    } finally {
+        mainLock.unlock();
+    }
+}
 ```
+
+##### 等待任务完成
+ThreadPoolExecutor的submit方法通过newTaskFor方法返回一个FutureTask对象，提交任务到线程池之后调用FutureTask的get方法阻塞得到返回值，等待任务的完成，那么怎样才算是任务完成呢，其实state状态取值标志了任务是否完成。
+```
+
+/**
+ * The run state of this task, initially NEW.  The run state
+ * transitions to a terminal state only in methods set,
+ * setException, and cancel.  During completion, state may take on
+ * transient values of COMPLETING (while outcome is being set) or
+ * INTERRUPTING (only while interrupting the runner to satisfy a
+ * cancel(true)). Transitions from these intermediate to final
+ * states use cheaper ordered/lazy writes because values are unique
+ * and cannot be further modified.
+ *
+ * Possible state transitions:
+ * NEW -> COMPLETING -> NORMAL
+ * NEW -> COMPLETING -> EXCEPTIONAL
+ * NEW -> CANCELLED
+ * NEW -> INTERRUPTING -> INTERRUPTED
+ */
+private volatile int state;
+private static final int NEW          = 0;
+private static final int COMPLETING   = 1;
+private static final int NORMAL       = 2;
+private static final int EXCEPTIONAL  = 3;
+private static final int CANCELLED    = 4;
+private static final int INTERRUPTING = 5;
+private static final int INTERRUPTED  = 6;
+
+//FutureTask创建的时候state是NEW
+public FutureTask(Runnable runnable, V result) {
+    this.callable = Executors.callable(runnable, result);
+    this.state = NEW;       // ensure visibility of callable
+}
+public V get() throws InterruptedException, ExecutionException {
+    int s = state;
+    //状态是NEW、COMPLETING执行等待
+    if (s <= COMPLETING)
+        s = awaitDone(false, 0L);
+    //report返回任务执行的结果
+    return report(s);
+}
+
+//run方法是对任务执行过程外层抽象逻辑的封装
+public void run() {
+  //状态校验
+    if (state != NEW ||
+        !UNSAFE.compareAndSwapObject(this, runnerOffset,
+                                     null, Thread.currentThread()))
+        return;
+    try {
+        Callable<V> c = callable;
+        if (c != null && state == NEW) {
+            V result;
+            boolean ran;
+            try {
+                //任务执行
+                result = c.call();
+                ran = true;
+            } catch (Throwable ex) {
+                result = null;
+                ran = false;
+                //设置state为任务执行失败
+                setException(ex);
+            }
+            if (ran)
+            //设置状态为完成
+                set(result);
+        }
+    } finally {
+        // runner must be non-null until state is settled to
+        // prevent concurrent calls to run()
+        runner = null;
+        // state must be re-read after nulling runner to prevent
+        // leaked interrupts
+        int s = state;
+        if (s >= INTERRUPTING)
+            handlePossibleCancellationInterrupt(s);
+    }
+}
+```
+
+**当我们把一个任务扔到了线程池当中，我们可以通过get方法获取任务的执行结果，倘若我们的线程池满了，会回调拒绝策略，而恰好我们拒绝策略是DiscardPolicy无声丢弃或者DiscardOldestPolicy，DiscardPolicy的rejectedExecution方法是一个空实现，被丢弃的任务(FutureTask)的默认状态是NEW，此时我们调用get方法等待任务返回结果，后果就是get方法永远也不会返回！**
+
+因此建议使用带有超时时间的get方法。
+
+#### forkjoin框架
+ForkJoinPool的主要使用场景比如：
+一批任务，有的任务很快执行完毕，有的任务会执行的很慢，这样导致了普通的线程池存在部分线程很忙，部分线程很闲，出现了分配不均衡的现象。
+ForkJoinPool也是间接实现了ExecutorService
+```
+public class ForkJoinPool extends AbstractExecutorService {
+
+}
+```
+forkjoin会对一个大任务进行不断的拆解，拆解的过程就是fork的过程，直到fork的粒度足够小，然后对这些小任务进行执行，最后将执行完毕的小人物的结果进行合并，即，join的过程，最后会合并成一个结果，这个结果就是大任务的结果：
+![fork-join.png](fork-join.png)
+
+##### 任务窃取
+![fork-join-task-steal.png](fork-join-task-steal.png)
+
+线程池每个线程都有一个任务队列，但是实际情况当中，有些任务比较简单，有些任务比较复杂，他们各自的执行时间长短不同，当一个线程执行完他自己的队列里边的任务的时候，会从其他线程的队列里边窃取任务执行，这里的队列都是双向的队列，两端都可以pop一个任务，当然这个要保证是线程安全的。
+
+#### 源码介绍
+ForkJoinPool构造器：
+```
+private ForkJoinPool(int parallelism,
+                     ForkJoinWorkerThreadFactory factory,
+                     UncaughtExceptionHandler handler,
+                     int mode,
+                     String workerNamePrefix) {
+    this.workerNamePrefix = workerNamePrefix; //线程名字前缀
+    this.factory = factory; //类似于线程池里边的线程工厂
+    this.ueh = handler;
+    this.config = (parallelism & SMASK) | mode;
+    long np = (long)(-parallelism); // offset ctl counts
+    this.ctl = ((np << AC_SHIFT) & AC_MASK) | ((np << TC_SHIFT) & TC_MASK);
+}
+```
+ForkJoinWorkerThreadFactory创建的时候，会创建一个队列:
+```
+protected ForkJoinWorkerThread(ForkJoinPool pool) {
+    // Use a placeholder until a useful name can be set in registerWorker
+    super("aForkJoinWorkerThread");
+    this.pool = pool;
+    this.workQueue = pool.registerWorker(this);
+}
+```
+这个队列就是线程对应的任务队列。
+
+#####  ForkJoinTask
+ForkJoinTask是forkjoinpool执行的任务的抽象。
+```
+public abstract class ForkJoinTask<V> implements Future<V>, Serializable {
+
+}
+```
+
+RecursiveAction和RecursiveTask都实现了ForkJoinTask，RecursiveAction的compute没有返回值，RecursiveTask的compute方法是有返回值的。
+在使用ForkJoinPool的时候，任务抽象的时候，如果任务有返回值，那么就是用RecursiveTask，否则使用RecursiveAction。
+
+##### 实例
+```
+public class MyTest3 {
+    public static void main(String[] args) {
+        ForkJoinPool forkJoinPool = new ForkJoinPool();
+        MyTask myTask = new MyTask(1,100);
+        int  result = forkJoinPool.invoke(myTask);
+        System.out.println(result);
+        forkJoinPool.shutdown();
+    }
+}
+
+class MyTask extends RecursiveTask<Integer>{
+
+    private int limit = 4;
+    private int firstIndex;
+    private int lastIndex ;
+    MyTask(int firstIndex,int lastIndex){
+        this.firstIndex = firstIndex;
+        this.lastIndex = lastIndex;
+    }
+
+    @Override
+    protected Integer compute() {
+        int gap = this.lastIndex - this.firstIndex;
+        boolean flag = gap <= this.limit;
+        int result = 0;
+        if(flag){
+            System.out.println(Thread.currentThread().getName());
+            for(int i=this.firstIndex;i<=this.lastIndex;++i){
+                result +=i;
+            }
+        }else {
+            int middleIndex = (this.firstIndex + this.lastIndex)/2;
+            MyTask leftTask = new MyTask(this.firstIndex,middleIndex);
+            MyTask rightTask = new MyTask(middleIndex + 1,this.lastIndex);
+            invokeAll(leftTask, rightTask);
+            result = leftTask.join() + rightTask.join();
+        }
+        return result;
+    }
+}
+```
+打印结果:
+ForkJoinPool-1-worker-1
+ForkJoinPool-1-worker-1
+ForkJoinPool-1-worker-1
+ForkJoinPool-1-worker-4
+ForkJoinPool-1-worker-3
+ForkJoinPool-1-worker-3
+ForkJoinPool-1-worker-1
+ForkJoinPool-1-worker-7
+ForkJoinPool-1-worker-7
+ForkJoinPool-1-worker-3
+ForkJoinPool-1-worker-3
+ForkJoinPool-1-worker-2
+ForkJoinPool-1-worker-2
+ForkJoinPool-1-worker-5
+ForkJoinPool-1-worker-5
+ForkJoinPool-1-worker-4
+ForkJoinPool-1-worker-4
+ForkJoinPool-1-worker-4
+ForkJoinPool-1-worker-5
+ForkJoinPool-1-worker-2
+ForkJoinPool-1-worker-2
+ForkJoinPool-1-worker-3
+ForkJoinPool-1-worker-3
+ForkJoinPool-1-worker-7
+ForkJoinPool-1-worker-0
+ForkJoinPool-1-worker-0
+ForkJoinPool-1-worker-6
+ForkJoinPool-1-worker-1
+ForkJoinPool-1-worker-0
+ForkJoinPool-1-worker-3
+ForkJoinPool-1-worker-2
+ForkJoinPool-1-worker-4
+5050

@@ -17,6 +17,7 @@ public class MyTest5 {
     }
 }
 ```
+<!-- more -->
 看一下Random的nextInt：
 ```
 public class Random implements java.io.Serializable {

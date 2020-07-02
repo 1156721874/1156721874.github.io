@@ -7,7 +7,7 @@ categories: concurrency
 
 ### 需求
 我们在向线程池提交任务的时候，提交的顺序是ABCD，提交之后任务执行完毕的时间都是不确定的，比如执行完毕的顺序是CBAD，然后实际开发中有这样的需求是，只要得到第一个任务的执行结果，其他任务的执行结果就不考虑了，试想，如果没有jdk的实现的api的话，我们也可以操作，增加一个队列，让任务执行完毕之后，将任务的执行结果放入到队列的头部，第二执行完毕的任务的执行结果放在结果队列的第二个位置，以此类推，队列头部的就是第一个任务执行的结果。
-
+<!-- more -->
 ### CompletionService的实现
 A service that decouples the production of new asynchronous tasks from the consumption of the results of completed tasks.
 Producers submit tasks for execution. Consumers take completed tasks and process their results in the order they complete.

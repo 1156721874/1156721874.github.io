@@ -10,7 +10,7 @@ categories: spring_core
 Student student = defaultListableBeanFactory.getBean("student", Student.class);
 ```
 当执行上述代码的时候才会实例化一个bean。
-
+<!-- more -->
 ### Bean的创建缓存过程
 org.springframework.beans.factory.support.AbstractBeanFactory#getBean:
 ```

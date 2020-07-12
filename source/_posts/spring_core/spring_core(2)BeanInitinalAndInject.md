@@ -10,7 +10,7 @@ categories: spring_core
 Student student = defaultListableBeanFactory.getBean("student", Student.class);
 ```
 当执行上述代码的时候才会实例化一个bean。
-
+<!-- more -->
 ### Bean的创建缓存过程
 org.springframework.beans.factory.support.AbstractBeanFactory#getBean:
 ```
@@ -143,6 +143,7 @@ public Object getSingleton(String beanName, ObjectFactory<?> singletonFactory) {
         ......
       boolean newSingleton = false;
 			try {
+        //执行lambda表达式【创建bean】
         singletonObject = singletonFactory.getObject();
         newSingleton = true;
       }
@@ -224,6 +225,10 @@ protected Object createBean(String beanName, RootBeanDefinition mbd, @Nullable O
 ```
 doCreateBean位于org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory:
 ```
+/** Cache of unfinished FactoryBean instances: FactoryBean name to BeanWrapper. */
+//未创建的FactoryBean实例
+private final ConcurrentMap<String, BeanWrapper> factoryBeanInstanceCache = new ConcurrentHashMap<>();
+
 //执行真正创建bean实例
 protected Object doCreateBean(final String beanName, final RootBeanDefinition mbd, final @Nullable Object[] args)
     throws BeanCreationException {
@@ -282,6 +287,7 @@ protected Object doCreateBean(final String beanName, final RootBeanDefinition mb
   try {
     //对bean实例的属性进行赋值，不做详细展开。
     populateBean(beanName, mbd, instanceWrapper);
+    //bean创建完毕之后的一些初始化工作，比如用户自定义的初始化方法之类的。
     exposedObject = initializeBean(beanName, exposedObject, mbd);
   }
   catch (Throwable ex) {
@@ -463,3 +469,120 @@ public Object instantiate(RootBeanDefinition bd, @Nullable String beanName, Bean
 ```
 根据构造器实例化对象在BeanUtils#instantiateClass中,这里不再列举，参考上一节的介绍。
 到此实例才算真正的创建出来！
+
+
+### 对象属性赋值与作用域
+修改在applicationContext.xml当中配置bean
+
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="student" class="com.tdl.spring.bean.Student">
+        <property name="name2" value="zhangsan"/>
+        <property name="age" value="20"/>
+    </bean>
+
+</beans>
+```
+即将name改为name2.
+那么如下程序在执行【defaultListableBeanFactory.getBean("student", Student.class)】之前不会抛出异常:
+```
+public class SpringClient {
+    public static void main(String[] args) {
+        Resource resource = new ClassPathResource("applicationContext.xml");
+        DefaultListableBeanFactory defaultListableBeanFactory
+                = new DefaultListableBeanFactory();
+        BeanDefinitionReader beanDefinitionReader =
+                new XmlBeanDefinitionReader(defaultListableBeanFactory);
+        beanDefinitionReader.loadBeanDefinitions(resource);
+
+        Student student = defaultListableBeanFactory.getBean("student", Student.class);
+        System.out.println(student.getName());
+        System.out.println(student.getAge());
+
+    }
+}
+```
+只有执行defaultListableBeanFactory.getBean的时候才会抛出异常。
+
+属性的赋值在org.springframework.beans.BeanWrapperImpl.setValue(final Object value)throws Exception执行:
+```
+public void setValue(final @Nullable Object value) throws Exception {
+  //得到写方法
+  final Method writeMethod = (this.pd instanceof GenericTypeAwarePropertyDescriptor ?
+      ((GenericTypeAwarePropertyDescriptor) this.pd).getWriteMethodForActualAccess() :
+      this.pd.getWriteMethod());
+  if (System.getSecurityManager() != null) {
+    AccessController.doPrivileged((PrivilegedAction<Object>) () -> {
+      ReflectionUtils.makeAccessible(writeMethod);
+      return null;
+    });
+    try {
+      AccessController.doPrivileged((PrivilegedExceptionAction<Object>) () ->
+          writeMethod.invoke(getWrappedInstance(), value), acc);
+    }
+    catch (PrivilegedActionException ex) {
+      throw ex.getException();
+    }
+  }
+  else {
+    ReflectionUtils.makeAccessible(writeMethod);
+    //反射调用
+    writeMethod.invoke(getWrappedInstance(), value);
+  }
+}
+```
+GenericTypeAwarePropertyDescriptor初始化的时候，写方法的定义是以"set"开头的方法。
+
+### 从已有缓存获取对象
+bean的默认scope是单例的，如果将scope设置为prototype类型的，那么每次获取的bean的实例都是不一样的，二期也不会缓存bean实例。
+```
+单例的bean会在getSingleton方法里边进行缓存
+if (mbd.isSingleton()) {
+  sharedInstance = getSingleton(beanName, () -> {
+    try {
+      return createBean(beanName, mbd, args);
+    }
+    catch (BeansException ex) {
+      // Explicitly remove instance from singleton cache: It might have been put there
+      // eagerly by the creation process, to allow for circular reference resolution.
+      // Also remove any beans that received a temporary reference to the bean.
+      destroySingleton(beanName);
+      throw ex;
+    }
+  });
+  bean = getObjectForBeanInstance(sharedInstance, name, beanName, mbd);
+}
+
+else if (mbd.isPrototype()) {
+  // It's a prototype -> create a new instance.
+  Object prototypeInstance = null;
+  try {
+    //Prototype类型的bean不会进行缓存。
+    beforePrototypeCreation(beanName);
+    prototypeInstance = createBean(beanName, mbd, args);
+  }
+  finally {
+    afterPrototypeCreation(beanName);
+  }
+  bean = getObjectForBeanInstance(prototypeInstance, name, beanName, mbd);
+}
+```
+
+关于spring Bean的创建流程
+1. Spring 所管理的Bean实际上是缓存在一个ConcurrentHashMap中的(singletonFactory对象中)
+2. 该对象本质上是一个key-value对的形式，key指的是bean的名字（id），value是一个Object对象，就是所创建的bean对象
+3. 在创建Bean之前，首先需要将该Bean的创建标示指定好，标示该Bean已经或是即将创建，目的是增强缓存的效率。
+4. 根据bean的scope属性来确定当前这个bean是一个singleton还是prototype的bean，然后创建相应的对象
+5. 无论是singleton还是prototype的bean，其创建的过程是一致的。
+6. 通过java反射机制来创建bean的实例，在创建之前需要检查构造方法的访问修饰符，如果不是public的，则会调用setAccessible(true)方法
+来突破java语法限制，使得可以通过非public构造方法来完成对象实例的创建。
+7. 当对象创建完毕后，开始进行对象属性的注入。
+8. 在对象属性注入的过程中，spring除去使用之前通过BeanDefination对象获取的bean信息外，还会通过反射的方式获取到上面所创建的bean中的真实属性信息(还包括一个class属性，表示该Bean所对应的class类型)
+9. 完成bean属性的注入(或者抛出异常)
+10. 如果bean是一个单例的，那么将所创建出来的bean添加到singleton对象中(缓存中)，供程序后续再次使用。
+
+【本章代码位置：https://github.com/1156721874/spring-kernel-lecture】

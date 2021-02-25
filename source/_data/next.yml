@@ -618,9 +618,9 @@ changyan:
 # Valine
 # For more information: https://valine.js.org, https://github.com/xCss/Valine
 valine:
-  enable: false
-  appid: # Your leancloud application appid
-  appkey: # Your leancloud application appkey
+  enable: true
+  appid: ryAR9bttS7fex1FPEPAylmmJ-gzGzoHsz # Your leancloud application appid
+  appkey: dYqygoN4Y01Bl38OdRoCHUYn # Your leancloud application appkey
   notify: false # Mail notifier
   verify: false # Verification code
   placeholder: Just go go # Comment box placeholder
@@ -697,9 +697,9 @@ cnzz_siteid:
 # AppID and AppKey are recommended to be the same as valine's for counter compatibility.
 # Do not enable both `valine.visitor` and `leancloud_visitors`.
 leancloud_visitors:
-  enable: false
-  app_id: # <your app id>
-  app_key: # <your app key>
+  enable: true
+  app_id: ryAR9bttS7fex1FPEPAylmmJ-gzGzoHsz # <your app id>
+  app_key: dYqygoN4Y01Bl38OdRoCHUYn # <your app key>
   # Required for apps from CN region
   server_url: # <your server url>
   # Dependencies: https://github.com/theme-next/hexo-leancloud-counter-security

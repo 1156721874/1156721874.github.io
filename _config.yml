@@ -75,6 +75,13 @@ pagination_dir: page
 ## Themes: https://hexo.io/themes/
 theme: next
 
+leancloud_counter_security:
+  enable_sync: true
+  app_id: ryAR9bttS7fex1FPEPAylmmJ-gzGzoHsz
+  app_key: dYqygoN4Y01Bl38OdRoCHUYn
+  username: CeaserWang # Will be asked while deploying if is left blank
+  password: 1024 # Recommmended to be left blank. Will be asked while deploying if is left blank
+
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:

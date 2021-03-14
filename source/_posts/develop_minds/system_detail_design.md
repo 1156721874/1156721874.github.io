@@ -16,7 +16,7 @@ categories: develop_minds
 ﻿
 ## 1.3 目标
 ﻿
-﻿
+﻿<!-- more -->
 # 2. 系统业务分析
 ﻿
 ﻿

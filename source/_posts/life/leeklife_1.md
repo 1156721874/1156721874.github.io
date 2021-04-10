@@ -3,6 +3,11 @@ title: 在人间做韭菜的那些年(2)--搬砖军规
 date: 2021-05-05 10:44:45
 tags: [leek]
 categories: life
+password: helloworld
+abstract: 该文章已加密, 请输入密码查看。
+message: 该文章已加密, 请输入密码查看。
+wrong_pass_message: 密码不正确，请重新输入！
+wrong_hash_message: 文章不能被校验, 不过您还是能看看解密后的内容！
 ---
 
 写了好几年代码，今天梳理和沉淀一些搬砖盖楼的方法论，时刻鞭策自己去遵守以及重温它们。

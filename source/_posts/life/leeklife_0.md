@@ -1,8 +1,13 @@
 ---
-title: 在人间做韭菜的那些年(1)--在大型韭菜田的感想
+title: 在人间做韭菜的那些年(1)--韭菜集团
 date: 2021-03-13 10:44:45
 tags: [leek]
 categories: life
+password: helloworld
+abstract: 该文章已加密, 请输入密码查看。
+message: 该文章已加密, 请输入密码查看。
+wrong_pass_message: 密码不正确，请重新输入！
+wrong_hash_message: 文章不能被校验, 不过您还是能看看解密后的内容！
 ---
 
 今天是2021-03-13号，当了半个月的韭菜，写点感想，怕现在脑子里边涌现的想法以后就被琐事淹没。

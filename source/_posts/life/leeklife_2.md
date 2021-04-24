@@ -9,7 +9,7 @@ categories: life
 ![image.png](https://i.loli.net/2021/04/24/MunjWY9IglcKHt8.png)
 <!-- more -->
 
-[项目推进迭代流程.xlsx](项目推进迭代流程.xlsx)
+[项目推进迭代流程.xlsx](../项目推进迭代流程.xlsx)
 
 #### prd阶段
 ##### 基本输出

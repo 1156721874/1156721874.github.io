@@ -13,7 +13,7 @@ categories: starter_struct
  支持任意实现JDBC规范的数据库。目前支持MySQL，Oracle，SQLServer，PostgreSQL以及任何遵循SQL92标准的数据库。
 
  ![image.png](https://shardingsphere.apache.org/document/legacy/4.x/document/img/sharding-jdbc-brief.png)
-
+<!-- more -->
 官方提供了数据分片、读写分离、数据脱敏的三种配置:
 [SPRING BOOT配置](https://shardingsphere.apache.org/document/legacy/4.x/document/cn/manual/sharding-jdbc/configuration/config-spring-boot/)
 

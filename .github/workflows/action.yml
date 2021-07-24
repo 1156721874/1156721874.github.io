@@ -12,7 +12,7 @@ jobs:
 
       - name: Install dependencies
         if: steps.cache.outputs.cache-hit != 'true'
-        run: npm
+        run: npm install
 
       - name: Hexo clean
         run: ./node_modules/.bin/hexo clean

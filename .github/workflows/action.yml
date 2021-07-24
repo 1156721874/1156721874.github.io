@@ -1,0 +1,29 @@
+name: CI
+on:
+  push:
+    branches:
+      - dev
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm
+
+      - name: Hexo clean
+        run: ./node_modules/.bin/hexo clean
+
+      - name: Hexo generate
+        run: ./node_modules/.bin/hexo generate
+
+      - name: Deploy to master
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          personal_token: ${{ secrets.CI_TOKEN }}
+          external_repository: 1156721874/1156721874.github.io
+          publish_branch: master
+          publish_dir: ./public

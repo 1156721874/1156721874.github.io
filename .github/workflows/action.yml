@@ -23,7 +23,9 @@ jobs:
       - name: Deploy to master
         uses: peaceiris/actions-gh-pages@v3
         with:
-          personal_token: ${{ secrets.CI_TOKEN }}
+          # personal_token: ${{ secrets.CI_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           external_repository: 1156721874/1156721874.github.io
           publish_branch: master
           publish_dir: ./public
+          cname: ceaser.wang

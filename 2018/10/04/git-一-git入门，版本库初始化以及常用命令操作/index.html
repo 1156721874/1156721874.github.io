@@ -52,7 +52,7 @@
 <meta property="og:image" content="https://ceaser.wang/2018/10/04/git-%E4%B8%80-git%E5%85%A5%E9%97%A8%EF%BC%8C%E7%89%88%E6%9C%AC%E5%BA%93%E5%88%9D%E5%A7%8B%E5%8C%96%E4%BB%A5%E5%8F%8A%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E6%93%8D%E4%BD%9C/20170626213638727.png">
 <meta property="og:image" content="https://ceaser.wang/2018/10/04/git-%E4%B8%80-git%E5%85%A5%E9%97%A8%EF%BC%8C%E7%89%88%E6%9C%AC%E5%BA%93%E5%88%9D%E5%A7%8B%E5%8C%96%E4%BB%A5%E5%8F%8A%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E6%93%8D%E4%BD%9C/20170626220111432.png">
 <meta property="article:published_time" content="2018-10-04T11:49:40.000Z">
-<meta property="article:modified_time" content="2022-01-04T14:41:25.604Z">
+<meta property="article:modified_time" content="2022-01-04T14:47:20.878Z">
 <meta property="article:author" content="CeaserWang">
 <meta property="article:tag" content="git">
 <meta property="article:tag" content="git init">
@@ -315,7 +315,7 @@
           <i class="far fa-calendar-check"></i>
         </span>
         <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2022-01-04 14:41:25" itemprop="dateModified" datetime="2022-01-04T14:41:25+00:00">2022-01-04</time>
+        <time title="Modified: 2022-01-04 14:47:20" itemprop="dateModified" datetime="2022-01-04T14:47:20+00:00">2022-01-04</time>
       </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -389,7 +389,7 @@
 <li>~/.gitconfig(很常用)                      git config –global</li>
 <li>针对于特定项目的 位于当前项目的  .git/config文件中。 git config –local<br>我们针对于第二种和第三种情况进行说明：</li>
 </ul>
-<p>  <strong>git config –global</strong><br> 首先进入.git目录查看 config文件内容：<br> git config命令一些参数：<br><img src="20170626210947905.png" alt="这里写图片描述"><br>config文件内容：<br> <img src="20170626210740993.png" alt="这里写图片描述"><br>紧接着：<br>git config –local user.name ‘CeaserWang’<br>git config –local user.email ‘<span class="exturl" data-url="bWFpbHRvOiYjeDc4OyYjMTIwOyYjeDc4OyYjNjQ7JiN4Nzg7JiN4Nzg7JiN4Nzg7JiM0NjsmIzk5OyYjeDZmOyYjeDZkOw==">&#x78;&#120;&#x78;&#64;&#x78;&#x78;&#x78;&#46;&#99;&#x6f;&#x6d;<i class="fa fa-external-link-alt"></i></span>‘<br>进行配置用户和邮箱，此时我们可以展示一下:<br>git config user.name<br>git config user.email<br>同时再次查看config文件会发现user.name和user.email都存在了。<br><img src="20170626211439173.png" alt="这里写图片描述"><br>或者 git config –list查看所有配置参数<br>git config –local user.name ‘CeaserWang’<br>git config –local user.email ‘<span class="exturl" data-url="bWFpbHRvOiYjMTIwOyYjeDc4OyYjMTIwOyYjNjQ7JiMxMjA7JiN4Nzg7JiMxMjA7JiM0NjsmIzk5OyYjMTExOyYjeDZkOw==">&#120;&#x78;&#120;&#64;&#120;&#x78;&#120;&#46;&#99;&#111;&#x6d;<i class="fa fa-external-link-alt"></i></span>‘ 这些命令也可以用来修改，再说一下删除：<br>git config –local  –unset  user.name<br><img src="20170626212216912.png" alt="这里写图片描述"><br>接下我们回到mygit根目录，修改下test.txt文件，然后git staus 查看状态：<br><img src="20170626212952735.png" alt="这里写图片描述"><br>这时提示信息又发生一些变化。<br> modified:   test.txt意思是已经修改了。<br> (use “git checkout – <file>…” to discard changes in working directory 意识是 使用git checkout – <file>命令丢弃刚才的修改。<br>  首先我们的文件修改之后加入了一行文字（welcome）然后状态是modified状态，此时我们使用git checkout 命令回退刚才的修改：<br><img src="20170626213638727.png" alt="这里写图片描述"><br>  会发现刚下的修改会取消了，状态回到愿原来的状态。这个命令要小心一点，因为文件没有放到版本库里边，真的丢弃了就找不回来了。</p>
+<p>  <strong>git config –global</strong><br> 首先进入.git目录查看 config文件内容：<br> git config命令一些参数：<br><img src="20170626210947905.png" alt="这里写图片描述"><br>config文件内容：<br> <img src="20170626210740993.png" alt="这里写图片描述"><br>紧接着：<br>git config –local user.name ‘CeaserWang’<br>git config –local user.email ‘<span class="exturl" data-url="bWFpbHRvOiYjeDc4OyYjeDc4OyYjeDc4OyYjNjQ7JiN4Nzg7JiN4Nzg7JiN4Nzg7JiM0NjsmI3g2MzsmIzExMTsmIzEwOTs=">&#x78;&#x78;&#x78;&#64;&#x78;&#x78;&#x78;&#46;&#x63;&#111;&#109;<i class="fa fa-external-link-alt"></i></span>‘<br>进行配置用户和邮箱，此时我们可以展示一下:<br>git config user.name<br>git config user.email<br>同时再次查看config文件会发现user.name和user.email都存在了。<br><img src="20170626211439173.png" alt="这里写图片描述"><br>或者 git config –list查看所有配置参数<br>git config –local user.name ‘CeaserWang’<br>git config –local user.email ‘<span class="exturl" data-url="bWFpbHRvOiYjMTIwOyYjMTIwOyYjMTIwOyYjeDQwOyYjeDc4OyYjMTIwOyYjeDc4OyYjeDJlOyYjOTk7JiMxMTE7JiN4NmQ7">&#120;&#120;&#120;&#x40;&#x78;&#120;&#x78;&#x2e;&#99;&#111;&#x6d;<i class="fa fa-external-link-alt"></i></span>‘ 这些命令也可以用来修改，再说一下删除：<br>git config –local  –unset  user.name<br><img src="20170626212216912.png" alt="这里写图片描述"><br>接下我们回到mygit根目录，修改下test.txt文件，然后git staus 查看状态：<br><img src="20170626212952735.png" alt="这里写图片描述"><br>这时提示信息又发生一些变化。<br> modified:   test.txt意思是已经修改了。<br> (use “git checkout – <file>…” to discard changes in working directory 意识是 使用git checkout – <file>命令丢弃刚才的修改。<br>  首先我们的文件修改之后加入了一行文字（welcome）然后状态是modified状态，此时我们使用git checkout 命令回退刚才的修改：<br><img src="20170626213638727.png" alt="这里写图片描述"><br>  会发现刚下的修改会取消了，状态回到愿原来的状态。这个命令要小心一点，因为文件没有放到版本库里边，真的丢弃了就找不回来了。</p>
 <p>另外git commit的提交说明可以直接：git commmit -m ‘提交说明’<br>提交日志时间是按照倒序的排列：<br><img src="20170626220111432.png" alt="这里写图片描述"></p>
 
     </div>

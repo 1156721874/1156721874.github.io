@@ -5,8 +5,7 @@ tags: [leek]
 categories: life
 ---
 
-  ![hinata.jpg](https://wx4.sinaimg.cn/mw2000/8725b930gy1gwoivy6rdfj20ku0ku0u7.jpg)
-  
+  ![28551b4cb1c76ad3d62afcc5_1_.jpg](https://wx4.sinaimg.cn/mw2000/8725b930gy1gwoivy6rdfj20ku0ku0u7.jpg)
   自从疫情以来，基本上没啥好的事情，中美对抗，股市跌宕，美股熔断，互联网内卷、房市末路，男女对立加重，青春也随着时间流逝，越是艰难的时候，越是需要思考总结，复盘，否则过了这个时间，铁就打不热了。
 <!-- more -->
 ### 不要拒绝成长

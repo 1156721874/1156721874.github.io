@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.css" integrity="sha256-no0c5ccDODBwp+9hSmV5VvPpKwHCpbVzXHexIkupM6U=" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.js" integrity="sha256-a5YRB27CcBwBFcT5EF/f3E4vzIqyHrSR878nseNYw64=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ceaser.wang","root":"/","images":"/images","scheme":"Muse","version":"8.6.1","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+<meta name="description" content="什么是UDF？UDF的全称是User-Defined-FunctionsHive中一共有三种UDF">
+<meta property="og:type" content="article">
+<meta property="og:title" content="hive原理与源码分析-UDxF、优化器及执行引擎（五）">
+<meta property="og:url" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-UDxF%E3%80%81%E4%BC%98%E5%8C%96%E5%99%A8%E5%8F%8A%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E%EF%BC%88%E4%BA%94%EF%BC%89/index.html">
+<meta property="og:site_name" content="南贺神社">
+<meta property="og:description" content="什么是UDF？UDF的全称是User-Defined-FunctionsHive中一共有三种UDF">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-UDxF%E3%80%81%E4%BC%98%E5%8C%96%E5%99%A8%E5%8F%8A%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E%EF%BC%88%E4%BA%94%EF%BC%89/20170514170358457.png">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-UDxF%E3%80%81%E4%BC%98%E5%8C%96%E5%99%A8%E5%8F%8A%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E%EF%BC%88%E4%BA%94%EF%BC%89/20170514195921527.png">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-UDxF%E3%80%81%E4%BC%98%E5%8C%96%E5%99%A8%E5%8F%8A%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E%EF%BC%88%E4%BA%94%EF%BC%89/2017051420054406.png">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-UDxF%E3%80%81%E4%BC%98%E5%8C%96%E5%99%A8%E5%8F%8A%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E%EF%BC%88%E4%BA%94%EF%BC%89/20170514202109291.png">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-UDxF%E3%80%81%E4%BC%98%E5%8C%96%E5%99%A8%E5%8F%8A%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E%EF%BC%88%E4%BA%94%EF%BC%89/20170514205734778.png">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-UDxF%E3%80%81%E4%BC%98%E5%8C%96%E5%99%A8%E5%8F%8A%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E%EF%BC%88%E4%BA%94%EF%BC%89/20170514205912937.png">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-UDxF%E3%80%81%E4%BC%98%E5%8C%96%E5%99%A8%E5%8F%8A%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E%EF%BC%88%E4%BA%94%EF%BC%89/20170514215438866.png">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-UDxF%E3%80%81%E4%BC%98%E5%8C%96%E5%99%A8%E5%8F%8A%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E%EF%BC%88%E4%BA%94%EF%BC%89/20170514220105056.png">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-UDxF%E3%80%81%E4%BC%98%E5%8C%96%E5%99%A8%E5%8F%8A%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E%EF%BC%88%E4%BA%94%EF%BC%89/20170514220833201.png">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-UDxF%E3%80%81%E4%BC%98%E5%8C%96%E5%99%A8%E5%8F%8A%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E%EF%BC%88%E4%BA%94%EF%BC%89/20170514221850831.png">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-UDxF%E3%80%81%E4%BC%98%E5%8C%96%E5%99%A8%E5%8F%8A%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E%EF%BC%88%E4%BA%94%EF%BC%89/20170514222441553.png">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-UDxF%E3%80%81%E4%BC%98%E5%8C%96%E5%99%A8%E5%8F%8A%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E%EF%BC%88%E4%BA%94%EF%BC%89/20170514222707054.png">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-UDxF%E3%80%81%E4%BC%98%E5%8C%96%E5%99%A8%E5%8F%8A%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E%EF%BC%88%E4%BA%94%EF%BC%89/20170514222926367.png">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-UDxF%E3%80%81%E4%BC%98%E5%8C%96%E5%99%A8%E5%8F%8A%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E%EF%BC%88%E4%BA%94%EF%BC%89/20170514223227098.png">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-UDxF%E3%80%81%E4%BC%98%E5%8C%96%E5%99%A8%E5%8F%8A%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E%EF%BC%88%E4%BA%94%EF%BC%89/20170514223655980.png">
+<meta property="article:published_time" content="2018-10-04T11:16:24.000Z">
+<meta property="article:modified_time" content="2022-01-04T02:21:30.652Z">
+<meta property="article:author" content="CeaserWang">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-UDxF%E3%80%81%E4%BC%98%E5%8C%96%E5%99%A8%E5%8F%8A%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E%EF%BC%88%E4%BA%94%EF%BC%89/20170514170358457.png">
+
+
+<link rel="canonical" href="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-UDxF%E3%80%81%E4%BC%98%E5%8C%96%E5%99%A8%E5%8F%8A%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E%EF%BC%88%E4%BA%94%EF%BC%89/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-UDxF%E3%80%81%E4%BC%98%E5%8C%96%E5%99%A8%E5%8F%8A%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E%EF%BC%88%E4%BA%94%EF%BC%89/","path":"2018/10/04/hive原理与源码分析-UDxF、优化器及执行引擎（五）/","title":"hive原理与源码分析-UDxF、优化器及执行引擎（五）"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>hive原理与源码分析-UDxF、优化器及执行引擎（五） | 南贺神社</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">南贺神社</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">你写程序有写诗一样的感觉吗?</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">205</span></a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">24</span></a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">212</span></a></li>
+        <li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-overview">
+            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="CeaserWang"
+      src="/../0xcc/index/Uchiha.jpg">
+  <p class="site-author-name" itemprop="name">CeaserWang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">212</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">205</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tLzExNTY3MjE4NzQ=" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;1156721874"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmNlYXNlcndhbmdAb3V0bG9vay5jb20=" title="E-Mail → mailto:ceaserwang@outlook.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+  </div>
+  <div class="cc-license site-overview-item animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><img src="https://cdn.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-user-friends fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly90d29kcmFnb25sYWtlLmNvbQ==" title="https:&#x2F;&#x2F;twodragonlake.com">TwoDragonLake</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9yb290Y2x1c3Rlci5naXRodWIuaW8=" title="https:&#x2F;&#x2F;rootcluster.github.io">RootCluster</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9tdXNlZmxvdy5pbw==" title="https:&#x2F;&#x2F;museflow.io">MuseFlow</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9pbmNvZGVyLm9yZw==" title="https:&#x2F;&#x2F;incoder.org">BladeCode</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9rYWlmYS5kZXY=" title="https:&#x2F;&#x2F;kaifa.dev">Alyenc</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmRhemhpZGF5b25nLmNu" title="https:&#x2F;&#x2F;blog.dazhidayong.cn">Killua</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9qb2NlbHluc2hhbmcuY24v" title="https:&#x2F;&#x2F;jocelynshang.cn&#x2F;">Jocelyn</span>
+        </li>
+    </ul>
+  </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-UDxF%E3%80%81%E4%BC%98%E5%8C%96%E5%99%A8%E5%8F%8A%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E%EF%BC%88%E4%BA%94%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
+      <meta itemprop="name" content="CeaserWang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="南贺神社">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          hive原理与源码分析-UDxF、优化器及执行引擎（五）
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-10-04 11:16:24" itemprop="dateCreated datePublished" datetime="2018-10-04T11:16:24+00:00">2018-10-04</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2022-01-04 02:21:30" itemprop="dateModified" datetime="2022-01-04T02:21:30+00:00">2022-01-04</time>
+      </span>
+
+  
+    <span id="/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-UDxF%E3%80%81%E4%BC%98%E5%8C%96%E5%99%A8%E5%8F%8A%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E%EF%BC%88%E4%BA%94%EF%BC%89/" class="post-meta-item leancloud_visitors" data-flag-title="hive原理与源码分析-UDxF、优化器及执行引擎（五）" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p><strong>什么是UDF？</strong><br>UDF的全称是User-Defined-Functions<br>Hive中一共有三种UDF</p>
+<span id="more"></span>
+<p>UDF（User-Defined Function）：输入一行，输入一行，1-&gt;1<br>UDAF（User-Defined Aggregation Function）：输入N行，输出一行，N-&gt;1<br>UDTF（User-Defined Table-generating Function)：输入一行，输出N行，1-&gt;N</p>
+<p><strong>一切都是UDxF</strong><br>内置操作符（本质上是一个UDF）<br>加、减、乘、除、等号、大于、小于……<br>内置UDF<br>常用数学操作，常用内符串操作……<br>常用日期操作……<br>内置UDAF<br>Count, sum , avg …<br>内置UDTF<br>Explode<br>自定义UDxF<br><span class="exturl" data-url="aHR0cHM6Ly9jd2lraS5hcGFjaGUub3JnL2NvbmZsdWVuY2UvZGlzcGxheS9IaXZlL0xhbmd1YWdlTWFudWFsK1VERg==">https://cwiki.apache.org/confluence/display/Hive/LanguageManual+UDF<i class="fa fa-external-link-alt"></i></span></p>
+<p><strong>UDF源码举例</strong><br>一个简单的加号 1+2.5<br>    <span class="exturl" data-url="aHR0cHM6Ly93d3cuY29kYXRsYXMuY29tL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvbWFzdGVyL3FsL3NyYy9qYXZhL29yZy9hcGFjaGUvaGFkb29wL2hpdmUvcWwvdWRmL2dlbmVyaWMvR2VuZXJpY1VERk9QUGx1cy5qYXZh">https://www.codatlas.com/github.com/apache/hive/master/ql/src/java/org/apache/hadoop/hive/ql/udf/generic/GenericUDFOPPlus.java<i class="fa fa-external-link-alt"></i></span><br>类型转换 cast(1.5 as string)<br>    <span class="exturl" data-url="aHR0cHM6Ly93d3cuY29kYXRsYXMuY29tL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvbWFzdGVyL3FsL3NyYy9qYXZhL29yZy9hcGFjaGUvaGFkb29wL2hpdmUvcWwvdWRmL1VERlRvU3RyaW5nLmphdmE/bGluZT0xMjA=">https://www.codatlas.com/github.com/apache/hive/master/ql/src/java/org/apache/hadoop/hive/ql/udf/UDFToString.java?line=120<i class="fa fa-external-link-alt"></i></span><br>返回字符串长度 length(s)<br>    <span class="exturl" data-url="aHR0cHM6Ly93d3cuY29kYXRsYXMuY29tL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvbWFzdGVyL3FsL3NyYy9qYXZhL29yZy9hcGFjaGUvaGFkb29wL2hpdmUvcWwvdWRmL1VERkxlbmd0aC5qYXZh">https://www.codatlas.com/github.com/apache/hive/master/ql/src/java/org/apache/hadoop/hive/ql/udf/UDFLength.java<i class="fa fa-external-link-alt"></i></span></p>
+<p><strong>PTF是一种特殊的UDF</strong><br><span class="exturl" data-url="aHR0cHM6Ly93d3cuY29kYXRsYXMuY29tL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvbWFzdGVyL3FsL3NyYy9qYXZhL29yZy9hcGFjaGUvaGFkb29wL2hpdmUvcWwvdWRmL2dlbmVyaWMvR2VuZXJpY1VERkxlYWQuamF2YQ==">https://www.codatlas.com/github.com/apache/hive/master/ql/src/java/org/apache/hadoop/hive/ql/udf/generic/GenericUDFLead.java<i class="fa fa-external-link-alt"></i></span><br><span class="exturl" data-url="aHR0cHM6Ly93d3cuY29kYXRsYXMuY29tL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvbWFzdGVyL3FsL3NyYy9qYXZhL29yZy9hcGFjaGUvaGFkb29wL2hpdmUvcWwvdWRmL2dlbmVyaWMvR2VuZXJpY1VERkxlYWRMYWcuamF2YT9saW5lPTM1">https://www.codatlas.com/github.com/apache/hive/master/ql/src/java/org/apache/hadoop/hive/ql/udf/generic/GenericUDFLeadLag.java?line=35<i class="fa fa-external-link-alt"></i></span><br>用于窗口函数的计算</p>
+<p><strong>UDF存在下列Operator中</strong><br><img src="20170514170358457.png" alt="这里写图片描述"></p>
+<p><strong>演示</strong><br><span class="exturl" data-url="aHR0cHM6Ly9jd2lraS5hcGFjaGUub3JnL2NvbmZsdWVuY2UvZGlzcGxheS9IaXZlL0hpdmVQbHVnaW5zI0hpdmVQbHVnaW5zLUNyZWF0aW5nQ3VzdG9tVURGcw==">https://cwiki.apache.org/confluence/display/Hive/HivePlugins#HivePlugins-CreatingCustomUDFs<i class="fa fa-external-link-alt"></i></span></p>
+<p><strong>UDAF</strong><br>UDAF用于聚合<br>存在于GroupByOperator -&gt; GenericUDAFEvaluator<br>    思考：为什么Group By Operator即有ExprNodeEvaluator又月GenericUDAFEvaluator?<br>    <span class="exturl" data-url="aHR0cHM6Ly93d3cuY29kYXRsYXMuY29tL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvbWFzdGVyL3FsL3NyYy9qYXZhL29yZy9hcGFjaGUvaGFkb29wL2hpdmUvcWwvZXhlYy9Hcm91cEJ5T3BlcmF0b3IuamF2YQ==">https://www.codatlas.com/github.com/apache/hive/master/ql/src/java/org/apache/hadoop/hive/ql/exec/GroupByOperator.java<i class="fa fa-external-link-alt"></i></span></p>
+<p><strong>UDAF源码举例</strong><br>通用接口<br><span class="exturl" data-url="aHR0cHM6Ly9pbnNpZ2h0LmlvL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvYmxvYi9tYXN0ZXIvcWwvc3JjL2phdmEvb3JnL2FwYWNoZS9oYWRvb3AvaGl2ZS9xbC91ZGYvZ2VuZXJpYy9HZW5lcmljVURBRkV2YWx1YXRvci5qYXZhP2xpbmU9NzA=">https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/hadoop/hive/ql/udf/generic/GenericUDAFEvaluator.java?line=70<i class="fa fa-external-link-alt"></i></span><br>当中有四种模式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Mode.</span><br><span class="line"> *</span><br><span class="line"> */</span><br><span class="line">public static enum Mode &#123;</span><br><span class="line">  /**</span><br><span class="line">   * PARTIAL1: from original data to partial aggregation data: iterate() and</span><br><span class="line">   * terminatePartial() will be called.</span><br><span class="line">   */</span><br><span class="line">  PARTIAL1,</span><br><span class="line">      /**</span><br><span class="line">   * PARTIAL2: from partial aggregation data to partial aggregation data:</span><br><span class="line">   * merge() and terminatePartial() will be called.</span><br><span class="line">   */</span><br><span class="line">  PARTIAL2,</span><br><span class="line">      /**</span><br><span class="line">   * FINAL: from partial aggregation to full aggregation: merge() and</span><br><span class="line">   * terminate() will be called.</span><br><span class="line">   */</span><br><span class="line">  FINAL,</span><br><span class="line">      /**</span><br><span class="line">   * COMPLETE: from original data directly to full aggregation: iterate() and</span><br><span class="line">   * terminate() will be called.</span><br><span class="line">   */</span><br><span class="line">  COMPLETE</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>Sum<br><span class="exturl" data-url="aHR0cHM6Ly93d3cuY29kYXRsYXMuY29tL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvbWFzdGVyL3FsL3NyYy9qYXZhL29yZy9hcGFjaGUvaGFkb29wL2hpdmUvcWwvdWRmL2dlbmVyaWMvR2VuZXJpY1VEQUZTdW0uamF2YQ==">https://www.codatlas.com/github.com/apache/hive/master/ql/src/java/org/apache/hadoop/hive/ql/udf/generic/GenericUDAFSum.java<i class="fa fa-external-link-alt"></i></span></p>
+<p><strong>回忆一下Group By执行的四种模式</strong><br><img src="20170514195921527.png" alt="这里写图片描述"></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9pbnNpZ2h0LmlvL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvYmxvYi9tYXN0ZXIvcWwvc3JjL2phdmEvb3JnL2FwYWNoZS9oYWRvb3AvaGl2ZS9xbC9wYXJzZS9TZW1hbnRpY0FuYWx5emVyLmphdmE/bGluZT05NzQ5">https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/hadoop/hive/ql/parse/SemanticAnalyzer.java?line=9749<i class="fa fa-external-link-alt"></i></span></p>
+<p><strong>对应一下UDAF四种模式</strong><br><img src="2017051420054406.png" alt="这里写图片描述">  </p>
+<p><strong>自定义UDAF</strong><br><span class="exturl" data-url="aHR0cHM6Ly9jd2lraS5hcGFjaGUub3JnL2NvbmZsdWVuY2UvZGlzcGxheS9IaXZlL0dlbmVyaWNVREFGQ2FzZVN0dWR5">https://cwiki.apache.org/confluence/display/Hive/GenericUDAFCaseStudy<i class="fa fa-external-link-alt"></i></span><br>写Resolver<br>写Evaluator<br>    getNewAggregationBuffer()<br>    iterate()<br>    terminatePartial()<br>    merge()<br>    terminate()</p>
+<p><strong>UDTF</strong><br>UDTF用于行转列、拆分行、生成小表<br>存在于UDTFOperator<br><span class="exturl" data-url="aHR0cHM6Ly93d3cuY29kYXRsYXMuY29tL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvbWFzdGVyL3FsL3NyYy9qYXZhL29yZy9hcGFjaGUvaGFkb29wL2hpdmUvcWwvZXhlYy9VRFRGT3BlcmF0b3IuamF2YQ==">https://www.codatlas.com/github.com/apache/hive/master/ql/src/java/org/apache/hadoop/hive/ql/exec/UDTFOperator.java<i class="fa fa-external-link-alt"></i></span></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">  @Override</span><br><span class="line">  public void process(Object row, int tag) throws HiveException &#123;</span><br><span class="line">  //输入一行数据</span><br><span class="line">    // The UDTF expects arguments in an object[]</span><br><span class="line">    StructObjectInspector soi = (StructObjectInspector) inputObjInspectors[tag];</span><br><span class="line">    List&lt;? extends StructField&gt; fields = soi.getAllStructFieldRefs();</span><br><span class="line"></span><br><span class="line">    for (int i = 0; i &lt; fields.size(); i++) &#123;</span><br><span class="line">      objToSendToUDTF[i] = soi.getStructFieldData(row, fields.get(i));</span><br><span class="line">    &#125;</span><br><span class="line">//对输出的多个数据处理</span><br><span class="line">    genericUDTF.process(objToSendToUDTF);</span><br><span class="line">    if (conf.isOuterLV() &amp;&amp; collector.getCounter() == 0) &#123;</span><br><span class="line">      collector.collect(outerObj);</span><br><span class="line">    &#125;</span><br><span class="line">    collector.reset();</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<p><span class="exturl" data-url="aHR0cHM6Ly9pbnNpZ2h0LmlvL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvYmxvYi9tYXN0ZXIvcWwvc3JjL2phdmEvb3JnL2FwYWNoZS9oYWRvb3AvaGl2ZS9xbC91ZGYvZ2VuZXJpYy9HZW5lcmljVURURi5qYXZhP2xpbmU9ODE=">https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/hadoop/hive/ql/udf/generic/GenericUDTF.java?line=81<i class="fa fa-external-link-alt"></i></span></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Give a set of arguments for the UDTF to process.</span><br><span class="line"> *</span><br><span class="line"> * @param args</span><br><span class="line"> *          object array of arguments</span><br><span class="line"> */</span><br><span class="line">public abstract void process(Object[] args) throws HiveException;</span><br></pre></td></tr></table></figure>
+
+<p>经常会与LateralView一起使用<br>    为什么？单独生成小表是无意义的<br>    会将生成的小表和原来的表进行join</p>
+<p><strong>Lateral View</strong><br>把某一列拆分成一个小表<br>把拆出来的小表作为一个视图<br>用这个视图和原表作Join (Map Join)<br><span class="exturl" data-url="aHR0cHM6Ly9jd2lraS5hcGFjaGUub3JnL2NvbmZsdWVuY2UvZGlzcGxheS9IaXZlL0xhbmd1YWdlTWFudWFsK0xhdGVyYWxWaWV3">https://cwiki.apache.org/confluence/display/Hive/LanguageManual+LateralView<i class="fa fa-external-link-alt"></i></span></p>
+<p><strong>Lateral View源码和执行计划</strong><br><span class="exturl" data-url="aHR0cHM6Ly9pbnNpZ2h0LmlvL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvYmxvYi9tYXN0ZXIvcWwvc3JjL2phdmEvb3JnL2FwYWNoZS9oYWRvb3AvaGl2ZS9xbC9leGVjL0xhdGVyYWxWaWV3Sm9pbk9wZXJhdG9yLmphdmE/bGluZT00Mw==">https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/hadoop/hive/ql/exec/LateralViewJoinOperator.java?line=43<i class="fa fa-external-link-alt"></i></span></p>
+<p>逻辑执行计划：<br><img src="20170514202109291.png" alt="这里写图片描述"></p>
+<p><strong>UDTF源码举例</strong><br><span class="exturl" data-url="aHR0cHM6Ly93d3cuY29kYXRsYXMuY29tL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvbWFzdGVyL3FsL3NyYy9qYXZhL29yZy9hcGFjaGUvaGFkb29wL2hpdmUvcWwvdWRmL2dlbmVyaWMvR2VuZXJpY1VEVEZFeHBsb2RlLmphdmE=">https://www.codatlas.com/github.com/apache/hive/master/ql/src/java/org/apache/hadoop/hive/ql/udf/generic/GenericUDTFExplode.java<i class="fa fa-external-link-alt"></i></span></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">public void process(Object[] o) throws HiveException &#123;</span><br><span class="line">//输入一行数据</span><br><span class="line">  switch (inputOI.getCategory()) &#123;</span><br><span class="line">  case LIST:</span><br><span class="line">    ListObjectInspector listOI = (ListObjectInspector)inputOI;</span><br><span class="line">    List&lt;?&gt; list = listOI.getList(o[0]);</span><br><span class="line">    if (list == null) &#123;</span><br><span class="line">      return;</span><br><span class="line">    &#125;</span><br><span class="line">    for (Object r : list) &#123;</span><br><span class="line">      forwardListObj[0] = r;</span><br><span class="line">      //处理</span><br><span class="line">      forward(forwardListObj);</span><br><span class="line">    &#125;</span><br><span class="line">    break;</span><br><span class="line">  case MAP:</span><br><span class="line">    MapObjectInspector mapOI = (MapObjectInspector)inputOI;</span><br><span class="line">    Map&lt;?,?&gt; map = mapOI.getMap(o[0]);</span><br><span class="line">    if (map == null) &#123;</span><br><span class="line">      return;</span><br><span class="line">    &#125;</span><br><span class="line">    for (Entry&lt;?,?&gt; r : map.entrySet()) &#123;</span><br><span class="line">      forwardMapObj[0] = r.getKey();</span><br><span class="line">      forwardMapObj[1] = r.getValue();</span><br><span class="line">      forward(forwardMapObj);</span><br><span class="line">    &#125;</span><br><span class="line">    break;</span><br><span class="line">  default:</span><br><span class="line">    throw new TaskExecutionException(&quot;explode() can only operate on an array or a map&quot;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如，一些价格，以逗号分隔，存储在一个字段中</p>
+<p><strong>自定义UDTF</strong><br><span class="exturl" data-url="aHR0cHM6Ly9jd2lraS5hcGFjaGUub3JnL2NvbmZsdWVuY2UvZGlzcGxheS9IaXZlL0RldmVsb3Blckd1aWRlK1VEVEY=">https://cwiki.apache.org/confluence/display/Hive/DeveloperGuide+UDTF<i class="fa fa-external-link-alt"></i></span><br>比UDAF要简单很多</p>
+<p><strong>Transform</strong><br>与UDTF类似，只是以自定义脚本的形式，编写<br>适合语言控，比如我特别喜欢Python或者特别喜欢Ruby，但并不推荐<br><span class="exturl" data-url="aHR0cHM6Ly9jd2lraS5hcGFjaGUub3JnL2NvbmZsdWVuY2UvZGlzcGxheS9IaXZlL0xhbmd1YWdlTWFudWFsK1RyYW5zZm9ybQ==">https://cwiki.apache.org/confluence/display/Hive/LanguageManual+Transform<i class="fa fa-external-link-alt"></i></span></p>
+<p>为什么不推荐呢看源码<br><strong>Transform源码分析</strong><br><span class="exturl" data-url="aHR0cHM6Ly93d3cuY29kYXRsYXMuY29tL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvbWFzdGVyL3FsL3NyYy9qYXZhL29yZy9hcGFjaGUvaGFkb29wL2hpdmUvcWwvZXhlYy9TY3JpcHRPcGVyYXRvci5qYXZh">https://www.codatlas.com/github.com/apache/hive/master/ql/src/java/org/apache/hadoop/hive/ql/exec/ScriptOperator.java<i class="fa fa-external-link-alt"></i></span></p>
+<p>hive默认的分隔符是”ctra+a”，倘若每行数据里边有tab分隔符，那么数据就会错乱，线程也会错乱。所以我们要在数据之中没有类似tab这样的分隔符的时候才能使用Transform不会出错。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">。。。。。。。。。。。略</span><br><span class="line">  public void process(Object row, int tag) throws HiveException &#123;</span><br><span class="line">  。。。。。。。。。。略</span><br><span class="line">  //启动2个线程，</span><br><span class="line">  outThread.start();</span><br><span class="line">  errThread.start();</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>Hive流程 – 回顾</strong><br><img src="20170514205734778.png" alt="这里写图片描述">  </p>
+<p>Optimizer其实优化器的调用者：<br><img src="20170514205912937.png" alt="这里写图片描述"></p>
+<p><strong>基于规则的优化的执行</strong><br>根据配置初始化一个规则列表，然后一条规则一条规则地执行<br>把根据QB生成的逻辑执行计划改写成新的逻辑执行计划<br><span class="exturl" data-url="aHR0cHM6Ly93d3cuY29kYXRsYXMuY29tL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvbWFzdGVyL3FsL3NyYy9qYXZhL29yZy9hcGFjaGUvaGFkb29wL2hpdmUvcWwvb3B0aW1pemVyL09wdGltaXplci5qYXZhP2xpbmU9MjQw">https://www.codatlas.com/github.com/apache/hive/master/ql/src/java/org/apache/hadoop/hive/ql/optimizer/Optimizer.java?line=240<i class="fa fa-external-link-alt"></i></span></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Invoke all the transformations one-by-one, and alter the query plan.</span><br><span class="line"> *</span><br><span class="line"> * @return ParseContext</span><br><span class="line"> * @throws SemanticException</span><br><span class="line"> */</span><br><span class="line">public ParseContext optimize() throws SemanticException &#123;</span><br><span class="line">  for (Transform t : transformations) &#123;</span><br><span class="line">    t.beginPerfLogging();</span><br><span class="line">    pctx = t.transform(pctx);</span><br><span class="line">    t.endPerfLogging(t.toString());</span><br><span class="line">  &#125;</span><br><span class="line">  return pctx;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>基于规则的优化的执行</strong><br><img src="20170514215438866.png" alt="这里写图片描述"></p>
+<p><strong>demo 1： 简单谓词下推优化器</strong><br><span class="exturl" data-url="aHR0cHM6Ly9pbnNpZ2h0LmlvL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvYmxvYi9tYXN0ZXIvcWwvc3JjL2phdmEvb3JnL2FwYWNoZS9oYWRvb3AvaGl2ZS9xbC9wcGQvU2ltcGxlUHJlZGljYXRlUHVzaERvd24uamF2YT9saW5lPTU1">https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/hadoop/hive/ql/ppd/SimplePredicatePushDown.java?line=55<i class="fa fa-external-link-alt"></i></span></p>
+<p><img src="20170514220105056.png" alt="这里写图片描述"></p>
+<p><strong>demo 2： ReduceSinkDeDuplication</strong><br><span class="exturl" data-url="aHR0cHM6Ly9pbnNpZ2h0LmlvL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvYmxvYi9tYXN0ZXIvcWwvc3JjL2phdmEvb3JnL2FwYWNoZS9oYWRvb3AvaGl2ZS9xbC9vcHRpbWl6ZXIvY29ycmVsYXRpb24vUmVkdWNlU2lua0RlRHVwbGljYXRpb24uamF2YT9saW5lPTk0">https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/hadoop/hive/ql/optimizer/correlation/ReduceSinkDeDuplication.java?line=94<i class="fa fa-external-link-alt"></i></span><br>去重优化器，减少map作业数</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">// If multiple rules can be matched with same cost, last rule will be choosen as a processor</span><br><span class="line">// see DefaultRuleDispatcher#dispatch()</span><br><span class="line">Map&lt;Rule, NodeProcessor&gt; opRules = new LinkedHashMap&lt;Rule, NodeProcessor&gt;();</span><br><span class="line">//reduce sink后边有reduce sink 执行ReduceSinkDeduplicateProcFactory.getReducerReducerProc()优化</span><br><span class="line">opRules.put(new RuleRegExp(&quot;R1&quot;, RS + &quot;%.*%&quot; + RS + &quot;%&quot;),</span><br><span class="line">    ReduceSinkDeduplicateProcFactory.getReducerReducerProc());</span><br><span class="line">    //reduce sink后边有group by + reduce sink执行ReduceSinkDeduplicateProcFactory.getGroupbyReducerProc()优化</span><br><span class="line">opRules.put(new RuleRegExp(&quot;R2&quot;, RS + &quot;%&quot; + GBY + &quot;%.*%&quot; + RS + &quot;%&quot;),</span><br><span class="line">    ReduceSinkDeduplicateProcFactory.getGroupbyReducerProc());</span><br><span class="line">if (mergeJoins) &#123;</span><br><span class="line">//jion 后边有reduce sink执行ReduceSinkDeduplicateProcFactory.getJoinReducerProc()优化</span><br><span class="line">  opRules.put(new RuleRegExp(&quot;R3&quot;, JOIN + &quot;%.*%&quot; + RS + &quot;%&quot;),</span><br><span class="line">      ReduceSinkDeduplicateProcFactory.getJoinReducerProc());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="20170514220833201.png" alt="这里写图片描述"></p>
+<p><strong>demo 3： JoinReorder</strong><br>我们建议小表放在左边，大表放在右边，但是没有这种情况下，<br>虽然大表要放右边，有了JoinReorder，大表就可以放左边了JoinReorder可以改写成这样的形式来优化。这种优化需要打开开关。<br>为什么？看代码<br>    <span class="exturl" data-url="aHR0cHM6Ly93d3cuY29kYXRsYXMuY29tL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvbWFzdGVyL3FsL3NyYy9qYXZhL29yZy9hcGFjaGUvaGFkb29wL2hpdmUvcWwvb3B0aW1pemVyL0pvaW5SZW9yZGVyLmphdmE/bGluZT00MA==">https://www.codatlas.com/github.com/apache/hive/master/ql/src/java/org/apache/hadoop/hive/ql/optimizer/JoinReorder.java?line=40<i class="fa fa-external-link-alt"></i></span><br>只能是大表，不能是大的子查询<br>    思考：为什么？<br>所以，打开这个开关时，简单查询是不需要小表放左边的<br><img src="20170514221850831.png" alt="这里写图片描述"><br>我们看一下这个开关：<br><span class="exturl" data-url="aHR0cHM6Ly9pbnNpZ2h0LmlvL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvYmxvYi9tYXN0ZXIvcWwvc3JjL2phdmEvb3JnL2FwYWNoZS9oYWRvb3AvaGl2ZS9xbC9vcHRpbWl6ZXIvT3B0aW1pemVyLmphdmE/bGluZT0xODY=">https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/hadoop/hive/ql/optimizer/Optimizer.java?line=186<i class="fa fa-external-link-alt"></i></span></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">if (HiveConf.getBoolVar(hiveConf, HiveConf.ConfVars.NWAYJOINREORDER)) &#123;</span><br><span class="line">  transformations.add(new JoinReorder());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><span class="exturl" data-url="aHR0cHM6Ly9pbnNpZ2h0LmlvL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvYmxvYi9tYXN0ZXIvY29tbW9uL3NyYy9qYXZhL29yZy9hcGFjaGUvaGFkb29wL2hpdmUvY29uZi9IaXZlQ29uZi5qYXZhP2xpbmU9MzM1Mw==">https://insight.io/github.com/apache/hive/blob/master/common/src/java/org/apache/hadoop/hive/conf/HiveConf.java?line=3353<i class="fa fa-external-link-alt"></i></span><br><img src="20170514222441553.png" alt="这里写图片描述"><br>默认情况是开发，但是只能是表，不能是子查询。</p>
+<p><strong>更多优化器</strong><br>更多优化器请根据Optimizer的代码自行阅读<br>如果作为一个用户，只需要知道优化器的作用即可<br>如果是源码程序员，可尝试手动写一个优化器</p>
+<p><strong>Hive流程 – 回顾</strong><br><img src="20170514222707054.png" alt="这里写图片描述"></p>
+<p><strong>Hive执行引擎</strong><br><img src="20170514222926367.png" alt="这里写图片描述"></p>
+<p><strong>执行引擎</strong><br>四种执行引擎<br>Local<br>MapReduce<br>Spark<br>    <span class="exturl" data-url="aHR0cHM6Ly9jd2lraS5hcGFjaGUub3JnL2NvbmZsdWVuY2UvZGlzcGxheS9IaXZlL0hpdmUrb24rU3BhcmslM0ErR2V0dGluZytTdGFydGVk">https://cwiki.apache.org/confluence/display/Hive/Hive+on+Spark%3A+Getting+Started<i class="fa fa-external-link-alt"></i></span><br>Tez<br>    <span class="exturl" data-url="aHR0cHM6Ly9jd2lraS5hcGFjaGUub3JnL2NvbmZsdWVuY2UvZGlzcGxheS9IaXZlL0hpdmUrb24rVGV6">https://cwiki.apache.org/confluence/display/Hive/Hive+on+Tez<i class="fa fa-external-link-alt"></i></span><br>Tez + LLAP</p>
+<p><strong>代码部分</strong><br><img src="20170514223227098.png" alt="这里写图片描述"><br>物理执行引擎生成一个TaskCompiler，TaskCompiler会对不同的执行引擎，比如spark，tez、mr等执行不同的物理计划编译器，local是mapreduce（四个线程做map，一个线程做reduce）。<br><span class="exturl" data-url="aHR0cHM6Ly93d3cuY29kYXRsYXMuY29tL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvbWFzdGVyL3FsL3NyYy9qYXZhL29yZy9hcGFjaGUvaGFkb29wL2hpdmUvcWwvcGFyc2UvVGFza0NvbXBpbGVyLmphdmE/bGluZT04Nw==">https://www.codatlas.com/github.com/apache/hive/master/ql/src/java/org/apache/hadoop/hive/ql/parse/TaskCompiler.java?line=87<i class="fa fa-external-link-alt"></i></span></p>
+<p><strong>Hive流程 – 我们还没介绍的</strong><br><img src="20170514223655980.png" alt="这里写图片描述"><br>逻辑执行计划生成物理执行计划，而物理执行计划是如何调整的。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>CeaserWang
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-UDxF%E3%80%81%E4%BC%98%E5%8C%96%E5%99%A8%E5%8F%8A%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E%EF%BC%88%E4%BA%94%EF%BC%89/" title="hive原理与源码分析-UDxF、优化器及执行引擎（五）">https://ceaser.wang/2018/10/04/hive原理与源码分析-UDxF、优化器及执行引擎（五）/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%AE%97%E5%AD%90Operators%E5%8F%8A%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96%E5%99%A8Optimizers%EF%BC%88%E5%9B%9B%EF%BC%89/" rel="prev" title="hive原理与源码分析-算子Operators及查询优化器Optimizers（四）">
+                  <i class="fa fa-chevron-left"></i> hive原理与源码分析-算子Operators及查询优化器Optimizers（四）
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%89%A9%E7%90%86%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92%E4%B8%8E%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E%EF%BC%88%E5%85%AD%EF%BC%89/" rel="next" title="hive原理与源码分析-物理执行计划与执行引擎（六）">
+                  hive原理与源码分析-物理执行计划与执行引擎（六） <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CeaserWang</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":"forest","js":{"url":"https://cdn.jsdelivr.net/npm/mermaid@8.11.0/dist/mermaid.min.js","integrity":"sha256-sVAx+v/Q7v0Q2xm5vN7h5ccSna6gaLREhG9sF8pKT6I="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+  <script class="next-config" data-name="nprogress" type="application/json">{"enable":true,"spinner":true}</script>
+  <script src="/js/third-party/nprogress.js"></script>
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"ryAR9bttS7fex1FPEPAylmmJ-gzGzoHsz","app_key":"dYqygoN4Y01Bl38OdRoCHUYn","server_url":null,"security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+
+</body>
+</html>

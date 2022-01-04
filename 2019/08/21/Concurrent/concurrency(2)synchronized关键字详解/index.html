@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.css" integrity="sha256-no0c5ccDODBwp+9hSmV5VvPpKwHCpbVzXHexIkupM6U=" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.js" integrity="sha256-a5YRB27CcBwBFcT5EF/f3E4vzIqyHrSR878nseNYw64=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ceaser.wang","root":"/","images":"/images","scheme":"Muse","version":"8.6.1","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+<meta name="description" content="变量在多线程之间的影响编写程序：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="concurrency(2)synchronized关键字详解">
+<meta property="og:url" content="https://ceaser.wang/2019/08/21/Concurrent/concurrency(2)synchronized%E5%85%B3%E9%94%AE%E5%AD%97%E8%AF%A6%E8%A7%A3/index.html">
+<meta property="og:site_name" content="南贺神社">
+<meta property="og:description" content="变量在多线程之间的影响编写程序：">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://ceaser.wang/2019/08/21/Concurrent/concurrency(2)synchronized%E5%85%B3%E9%94%AE%E5%AD%97%E8%AF%A6%E8%A7%A3/monitor.png">
+<meta property="og:image" content="https://ceaser.wang/2019/08/21/Concurrent/concurrency(2)synchronized%E5%85%B3%E9%94%AE%E5%AD%97%E8%AF%A6%E8%A7%A3/wait.png">
+<meta property="og:image" content="https://ceaser.wang/2019/08/21/Concurrent/concurrency(2)synchronized%E5%85%B3%E9%94%AE%E5%AD%97%E8%AF%A6%E8%A7%A3/notify1.png">
+<meta property="article:published_time" content="2019-08-21T14:05:45.000Z">
+<meta property="article:modified_time" content="2022-01-04T02:21:30.548Z">
+<meta property="article:author" content="CeaserWang">
+<meta property="article:tag" content="synchronized 并发">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ceaser.wang/2019/08/21/Concurrent/concurrency(2)synchronized%E5%85%B3%E9%94%AE%E5%AD%97%E8%AF%A6%E8%A7%A3/monitor.png">
+
+
+<link rel="canonical" href="https://ceaser.wang/2019/08/21/Concurrent/concurrency(2)synchronized%E5%85%B3%E9%94%AE%E5%AD%97%E8%AF%A6%E8%A7%A3/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://ceaser.wang/2019/08/21/Concurrent/concurrency(2)synchronized%E5%85%B3%E9%94%AE%E5%AD%97%E8%AF%A6%E8%A7%A3/","path":"2019/08/21/Concurrent/concurrency(2)synchronized关键字详解/","title":"concurrency(2)synchronized关键字详解"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>concurrency(2)synchronized关键字详解 | 南贺神社</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">南贺神社</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">你写程序有写诗一样的感觉吗?</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">205</span></a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">24</span></a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">212</span></a></li>
+        <li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%98%E9%87%8F%E5%9C%A8%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%B9%8B%E9%97%B4%E7%9A%84%E5%BD%B1%E5%93%8D"><span class="nav-number">1.</span> <span class="nav-text">变量在多线程之间的影响</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#synchronized%E5%8A%A0%E9%94%81%E5%AF%B9%E8%B1%A1%E5%AF%BC%E8%87%B4%E7%9A%84%E7%BA%BF%E7%A8%8B%E6%89%A7%E8%A1%8C%E7%9A%84%E4%B8%8D%E5%90%8C"><span class="nav-number">2.</span> <span class="nav-text">synchronized加锁对象导致的线程执行的不同</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA"><span class="nav-number">3.</span> <span class="nav-text">结论</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#synchronized%E7%9A%84%E5%87%A0%E7%A7%8D%E4%B8%8D%E5%90%8C%E7%9A%84%E7%94%A8%E6%B3%95"><span class="nav-number">4.</span> <span class="nav-text">synchronized的几种不同的用法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%98%BE%E5%BC%8F%E5%8A%A0%E9%94%81%E5%AF%B9%E8%B1%A1"><span class="nav-number">4.1.</span> <span class="nav-text">显式加锁对象</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#synchronized%E5%AF%B9%E6%96%B9%E6%B3%95%E7%9A%84%E5%90%8C%E6%AD%A5"><span class="nav-number">4.2.</span> <span class="nav-text">synchronized对方法的同步</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#synchronized%E4%BF%AE%E9%A5%B0%E9%9D%99%E6%80%81%E6%96%B9%E6%B3%95"><span class="nav-number">4.3.</span> <span class="nav-text">synchronized修饰静态方法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ObjectMonitor-openjdk-%E8%A7%A3%E8%AF%BB"><span class="nav-number">5.</span> <span class="nav-text">ObjectMonitor openjdk 解读</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#wait%E6%96%B9%E6%B3%95%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">6.</span> <span class="nav-text">wait方法的实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#notify%E6%96%B9%E6%B3%95"><span class="nav-number">7.</span> <span class="nav-text">notify方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%94%81%E5%8D%87%E7%BA%A7%E4%B8%8E%E5%81%8F%E5%90%91%E9%94%81%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90"><span class="nav-number">8.</span> <span class="nav-text">锁升级与偏向锁深入解析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%81%8F%E5%90%91%E9%94%81%EF%BC%9A"><span class="nav-number">8.1.</span> <span class="nav-text">偏向锁：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BD%BB%E9%87%8F%E7%BA%A7%E9%94%81%EF%BC%9A"><span class="nav-number">8.2.</span> <span class="nav-text">轻量级锁：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%87%AA%E6%97%8B%E9%94%81%EF%BC%9A"><span class="nav-number">8.3.</span> <span class="nav-text">自旋锁：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%87%8D%E9%87%8F%E7%BA%A7%E9%94%81%EF%BC%9A"><span class="nav-number">8.4.</span> <span class="nav-text">重量级锁：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E5%99%A8%E5%AF%B9%E4%BA%8E%E9%94%81%E7%9A%84%E4%BC%98%E5%8C%96%E6%8E%AA%E6%96%BD"><span class="nav-number">9.</span> <span class="nav-text">编译器对于锁的优化措施</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%94%81%E6%B6%88%E9%99%A4%EF%BC%9A"><span class="nav-number">9.1.</span> <span class="nav-text">锁消除：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%94%81%E7%B2%97%E5%8C%96%EF%BC%9A"><span class="nav-number">9.2.</span> <span class="nav-text">锁粗化：</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-overview">
+            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="CeaserWang"
+      src="/../0xcc/index/Uchiha.jpg">
+  <p class="site-author-name" itemprop="name">CeaserWang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">212</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">205</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tLzExNTY3MjE4NzQ=" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;1156721874"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmNlYXNlcndhbmdAb3V0bG9vay5jb20=" title="E-Mail → mailto:ceaserwang@outlook.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+  </div>
+  <div class="cc-license site-overview-item animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><img src="https://cdn.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-user-friends fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly90d29kcmFnb25sYWtlLmNvbQ==" title="https:&#x2F;&#x2F;twodragonlake.com">TwoDragonLake</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9yb290Y2x1c3Rlci5naXRodWIuaW8=" title="https:&#x2F;&#x2F;rootcluster.github.io">RootCluster</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9tdXNlZmxvdy5pbw==" title="https:&#x2F;&#x2F;museflow.io">MuseFlow</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9pbmNvZGVyLm9yZw==" title="https:&#x2F;&#x2F;incoder.org">BladeCode</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9rYWlmYS5kZXY=" title="https:&#x2F;&#x2F;kaifa.dev">Alyenc</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmRhemhpZGF5b25nLmNu" title="https:&#x2F;&#x2F;blog.dazhidayong.cn">Killua</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9qb2NlbHluc2hhbmcuY24v" title="https:&#x2F;&#x2F;jocelynshang.cn&#x2F;">Jocelyn</span>
+        </li>
+    </ul>
+  </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2019/08/21/Concurrent/concurrency(2)synchronized%E5%85%B3%E9%94%AE%E5%AD%97%E8%AF%A6%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
+      <meta itemprop="name" content="CeaserWang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="南贺神社">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          concurrency(2)synchronized关键字详解
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2019-08-21 14:05:45" itemprop="dateCreated datePublished" datetime="2019-08-21T14:05:45+00:00">2019-08-21</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2022-01-04 02:21:30" itemprop="dateModified" datetime="2022-01-04T02:21:30+00:00">2022-01-04</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/concurrency/" itemprop="url" rel="index"><span itemprop="name">concurrency</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2019/08/21/Concurrent/concurrency(2)synchronized%E5%85%B3%E9%94%AE%E5%AD%97%E8%AF%A6%E8%A7%A3/" class="post-meta-item leancloud_visitors" data-flag-title="concurrency(2)synchronized关键字详解" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h3 id="变量在多线程之间的影响"><a href="#变量在多线程之间的影响" class="headerlink" title="变量在多线程之间的影响"></a>变量在多线程之间的影响</h3><p>编写程序：</p>
+<span id="more"></span>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">public class MyThreadTest&#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        Runnable r = new MyThread();</span><br><span class="line">        Thread t1 = new Thread(r);</span><br><span class="line">        Thread t2 = new Thread(r);</span><br><span class="line">        t1.start();</span><br><span class="line">        t2.start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"> class MyThread implements  Runnable &#123;</span><br><span class="line">    int x;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void run() &#123;</span><br><span class="line">        x= 0;</span><br><span class="line">        while(true)&#123;</span><br><span class="line">            System.out.println(&quot;result:&quot; + x++);</span><br><span class="line">            try &#123;</span><br><span class="line">                Thread.sleep((long)Math.random() * 1000);</span><br><span class="line">            &#125; catch (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">            if(x == 30)&#123;</span><br><span class="line">                break;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>输出的可能有多种：<br>A：<br>result:0<br>result:1<br>result:2<br>result:3<br>result:5</p>
+<p>B：<br>result:1<br>result:0<br>result:2<br>result:3<br>result:4</p>
+<p>即0和1的先后顺序是不确定的。<br>我们创建了2个线程但是他们都会执行同一个r对象的run方法，，而变量x又是公共的变量，在多线程之间都是可见的，这在多线程里边会有一些影响，这样导致了输出的不确定性。</p>
+<h3 id="synchronized加锁对象导致的线程执行的不同"><a href="#synchronized加锁对象导致的线程执行的不同" class="headerlink" title="synchronized加锁对象导致的线程执行的不同"></a>synchronized加锁对象导致的线程执行的不同</h3><p>编写程序</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line">public class MyThreadTest2 &#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        MyClass myClass = new MyClass();</span><br><span class="line">        Thread t1 = new Thread1(myClass);</span><br><span class="line">        Thread t2 = new Thread2(myClass);</span><br><span class="line"></span><br><span class="line">        t1.start();</span><br><span class="line"></span><br><span class="line">        try &#123;</span><br><span class="line">            Thread.sleep(700);</span><br><span class="line">        &#125; catch (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        t2.start();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class MyClass&#123;</span><br><span class="line"></span><br><span class="line">    public synchronized void hello()&#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            Thread.sleep(4000);</span><br><span class="line">        &#125; catch (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(&quot;hello&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public synchronized void world()&#123;</span><br><span class="line">        System.out.println(&quot;world&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class Thread1 extends Thread&#123;</span><br><span class="line">    private MyClass myClass;</span><br><span class="line"></span><br><span class="line">    public  Thread1(MyClass myClass)&#123;</span><br><span class="line">        this.myClass = myClass;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void run()&#123;</span><br><span class="line">        this.myClass.hello();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">class Thread2 extends Thread&#123;</span><br><span class="line">    private MyClass myClass;</span><br><span class="line"></span><br><span class="line">    public  Thread2(MyClass myClass)&#123;</span><br><span class="line">        this.myClass = myClass;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void run()&#123;</span><br><span class="line">        this.myClass.world();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>输出：<br>hello<br>world</p>
+<p>即 hello先于world打印。<br>现在我们修改main函数：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">public static void main(String[] args) &#123;</span><br><span class="line">    MyClass myClass = new MyClass();</span><br><span class="line">    MyClass myClass2 = new MyClass();</span><br><span class="line">    Thread t1 = new Thread1(myClass);</span><br><span class="line">    Thread t2 = new Thread2(myClass2);</span><br><span class="line"></span><br><span class="line">    t1.start();</span><br><span class="line"></span><br><span class="line">    try &#123;</span><br><span class="line">        Thread.sleep(700);</span><br><span class="line">    &#125; catch (InterruptedException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">    t2.start();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>输出：<br>world<br>hello</p>
+<p>由于t1和t2使用了2个不同的MyClass，那么synchronized锁住的对象也就不一样，线程之间互不影响，因为world首先打印出来。</p>
+<h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h3><p>如果一个对象它里边有若干个synchronized方法，那么在某一时刻，只有一个线程能进入这里边的某一个synchronized方法，而其他线程想要进入其他的任意synchronized方法也要等待。<br>如果synchronized修饰static的方法，那么锁住的就是class对象。</p>
+<h3 id="synchronized的几种不同的用法"><a href="#synchronized的几种不同的用法" class="headerlink" title="synchronized的几种不同的用法"></a>synchronized的几种不同的用法</h3><h4 id="显式加锁对象"><a href="#显式加锁对象" class="headerlink" title="显式加锁对象"></a>显式加锁对象</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">public class MyTest1 &#123;</span><br><span class="line"></span><br><span class="line">    private Object object = new Object();</span><br><span class="line"></span><br><span class="line">    public void method()&#123;</span><br><span class="line">        synchronized (object)&#123;</span><br><span class="line">            System.out.println(&quot;hello world&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>查看字节码：<br>javap -c  com.twodragonlake.concurrency3.MyTest1</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">public void method();</span><br><span class="line">  Code:</span><br><span class="line">     0: aload_0</span><br><span class="line">     1: getfield      #3                  // Field object:Ljava/lang/Object;</span><br><span class="line">     4: dup</span><br><span class="line">     5: astore_1</span><br><span class="line">     6: monitorenter                      //进入监视器（获取锁）</span><br><span class="line">     7: getstatic     #4                  // Field java/lang/System.out:Ljava/io/PrintStream;</span><br><span class="line">    10: ldc           #5                  // String hello world</span><br><span class="line">    12: invokevirtual #6                  // Method java/io/PrintStream.println:(Ljava/lang/String;)V</span><br><span class="line">    15: aload_1</span><br><span class="line">    16: monitorexit                       //退出监视器（释放锁）</span><br><span class="line">    17: goto          25</span><br><span class="line">    20: astore_2</span><br><span class="line">    21: aload_1</span><br><span class="line">    22: monitorexit                       //防止异常的情况下保证锁一定能释放掉</span><br><span class="line">    23: aload_2</span><br><span class="line">    24: athrow</span><br><span class="line">    25: return</span><br><span class="line">  Exception table:</span><br><span class="line">     from    to  target type</span><br><span class="line">         7    17    20   any</span><br><span class="line">        20    23    20   any</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>当我们使用synchronized关键字来修饰代码块时，字节码层面上是通过monitorenter和monitorexit指令来实现的锁的获取与释放动作。</p>
+<p>修改method方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public void method()&#123;</span><br><span class="line">    synchronized (object)&#123;</span><br><span class="line">        System.out.println(&quot;hello world&quot;);</span><br><span class="line">        throw new RuntimeException();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>查看字节码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">public void method();</span><br><span class="line">  Code:</span><br><span class="line">     0: aload_0</span><br><span class="line">     1: getfield      #3                  // Field object:Ljava/lang/Object;</span><br><span class="line">     4: dup</span><br><span class="line">     5: astore_1</span><br><span class="line">     6: monitorenter                      //进入监视器</span><br><span class="line">     7: getstatic     #4                  // Field java/lang/System.out:Ljava/io/PrintStream;</span><br><span class="line">    10: ldc           #5                  // String hello world</span><br><span class="line">    12: invokevirtual #6                  // Method java/io/PrintStream.println:(Ljava/lang/String;)V</span><br><span class="line">    15: new           #7                  // class java/lang/RuntimeException</span><br><span class="line">    18: dup</span><br><span class="line">    19: invokespecial #8                  // Method java/lang/RuntimeException.&quot;&lt;init&gt;&quot;:()V</span><br><span class="line">    22: athrow</span><br><span class="line">    23: astore_2</span><br><span class="line">    24: aload_1</span><br><span class="line">    25: monitorexit                      //退出监视器，因为肯定会抛出异常，所以只有这一个monitorexit。</span><br><span class="line">    26: aload_2</span><br><span class="line">    27: athrow                           //</span><br><span class="line">  Exception table:</span><br><span class="line">     from    to  target type</span><br><span class="line">         7    26    23   any</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>当前线程进入到monitorenter指令后，线程将会持有Monitor对象，退出monitorenter指令后，线程将会释放Monitor对象。</p>
+<h4 id="synchronized对方法的同步"><a href="#synchronized对方法的同步" class="headerlink" title="synchronized对方法的同步"></a>synchronized对方法的同步</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public class MyTest2 &#123;</span><br><span class="line"></span><br><span class="line">    public synchronized void method()&#123;</span><br><span class="line">        System.out.println(&quot;hello world&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>字节码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">public synchronized void method();</span><br><span class="line">    descriptor: ()V</span><br><span class="line">    flags: ACC_PUBLIC, ACC_SYNCHRONIZED</span><br><span class="line">    Code:</span><br><span class="line">      stack=2, locals=1, args_size=1</span><br><span class="line">         0: getstatic     #2                  // Field java/lang/System.out:Ljava/io/PrintStream;</span><br><span class="line">         3: ldc           #3                  // String hello world</span><br><span class="line">         5: invokevirtual #4                  // Method java/io/PrintStream.println:(Ljava/lang/String;)V</span><br><span class="line">         8: return</span><br><span class="line">      LineNumberTable:</span><br><span class="line">        line 13: 0</span><br><span class="line">        line 14: 8</span><br><span class="line">      LocalVariableTable:</span><br><span class="line">        Start  Length  Slot  Name   Signature</span><br><span class="line">            0       9     0  this   Lcom/twodragonlake/concurrency3/MyTest2;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>当synchronized修饰方法的时候看不到监视器的指令，但是怎么分辨是同步的呢？其实是通过方法的标示：<br>flags: ACC_PUBLIC, ACC_SYNCHRONIZED<br>ACC_SYNCHRONIZED标示是一个同步的方法。<br>对于synchronized关键字修饰方法来说，并没有监视器的进入和退出指令，而是出现了一个ACC_SYNCHRONIZED标志。<br>jvm使用了ACC_SYNCHRONIZED访问标志来区分一个方法是否为同步方法。<br>如果有，那么执行线程将会先持有方法所在对象的monitor对象，然后再去执行方法体；在该方法执行期间，<br>其他的任何线程均无法获取到这个Monitor对象，当线程执行完该方法后，它会释放掉这个Monitor对象。</p>
+<h4 id="synchronized修饰静态方法"><a href="#synchronized修饰静态方法" class="headerlink" title="synchronized修饰静态方法"></a>synchronized修饰静态方法</h4><p>编写代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">public class MyTest3 &#123;</span><br><span class="line"></span><br><span class="line">    public static  synchronized  void  method()&#123;</span><br><span class="line">        System.out.println(&quot;hello world&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>字节码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public static synchronized void method();</span><br><span class="line">  descriptor: ()V</span><br><span class="line">  flags: ACC_PUBLIC, ACC_STATIC, ACC_SYNCHRONIZED</span><br><span class="line">  Code:</span><br><span class="line">    stack=2, locals=0, args_size=0</span><br><span class="line">       0: getstatic     #2                  // Field java/lang/System.out:Ljava/io/PrintStream;</span><br><span class="line">       3: ldc           #3                  // String hello world</span><br><span class="line">       5: invokevirtual #4                  // Method java/io/PrintStream.println:(Ljava/lang/String;)V</span><br><span class="line">       8: return</span><br><span class="line">    LineNumberTable:</span><br><span class="line">      line 13: 0</span><br><span class="line">      line 14: 8</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>访问标记：ACC_PUBLIC, ACC_STATIC, ACC_SYNCHRONIZED 相比非静态方法多了一个标志 ACC_STATIC。<br>即，方法 的字节码标志存在ACC_STATIC和ACC_SYNCHRONIZED的时候就是一个静态同步方法。</p>
+<p>JVM中的同步是基于进入与退出监视器对象（管程对象）来实现的，每个对象实例都会有一个Monitor对象，Monitor对象和Java对象一同创建并销毁，Monitor对象是由C++来实现的。</p>
+<p>当多个线程同时访问同一段同步代码时，这些线程会被放到一个EntryList集合中，处于阻塞状态的线程都会被放到该列表当中，接下来，当前线程获取到对象的Monitor时，Monitor是依赖于底层操作系统的mutex lock来实现互斥的，线程获取mutex成功，则会持有该mutex，这时其他线程无法再获取到该mutex。</p>
+<p>如果线程调用了wait方法，那么该线程就会释放掉所持有的的mutex，并且该线程会进入到wait集合（等待集合）中，，等待下一次被其他线程调用notify/notifyall唤醒，如果当前线程顺利执行完毕方法，那么它也会释放掉所有持有mutex。</p>
+<p>总结一下：同步锁在这种实现方式当中，因为Monitor是依赖于底层的操作系统实现，这样就存在用户态与内核态之间的切换，，所以会增加性能开销。<br>通过对象互斥锁的概念保证共享数据操作的完整性，每个对象都对应于一个可称为【互斥锁】的标记，这个标记用于保证在任何时刻，只能有一个线程访问该对象。</p>
+<p>那些处于EntryList与waitSet中的线程均处于阻塞状态，阻塞操作是由操作系统来完成的，在inux下是通过pthread_mutex_local函数实现的。<br>线程被阻塞后便会进入到内核调度状态，这会导致系统用户态与内核态之间来回切换，严重影响锁的性能。</p>
+<p>解决上述问题的办法便是自旋。其原理：当发生对Monitor的挣用时，若Owner能够在很短的时间内释放掉锁，则那些正在挣用的线程就可以稍微等待下，【即所谓的自旋】，在Owner线程释放锁之后，挣用线程可能会立刻获取到锁，从而避免了系统阻塞。不过，当Owner运行时间超过了临界值后，挣用线程自旋一段时间后依然无法获取到锁，这时挣用线程则会停止自旋从而到阻塞状态，所以总体的思想是：先自旋，不成功再进行阻塞，尽量降低阻塞的可能性，这对那些执行时间很短的代码块来说就有极大性能提升，显然，自旋在多处理器（多核心）上才有意义。<br>阻塞要进入到内核态，如果线程唤醒又会从内核态转到用户态，所以要尽量避免阻塞。</p>
+<p>互斥锁的属性：</p>
+<ol>
+<li>PTHREAD_MUTEX_TIMED_NP: 这是缺省值，也就是普通锁，当一个线程加锁以后，，其余请求锁的线程将会形成一个等待队列，并且在解锁后按照优先级获取到锁。这种策略可以确保资源分配的公平性。</li>
+<li>PTHREAD_MUTEX_RECURSIVE_NP:  嵌套锁。允许一个线程对同一个锁成功获取多次，并通过unlock解锁。如果是不同线程请求，则在加锁线程解锁时重新进行竞争。</li>
+<li>PTHREAD_MUTEX_ERRORCHECK_NP: 检错锁，如果一个线程请求同一个锁，则返回EDEADLK,否则与PTHREAD_MUTEX_TIMED_NP类型的动作相同，这样就保证了当不允许多次加锁时不会出现最简单情况下的死锁。</li>
+<li>PTHREAD_MUTEX_ADAPTIVE_NP: 适应锁，动作最为简单的锁类型，仅仅等待解锁后重新竞争。</li>
+</ol>
+<h3 id="ObjectMonitor-openjdk-解读"><a href="#ObjectMonitor-openjdk-解读" class="headerlink" title="ObjectMonitor openjdk 解读"></a>ObjectMonitor openjdk 解读</h3><p>synchronized关键字是通过monitor管理线程的同步，那么这个monitor在openjdk里边有哪些组成，干了一些什么事情？<br>其实在c++的层面monitor对应的c++类就是ObjectMonitor，它的头文件源码如下：<br><span class="exturl" data-url="aHR0cDovL2hnLm9wZW5qZGsuamF2YS5uZXQvamRrOHUvamRrOHUvaG90c3BvdC9maWxlL2JmYWMxNmYxOGQ5Mi9zcmMvc2hhcmUvdm0vcnVudGltZS9vYmplY3RNb25pdG9yLmhwcA==">http://hg.openjdk.java.net/jdk8u/jdk8u/hotspot/file/bfac16f18d92/src/share/vm/runtime/objectMonitor.hpp<i class="fa fa-external-link-alt"></i></span></p>
+<p>看一下初始化方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">// initialize the monitor, exception the semaphore, all other fields</span><br><span class="line">// are simple integers or pointers</span><br><span class="line">ObjectMonitor() &#123;</span><br><span class="line">  _header       = NULL;</span><br><span class="line">  _count        = 0;</span><br><span class="line">  _waiters      = 0,</span><br><span class="line">  _recursions   = 0;     记录可重入锁重入的次数</span><br><span class="line">  _object       = NULL;  </span><br><span class="line">  _owner        = NULL;  当前锁的拥有者线程</span><br><span class="line">  _WaitSet      = NULL;  线程调用了wait方法，就会进入这个队列</span><br><span class="line">  _WaitSetLock  = 0 ;    简单的一个自旋锁【先自旋，自旋拿不到锁再进行内核态转换】</span><br><span class="line">  _Responsible  = NULL ;</span><br><span class="line">  _succ         = NULL ;</span><br><span class="line">  _cxq          = NULL ; 最近的一个等待线程，也是一个ObjectMonitor的线程代理</span><br><span class="line">  FreeNext      = NULL ;</span><br><span class="line">  _EntryList    = NULL ; 等待进入monitor的线程都在_EntryList集合里边</span><br><span class="line">  _SpinFreq     = 0 ;</span><br><span class="line">  _SpinClock    = 0 ;</span><br><span class="line">  OwnerIsThread = 0 ;</span><br><span class="line">  _previous_owner_tid = 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>看一下它的处理架构：<br><img src="monitor.png" alt="monitor.png"><br>waitSet采用链表的结构存储等待的线程的好处是，只要拿到一个线程就能访问其他的线程，在有些情况下可能针对于优先级唤醒有非常好的帮助。</p>
+<h3 id="wait方法的实现"><a href="#wait方法的实现" class="headerlink" title="wait方法的实现"></a>wait方法的实现</h3><p>java的Object的wait方法，在objectMonitor.cpp里边，源码位置：<br><span class="exturl" data-url="aHR0cDovL2hnLm9wZW5qZGsuamF2YS5uZXQvamRrOHUvamRrOHUvaG90c3BvdC9maWxlL2JmYWMxNmYxOGQ5Mi9zcmMvc2hhcmUvdm0vcnVudGltZS9vYmplY3RNb25pdG9yLmNwcA==">http://hg.openjdk.java.net/jdk8u/jdk8u/hotspot/file/bfac16f18d92/src/share/vm/runtime/objectMonitor.cpp<i class="fa fa-external-link-alt"></i></span><br>wait方法的开始是从1463—1690，定位到1508行：<br><img src="wait.png" alt="wait.png"><br>ObjectWaiter node(Self);构建了一个ObjectWaiter的节点，然后调用 AddWaiter (&amp;node) ;将其加入到waitset里边。<br>AddWaiter:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">waitSet里边是一个双向链表，这里边都是在修改指针，将当前节点加入到链表。</span><br><span class="line">inline void ObjectMonitor::AddWaiter(ObjectWaiter* node) &#123;</span><br><span class="line">  assert(node != NULL, &quot;should not dequeue NULL node&quot;);</span><br><span class="line">  assert(node-&gt;_prev == NULL, &quot;node already in list&quot;);</span><br><span class="line">  assert(node-&gt;_next == NULL, &quot;node already in list&quot;);</span><br><span class="line">  // put node at end of queue (circular doubly linked list)</span><br><span class="line">  if (_WaitSet == NULL) &#123;</span><br><span class="line">    _WaitSet = node;</span><br><span class="line">    node-&gt;_prev = node;</span><br><span class="line">    node-&gt;_next = node;</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    ObjectWaiter* head = _WaitSet ;</span><br><span class="line">    ObjectWaiter* tail = head-&gt;_prev;</span><br><span class="line">    assert(tail-&gt;_next == head, &quot;invariant check&quot;);</span><br><span class="line">    tail-&gt;_next = node;</span><br><span class="line">    head-&gt;_prev = node;</span><br><span class="line">    node-&gt;_next = head;</span><br><span class="line">    node-&gt;_prev = tail;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>wait方法里边的 exit (true, Self); 指的是线程进入waitSet之后就退出了monitor，释放对象的锁。</p>
+<h3 id="notify方法"><a href="#notify方法" class="headerlink" title="notify方法"></a>notify方法</h3><p>notify在从1698行开始。<br><img src="notify1.png" alt="notify1.png"><br>看一下DequeueWaiter方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">唤醒waitSet里边的第一个线程</span><br><span class="line">inline ObjectWaiter* ObjectMonitor::DequeueWaiter() &#123;</span><br><span class="line">  // dequeue the very first waiter</span><br><span class="line">  ObjectWaiter* waiter = _WaitSet;</span><br><span class="line">  if (waiter) &#123;</span><br><span class="line">    DequeueSpecificWaiter(waiter);</span><br><span class="line">  &#125;</span><br><span class="line">  return waiter;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在notify调用完DequeueWaiter拿到第一个线程之后，下边有一系列逻辑：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">if (Policy != 4) &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">if (Policy == 0) &#123;  </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">if (Policy == 1) &#123;</span><br><span class="line">&#125;</span><br><span class="line">if (Policy == 2) &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">if (Policy == 3) &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">if (Policy &lt; 4) &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Policy代表的是调度策略类型，不同的调度策略唤醒的线程会大不相同。<br>唤醒的线程会进入到EntryList,并且从waitSet移除：<br>举个例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">if (Policy == 1) &#123;      // append to EntryList</span><br><span class="line">    if (List == NULL) &#123;</span><br><span class="line">        iterator-&gt;_next = iterator-&gt;_prev = NULL ;</span><br><span class="line">        _EntryList = iterator ;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">       // CONSIDER:  finding the tail currently requires a linear-time walk of</span><br><span class="line">       // the EntryList.  We can make tail access constant-time by converting to</span><br><span class="line">       // a CDLL instead of using our current DLL.</span><br><span class="line">       ObjectWaiter * Tail ;</span><br><span class="line">       for (Tail = List ; Tail-&gt;_next != NULL ; Tail = Tail-&gt;_next) ;</span><br><span class="line">       assert (Tail != NULL &amp;&amp; Tail-&gt;_next == NULL, &quot;invariant&quot;) ;</span><br><span class="line">       Tail-&gt;_next = iterator ;</span><br><span class="line">       iterator-&gt;_prev = Tail ;</span><br><span class="line">       iterator-&gt;_next = NULL ;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="锁升级与偏向锁深入解析"><a href="#锁升级与偏向锁深入解析" class="headerlink" title="锁升级与偏向锁深入解析"></a>锁升级与偏向锁深入解析</h3><p>在jdk1.5之前，，我们若想实现线程同步，只能通过synchronized关键字这一种方式达成，底层，java也是通过synchronized关键字来做到数据的原子性维护的；synchronized关键字是jvm实现的一种内置锁，从底层角度来说，这种锁的获取与释放都是由jvm帮助我们隐式实现的。</p>
+<p>从jdk1.5开始，并发包引入了Lock锁，Lock这种同步锁是基于java来实现的，因此锁的获取与释放都是通过java代码来实现与控制的。</p>
+<p>然后synchronized是基于底层操作系统的Mutex Lock来实现的，每次对锁的获取与释放动作都会带来用户态与内核态之间的切换，这种切换会极大地增加系统负担；在并发量较高时，也就是说锁的竞争比较激烈时，synchronized锁在性能上的表现就非常差。</p>
+<p>从JDK1.6开始，synchronized锁的实现发生了很大的变化，JVM引入了相应的优化手段来提升synchronized锁的性能，这种提升涉及到偏向锁，轻量级锁及重量级锁等，从而减少锁的竞争锁带来的用户态与内核态之间的切换；这种锁的优化实际上是通过java对象头中的一些标志位来去实现的；对于锁的访问与改变，实际上都与对象头息息相关。</p>
+<p>从JDK1.6开始，对象实例在堆当中划分为三个组成部分：对象头，实例数据与对齐填充。<br>对象头主要也是由三块内容构成：</p>
+<ol>
+<li>Mark Word</li>
+<li>指向类的指针</li>
+<li>数组长度</li>
+</ol>
+<p>其中Mark Word（它记录了对象，锁及垃圾回收相关的信息，在6位的jvm中，器长度也是64bit）的信息包括了如下组成部分：</p>
+<ol>
+<li>无锁标记</li>
+<li>偏向锁标记</li>
+<li>轻量级锁标记</li>
+<li>重量级锁标记</li>
+<li>GC标记</li>
+</ol>
+<p>对于synchronized锁来说，锁的升级主要是通过Mark Word中的锁标记位与是否偏向锁标志位来达成的，synchronized关键字所对应的锁都是先从偏向锁开始，随着锁竞争的不断升级，逐步演化至轻量级锁，最后则变成了重量级锁。</p>
+<p>无锁 -&gt; 偏向锁 -&gt; 轻量级锁 -&gt; 重量级锁</p>
+<h4 id="偏向锁："><a href="#偏向锁：" class="headerlink" title="偏向锁："></a>偏向锁：</h4><p>针对于一个线程来说的，它的主要作用是优化同一个线程多次获取一个锁的情况；如果一个synchronized方法被一个线程访问，那么这个方法所在的对象就会在其Mark Word中的将偏向锁进行标记，同时还会有一个字段来存储该线程的ID；当这个线程再次访问同一个synchronized方法时，他会检查这个对象的Mark Word的偏向锁标记以及是否指向了气线程id，如果是的话，那么该线程就无需进入管程(Monitor)，而是直接进入到该方法体中。</p>
+<p>如果是另外一个线程访问synchronized方法，那么实际情况会如何呢？</p>
+<p>偏向锁会被取消掉，升级为轻量级锁。</p>
+<h4 id="轻量级锁："><a href="#轻量级锁：" class="headerlink" title="轻量级锁："></a>轻量级锁：</h4><p>若第一个线程已经获取到了当前对象的锁，这时第二个线程又开始尝试争抢该对象的锁，由于该对象的锁已经被第一个线程获取到，因此它是偏向锁，而第二个线程在争抢时，会发现该对象头中的Mark Word已经是偏向锁，但是里边存储的线程id并不是自己的（是第一个线程），那么它会进行CAS（Compare and Swap），从而获取到锁，这里边存在两种情况：</p>
+<ol>
+<li>获取锁成功：那么它会直接将Mark Word中的线程id由第一个线程变成自己（偏向锁标记为保持不变），这样改对象依然会保存锁的状态。</li>
+<li>获取锁失败：则表示这时可能会有多个线程同时尝试争抢该对象的锁，那么这时偏向锁就会进行升级，升级为轻量级锁。</li>
+</ol>
+<h4 id="自旋锁："><a href="#自旋锁：" class="headerlink" title="自旋锁："></a>自旋锁：</h4><p>若自旋失败（依然无法获取锁），那么锁就会转化为重量级锁，在这种情况下，无法获取到锁的线程都会进入到Monitor（即内核态）<br>自旋最大的一个特点就是避免了线程从用户态进入到内核态。</p>
+<h4 id="重量级锁："><a href="#重量级锁：" class="headerlink" title="重量级锁："></a>重量级锁：</h4><p>线程最终从用户态进入到内核态。</p>
+<h3 id="编译器对于锁的优化措施"><a href="#编译器对于锁的优化措施" class="headerlink" title="编译器对于锁的优化措施"></a>编译器对于锁的优化措施</h3><h4 id="锁消除："><a href="#锁消除：" class="headerlink" title="锁消除："></a>锁消除：</h4><p>程序1：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public class MyTest4 &#123;</span><br><span class="line">    private Object object = new Object();</span><br><span class="line">    public void method()&#123;</span><br><span class="line">       synchronized (object)&#123;</span><br><span class="line">           System.out.println(&quot;hello world&quot;);</span><br><span class="line">       &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>程序2：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public class MyTest4 &#123;</span><br><span class="line">    public void method()&#123;</span><br><span class="line">        Object object = new Object();</span><br><span class="line">       synchronized (object)&#123;</span><br><span class="line">           System.out.println(&quot;hello world&quot;);</span><br><span class="line">       &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>程序2将锁对象object作为局部变量放在方法体里边，这样就意味着每个线程都有一个自己的锁，并不会像程序1那样在成员变量object上发生锁的竞争，观察程序2的字节码还是会有synchronized的相关字节码，但是在实际运行的时候，jit编译器会进行优化，会把程序2的synchronized关键字去掉。</p>
+<p>JIT编译器（Just In Time编译器）可以在动态编辑同步代码时，使用一种叫做逃逸分析的技术，来通过该项技术判别程序中所使用的锁对象是否只被一个线程所使用，而没有散布到其他线程当中；如果情况就是这样的话，那么JIT编译器在编译这个同步代码时就不会生成synchronized<br>关键字所标示的锁的申请与释放机器码，从而消除了锁的使用流程。</p>
+<h4 id="锁粗化："><a href="#锁粗化：" class="headerlink" title="锁粗化："></a>锁粗化：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">public class MyTest5 &#123;</span><br><span class="line">    private Object object = new Object();</span><br><span class="line">    public void method()&#123;</span><br><span class="line">        synchronized (object)&#123;</span><br><span class="line">            System.out.println(&quot;hello world&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">        synchronized (object)&#123;</span><br><span class="line">            System.out.println(&quot;welcome&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">        synchronized (object)&#123;</span><br><span class="line">            System.out.println(&quot;person&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>反编译结果：</p>
+<p>javap  -c com.twodragonlake.concurrency3.MyTest5</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">public void method();</span><br><span class="line">    Code:</span><br><span class="line">       0: aload_0</span><br><span class="line">       1: getfield      #3                  // Field object:Ljava/lang/Object;</span><br><span class="line">       4: dup</span><br><span class="line">       5: astore_1</span><br><span class="line">       6: monitorenter                      【第一个synchronized的monitorenter】</span><br><span class="line">       7: getstatic     #4                  // Field java/lang/System.out:Ljava/io/PrintStream;</span><br><span class="line">      10: ldc           #5                  // String hello world</span><br><span class="line">      12: invokevirtual #6                  // Method java/io/PrintStream.println:(Ljava/lang/String;)V</span><br><span class="line">      15: aload_1</span><br><span class="line">      16: monitorexit                       【第一个synchronized的monitorexit】</span><br><span class="line">      17: goto          25</span><br><span class="line">      20: astore_2</span><br><span class="line">      21: aload_1</span><br><span class="line">      22: monitorexit                       【第一个synchronized的第二个monitorenter，异常情况释放锁用】</span><br><span class="line">      23: aload_2</span><br><span class="line">      24: athrow</span><br><span class="line">      25: aload_0</span><br><span class="line">      26: getfield      #3                  // Field object:Ljava/lang/Object;</span><br><span class="line">      29: dup</span><br><span class="line">      30: astore_1</span><br><span class="line">      31: monitorenter                      【第二个synchronized的monitorenter】</span><br><span class="line">      32: getstatic     #4                  // Field java/lang/System.out:Ljava/io/PrintStream;</span><br><span class="line">      35: ldc           #7                  // String welcome</span><br><span class="line">      37: invokevirtual #6                  // Method java/io/PrintStream.println:(Ljava/lang/String;)V</span><br><span class="line">      40: aload_1</span><br><span class="line">      41: monitorexit                       【第二个synchronized的monitorexit】</span><br><span class="line">      42: goto          50</span><br><span class="line">      45: astore_3</span><br><span class="line">      46: aload_1</span><br><span class="line">      47: monitorexit                      【第二个synchronized的第二个monitorenter，异常情况释放锁用】</span><br><span class="line">      48: aload_3</span><br><span class="line">      49: athrow</span><br><span class="line">      50: aload_0</span><br><span class="line">      51: getfield      #3                  // Field object:Ljava/lang/Object;</span><br><span class="line">      54: dup</span><br><span class="line">      55: astore_1</span><br><span class="line">      56: monitorenter                      【第三个synchronized的monitorenter】</span><br><span class="line">      57: getstatic     #4                  // Field java/lang/System.out:Ljava/io/PrintStream;</span><br><span class="line">      60: ldc           #8                  // String person</span><br><span class="line">      62: invokevirtual #6                  // Method java/io/PrintStream.println:(Ljava/lang/String;)V</span><br><span class="line">      65: aload_1</span><br><span class="line">      66: monitorexit                       【第三个synchronized的monitorexit】</span><br><span class="line">      67: goto          77</span><br><span class="line">      70: astore        4</span><br><span class="line">      72: aload_1</span><br><span class="line">      73: monitorexit                       【第三个synchronized的第二个monitorenter，异常情况释放锁用】</span><br><span class="line">      74: aload         4</span><br><span class="line">      76: athrow</span><br><span class="line">      77: return</span><br></pre></td></tr></table></figure>
+
+<p>JIT编译器在执行动态编译时，若发现前后相邻的synchronized块使用的是同一个锁对象，那么它就会把这几个synchronized块给合并为一个较大的同步块，这样做的好处在于线程执行这些代码时，就无需频繁申请与释放锁了，从而达到申请与释放锁一次，就可以执行全部的同步代码块，从而提升了性能。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>CeaserWang
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://ceaser.wang/2019/08/21/Concurrent/concurrency(2)synchronized%E5%85%B3%E9%94%AE%E5%AD%97%E8%AF%A6%E8%A7%A3/" title="concurrency(2)synchronized关键字详解">https://ceaser.wang/2019/08/21/Concurrent/concurrency(2)synchronized关键字详解/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/synchronized-%E5%B9%B6%E5%8F%91/" rel="tag"><i class="fa fa-tag"></i> synchronized 并发</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/08/11/Concurrent/concurrency(1)Object%E7%B1%BB%E7%9B%B8%E5%85%B3%E6%96%B9%E6%B3%95%E8%A7%A3%E8%AF%BB/" rel="prev" title="concurrency(1)Object类相关方法解读">
+                  <i class="fa fa-chevron-left"></i> concurrency(1)Object类相关方法解读
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/08/31/Concurrent/concurrency(3)%E6%AD%BB%E9%94%81%E6%A3%80%E6%B5%8B%E4%B8%8E%E7%9B%B8%E5%85%B3%E5%B7%A5%E5%85%B7%E8%AF%A6%E8%A7%A3/" rel="next" title="concurrency(3)死锁检测与相关工具详解">
+                  concurrency(3)死锁检测与相关工具详解 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CeaserWang</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":"forest","js":{"url":"https://cdn.jsdelivr.net/npm/mermaid@8.11.0/dist/mermaid.min.js","integrity":"sha256-sVAx+v/Q7v0Q2xm5vN7h5ccSna6gaLREhG9sF8pKT6I="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+  <script class="next-config" data-name="nprogress" type="application/json">{"enable":true,"spinner":true}</script>
+  <script src="/js/third-party/nprogress.js"></script>
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"ryAR9bttS7fex1FPEPAylmmJ-gzGzoHsz","app_key":"dYqygoN4Y01Bl38OdRoCHUYn","server_url":null,"security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.css" integrity="sha256-no0c5ccDODBwp+9hSmV5VvPpKwHCpbVzXHexIkupM6U=" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.js" integrity="sha256-a5YRB27CcBwBFcT5EF/f3E4vzIqyHrSR878nseNYw64=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ceaser.wang","root":"/","images":"/images","scheme":"Muse","version":"8.6.1","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+<meta name="description" content="ConditionLock接口里边有一个方法【Condition newCondition();】，返回的是一个Condition实例；">
+<meta property="og:type" content="article">
+<meta property="og:title" content="concurrency(6)Condition详解">
+<meta property="og:url" content="https://ceaser.wang/2020/01/04/Concurrent/concurrency(6)Condition%E8%AF%A6%E8%A7%A3/index.html">
+<meta property="og:site_name" content="南贺神社">
+<meta property="og:description" content="ConditionLock接口里边有一个方法【Condition newCondition();】，返回的是一个Condition实例；">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-01-04T14:00:45.000Z">
+<meta property="article:modified_time" content="2022-01-04T02:21:30.552Z">
+<meta property="article:author" content="CeaserWang">
+<meta property="article:tag" content="Condition Lock">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://ceaser.wang/2020/01/04/Concurrent/concurrency(6)Condition%E8%AF%A6%E8%A7%A3/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://ceaser.wang/2020/01/04/Concurrent/concurrency(6)Condition%E8%AF%A6%E8%A7%A3/","path":"2020/01/04/Concurrent/concurrency(6)Condition详解/","title":"concurrency(6)Condition详解"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>concurrency(6)Condition详解 | 南贺神社</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">南贺神社</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">你写程序有写诗一样的感觉吗?</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">205</span></a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">24</span></a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">212</span></a></li>
+        <li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Condition"><span class="nav-number">1.</span> <span class="nav-text">Condition</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#doc%E8%AF%B4%E6%98%8E"><span class="nav-number">1.1.</span> <span class="nav-text">doc说明</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E4%B8%8A%E7%9A%84%E8%80%83%E9%87%8F"><span class="nav-number">1.1.1.</span> <span class="nav-text">实现上的考量</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Condition-await"><span class="nav-number">2.</span> <span class="nav-text">Condition.await()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Condition-awaitUninterruptibly"><span class="nav-number">3.</span> <span class="nav-text">Condition.awaitUninterruptibly()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#long-Condition-awaitNanos-long-nanosTimeout"><span class="nav-number">4.</span> <span class="nav-text">long Condition.awaitNanos(long nanosTimeout)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#boolean-await-long-time-TimeUnit-unit"><span class="nav-number">5.</span> <span class="nav-text">boolean await(long time, TimeUnit unit)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#boolean-awaitUntil-Date-deadline"><span class="nav-number">6.</span> <span class="nav-text">boolean awaitUntil(Date deadline)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#void-signal"><span class="nav-number">7.</span> <span class="nav-text">void signal()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#void-signalAll"><span class="nav-number">8.</span> <span class="nav-text">void signalAll()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9A%E8%BF%87Condition%E5%AE%9E%E7%8E%B0%E7%BA%BF%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1%E5%AE%9E%E4%BE%8B%E5%89%96%E6%9E%90"><span class="nav-number">9.</span> <span class="nav-text">通过Condition实现线程间通信实例剖析</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-overview">
+            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="CeaserWang"
+      src="/../0xcc/index/Uchiha.jpg">
+  <p class="site-author-name" itemprop="name">CeaserWang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">212</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">205</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tLzExNTY3MjE4NzQ=" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;1156721874"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmNlYXNlcndhbmdAb3V0bG9vay5jb20=" title="E-Mail → mailto:ceaserwang@outlook.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+  </div>
+  <div class="cc-license site-overview-item animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><img src="https://cdn.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-user-friends fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly90d29kcmFnb25sYWtlLmNvbQ==" title="https:&#x2F;&#x2F;twodragonlake.com">TwoDragonLake</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9yb290Y2x1c3Rlci5naXRodWIuaW8=" title="https:&#x2F;&#x2F;rootcluster.github.io">RootCluster</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9tdXNlZmxvdy5pbw==" title="https:&#x2F;&#x2F;museflow.io">MuseFlow</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9pbmNvZGVyLm9yZw==" title="https:&#x2F;&#x2F;incoder.org">BladeCode</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9rYWlmYS5kZXY=" title="https:&#x2F;&#x2F;kaifa.dev">Alyenc</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmRhemhpZGF5b25nLmNu" title="https:&#x2F;&#x2F;blog.dazhidayong.cn">Killua</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9qb2NlbHluc2hhbmcuY24v" title="https:&#x2F;&#x2F;jocelynshang.cn&#x2F;">Jocelyn</span>
+        </li>
+    </ul>
+  </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2020/01/04/Concurrent/concurrency(6)Condition%E8%AF%A6%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
+      <meta itemprop="name" content="CeaserWang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="南贺神社">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          concurrency(6)Condition详解
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-01-04 14:00:45" itemprop="dateCreated datePublished" datetime="2020-01-04T14:00:45+00:00">2020-01-04</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2022-01-04 02:21:30" itemprop="dateModified" datetime="2022-01-04T02:21:30+00:00">2022-01-04</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/concurrency/" itemprop="url" rel="index"><span itemprop="name">concurrency</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2020/01/04/Concurrent/concurrency(6)Condition%E8%AF%A6%E8%A7%A3/" class="post-meta-item leancloud_visitors" data-flag-title="concurrency(6)Condition详解" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h3 id="Condition"><a href="#Condition" class="headerlink" title="Condition"></a>Condition</h3><p>Lock接口里边有一个方法【Condition newCondition();】，返回的是一个Condition实例；</p>
+<span id="more"></span>
+<p>看一下Condition的doc：<br>Returns a new Condition instance that is bound to this Lock instance.<br>Before waiting on the condition the lock must be held by the current thread. A call to Condition.await() will atomically release the lock before waiting and re-acquire the lock before the wait returns.<br>返回一个绑定到当前锁实例的一个Condition。<br>在等待Condition之前当前线程必须要获取到Condition绑定的锁实例。<br>调用Condition.await()方法的时候将会自动释放锁，在等待重新获取锁和wait方法之前。</p>
+<p>传统上，我们可以通过synchronized关键字+wait + notify/notifyall来实现多个线程之间的协调与通信，整个 过程都是由jvm来帮助实现的，开发者无需（也是无法）了解底层实现细节。<br>从jdk1.5开始，并发包提供了lock，Condation(wait与notify/signalAll)来实现多个线程之间协调与通信，整个过程都是由开发者来控制的 而且相比于传统方式，更加灵活，功能也更加强。</p>
+<p>Thread.sleep与await（或是Object的wait方法）的本质区别：sleep方法本质上不会释放锁，而await会释放锁，并且在signal之后，还需要重新获取到锁才能继续执行（该行为与Object的wait方法完全一致）</p>
+<h4 id="doc说明"><a href="#doc说明" class="headerlink" title="doc说明"></a>doc说明</h4><p>Condition factors out the Object monitor methods (wait, notify and notifyAll) into distinct objects to give the effect of having multiple wait-sets per object, by combining them with the use of arbitrary Lock implementations. Where a Lock replaces the use of synchronized methods and statements, a Condition replaces the use of the Object monitor methods.<br>Conditions (also known as condition queues or condition variables) provide a means for one thread to suspend execution (to “wait”) until notified by another thread that some state condition may now be true. Because access to this shared state information occurs in different threads, it must be protected, so a lock of some form is associated with the condition. The key property that waiting for a condition provides is that it atomically releases the associated lock and suspends the current thread, just like Object.wait.<br>A Condition instance is intrinsically bound to a lock. To obtain a Condition instance for a particular Lock instance use its newCondition() method.<br>As an example, suppose we have a bounded buffer which supports put and take methods. If a take is attempted on an empty buffer, then the thread will block until an item becomes available; if a put is attempted on a full buffer, then the thread will block until a space becomes available. We would like to keep waiting put threads and take threads in separate wait-sets so that we can use the optimization of only notifying a single thread at a time when items or spaces become available in the buffer. This can be achieved using two Condition instances.<br>   class BoundedBuffer {<br>     final Lock lock = new ReentrantLock();<br>     final Condition notFull  = lock.newCondition();<br>     final Condition notEmpty = lock.newCondition();</p>
+<pre><code> final Object[] items = new Object[100];
+ int putptr, takeptr, count;
+
+ public void put(Object x) throws InterruptedException &#123;
+   lock.lock();
+   try &#123;
+     while (count == items.length)
+       notFull.await();
+     items[putptr] = x;
+     if (++putptr == items.length) putptr = 0;
+     ++count;
+     notEmpty.signal();
+   &#125; finally &#123;
+     lock.unlock();
+   &#125;
+ &#125;
+
+ public Object take() throws InterruptedException &#123;
+   lock.lock();
+   try &#123;
+     while (count == 0)
+       notEmpty.await();
+     Object x = items[takeptr];
+     if (++takeptr == items.length) takeptr = 0;
+     --count;
+     notFull.signal();
+     return x;
+   &#125; finally &#123;
+     lock.unlock();
+   &#125;
+ &#125;
+</code></pre>
+<p>   }</p>
+<p>(The java.util.concurrent.ArrayBlockingQueue class provides this functionality, so there is no reason to implement this sample usage class.)<br>A Condition implementation can provide behavior and semantics that is different from that of the Object monitor methods, such as guaranteed ordering for notifications, or not requiring a lock to be held when performing notifications. If an implementation provides such specialized semantics then the implementation must document those semantics.<br>Note that Condition instances are just normal objects and can themselves be used as the target in a synchronized statement, and can have their own monitor wait and notification methods invoked. Acquiring the monitor lock of a Condition instance, or using its monitor methods, has no specified relationship with acquiring the Lock associated with that Condition or the use of its waiting and signalling methods. It is recommended that to avoid confusion you never use Condition instances in this way, except perhaps within their own implementation.<br>Except where noted, passing a null value for any parameter will result in a NullPointerException being thrown.<br>Implementation Considerations<br>When waiting upon a Condition, a “spurious wakeup” is permitted to occur, in general, as a concession to the underlying platform semantics. This has little practical impact on most application programs as a Condition should always be waited upon in a loop, testing the state predicate that is being waited for. An implementation is free to remove the possibility of spurious wakeups but it is recommended that applications programmers always assume that they can occur and so always wait in a loop.<br>The three forms of condition waiting (interruptible, non-interruptible, and timed) may differ in their ease of implementation on some platforms and in their performance characteristics. In particular, it may be difficult to provide these features and maintain specific semantics such as ordering guarantees. Further, the ability to interrupt the actual suspension of the thread may not always be feasible to implement on all platforms.<br>Consequently, an implementation is not required to define exactly the same guarantees or semantics for all three forms of waiting, nor is it required to support interruption of the actual suspension of the thread.<br>An implementation is required to clearly document the semantics and guarantees provided by each of the waiting methods, and when an implementation does support interruption of thread suspension then it must obey the interruption semantics as defined in this interface.<br>As interruption generally implies cancellation, and checks for interruption are often infrequent, an implementation can favor responding to an interrupt over normal method return. This is true even if it can be shown that the interrupt occurred after another action that may have unblocked the thread. An implementation should document this behavior.</p>
+<p>Condition相当于把Object的监控器方法(wait,notify和notifyall)插入到各种不同的对象当中，达到让每一个对象拥有多个等待集合的效果，通过任意的一个锁的实现组合起来，其中会用lock替代synchronized语句和代码块，Condition会替代Object的monitor方法的使用。</p>
+<p>Condition又叫做条件队列或者条件变量，Condition提供了一种方式可以让线程挂起（等待），直到被另一个线程发现共享变量信息为true把它唤醒为止，由于共享变量的信息可以在不同的线程里边可见，因此它必须要受到保护，这样就一定要lock和Condition绑定起来。等待这个条件的属性，会自动的释放关联的锁，挂起当前的线程，就像Object的wait方法一样。</p>
+<p>一个Condition实例天然的绑定到lock上，我们使用newCondition()获取一个特定的lock实例对应的Condition实例。<br>举例，假设有一个有界的缓冲区，有take和put方法，如果take的时候是一个空的buffer直到有元素可取，那么当前线程阻塞，如果put一个满的buffer的时候，当前线程阻塞直到有空闲位置可塞，这样可以保持put和take线程等待在2个不同的等待集合里边。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">class BoundedBuffer &#123;</span><br><span class="line">     final Lock lock = new ReentrantLock();</span><br><span class="line">     final Condition notFull  = lock.newCondition();</span><br><span class="line">     final Condition notEmpty = lock.newCondition();</span><br><span class="line"></span><br><span class="line">     final Object[] items = new Object[100];</span><br><span class="line">     int putptr, takeptr, count;</span><br><span class="line"></span><br><span class="line">     public void put(Object x) throws InterruptedException &#123;</span><br><span class="line">       lock.lock();</span><br><span class="line">       try &#123;</span><br><span class="line">         while (count == items.length)</span><br><span class="line">           notFull.await();</span><br><span class="line">         items[putptr] = x;</span><br><span class="line">         if (++putptr == items.length) putptr = 0;</span><br><span class="line">         ++count;</span><br><span class="line">         notEmpty.signal();</span><br><span class="line">       &#125; finally &#123;</span><br><span class="line">         lock.unlock();</span><br><span class="line">       &#125;</span><br><span class="line">     &#125;</span><br><span class="line"></span><br><span class="line">     public Object take() throws InterruptedException &#123;</span><br><span class="line">       lock.lock();</span><br><span class="line">       try &#123;</span><br><span class="line">         while (count == 0)</span><br><span class="line">           notEmpty.await();</span><br><span class="line">         Object x = items[takeptr];</span><br><span class="line">         if (++takeptr == items.length) takeptr = 0;</span><br><span class="line">         --count;</span><br><span class="line">         notFull.signal();</span><br><span class="line">         return x;</span><br><span class="line">       &#125; finally &#123;</span><br><span class="line">         lock.unlock();</span><br><span class="line">       &#125;</span><br><span class="line">     &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<p>java.util.concurrent.ArrayBlockingQueue已经实现了上述的功能，因此没有必要再实现相同的class。<br>Condition提供的行为或者语义和Object的monitor可以是不一样的，比如通知的确定性的排序，或者执行通知的时候不要求持有锁，如果实现实现了这样的语义，那么不需要在文档里边指明。</p>
+<p>Condition仅仅是普通的对象，他们自己也可以作为synchronized的目标，可以有他们自己的wait和notify方法，获取Condition实例的监视器锁或者使用监视器方法和获取Condition绑定的锁以及使用Condition的waiting和signalling方法没有任何关联。推荐避免使用Condition的实例的监视器相关方式，除非是在他们自己的实现当中。</p>
+<p>除非有说明，Condition的任何null的参数都会抛出NullPointerException 异常。</p>
+<h5 id="实现上的考量"><a href="#实现上的考量" class="headerlink" title="实现上的考量"></a>实现上的考量</h5><p>在等待条件发生的时候，一种假的唤醒是允许发生的，通常作为一种所属平台的语义，这对大多数的应用程序不会产生实际的影响，Condition通常会在一个while循环当中去等待，测试等待的条件是否被满足。<br>三种条件的等待(可中断，不可中断，超时)在一些平台的实现是不一样的，我们很难实现这些语义的。<br>每一个实现要在文档中说明它所实现的语气。<br>略。</p>
+<h3 id="Condition-await"><a href="#Condition-await" class="headerlink" title="Condition.await()"></a>Condition.await()</h3><p>Causes the current thread to wait until it is signalled or interrupted.<br>The lock associated with this Condition is atomically released and the current thread becomes disabled for thread scheduling purposes and lies dormant until one of four things happens:<br>Some other thread invokes the signal method for this Condition and the current thread happens to be chosen as the thread to be awakened; or<br>Some other thread invokes the signalAll method for this Condition; or<br>Some other thread interrupts the current thread, and interruption of thread suspension is supported; or<br>A “spurious wakeup” occurs.<br>In all cases, before this method can return the current thread must re-acquire the lock associated with this condition. When the thread returns it is guaranteed to hold this lock.<br>If the current thread:<br>has its interrupted status set on entry to this method; or<br>is interrupted while waiting and interruption of thread suspension is supported,<br>then InterruptedException is thrown and the current thread’s interrupted status is cleared. It is not specified, in the first case, whether or not the test for interruption occurs before the lock is released.<br>Implementation Considerations<br>The current thread is assumed to hold the lock associated with this Condition when this method is called. It is up to the implementation to determine if this is the case and if not, how to respond. Typically, an exception will be thrown (such as IllegalMonitorStateException) and the implementation must document that fact.<br>An implementation can favor responding to an interrupt over normal method return in response to a signal. In that case the implementation must ensure that the signal is redirected to another waiting thread, if there is one.<br>让当前线程挂起，直到被唤醒或者被中断。<br>和当前Condition关联到的锁自动释放，当前的线程无法得到调度，进入休眠状态，直到如下四个条件发生：</p>
+<ul>
+<li>其他线程调用了当前Condition的signal方法，并且当前线程被选中被唤醒。</li>
+<li>其他线程调用了Condition的signalAll；</li>
+<li>其他的线程中断了当前线程，并且线程中断和挂起是被支持的；</li>
+<li>假唤醒发生；</li>
+</ul>
+<p>在所有的情况当中，在方法返回之前，当前线程必须要重新获取到Condition关联的锁，当线程返回的时候，确保线程持有锁。</p>
+<p>如果当前线程满足：</p>
+<ul>
+<li>当前线程在进入这个方法之前设置了中断状态，或者</li>
+<li>在等待的时候被中断，并且中断和挂起是被支持的。<br>InterruptedException异常将会抛出，当前线程的中断状态将会被清除。</li>
+</ul>
+<h3 id="Condition-awaitUninterruptibly"><a href="#Condition-awaitUninterruptibly" class="headerlink" title="Condition.awaitUninterruptibly()"></a>Condition.awaitUninterruptibly()</h3><p>等待，不可中断<br>Causes the current thread to wait until it is signalled.<br>The lock associated with this condition is atomically released and the current thread becomes disabled for thread scheduling purposes and lies dormant until one of three things happens:<br>Some other thread invokes the signal method for this Condition and the current thread happens to be chosen as the thread to be awakened; or<br>Some other thread invokes the signalAll method for this Condition; or<br>A “spurious wakeup” occurs.<br>In all cases, before this method can return the current thread must re-acquire the lock associated with this condition. When the thread returns it is guaranteed to hold this lock.<br>If the current thread’s interrupted status is set when it enters this method, or it is interrupted while waiting, it will continue to wait until signalled. When it finally returns from this method its interrupted status will still be set.<br>让当前线程挂起，直到被唤醒<br>和当前Condition关联到的锁自动释放，当前的线程无法得到调度，进入休眠状态，直到如下四个条件发生：</p>
+<ul>
+<li>其他线程调用了当前Condition的signal方法，并且当前线程被选中被唤醒。</li>
+<li>其他线程调用了Condition的signalAll；</li>
+<li>假唤醒发生；</li>
+</ul>
+<p>在所有的情况当中，在方法返回之前，当前线程必须要重新获取到Condition关联的锁，当线程返回的时候，确保线程持有锁。</p>
+<h3 id="long-Condition-awaitNanos-long-nanosTimeout"><a href="#long-Condition-awaitNanos-long-nanosTimeout" class="headerlink" title="long Condition.awaitNanos(long nanosTimeout)"></a>long Condition.awaitNanos(long nanosTimeout)</h3><p>等待纳秒时间<br>让当前线程挂起，直到被唤醒或者被中断，或者指定的时间已经过去了。<br>返回结果的long值的意义：比我我们的nanosTimeout是500，但是我们等了300就返回了，那么返回的long是200，就是剩余的时间。<br>如果返回值是小于等于0，就是超时了，在给定的时间并没有返回，可以重新去等待。<br>为了减少误差参数使用了纳秒，减少误差。</p>
+<h3 id="boolean-await-long-time-TimeUnit-unit"><a href="#boolean-await-long-time-TimeUnit-unit" class="headerlink" title="boolean await(long time, TimeUnit unit)"></a>boolean await(long time, TimeUnit unit)</h3><h3 id="boolean-awaitUntil-Date-deadline"><a href="#boolean-awaitUntil-Date-deadline" class="headerlink" title="boolean awaitUntil(Date deadline)"></a>boolean awaitUntil(Date deadline)</h3><p>指定在未来的一个时间作为超时的判定</p>
+<h3 id="void-signal"><a href="#void-signal" class="headerlink" title="void signal()"></a>void signal()</h3><p>Wakes up one waiting thread.<br>If any threads are waiting on this condition then one is selected for waking up. That thread must then re-acquire the lock before returning from await.<br>唤醒一个等待的线程。</p>
+<p>如果有多个线程在condition等待，那么就选择一个去唤醒，被唤醒的线程在从wait方法返回之前必须要重新获取到锁。</p>
+<h3 id="void-signalAll"><a href="#void-signalAll" class="headerlink" title="void signalAll()"></a>void signalAll()</h3><p>Wakes up all waiting threads.<br>If any threads are waiting on this condition then they are all woken up. Each thread must re-acquire the lock before it can return from await.</p>
+<p>唤醒所有的等待线程，每个线程在从wait方法返回之前必须重新获取到锁。</p>
+<p>注意被唤醒和继续执行是不一样的，有10个线程同时等待在一个Condition上，第11个线程调用了Condition的signalAll方法，那么另外的等待的10个线程只有一个拿到锁，并且继续执行，剩余的9个都在轮询获取锁的过程之中，并没有得到执行。</p>
+<h3 id="通过Condition实现线程间通信实例剖析"><a href="#通过Condition实现线程间通信实例剖析" class="headerlink" title="通过Condition实现线程间通信实例剖析"></a>通过Condition实现线程间通信实例剖析</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line">public class MyTest2 &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        BoundedContainer boundedContainer = new BoundedContainer();</span><br><span class="line">        IntStream.range(0,10).forEach(i -&gt; new Thread(() -&gt; &#123;</span><br><span class="line">            try &#123;</span><br><span class="line">                boundedContainer.put(&quot;hello&quot;+i);</span><br><span class="line">            &#125; catch (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).start());</span><br><span class="line"></span><br><span class="line">        IntStream.range(0,10).forEach(i -&gt; new Thread(() -&gt; &#123;</span><br><span class="line">            try &#123;</span><br><span class="line">                boundedContainer.take();</span><br><span class="line">            &#125; catch (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).start());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class BoundedContainer &#123;</span><br><span class="line"></span><br><span class="line">    private String[] elements = new String[10];</span><br><span class="line"></span><br><span class="line">    private Lock lock = new ReentrantLock();</span><br><span class="line"></span><br><span class="line">    private Condition notEmptyCondition = lock.newCondition();</span><br><span class="line"></span><br><span class="line">    private Condition notFullCondition = lock.newCondition();</span><br><span class="line"></span><br><span class="line">    private int elementCount;//elements数组中已有元素数量</span><br><span class="line"></span><br><span class="line">    private int putIndex;</span><br><span class="line"></span><br><span class="line">    private int takeIndex;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    public void put(String element) throws InterruptedException &#123;</span><br><span class="line">        lock.lock();</span><br><span class="line">        try&#123;</span><br><span class="line">            while (elementCount == elements.length)&#123;</span><br><span class="line">                notFullCondition.await();</span><br><span class="line">            &#125;</span><br><span class="line">            elements[putIndex] = element;</span><br><span class="line">            if(++putIndex == elements.length)&#123;</span><br><span class="line">                putIndex = 0;</span><br><span class="line">            &#125;</span><br><span class="line">            ++elementCount;</span><br><span class="line">            System.out.println(&quot;put method :&quot; + Arrays.toString(elements));</span><br><span class="line">            notEmptyCondition.signal();</span><br><span class="line">        &#125;finally &#123;</span><br><span class="line">            lock.unlock();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String take() throws InterruptedException &#123;</span><br><span class="line">        lock.lock();</span><br><span class="line">        String element;</span><br><span class="line">        try&#123;</span><br><span class="line">            while (elementCount == 0)&#123;</span><br><span class="line">                notEmptyCondition.await();</span><br><span class="line">            &#125;</span><br><span class="line">            element = elements[takeIndex];</span><br><span class="line">            elements[takeIndex] = null;</span><br><span class="line">            if(++takeIndex == elements.length)&#123;</span><br><span class="line">                takeIndex = 0;</span><br><span class="line">            &#125;</span><br><span class="line">            --elementCount;</span><br><span class="line">            System.out.println(&quot;take method :&quot; + Arrays.toString(elements));</span><br><span class="line">            notFullCondition.signal();</span><br><span class="line">            return element;</span><br><span class="line">        &#125;finally &#123;</span><br><span class="line">            lock.unlock();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">put method :[hello0, null, null, null, null, null, null, null, null, null]</span><br><span class="line">put method :[hello0, hello7, null, null, null, null, null, null, null, null]</span><br><span class="line">put method :[hello0, hello7, hello8, null, null, null, null, null, null, null]</span><br><span class="line">put method :[hello0, hello7, hello8, hello1, null, null, null, null, null, null]</span><br><span class="line">put method :[hello0, hello7, hello8, hello1, hello2, null, null, null, null, null]</span><br><span class="line">put method :[hello0, hello7, hello8, hello1, hello2, hello3, null, null, null, null]</span><br><span class="line">put method :[hello0, hello7, hello8, hello1, hello2, hello3, hello4, null, null, null]</span><br><span class="line">put method :[hello0, hello7, hello8, hello1, hello2, hello3, hello4, hello6, null, null]</span><br><span class="line">put method :[hello0, hello7, hello8, hello1, hello2, hello3, hello4, hello6, hello5, null]</span><br><span class="line">put method :[hello0, hello7, hello8, hello1, hello2, hello3, hello4, hello6, hello5, hello9]</span><br><span class="line">take method :[null, hello7, hello8, hello1, hello2, hello3, hello4, hello6, hello5, hello9]</span><br><span class="line">take method :[null, null, hello8, hello1, hello2, hello3, hello4, hello6, hello5, hello9]</span><br><span class="line">take method :[null, null, null, hello1, hello2, hello3, hello4, hello6, hello5, hello9]</span><br><span class="line">take method :[null, null, null, null, hello2, hello3, hello4, hello6, hello5, hello9]</span><br><span class="line">take method :[null, null, null, null, null, hello3, hello4, hello6, hello5, hello9]</span><br><span class="line">take method :[null, null, null, null, null, null, hello4, hello6, hello5, hello9]</span><br><span class="line">take method :[null, null, null, null, null, null, null, hello6, hello5, hello9]</span><br><span class="line">take method :[null, null, null, null, null, null, null, null, hello5, hello9]</span><br><span class="line">take method :[null, null, null, null, null, null, null, null, null, hello9]</span><br><span class="line">take method :[null, null, null, null, null, null, null, null, null, null]</span><br></pre></td></tr></table></figure>
+
+<p>修改main方法执行顺序：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">BoundedContainer boundedContainer = new BoundedContainer();</span><br><span class="line">IntStream.range(0,10).forEach(i -&gt; new Thread(() -&gt; &#123;</span><br><span class="line">    try &#123;</span><br><span class="line">        boundedContainer.take();</span><br><span class="line">    &#125; catch (InterruptedException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;).start());</span><br><span class="line">IntStream.range(0,10).forEach(i -&gt; new Thread(() -&gt; &#123;</span><br><span class="line">    try &#123;</span><br><span class="line">        boundedContainer.put(&quot;hello&quot;+i);</span><br><span class="line">    &#125; catch (InterruptedException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;).start());</span><br></pre></td></tr></table></figure>
+
+<p>执行结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">put method :[hello0, null, null, null, null, null, null, null, null, null]</span><br><span class="line">put method :[hello0, hello1, null, null, null, null, null, null, null, null]</span><br><span class="line">put method :[hello0, hello1, hello2, null, null, null, null, null, null, null]</span><br><span class="line">put method :[hello0, hello1, hello2, hello3, null, null, null, null, null, null]</span><br><span class="line">put method :[hello0, hello1, hello2, hello3, hello4, null, null, null, null, null]</span><br><span class="line">put method :[hello0, hello1, hello2, hello3, hello4, hello6, null, null, null, null]</span><br><span class="line">put method :[hello0, hello1, hello2, hello3, hello4, hello6, hello5, null, null, null]</span><br><span class="line">put method :[hello0, hello1, hello2, hello3, hello4, hello6, hello5, hello7, null, null]</span><br><span class="line">take method :[null, hello1, hello2, hello3, hello4, hello6, hello5, hello7, null, null]</span><br><span class="line">put method :[null, hello1, hello2, hello3, hello4, hello6, hello5, hello7, hello8, null]</span><br><span class="line">take method :[null, null, hello2, hello3, hello4, hello6, hello5, hello7, hello8, null]</span><br><span class="line">put method :[null, null, hello2, hello3, hello4, hello6, hello5, hello7, hello8, hello9]</span><br><span class="line">take method :[null, null, null, hello3, hello4, hello6, hello5, hello7, hello8, hello9]</span><br><span class="line">take method :[null, null, null, null, hello4, hello6, hello5, hello7, hello8, hello9]</span><br><span class="line">take method :[null, null, null, null, null, hello6, hello5, hello7, hello8, hello9]</span><br><span class="line">take method :[null, null, null, null, null, null, hello5, hello7, hello8, hello9]</span><br><span class="line">take method :[null, null, null, null, null, null, null, hello7, hello8, hello9]</span><br><span class="line">take method :[null, null, null, null, null, null, null, null, hello8, hello9]</span><br><span class="line">take method :[null, null, null, null, null, null, null, null, null, hello9]</span><br><span class="line">take method :[null, null, null, null, null, null, null, null, null, null]</span><br></pre></td></tr></table></figure>
+<p>由于先执行的take线程，但是没有元素会一直wait，直到put线程生成元素之后，take线程才会得到执行，但是和take线程争夺所资源的还有put线程。</p>
+<p>如果线程数量大于数组的长度10，也会在put方法的while方法上等待，直到可以put为止。</p>
+<p>如果put线程数量小于take线程数量，那么程序不会结束，因为take线程会阻塞在while循环上面，直到有数据可以取出，但是put线程都已经完毕了，不会有元素添加，那么take线程会一直阻塞下去。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>CeaserWang
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://ceaser.wang/2020/01/04/Concurrent/concurrency(6)Condition%E8%AF%A6%E8%A7%A3/" title="concurrency(6)Condition详解">https://ceaser.wang/2020/01/04/Concurrent/concurrency(6)Condition详解/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Condition-Lock/" rel="tag"><i class="fa fa-tag"></i> Condition Lock</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/01/04/Concurrent/concurrency(5)Lock%E9%94%81%E6%96%B9%E6%B3%95%E5%8E%9F%E7%90%86%E8%AF%A6%E8%A7%A3%E4%BB%A5%E5%8F%8A%E4%B8%8ESynchronized%E5%85%B3%E9%94%AE%E5%AD%97%E5%B7%AE%E5%88%AB/" rel="prev" title="concurrency(5)Lock锁方法原理详解以及与Synchronized关键字差别">
+                  <i class="fa fa-chevron-left"></i> concurrency(5)Lock锁方法原理详解以及与Synchronized关键字差别
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/03/08/jvm%E5%8E%9F%E7%90%86%EF%BC%8848%EF%BC%89%E5%BC%BA%E5%BC%95%E7%94%A8-%E8%BD%AF%E5%BC%95%E7%94%A8-%E5%BC%B1%E5%BC%95%E7%94%A8-%E8%99%9A%E5%BC%95%E7%94%A8-ThreadLocal/" rel="next" title="jvm原理（48）强引用-软引用-弱引用-虚引用-ThreadLocal">
+                  jvm原理（48）强引用-软引用-弱引用-虚引用-ThreadLocal <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CeaserWang</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":"forest","js":{"url":"https://cdn.jsdelivr.net/npm/mermaid@8.11.0/dist/mermaid.min.js","integrity":"sha256-sVAx+v/Q7v0Q2xm5vN7h5ccSna6gaLREhG9sF8pKT6I="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+  <script class="next-config" data-name="nprogress" type="application/json">{"enable":true,"spinner":true}</script>
+  <script src="/js/third-party/nprogress.js"></script>
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"ryAR9bttS7fex1FPEPAylmmJ-gzGzoHsz","app_key":"dYqygoN4Y01Bl38OdRoCHUYn","server_url":null,"security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+
+</body>
+</html>

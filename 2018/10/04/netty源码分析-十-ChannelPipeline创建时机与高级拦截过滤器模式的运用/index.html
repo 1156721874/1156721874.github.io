@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.css" integrity="sha256-no0c5ccDODBwp+9hSmV5VvPpKwHCpbVzXHexIkupM6U=" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.js" integrity="sha256-a5YRB27CcBwBFcT5EF/f3E4vzIqyHrSR878nseNYw64=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ceaser.wang","root":"/","images":"/images","scheme":"Muse","version":"8.6.1","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+<meta name="description" content="ChannelPipeline的创建时机：我们从服务端的入口main程序开始：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="netty源码分析(十)ChannelPipeline创建时机与高级拦截过滤器模式的运用">
+<meta property="og:url" content="https://ceaser.wang/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%8D%81-ChannelPipeline%E5%88%9B%E5%BB%BA%E6%97%B6%E6%9C%BA%E4%B8%8E%E9%AB%98%E7%BA%A7%E6%8B%A6%E6%88%AA%E8%BF%87%E6%BB%A4%E5%99%A8%E6%A8%A1%E5%BC%8F%E7%9A%84%E8%BF%90%E7%94%A8/index.html">
+<meta property="og:site_name" content="南贺神社">
+<meta property="og:description" content="ChannelPipeline的创建时机：我们从服务端的入口main程序开始：">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2018-10-04T14:34:29.000Z">
+<meta property="article:modified_time" content="2022-01-04T02:21:30.900Z">
+<meta property="article:author" content="CeaserWang">
+<meta property="article:tag" content="ChannelPipeline 拦截过滤器">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://ceaser.wang/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%8D%81-ChannelPipeline%E5%88%9B%E5%BB%BA%E6%97%B6%E6%9C%BA%E4%B8%8E%E9%AB%98%E7%BA%A7%E6%8B%A6%E6%88%AA%E8%BF%87%E6%BB%A4%E5%99%A8%E6%A8%A1%E5%BC%8F%E7%9A%84%E8%BF%90%E7%94%A8/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://ceaser.wang/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%8D%81-ChannelPipeline%E5%88%9B%E5%BB%BA%E6%97%B6%E6%9C%BA%E4%B8%8E%E9%AB%98%E7%BA%A7%E6%8B%A6%E6%88%AA%E8%BF%87%E6%BB%A4%E5%99%A8%E6%A8%A1%E5%BC%8F%E7%9A%84%E8%BF%90%E7%94%A8/","path":"2018/10/04/netty源码分析-十-ChannelPipeline创建时机与高级拦截过滤器模式的运用/","title":"netty源码分析(十)ChannelPipeline创建时机与高级拦截过滤器模式的运用"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>netty源码分析(十)ChannelPipeline创建时机与高级拦截过滤器模式的运用 | 南贺神社</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">南贺神社</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">你写程序有写诗一样的感觉吗?</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">205</span></a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">24</span></a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">212</span></a></li>
+        <li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-overview">
+            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="CeaserWang"
+      src="/../0xcc/index/Uchiha.jpg">
+  <p class="site-author-name" itemprop="name">CeaserWang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">212</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">205</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tLzExNTY3MjE4NzQ=" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;1156721874"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmNlYXNlcndhbmdAb3V0bG9vay5jb20=" title="E-Mail → mailto:ceaserwang@outlook.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+  </div>
+  <div class="cc-license site-overview-item animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><img src="https://cdn.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-user-friends fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly90d29kcmFnb25sYWtlLmNvbQ==" title="https:&#x2F;&#x2F;twodragonlake.com">TwoDragonLake</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9yb290Y2x1c3Rlci5naXRodWIuaW8=" title="https:&#x2F;&#x2F;rootcluster.github.io">RootCluster</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9tdXNlZmxvdy5pbw==" title="https:&#x2F;&#x2F;museflow.io">MuseFlow</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9pbmNvZGVyLm9yZw==" title="https:&#x2F;&#x2F;incoder.org">BladeCode</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9rYWlmYS5kZXY=" title="https:&#x2F;&#x2F;kaifa.dev">Alyenc</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmRhemhpZGF5b25nLmNu" title="https:&#x2F;&#x2F;blog.dazhidayong.cn">Killua</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9qb2NlbHluc2hhbmcuY24v" title="https:&#x2F;&#x2F;jocelynshang.cn&#x2F;">Jocelyn</span>
+        </li>
+    </ul>
+  </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%8D%81-ChannelPipeline%E5%88%9B%E5%BB%BA%E6%97%B6%E6%9C%BA%E4%B8%8E%E9%AB%98%E7%BA%A7%E6%8B%A6%E6%88%AA%E8%BF%87%E6%BB%A4%E5%99%A8%E6%A8%A1%E5%BC%8F%E7%9A%84%E8%BF%90%E7%94%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
+      <meta itemprop="name" content="CeaserWang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="南贺神社">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          netty源码分析(十)ChannelPipeline创建时机与高级拦截过滤器模式的运用
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-10-04 14:34:29" itemprop="dateCreated datePublished" datetime="2018-10-04T14:34:29+00:00">2018-10-04</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2022-01-04 02:21:30" itemprop="dateModified" datetime="2022-01-04T02:21:30+00:00">2022-01-04</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/netty/" itemprop="url" rel="index"><span itemprop="name">netty</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%8D%81-ChannelPipeline%E5%88%9B%E5%BB%BA%E6%97%B6%E6%9C%BA%E4%B8%8E%E9%AB%98%E7%BA%A7%E6%8B%A6%E6%88%AA%E8%BF%87%E6%BB%A4%E5%99%A8%E6%A8%A1%E5%BC%8F%E7%9A%84%E8%BF%90%E7%94%A8/" class="post-meta-item leancloud_visitors" data-flag-title="netty源码分析(十)ChannelPipeline创建时机与高级拦截过滤器模式的运用" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>ChannelPipeline的创建时机：<br>我们从服务端的入口main程序开始：</p>
+<span id="more"></span>
+<p>1、</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ChannelFuture channelFuture = serverBootstrap.bind(8899).sync();</span><br></pre></td></tr></table></figure>
+<p>2、<br>AbstractBootstrap:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public ChannelFuture bind(SocketAddress localAddress) &#123;</span><br><span class="line">    validate();</span><br><span class="line">    if (localAddress == null) &#123;</span><br><span class="line">        throw new NullPointerException(&quot;localAddress&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    return doBind(localAddress);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>3、AbstractBootstrap</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">....略</span><br><span class="line">    private ChannelFuture doBind(final SocketAddress localAddress) &#123;</span><br><span class="line">        final ChannelFuture regFuture = initAndRegister();</span><br><span class="line">        final Channel channel = regFuture.channel();</span><br><span class="line">....略</span><br></pre></td></tr></table></figure>
+
+<p>4、AbstractBootstrap</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">....略</span><br><span class="line">    final ChannelFuture initAndRegister() &#123;</span><br><span class="line">        Channel channel = null;</span><br><span class="line">        try &#123;</span><br><span class="line">            channel = channelFactory.newChannel();//前边章节说过这个channel 是NioServerSocketChannel通过反射new出来的</span><br><span class="line">            init(channel);//init方法内部会直接调用ChannelPipeline p = channel.pipeline();，即NioServerSocketChannel</span><br><span class="line">            //实例化的时候构建了ChannelPipeline</span><br><span class="line">                        ....略</span><br></pre></td></tr></table></figure>
+<p>5、进入NioServerSocketChannel的构造器</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public NioServerSocketChannel() &#123;</span><br><span class="line">      this(newSocket(DEFAULT_SELECTOR_PROVIDER));</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>6、NioServerSocketChannel重载构造器</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Create a new instance using the given &#123;@link ServerSocketChannel&#125;.</span><br><span class="line"> */</span><br><span class="line">public NioServerSocketChannel(ServerSocketChannel channel) &#123;</span><br><span class="line">    super(null, channel, SelectionKey.OP_ACCEPT);</span><br><span class="line">    config = new NioServerSocketChannelConfig(this, javaChannel().socket());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>7、进入super 类 AbstractNioMessageChannel的构造器</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">protected AbstractNioMessageChannel(Channel parent, SelectableChannel ch, int readInterestOp) &#123;</span><br><span class="line">     super(parent, ch, readInterestOp);</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>8、进入super类AbstractNioChannel的构造器</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">protected AbstractNioChannel(Channel parent, SelectableChannel ch, int readInterestOp) &#123;</span><br><span class="line">    super(parent);</span><br><span class="line">    this.ch = ch;</span><br><span class="line">    this.readInterestOp = readInterestOp;</span><br><span class="line">    try &#123;</span><br><span class="line">        ch.configureBlocking(false);</span><br><span class="line">    &#125; catch (IOException e) &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            ch.close();</span><br><span class="line">        &#125; catch (IOException e2) &#123;</span><br><span class="line">            if (logger.isWarnEnabled()) &#123;</span><br><span class="line">                logger.warn(</span><br><span class="line">                        &quot;Failed to close a partially initialized socket.&quot;, e2);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        throw new ChannelException(&quot;Failed to enter non-blocking mode.&quot;, e);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>9、进入super类AbstractChannel的构造器：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">protected AbstractChannel(Channel parent) &#123;</span><br><span class="line">    this.parent = parent;</span><br><span class="line">    id = newId();</span><br><span class="line">    unsafe = newUnsafe();</span><br><span class="line">    pipeline = newChannelPipeline();//ChannelPipeline被实例化</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>10、进入newChannelPipeline的方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">protected DefaultChannelPipeline newChannelPipeline() &#123;</span><br><span class="line">    return new DefaultChannelPipeline(this);//返回的是一个DefaultChannelPipeline，并且DefaultChannelPipeline持有</span><br><span class="line">    //AbstractChannel的引用，即Channel的引用</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>11、进入DefaultChannelPipeline的构造器：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">public class DefaultChannelPipeline implements ChannelPipeline &#123;</span><br><span class="line">...略</span><br><span class="line">    final AbstractChannelHandlerContext head;</span><br><span class="line">    final AbstractChannelHandlerContext tail;</span><br><span class="line">    private final Channel channel;//ChannelPipeline 持有Channel的引用</span><br><span class="line">...略</span><br><span class="line">    protected DefaultChannelPipeline(Channel channel) &#123;</span><br><span class="line">        this.channel = ObjectUtil.checkNotNull(channel, &quot;channel&quot;);//给DefaultChannelPipeline的Channel引用赋值。</span><br><span class="line">        succeededFuture = new SucceededChannelFuture(channel, null);</span><br><span class="line">        voidPromise =  new VoidChannelPromise(channel, true);</span><br><span class="line"></span><br><span class="line">        tail = new TailContext(this);//构造尾结点</span><br><span class="line">        head = new HeadContext(this);//构造头结点</span><br><span class="line">        //组成链表</span><br><span class="line">        head.next = tail;</span><br><span class="line">        tail.prev = head;</span><br><span class="line">    &#125;</span><br><span class="line">...略</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到Channel所有的ChannelPipeline组成了一个链表的形式，回想我们之前分析的ServerBootstrap类的启动初始化过程的init方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">void init(Channel channel) throws Exception &#123;</span><br><span class="line"> ChannelPipeline p = channel.pipeline();</span><br><span class="line"> p.addLast(new ChannelInitializer&lt;Channel&gt;() &#123;</span><br><span class="line">           @Override</span><br><span class="line">           public void initChannel(final Channel ch) throws Exception &#123;</span><br><span class="line">               final ChannelPipeline pipeline = ch.pipeline();</span><br><span class="line">               ChannelHandler handler = config.handler();</span><br><span class="line">               if (handler != null) &#123;</span><br><span class="line">                   pipeline.addLast(handler);</span><br><span class="line">               &#125;</span><br><span class="line"></span><br><span class="line">               ch.eventLoop().execute(new Runnable() &#123;</span><br><span class="line">                   @Override</span><br><span class="line">                   public void run() &#123;</span><br><span class="line">                       pipeline.addLast(new ServerBootstrapAcceptor(</span><br><span class="line">                               ch, currentChildGroup, currentChildHandler, currentChildOptions, currentChildAttrs));</span><br><span class="line">                   &#125;</span><br><span class="line">               &#125;);</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;);</span><br></pre></td></tr></table></figure>
+<p>当拿到ChannelPipeline 之后，紧接着会在链表上添加一个ChannelInitializer，以及我们开发者自己写的Initializer，都是在链表上执行add方法，加入到链表里边：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">public class MyServerInitializer extends ChannelInitializer&lt;SocketChannel&gt; &#123;</span><br><span class="line">    @Override</span><br><span class="line">    protected void initChannel(SocketChannel ch) throws Exception &#123;</span><br><span class="line">        ChannelPipeline pipline = ch.pipeline();</span><br><span class="line">        pipline.addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE,0,4,0,4));</span><br><span class="line">        pipline.addLast(new LengthFieldPrepender(4));</span><br><span class="line">        pipline.addLast(new StringDecoder(CharsetUtil.UTF_8));</span><br><span class="line">        pipline.addLast(new StringEncoder(CharsetUtil.UTF_8));</span><br><span class="line">        pipline.addLast(new MyServerHandler());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>那么我们有必要看一下ChannelPipeline的doc：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * A list of &#123;@link ChannelHandler&#125;s which handles or intercepts inbound events and outbound operations of a</span><br><span class="line"> * &#123;@link Channel&#125;.  &#123;@link ChannelPipeline&#125; implements an advanced form of the</span><br><span class="line"> * &lt;a href=&quot;http://www.oracle.com/technetwork/java/interceptingfilter-142169.html&quot;&gt;Intercepting Filter&lt;/a&gt; pattern</span><br><span class="line"> * to give a user full control over how an event is handled and how the &#123;@link ChannelHandler&#125;s in a pipeline</span><br><span class="line"> * interact with each other.</span><br><span class="line">ChannelPipeline是一个处理或者拦截Channel的出栈事件或者入栈操作的ChannelHandler列表，</span><br><span class="line">ChannelPipeline实现了一种高效的拦截过滤器模式的形式来让用户完全控制一个事件怎样处理</span><br><span class="line">和pipeline的ChannelHandler怎样和其他ChannelHandler交互。</span><br><span class="line"> * &lt;h3&gt;Creation of a pipeline&lt;/h3&gt;</span><br><span class="line"> * Each channel has its own pipeline and it is created automatically when a new channel is created.</span><br><span class="line"> * 每一个channel 都有自己的pipeline，就是在channel 创建的时候自动创建一个pipeline</span><br><span class="line"> * &lt;h3&gt;How an event flows in a pipeline&lt;/h3&gt;</span><br><span class="line"> * 一个事件是怎样在pipeline流动的。</span><br><span class="line"> * The following diagram describes how I/O events are processed by &#123;@link ChannelHandler&#125;s in a &#123;@link ChannelPipeline&#125;</span><br><span class="line"> * typically. An I/O event is handled by either a &#123;@link ChannelInboundHandler&#125; or a &#123;@link ChannelOutboundHandler&#125;</span><br><span class="line"> * and be forwarded to its closest handler by calling the event propagation methods defined in</span><br><span class="line"> * &#123;@link ChannelHandlerContext&#125;, such as &#123;@link ChannelHandlerContext#fireChannelRead(Object)&#125; and</span><br><span class="line"> * &#123;@link ChannelHandlerContext#write(Object)&#125;.</span><br><span class="line"> * 下面的图描述了一个I/O事件一般是怎样在ChannelPipeline里的ChannelHandler处理的，</span><br><span class="line"> * 一个I/O事件要么被ChannelInboundHandler处理，要么</span><br><span class="line"> * 里边的事件传播方法转发给最近的一个处理器，比如ChannelHandlerContext#fireChannelRead(Object)</span><br><span class="line"> * 和ChannelHandlerContext#write(Object)。</span><br><span class="line"> * &lt;pre&gt;</span><br><span class="line"> *                                                 I/O Request</span><br><span class="line"> *                                            via &#123;@link Channel&#125; or</span><br><span class="line"> *                                        &#123;@link ChannelHandlerContext&#125;</span><br><span class="line"> *                                                      |</span><br><span class="line"> *  +---------------------------------------------------+---------------+</span><br><span class="line"> *  |                           ChannelPipeline         |               |</span><br><span class="line"> *  |                                                  \|/              |</span><br><span class="line"> *  |    +---------------------+            +-----------+----------+    |</span><br><span class="line"> *  |    | Inbound Handler  N  |            | Outbound Handler  1  |    |</span><br><span class="line"> *  |    +----------+----------+            +-----------+----------+    |</span><br><span class="line"> *  |              /|\                                  |               |</span><br><span class="line"> *  |               |                                  \|/              |</span><br><span class="line"> *  |    +----------+----------+            +-----------+----------+    |</span><br><span class="line"> *  |    | Inbound Handler N-1 |            | Outbound Handler  2  |    |</span><br><span class="line"> *  |    +----------+----------+            +-----------+----------+    |</span><br><span class="line"> *  |              /|\                                  .               |</span><br><span class="line"> *  |               .                                   .               |</span><br><span class="line"> *  | ChannelHandlerContext.fireIN_EVT() ChannelHandlerContext.OUT_EVT()|</span><br><span class="line"> *  |        [ method call]                       [method call]         |</span><br><span class="line"> *  |               .                                   .               |</span><br><span class="line"> *  |               .                                  \|/              |</span><br><span class="line"> *  |    +----------+----------+            +-----------+----------+    |</span><br><span class="line"> *  |    | Inbound Handler  2  |            | Outbound Handler M-1 |    |</span><br><span class="line"> *  |    +----------+----------+            +-----------+----------+    |</span><br><span class="line"> *  |              /|\                                  |               |</span><br><span class="line"> *  |               |                                  \|/              |</span><br><span class="line"> *  |    +----------+----------+            +-----------+----------+    |</span><br><span class="line"> *  |    | Inbound Handler  1  |            | Outbound Handler  M  |    |</span><br><span class="line"> *  |    +----------+----------+            +-----------+----------+    |</span><br><span class="line"> *  |              /|\                                  |               |</span><br><span class="line"> *  +---------------+-----------------------------------+---------------+</span><br><span class="line"> *                  |                                  \|/</span><br><span class="line"> *  +---------------+-----------------------------------+---------------+</span><br><span class="line"> *  |               |                                   |               |</span><br><span class="line"> *  |       [ Socket.read() ]                    [ Socket.write() ]     |</span><br><span class="line"> *  |                                                                   |</span><br><span class="line"> *  |  Netty Internal I/O Threads (Transport Implementation)            |</span><br><span class="line"> *  +-------------------------------------------------------------------+</span><br><span class="line"> * &lt;/pre&gt;</span><br><span class="line">通过上图可以看到入栈的和出栈的处理器互不干扰。</span><br><span class="line"> * An inbound event is handled by the inbound handlers in the bottom-up direction as shown on the left side of the</span><br><span class="line"> * diagram.  An inbound handler usually handles the inbound data generated by the I/O thread on the bottom of the</span><br><span class="line"> * diagram.  The inbound data is often read from a remote peer via the actual input operation such as</span><br><span class="line"> * &#123;@link SocketChannel#read(ByteBuffer)&#125;.  If an inbound event goes beyond the top inbound handler, it is discarded</span><br><span class="line"> * silently, or logged if it needs your attention.</span><br><span class="line"> * 在左图，一个入栈事件是从下到上的顺序被绑定的处理器处理的，一个入栈处理器通常处理从I/O线程生成的数据，</span><br><span class="line"> * 这些入栈数据一般是从远程实际的操作</span><br><span class="line"> *  它将会被悄无声息的丢弃，或者需要的话使用日志</span><br><span class="line"> * 记录下来。</span><br><span class="line"> * * &lt;p&gt;</span><br><span class="line"> * An outbound event is handled by the outbound handler in the top-down direction as shown on the right side of the</span><br><span class="line"> * diagram.  An outbound handler usually generates or transforms the outbound traffic such as write requests.</span><br><span class="line"> * If an outbound event goes beyond the bottom outbound handler, it is handled by an I/O thread associated with the</span><br><span class="line"> * &#123;@link Channel&#125;. The I/O thread often performs the actual output operation such as</span><br><span class="line"> * &#123;@link SocketChannel#write(ByteBuffer)&#125;.</span><br><span class="line"> * &lt;p&gt;</span><br><span class="line"> * 右图，一个出栈事件会被出栈处理器处理，一个出栈处理器生成或者传输出栈数据，比如写请求，</span><br><span class="line"> * 如果一个出栈事件超出最底层的处理器，那么他将会被I/O</span><br><span class="line"> * 线程处理，与其关联的SocketChannel#write(ByteBuffer)操作。</span><br><span class="line">  * For example, let us assume that we created the following pipeline:</span><br><span class="line">  * 加入我们假设创建了如下的pipeline</span><br><span class="line"> * &lt;pre&gt;</span><br><span class="line"> * &#123;@link ChannelPipeline&#125; p = ...;</span><br><span class="line"> * p.addLast(&quot;1&quot;, new InboundHandlerA());//入栈处理器</span><br><span class="line"> * p.addLast(&quot;2&quot;, new InboundHandlerB());//入栈处理器</span><br><span class="line"> * p.addLast(&quot;3&quot;, new OutboundHandlerA());//出栈处理器</span><br><span class="line"> * p.addLast(&quot;4&quot;, new OutboundHandlerB());//出栈处理器</span><br><span class="line"> * p.addLast(&quot;5&quot;, new InboundOutboundHandlerX());//既是入栈又是出栈处理器</span><br><span class="line"> * &lt;/pre&gt;</span><br><span class="line"></span><br><span class="line">  * In the example above, the class whose name starts with &#123;@code Inbound&#125; means it is an inbound handler.</span><br><span class="line"> * The class whose name starts with &#123;@code Outbound&#125; means it is a outbound handler.</span><br><span class="line"> * 在前边提到的例子中，以Inbound开头的都是入栈处理器，以Outbound开头的都是出栈处理器。</span><br><span class="line"> * &lt;p&gt;</span><br><span class="line"> * In the given example configuration, the handler evaluation order is 1, 2, 3, 4, 5 when an event goes inbound.</span><br><span class="line"> * When an event goes outbound, the order is 5, 4, 3, 2, 1.  On top of this principle, &#123;@link ChannelPipeline&#125; skips</span><br><span class="line"> * the evaluation of certain handlers to shorten the stack depth:</span><br><span class="line">根据上边的原理，ChannelPipeline会忽略掉某些处理器来减</span><br><span class="line"> * 栈的深度。</span><br><span class="line"> * &lt;ul&gt;</span><br><span class="line"> * &lt;li&gt;3 and 4 don&#x27;t implement &#123;@link ChannelInboundHandler&#125;, and therefore the actual evaluation order of an inbound</span><br><span class="line"> *     event will be: 1, 2, and 5.&lt;/li&gt;</span><br><span class="line"> * 3和4没有实现ChannelInboundHandler，因此实际的入栈顺序是1, 2, 5</span><br><span class="line"> * &lt;li&gt;1 and 2 don&#x27;t implement &#123;@link ChannelOutboundHandler&#125;, and therefore the actual evaluation order of a</span><br><span class="line"> *     outbound event will be: 5, 4, and 3.&lt;/li&gt;</span><br><span class="line"> * 1和2没有实现ChannelOutboundHandler，因此出栈顺序是 5, 4, 3</span><br><span class="line"> * &lt;li&gt;If 5 implements both &#123;@link ChannelInboundHandler&#125; and &#123;@link ChannelOutboundHandler&#125;, the evaluation order of</span><br><span class="line"> *     an inbound and a outbound event could be 125 and 543 respectively.&lt;/li&gt;</span><br><span class="line"> * 5实现了ChannelInboundHandler和ChannelOutboundHandler，出栈和入栈都包含5。只是一个在结尾，一个在开头。</span><br><span class="line"> * &lt;/ul&gt;</span><br><span class="line"> * &lt;h3&gt;Forwarding an event to the next handler&lt;/h3&gt;</span><br><span class="line"> * 将事件转发给下一个处理器。</span><br><span class="line"> * As you might noticed in the diagram shows, a handler has to invoke the event propagation methods in</span><br><span class="line"> * &#123;@link ChannelHandlerContext&#125; to forward an event to its next handler.  Those methods include:</span><br><span class="line"> * 你可能在图中可以看到，一个处理器调用ChannelHandlerContext的事件传播方法转发给下一个处理器，这些方法包括：</span><br><span class="line"> * &lt;ul&gt;</span><br><span class="line"> * &lt;li&gt;Inbound event propagation methods:</span><br><span class="line"> *    入栈事件传播方法</span><br><span class="line"> *     &lt;ul&gt;</span><br><span class="line"> *     &lt;li&gt;&#123;@link ChannelHandlerContext#fireChannelRegistered()&#125;&lt;/li&gt;</span><br><span class="line"> *     &lt;li&gt;&#123;@link ChannelHandlerContext#fireChannelActive()&#125;&lt;/li&gt;</span><br><span class="line"> *     &lt;li&gt;&#123;@link ChannelHandlerContext#fireChannelRead(Object)&#125;&lt;/li&gt;</span><br><span class="line"> *     &lt;li&gt;&#123;@link ChannelHandlerContext#fireChannelReadComplete()&#125;&lt;/li&gt;</span><br><span class="line"> *     &lt;li&gt;&#123;@link ChannelHandlerContext#fireExceptionCaught(Throwable)&#125;&lt;/li&gt;</span><br><span class="line"> *     &lt;li&gt;&#123;@link ChannelHandlerContext#fireUserEventTriggered(Object)&#125;&lt;/li&gt;</span><br><span class="line"> *     &lt;li&gt;&#123;@link ChannelHandlerContext#fireChannelWritabilityChanged()&#125;&lt;/li&gt;</span><br><span class="line"> *     &lt;li&gt;&#123;@link ChannelHandlerContext#fireChannelInactive()&#125;&lt;/li&gt;</span><br><span class="line"> *     &lt;li&gt;&#123;@link ChannelHandlerContext#fireChannelUnregistered()&#125;&lt;/li&gt;</span><br><span class="line"> *     &lt;/ul&gt;</span><br><span class="line"> * &lt;/li&gt;</span><br><span class="line"> * &lt;li&gt;Outbound event propagation methods:</span><br><span class="line"> * 出栈事件传播方法</span><br><span class="line"> *     &lt;ul&gt;</span><br><span class="line"> *     &lt;li&gt;&#123;@link ChannelHandlerContext#bind(SocketAddress, ChannelPromise)&#125;&lt;/li&gt;</span><br><span class="line"> *     &lt;li&gt;&#123;@link ChannelHandlerContext#connect(SocketAddress, SocketAddress, ChannelPromise)&#125;&lt;/li&gt;</span><br><span class="line"> *     &lt;li&gt;&#123;@link ChannelHandlerContext#write(Object, ChannelPromise)&#125;&lt;/li&gt;</span><br><span class="line"> *     &lt;li&gt;&#123;@link ChannelHandlerContext#flush()&#125;&lt;/li&gt;</span><br><span class="line"> *     &lt;li&gt;&#123;@link ChannelHandlerContext#read()&#125;&lt;/li&gt;</span><br><span class="line"> *     &lt;li&gt;&#123;@link ChannelHandlerContext#disconnect(ChannelPromise)&#125;&lt;/li&gt;</span><br><span class="line"> *     &lt;li&gt;&#123;@link ChannelHandlerContext#close(ChannelPromise)&#125;&lt;/li&gt;</span><br><span class="line"> *     &lt;li&gt;&#123;@link ChannelHandlerContext#deregister(ChannelPromise)&#125;&lt;/li&gt;</span><br><span class="line"> *     &lt;/ul&gt;</span><br><span class="line"> * &lt;/li&gt;</span><br><span class="line"> * &lt;/ul&gt;</span><br><span class="line"> *</span><br><span class="line"> * and the following example shows how the event propagation is usually done:</span><br><span class="line"> *下面的实例展示了事件传播是怎么做的</span><br><span class="line"> * &lt;pre&gt;</span><br><span class="line"> * public class MyInboundHandler extends &#123;@link ChannelInboundHandlerAdapter&#125; &#123;</span><br><span class="line"> *     &#123;@code @Override&#125;</span><br><span class="line"> *     public void channelActive(&#123;@link ChannelHandlerContext&#125; ctx) &#123;</span><br><span class="line"> *         System.out.println(&quot;Connected!&quot;);</span><br><span class="line"> *         ctx.fireChannelActive();//传播下一个</span><br><span class="line"> *     &#125;</span><br><span class="line"> * &#125;</span><br><span class="line"> *</span><br><span class="line"> * public class MyOutboundHandler extends &#123;@link ChannelOutboundHandlerAdapter&#125; &#123;</span><br><span class="line"> *     &#123;@code @Override&#125;</span><br><span class="line"> *     public void close(&#123;@link ChannelHandlerContext&#125; ctx, &#123;@link ChannelPromise&#125; promise) &#123;</span><br><span class="line"> *         System.out.println(&quot;Closing ..&quot;);</span><br><span class="line"> *         ctx.close(promise);//关闭</span><br><span class="line"> *     &#125;</span><br><span class="line"> * &#125;</span><br><span class="line"> * &lt;/pre&gt;</span><br><span class="line"> *</span><br><span class="line"> * &lt;h3&gt;Building a pipeline&lt;/h3&gt;</span><br><span class="line"> * 创建pipeline</span><br><span class="line"> * &lt;p&gt;</span><br><span class="line"> * A user is supposed to have one or more &#123;@link ChannelHandler&#125;s in a pipeline to receive I/O events (e.g. read) and</span><br><span class="line"> * to request I/O operations (e.g. write and close).  For example, a typical server will have the following handlers</span><br><span class="line"> * in each channel&#x27;s pipeline, but your mileage may vary depending on the complexity and characteristics of the</span><br><span class="line"> * protocol and business logic:</span><br><span class="line"> *一个用户可以支持在pipeline 中有一个或者多个ChannelHandler来接受I/O 事件，</span><br><span class="line"> 比如读操作，或者请求I/O操作，比如写后者关闭，比如，一个典型</span><br><span class="line"> 的服务的每个channel下的pipeline有下面的处理器，但是会因为复杂度和协议的特性或者业务逻辑而有一些不同：</span><br><span class="line"> * &lt;ol&gt;</span><br><span class="line"> * &lt;li&gt;Protocol Decoder - translates binary data (e.g. &#123;@link ByteBuf&#125;) into a Java object.&lt;/li&gt;</span><br><span class="line"> * 协议解码器 - 将二级制转换为一个Java对象，比如ByteBuf，</span><br><span class="line"> * &lt;li&gt;Protocol Encoder - translates a Java object into binary data.&lt;/li&gt;</span><br><span class="line"> * 协议解码器，将一个Java对象转换为一个二进制数据</span><br><span class="line"> * &lt;li&gt;Business Logic Handler - performs the actual business logic (e.g. database access).&lt;/li&gt;</span><br><span class="line"> * 业务逻辑处理器 - 实现实际的业务逻辑.</span><br><span class="line"> * &lt;/ol&gt;</span><br><span class="line"> *</span><br><span class="line"> * and it could be represented as shown in the following example:</span><br><span class="line"> *这些会通过如下的业务逻辑来体现。</span><br><span class="line"> * &lt;pre&gt;</span><br><span class="line"> * static final &#123;@link EventExecutorGroup&#125; group = new &#123;@link DefaultEventExecutorGroup&#125;(16);</span><br><span class="line"> * ...</span><br><span class="line"> *</span><br><span class="line"> * &#123;@link ChannelPipeline&#125; pipeline = ch.pipeline();</span><br><span class="line"> *</span><br><span class="line"> * pipeline.addLast(&quot;decoder&quot;, new MyProtocolDecoder());</span><br><span class="line"> * pipeline.addLast(&quot;encoder&quot;, new MyProtocolEncoder());</span><br><span class="line"> *</span><br><span class="line"> * // Tell the pipeline to run MyBusinessLogicHandler&#x27;s event handler methods</span><br><span class="line"> * // in a different thread than an I/O thread so that the I/O thread is not blocked by</span><br><span class="line"> * // a time-consuming task.</span><br><span class="line"> * // If your business logic is fully asynchronous or finished very quickly, you don&#x27;t</span><br><span class="line"> * // need to specify a group.</span><br><span class="line"> * 告诉pipeline 在另外一个I/O 线程里边执行MyBusinessLogicHandler的事件处理器的方法，</span><br><span class="line"> * 这样就不会阻塞实时消费任务。</span><br><span class="line"> * 如果你得业务逻辑是同步的或者完成速度非常快，就不需要指定这个group。</span><br><span class="line"> * pipeline.addLast(group, &quot;handler&quot;, new MyBusinessLogicHandler());</span><br><span class="line"> * 这种方式是netty指定的标准方式，另外一种方式是在MyBusinessLogicHandler里边创建线程池也是可以的。</span><br><span class="line"> *  * &lt;/pre&gt;</span><br><span class="line"> *</span><br><span class="line"> * &lt;h3&gt;Thread safety&lt;/h3&gt;</span><br><span class="line"> * 线程安全性</span><br><span class="line"> * &lt;p&gt;</span><br><span class="line"> * A &#123;@link ChannelHandler&#125; can be added or removed at any time because a &#123;@link ChannelPipeline&#125; is thread safe.</span><br><span class="line"> * For example, you can insert an encryption handler when sensitive information is about to be exchanged,</span><br><span class="line"> * after the exchange.</span><br><span class="line"> * ChannelHandler可以随时添加和删除，因为ChannelPipeline是线程安全的，比如，</span><br><span class="line"> * 当敏感的数据被交换的时候你可以插入一个加密的处理器，</span><br><span class="line"> * 当交换完毕再删除掉。</span><br><span class="line"> */</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>CeaserWang
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://ceaser.wang/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%8D%81-ChannelPipeline%E5%88%9B%E5%BB%BA%E6%97%B6%E6%9C%BA%E4%B8%8E%E9%AB%98%E7%BA%A7%E6%8B%A6%E6%88%AA%E8%BF%87%E6%BB%A4%E5%99%A8%E6%A8%A1%E5%BC%8F%E7%9A%84%E8%BF%90%E7%94%A8/" title="netty源码分析(十)ChannelPipeline创建时机与高级拦截过滤器模式的运用">https://ceaser.wang/2018/10/04/netty源码分析-十-ChannelPipeline创建时机与高级拦截过滤器模式的运用/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/ChannelPipeline-%E6%8B%A6%E6%88%AA%E8%BF%87%E6%BB%A4%E5%99%A8/" rel="tag"><i class="fa fa-tag"></i> ChannelPipeline 拦截过滤器</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E4%B9%9D-Reactor%E6%A8%A1%E5%BC%8F%E4%B8%8ENetty%E7%BB%84%E4%BB%B6%E5%AF%B9%E6%AF%94%E5%8F%8AAcceptor%E7%BB%84%E4%BB%B6%E7%9A%84%E4%BD%9C%E7%94%A8%E5%88%86%E6%9E%90/" rel="prev" title="netty源码分析(九)Reactor模式与Netty组件对比及Acceptor组件的作用分析">
+                  <i class="fa fa-chevron-left"></i> netty源码分析(九)Reactor模式与Netty组件对比及Acceptor组件的作用分析
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%8D%81%E4%B8%80-Netty%E5%B8%B8%E9%87%8F%E6%B1%A0%E5%AE%9E%E7%8E%B0%E5%8F%8AChannelOption%E4%B8%8EAttribute%E4%BD%9C%E7%94%A8%E5%88%86%E6%9E%90/" rel="next" title="netty源码分析(十一)Netty常量池实现及ChannelOption与Attribute作用分析">
+                  netty源码分析(十一)Netty常量池实现及ChannelOption与Attribute作用分析 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CeaserWang</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":"forest","js":{"url":"https://cdn.jsdelivr.net/npm/mermaid@8.11.0/dist/mermaid.min.js","integrity":"sha256-sVAx+v/Q7v0Q2xm5vN7h5ccSna6gaLREhG9sF8pKT6I="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+  <script class="next-config" data-name="nprogress" type="application/json">{"enable":true,"spinner":true}</script>
+  <script src="/js/third-party/nprogress.js"></script>
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"ryAR9bttS7fex1FPEPAylmmJ-gzGzoHsz","app_key":"dYqygoN4Y01Bl38OdRoCHUYn","server_url":null,"security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+
+</body>
+</html>

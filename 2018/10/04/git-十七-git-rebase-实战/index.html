@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.css" integrity="sha256-no0c5ccDODBwp+9hSmV5VvPpKwHCpbVzXHexIkupM6U=" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.js" integrity="sha256-a5YRB27CcBwBFcT5EF/f3E4vzIqyHrSR878nseNYw64=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ceaser.wang","root":"/","images":"/images","scheme":"Muse","version":"8.6.1","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+<meta name="description" content="我们新建三个分支分别是master、dev、test,之后在dev分支的test.txt文件新建2个提交，在test分支的test.txt文件新建2个提交。切换到test分支，然后执行git rebase dev 我们要将dev分支的提交应用到test分支：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="git(十七) git rebase 实战">
+<meta property="og:url" content="https://ceaser.wang/2018/10/04/git-%E5%8D%81%E4%B8%83-git-rebase-%E5%AE%9E%E6%88%98/index.html">
+<meta property="og:site_name" content="南贺神社">
+<meta property="og:description" content="我们新建三个分支分别是master、dev、test,之后在dev分支的test.txt文件新建2个提交，在test分支的test.txt文件新建2个提交。切换到test分支，然后执行git rebase dev 我们要将dev分支的提交应用到test分支：">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/git-%E5%8D%81%E4%B8%83-git-rebase-%E5%AE%9E%E6%88%98/20170805204123755.png">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/git-%E5%8D%81%E4%B8%83-git-rebase-%E5%AE%9E%E6%88%98/20170805211736486.png">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/git-%E5%8D%81%E4%B8%83-git-rebase-%E5%AE%9E%E6%88%98/20170805212448530.png">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/git-%E5%8D%81%E4%B8%83-git-rebase-%E5%AE%9E%E6%88%98/20170805213018895.png">
+<meta property="article:published_time" content="2018-10-04T14:04:30.000Z">
+<meta property="article:modified_time" content="2022-01-04T02:21:30.612Z">
+<meta property="article:author" content="CeaserWang">
+<meta property="article:tag" content="git">
+<meta property="article:tag" content="rebase">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ceaser.wang/2018/10/04/git-%E5%8D%81%E4%B8%83-git-rebase-%E5%AE%9E%E6%88%98/20170805204123755.png">
+
+
+<link rel="canonical" href="https://ceaser.wang/2018/10/04/git-%E5%8D%81%E4%B8%83-git-rebase-%E5%AE%9E%E6%88%98/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://ceaser.wang/2018/10/04/git-%E5%8D%81%E4%B8%83-git-rebase-%E5%AE%9E%E6%88%98/","path":"2018/10/04/git-十七-git-rebase-实战/","title":"git(十七) git rebase 实战"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>git(十七) git rebase 实战 | 南贺神社</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">南贺神社</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">你写程序有写诗一样的感觉吗?</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">205</span></a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">24</span></a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">212</span></a></li>
+        <li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-overview">
+            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="CeaserWang"
+      src="/../0xcc/index/Uchiha.jpg">
+  <p class="site-author-name" itemprop="name">CeaserWang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">212</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">205</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tLzExNTY3MjE4NzQ=" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;1156721874"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmNlYXNlcndhbmdAb3V0bG9vay5jb20=" title="E-Mail → mailto:ceaserwang@outlook.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+  </div>
+  <div class="cc-license site-overview-item animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><img src="https://cdn.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-user-friends fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly90d29kcmFnb25sYWtlLmNvbQ==" title="https:&#x2F;&#x2F;twodragonlake.com">TwoDragonLake</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9yb290Y2x1c3Rlci5naXRodWIuaW8=" title="https:&#x2F;&#x2F;rootcluster.github.io">RootCluster</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9tdXNlZmxvdy5pbw==" title="https:&#x2F;&#x2F;museflow.io">MuseFlow</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9pbmNvZGVyLm9yZw==" title="https:&#x2F;&#x2F;incoder.org">BladeCode</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9rYWlmYS5kZXY=" title="https:&#x2F;&#x2F;kaifa.dev">Alyenc</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmRhemhpZGF5b25nLmNu" title="https:&#x2F;&#x2F;blog.dazhidayong.cn">Killua</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9qb2NlbHluc2hhbmcuY24v" title="https:&#x2F;&#x2F;jocelynshang.cn&#x2F;">Jocelyn</span>
+        </li>
+    </ul>
+  </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/10/04/git-%E5%8D%81%E4%B8%83-git-rebase-%E5%AE%9E%E6%88%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
+      <meta itemprop="name" content="CeaserWang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="南贺神社">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          git(十七) git rebase 实战
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-10-04 14:04:30" itemprop="dateCreated datePublished" datetime="2018-10-04T14:04:30+00:00">2018-10-04</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2022-01-04 02:21:30" itemprop="dateModified" datetime="2022-01-04T02:21:30+00:00">2022-01-04</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/git/" itemprop="url" rel="index"><span itemprop="name">git</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2018/10/04/git-%E5%8D%81%E4%B8%83-git-rebase-%E5%AE%9E%E6%88%98/" class="post-meta-item leancloud_visitors" data-flag-title="git(十七) git rebase 实战" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>我们新建三个分支分别是master、dev、test,之后在dev分支的test.txt文件新建2个提交，在test分支的test.txt文件新建2个提交。<br>切换到test分支，然后执行git rebase dev 我们要将dev分支的提交应用到test分支：</p>
+<span id="more"></span>
+<p><img src="20170805204123755.png" alt="这里写图片描述"><br>然后在test分支执行git rebase dev</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">Administrator@CeaserWang MINGW64 /e/Study/git_rebase (test)</span><br><span class="line">$ git rebase dev</span><br><span class="line">First, rewinding head to replay your work on top of it...</span><br><span class="line">Applying: [test branch] add -test1- in text.txt //将test的第一次提交应用到dev的最后一个节点</span><br><span class="line">error: Failed to merge in the changes.</span><br><span class="line">Using index info to reconstruct a base tree...</span><br><span class="line">M       test.txt</span><br><span class="line">Falling back to patching base and 3-way merge...</span><br><span class="line">Auto-merging test.txt</span><br><span class="line">CONFLICT (content): Merge conflict in test.txt</span><br><span class="line">Patch failed at 0001 [test branch] add -test1- in text.txt</span><br><span class="line">The copy of the patch that failed is found in: .git/rebase-apply/patch</span><br><span class="line"></span><br><span class="line">When you have resolved this problem, run &quot;git rebase --continue&quot;.</span><br><span class="line">If you prefer to skip this patch, run &quot;git rebase --skip&quot; instead.</span><br><span class="line">To check out the original branch and stop rebasing, run &quot;git rebase --abort&quot;.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Administrator@CeaserWang MINGW64 /e/Study/git_rebase (test|REBASE 1/2)</span><br><span class="line">$ cat test.txt</span><br><span class="line">master1</span><br><span class="line">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</span><br><span class="line">dev1</span><br><span class="line">dev2</span><br><span class="line">=======</span><br><span class="line">test1</span><br><span class="line">&gt;&gt;&gt;&gt;&gt;&gt;&gt; [test branch] add -test1- in text.txt</span><br><span class="line">Administrator@CeaserWang MINGW64 /e/Study/git_rebase (test|REBASE 1/2)</span><br><span class="line">$ git status</span><br><span class="line">rebase in progress; onto f28df0d</span><br><span class="line">You are currently rebasing branch &#x27;test&#x27; on &#x27;f28df0d&#x27;.//对dev 的&#x27;f28df0d&#x27;应用补丁。</span><br><span class="line">  (fix conflicts and then run &quot;git rebase --continue&quot;)</span><br><span class="line">  (use &quot;git rebase --skip&quot; to skip this patch)//使用dev的补丁，废弃test的修改。</span><br><span class="line">  (use &quot;git rebase --abort&quot; to check out the original branch)//终止rebase过程</span><br><span class="line"></span><br><span class="line">Unmerged paths:</span><br><span class="line">  (use &quot;git reset HEAD &lt;file&gt;...&quot; to unstage)</span><br><span class="line">  (use &quot;git add &lt;file&gt;...&quot; to mark resolution)</span><br><span class="line"></span><br><span class="line">        both modified:   test.txt</span><br><span class="line"></span><br><span class="line">no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&quot;)</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>git rebase –abort的意思是终止当前rebase的操作，回到原始状态。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Administrator@CeaserWang MINGW64 /e/Study/git_rebase (test|REBASE 1/2)</span><br><span class="line">$ git rebase --abort</span><br><span class="line"></span><br><span class="line">Administrator@CeaserWang MINGW64 /e/Study/git_rebase (test)</span><br><span class="line">$ cat test.txt</span><br><span class="line">master1</span><br><span class="line">test1</span><br><span class="line">test2</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>刚才演示了abort的效果，我们重新rebase回到rebase状态：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">Administrator@CeaserWang MINGW64 /e/Study/git_rebase (test)</span><br><span class="line">$ git rebase dev</span><br><span class="line">First, rewinding head to replay your work on top of it...</span><br><span class="line">Applying: [test branch] add  a line  in test.txt</span><br><span class="line">error: Failed to merge in the changes.</span><br><span class="line">Using index info to reconstruct a base tree...</span><br><span class="line">M       test.txt</span><br><span class="line">Falling back to patching base and 3-way merge...</span><br><span class="line">Auto-merging test.txt</span><br><span class="line">CONFLICT (content): Merge conflict in test.txt</span><br><span class="line">Patch failed at 0001 [test branch] add  a line  in test.txt</span><br><span class="line">The copy of the patch that failed is found in: .git/rebase-apply/patch</span><br><span class="line"></span><br><span class="line">When you have resolved this problem, run &quot;git rebase --continue&quot;.</span><br><span class="line">If you prefer to skip this patch, run &quot;git rebase --skip&quot; instead.</span><br><span class="line">To check out the original branch and stop rebasing, run &quot;git rebase --abort&quot;.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Administrator@CeaserWang MINGW64 /e/Study/git_rebase (test|REBASE 1/2)</span><br><span class="line">$ cat test.txt</span><br><span class="line">master1</span><br><span class="line">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</span><br><span class="line">dev1</span><br><span class="line">dev2</span><br><span class="line">=======</span><br><span class="line">test1</span><br><span class="line">&gt;&gt;&gt;&gt;&gt;&gt;&gt; [test branch] add  a line  in test.txt</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>test.txt文件里边的冲突部分是dev分支的“dev1 dev2”2行和test分支的“test1”， 即以dev的2次提交为基准，那么如果执行git rebase –skip所做的操作是：<br>丢弃test的第一次提交的修改，保留dev的修改：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">Administrator@CeaserWang MINGW64 /e/Study/git_rebase (test|REBASE 1/2)</span><br><span class="line">$ git rebase --skip</span><br><span class="line">Applying: [test branch] add -test2- in text.txt //应用test的第二次提交。</span><br><span class="line">error: Failed to merge in the changes.</span><br><span class="line">Using index info to reconstruct a base tree...</span><br><span class="line">M       test.txt</span><br><span class="line">Falling back to patching base and 3-way merge...</span><br><span class="line">Auto-merging test.txt</span><br><span class="line">CONFLICT (content): Merge conflict in test.txt</span><br><span class="line">Patch failed at 0002 [test branch] add -test2- in text.txt</span><br><span class="line">The copy of the patch that failed is found in: .git/rebase-apply/patch</span><br><span class="line"></span><br><span class="line">When you have resolved this problem, run &quot;git rebase --continue&quot;.</span><br><span class="line">If you prefer to skip this patch, run &quot;git rebase --skip&quot; instead.</span><br><span class="line">To check out the original branch and stop rebasing, run &quot;git rebase --abort&quot;.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Administrator@CeaserWang MINGW64 /e/Study/git_rebase (test|REBASE 2/2)</span><br><span class="line">$ cat test.txt</span><br><span class="line">master1</span><br><span class="line">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</span><br><span class="line">dev1</span><br><span class="line">dev2</span><br><span class="line">=======</span><br><span class="line">test1</span><br><span class="line">test2 //test2出现。</span><br><span class="line">&gt;&gt;&gt;&gt;&gt;&gt;&gt; [test branch] add -test2- in text.txt</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>此时如果我们再次执行git rebase –skip 就会将test的第二次提交丢弃，保留dev的修改：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Administrator@CeaserWang MINGW64 /e/Study/git_rebase (test|REBASE 2/2)</span><br><span class="line">$ git rebase --skip</span><br><span class="line"></span><br><span class="line">Administrator@CeaserWang MINGW64 /e/Study/git_rebase (test)</span><br><span class="line">$ cat test.txt</span><br><span class="line">master1</span><br><span class="line">dev1</span><br><span class="line">dev2</span><br><span class="line"></span><br><span class="line">Administrator@CeaserWang MINGW64 /e/Study/git_rebase (test)</span><br><span class="line">$</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>可以看到保留的2次的dev出现在文件里边，即“dev1 “和”dev2”这2次提交。<br>同时我们看一下git log：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">Administrator@CeaserWang MINGW64 /e/Study/git_rebase (test)</span><br><span class="line">$ git log</span><br><span class="line">commit f28df0d2c6fcb11d34e7551d5bb9b337aa46b259 (HEAD -&gt; test, dev)</span><br><span class="line">Author: ceaser &lt;ceaserwang@outlook.com&gt;</span><br><span class="line">Date:   Sat Aug 5 20:38:36 2017 +0800</span><br><span class="line"></span><br><span class="line">    [dev  branch] add -dev2- in test.txt</span><br><span class="line"></span><br><span class="line">commit 9ad27e0c99795978f259af4d2e17b99b77448f91</span><br><span class="line">Author: ceaser &lt;ceaserwang@outlook.com&gt;</span><br><span class="line">Date:   Sat Aug 5 20:38:22 2017 +0800</span><br><span class="line"></span><br><span class="line">    [dev  branch] add -dev1- in test.txt</span><br><span class="line"></span><br><span class="line">commit 72d9d551a336c1db8976a8d1f595f4d9dbd5569b (master)</span><br><span class="line">Author: ceaser &lt;ceaserwang@outlook.com&gt;</span><br><span class="line">Date:   Sat Aug 5 19:55:40 2017 +0800</span><br><span class="line"></span><br><span class="line">    master branch add file test.txt with master1 content</span><br><span class="line"></span><br><span class="line">commit 62046ccba0fea0b8e922697312632972edc8f0f8</span><br><span class="line">Author: ceaser &lt;ceaserwang@outlook.com&gt;</span><br><span class="line">Date:   Sat Aug 5 19:48:49 2017 +0800</span><br><span class="line"></span><br><span class="line">    master branch add file test.txt with line master1 commtent</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>里边有dev的2次提交的commit id验证了我们所说的。<br>此时我们切换到dev分支，演示出现冲突的一种情况，上边我们演示的是丢弃test的提交，那么我们接下来演示不丢弃test的提交，切换到dev的时候我们 git merge test，进行的是fast forward：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Administrator@CeaserWang MINGW64 /e/Study/git_rebase (test)</span><br><span class="line">$  git checkout dev</span><br><span class="line">Switched to branch &#x27;dev&#x27;</span><br><span class="line"></span><br><span class="line">Administrator@CeaserWang MINGW64 /e/Study/git_rebase (dev)</span><br><span class="line">$ git merge test</span><br><span class="line">Already up-to-date.</span><br></pre></td></tr></table></figure>
+<p>我们增加dev3和dev4：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line">Administrator@CeaserWang MINGW64 /e/Study/git_rebase (dev)</span><br><span class="line">$ cat test.txt</span><br><span class="line">master1</span><br><span class="line">dev1</span><br><span class="line">dev2</span><br><span class="line"></span><br><span class="line">Administrator@CeaserWang MINGW64 /e/Study/git_rebase (dev)</span><br><span class="line">$ echo &#x27;dev3&#x27; &gt;&gt; test.txt</span><br><span class="line"></span><br><span class="line">Administrator@CeaserWang MINGW64 /e/Study/git_rebase (dev)</span><br><span class="line">$ git add test.txt</span><br><span class="line">warning: LF will be replaced by CRLF in test.txt.</span><br><span class="line">The file will have its original line endings in your working directory.</span><br><span class="line"></span><br><span class="line">Administrator@CeaserWang MINGW64 /e/Study/git_rebase (dev)</span><br><span class="line">$ git commit -m &#x27;[dev branch] add -dev3- in test.txt&#x27;</span><br><span class="line">[dev f018dc6] [dev branch] add -dev3- in test.txt</span><br><span class="line"> 1 file changed, 1 insertion(+)</span><br><span class="line"></span><br><span class="line">Administrator@CeaserWang MINGW64 /e/Study/git_rebase (dev)</span><br><span class="line">$ echo &#x27;dev4&#x27; &gt;&gt; test.txt</span><br><span class="line"></span><br><span class="line">Administrator@CeaserWang MINGW64 /e/Study/git_rebase (dev)</span><br><span class="line">$ git add test.txt</span><br><span class="line">warning: LF will be replaced by CRLF in test.txt.</span><br><span class="line">The file will have its original line endings in your working directory.</span><br><span class="line"></span><br><span class="line">Administrator@CeaserWang MINGW64 /e/Study/git_rebase (dev)</span><br><span class="line">$ git commit -m &#x27;[dev branch] add -dev4- in test.txt&#x27;</span><br><span class="line">[dev 3d74c2e] [dev branch] add -dev4- in test.txt</span><br><span class="line"> 1 file changed, 1 insertion(+)</span><br><span class="line"></span><br><span class="line">Administrator@CeaserWang MINGW64 /e/Study/git_rebase (dev)</span><br><span class="line">$ cat test.txt</span><br><span class="line">master1</span><br><span class="line">dev1</span><br><span class="line">dev2</span><br><span class="line">dev3</span><br><span class="line">dev4</span><br><span class="line">Administrator@CeaserWang MINGW64 /e/Study/git_rebase (dev)</span><br><span class="line">$ git log -3</span><br><span class="line">commit 3d74c2ee12b7556cdbd576eb9f6fd9795898ddf6 (HEAD -&gt; dev)</span><br><span class="line">Author: ceaser &lt;ceaserwang@outlook.com&gt;</span><br><span class="line">Date:   Sat Aug 5 21:08:39 2017 +0800</span><br><span class="line"></span><br><span class="line">    [dev branch] add -dev4- in test.txt</span><br><span class="line"></span><br><span class="line">commit f018dc6f17d1a9b7c835e43064b695dd4b74e8df</span><br><span class="line">Author: ceaser &lt;ceaserwang@outlook.com&gt;</span><br><span class="line">Date:   Sat Aug 5 21:08:23 2017 +0800</span><br><span class="line"></span><br><span class="line">    [dev branch] add -dev3- in test.txt</span><br><span class="line"></span><br><span class="line">commit f28df0d2c6fcb11d34e7551d5bb9b337aa46b259 (test)</span><br><span class="line">Author: ceaser &lt;ceaserwang@outlook.com&gt;</span><br><span class="line">Date:   Sat Aug 5 20:38:36 2017 +0800</span><br><span class="line"></span><br><span class="line">    [dev  branch] add -dev2- in test.txt</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>切换到test分支增加test3 和test4：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line">Administrator@CeaserWang MINGW64 /e/Study/git_rebase (test)</span><br><span class="line">$ cat test.txt</span><br><span class="line">master1</span><br><span class="line">dev1</span><br><span class="line">dev2</span><br><span class="line"></span><br><span class="line">Administrator@CeaserWang MINGW64 /e/Study/git_rebase (test)</span><br><span class="line">$ echo &#x27;test3&#x27; &gt;&gt; test.txt</span><br><span class="line"></span><br><span class="line">Administrator@CeaserWang MINGW64 /e/Study/git_rebase (test)</span><br><span class="line">$ git add test.txt</span><br><span class="line">warning: LF will be replaced by CRLF in test.txt.</span><br><span class="line">The file will have its original line endings in your working directory.</span><br><span class="line"></span><br><span class="line">Administrator@CeaserWang MINGW64 /e/Study/git_rebase (test)</span><br><span class="line">$ git commit -m &#x27;[test branch] add -test3- in test.txt&#x27;</span><br><span class="line">[test 17794bd] [test branch] add -test3- in test.txt</span><br><span class="line"> 1 file changed, 1 insertion(+)</span><br><span class="line"></span><br><span class="line">Administrator@CeaserWang MINGW64 /e/Study/git_rebase (test)</span><br><span class="line">$ echo &#x27;test4&#x27; &gt;&gt; test.txt</span><br><span class="line"></span><br><span class="line">Administrator@CeaserWang MINGW64 /e/Study/git_rebase (test)</span><br><span class="line">$ git add test.txt</span><br><span class="line">warning: LF will be replaced by CRLF in test.txt.</span><br><span class="line">The file will have its original line endings in your working directory.</span><br><span class="line"></span><br><span class="line">Administrator@CeaserWang MINGW64 /e/Study/git_rebase (test)</span><br><span class="line">$ git commit -m &#x27;[test branch] add -test4- in test.txt&#x27;</span><br><span class="line">[test d5a085e] [test branch] add -test4- in test.txt</span><br><span class="line"> 1 file changed, 1 insertion(+)</span><br><span class="line"></span><br><span class="line">Administrator@CeaserWang MINGW64 /e/Study/git_rebase (test)</span><br><span class="line">$ git log -3</span><br><span class="line">commit d5a085e27b6f25f354c3292078d0069a3605eeaa (HEAD -&gt; test)</span><br><span class="line">Author: ceaser &lt;ceaserwang@outlook.com&gt;</span><br><span class="line">Date:   Sat Aug 5 21:12:56 2017 +0800</span><br><span class="line"></span><br><span class="line">    [test branch] add -test4- in test.txt</span><br><span class="line"></span><br><span class="line">commit 17794bda63b337577ad0da88826c28ef2b17ba67</span><br><span class="line">Author: ceaser &lt;ceaserwang@outlook.com&gt;</span><br><span class="line">Date:   Sat Aug 5 21:12:43 2017 +0800</span><br><span class="line"></span><br><span class="line">    [test branch] add -test3- in test.txt</span><br><span class="line"></span><br><span class="line">commit f28df0d2c6fcb11d34e7551d5bb9b337aa46b259</span><br><span class="line">Author: ceaser &lt;ceaserwang@outlook.com&gt;</span><br><span class="line">Date:   Sat Aug 5 20:38:36 2017 +0800</span><br><span class="line"></span><br><span class="line">    [dev  branch] add -dev2- in test.txt</span><br><span class="line">Administrator@CeaserWang MINGW64 /e/Study/git_rebase (test)</span><br><span class="line">$ cat test.txt</span><br><span class="line">master1</span><br><span class="line">dev1</span><br><span class="line">dev2</span><br><span class="line">test3</span><br><span class="line">test4</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>test分支下执行git rebase dev:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">Administrator@CeaserWang MINGW64 /e/Study/git_rebase (test)</span><br><span class="line">$ git rebase dev</span><br><span class="line">First, rewinding head to replay your work on top of it...</span><br><span class="line">Applying: [test branch] add -test3- in test.txt</span><br><span class="line">error: Failed to merge in the changes.</span><br><span class="line">Using index info to reconstruct a base tree...</span><br><span class="line">M       test.txt</span><br><span class="line">Falling back to patching base and 3-way merge...</span><br><span class="line">Auto-merging test.txt</span><br><span class="line">CONFLICT (content): Merge conflict in test.txt</span><br><span class="line">Patch failed at 0001 [test branch] add -test3- in test.txt</span><br><span class="line">The copy of the patch that failed is found in: .git/rebase-apply/patch</span><br><span class="line"></span><br><span class="line">When you have resolved this problem, run &quot;git rebase --continue&quot;.</span><br><span class="line">If you prefer to skip this patch, run &quot;git rebase --skip&quot; instead.</span><br><span class="line">To check out the original branch and stop rebasing, run &quot;git rebase --abort&quot;.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Administrator@CeaserWang MINGW64 /e/Study/git_rebase (test|REBASE 1/2)</span><br><span class="line">$ cat test.txt</span><br><span class="line">master1</span><br><span class="line">dev1</span><br><span class="line">dev2</span><br><span class="line">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</span><br><span class="line">dev3</span><br><span class="line">dev4</span><br><span class="line">=======</span><br><span class="line">test3</span><br><span class="line">&gt;&gt;&gt;&gt;&gt;&gt;&gt; [test branch] add -test3- in test.txt</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>此时出现的冲突我们先保留test3：<br>vi test.txt 删除456行：<br><img src="20170805211736486.png" alt="这里写图片描述"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ cat test.txt</span><br><span class="line">master1</span><br><span class="line">dev1</span><br><span class="line">dev2</span><br><span class="line">test3</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>执行git rebase –continue</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Administrator@CeaserWang MINGW64 /e/Study/git_rebase (test|REBASE 1/2)</span><br><span class="line">$ git add test.txt</span><br><span class="line"></span><br><span class="line">Administrator@CeaserWang MINGW64 /e/Study/git_rebase (test|REBASE 1/2)</span><br><span class="line">$ git rebase --continue</span><br><span class="line">Applying: [test branch] add -test3- in test.txt</span><br><span class="line">Applying: [test branch] add -test4- in test.txt</span><br><span class="line"></span><br><span class="line">Administrator@CeaserWang MINGW64 /e/Study/git_rebase (test) //回到test</span><br><span class="line">$</span><br></pre></td></tr></table></figure>
+<p>执行之后出现：<br>Applying: [test branch] add -test3- in test.txt<br>Applying: [test branch] add -test4- in test.txt<br>我们保留了test3的提交，test4就是比test3多了一次提交，直接就成功了。</p>
+<p>查看文件只保留了test的提交：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$  cat test.txt</span><br><span class="line">master1</span><br><span class="line">dev1</span><br><span class="line">dev2</span><br><span class="line">test3</span><br><span class="line">test4</span><br></pre></td></tr></table></figure>
+<p>test的日志：<br><img src="20170805212448530.png" alt="这里写图片描述"></p>
+<p>如果我们在dev分支执行merge test会执行fast forward：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Administrator@CeaserWang MINGW64 /e/Study/git_rebase (test)</span><br><span class="line">$ git checkout dev</span><br><span class="line">Switched to branch &#x27;dev&#x27;</span><br><span class="line"></span><br><span class="line">Administrator@CeaserWang MINGW64 /e/Study/git_rebase (dev)</span><br><span class="line">$ git merge test</span><br><span class="line">Updating 3d74c2e..9dcfcec</span><br><span class="line">Fast-forward</span><br><span class="line"> test.txt | 4 ++--</span><br><span class="line"> 1 file changed, 2 insertions(+), 2 deletions(-)</span><br></pre></td></tr></table></figure>
+<p>我们用gitk看一下提交历史：<br>他的整个提交历史是一条直线<br><img src="20170805213018895.png" alt="这里写图片描述"><br>总的来说rebase的操作是将分叉的情况形成一条直线，但是会修改git的提交历史。</p>
+<p>将test的提交应用到dev：<br>1、git checkout test<br>2、git rebase dev 以dev为基准将test的提交进行回放，挨个的应用到dev上去，然后test的那些提交就会废弃。<br>等价于git merge dev</p>
+<p>git merge 和git rebase区别：<br>merge不会修改提交历史，rebase会修改提交历史。<br>rebase只应用于本地没有提交的代码，如果应用到已经提交到远程的分支不要应用，不然会非常的麻烦，get merge可以应用于远程分支。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>CeaserWang
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://ceaser.wang/2018/10/04/git-%E5%8D%81%E4%B8%83-git-rebase-%E5%AE%9E%E6%88%98/" title="git(十七) git rebase 实战">https://ceaser.wang/2018/10/04/git-十七-git-rebase-实战/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/git/" rel="tag"><i class="fa fa-tag"></i> git</a>
+              <a href="/tags/rebase/" rel="tag"><i class="fa fa-tag"></i> rebase</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2018/10/04/git-%E5%8D%81%E5%85%AD-git-rebase-%E5%8E%9F%E7%90%86%E6%B7%B1%E5%BA%A6%E5%89%96%E6%9E%90/" rel="prev" title="git(十六) git rebase 原理深度剖析">
+                  <i class="fa fa-chevron-left"></i> git(十六) git rebase 原理深度剖析
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E4%B8%80-EventLoopGroup/" rel="next" title="netty源码分析(一)EventLoopGroup">
+                  netty源码分析(一)EventLoopGroup <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CeaserWang</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":"forest","js":{"url":"https://cdn.jsdelivr.net/npm/mermaid@8.11.0/dist/mermaid.min.js","integrity":"sha256-sVAx+v/Q7v0Q2xm5vN7h5ccSna6gaLREhG9sF8pKT6I="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+  <script class="next-config" data-name="nprogress" type="application/json">{"enable":true,"spinner":true}</script>
+  <script src="/js/third-party/nprogress.js"></script>
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"ryAR9bttS7fex1FPEPAylmmJ-gzGzoHsz","app_key":"dYqygoN4Y01Bl38OdRoCHUYn","server_url":null,"security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+
+</body>
+</html>

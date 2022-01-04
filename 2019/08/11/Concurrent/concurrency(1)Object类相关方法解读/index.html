@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.css" integrity="sha256-no0c5ccDODBwp+9hSmV5VvPpKwHCpbVzXHexIkupM6U=" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.js" integrity="sha256-a5YRB27CcBwBFcT5EF/f3E4vzIqyHrSR878nseNYw64=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ceaser.wang","root":"/","images":"/images","scheme":"Muse","version":"8.6.1","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+<meta name="description" content="Object类的并发相关方法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="concurrency(1)Object类相关方法解读">
+<meta property="og:url" content="https://ceaser.wang/2019/08/11/Concurrent/concurrency(1)Object%E7%B1%BB%E7%9B%B8%E5%85%B3%E6%96%B9%E6%B3%95%E8%A7%A3%E8%AF%BB/index.html">
+<meta property="og:site_name" content="南贺神社">
+<meta property="og:description" content="Object类的并发相关方法">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-08-11T14:05:45.000Z">
+<meta property="article:modified_time" content="2022-01-04T02:21:30.548Z">
+<meta property="article:author" content="CeaserWang">
+<meta property="article:tag" content="Object 并发">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://ceaser.wang/2019/08/11/Concurrent/concurrency(1)Object%E7%B1%BB%E7%9B%B8%E5%85%B3%E6%96%B9%E6%B3%95%E8%A7%A3%E8%AF%BB/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://ceaser.wang/2019/08/11/Concurrent/concurrency(1)Object%E7%B1%BB%E7%9B%B8%E5%85%B3%E6%96%B9%E6%B3%95%E8%A7%A3%E8%AF%BB/","path":"2019/08/11/Concurrent/concurrency(1)Object类相关方法解读/","title":"concurrency(1)Object类相关方法解读"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>concurrency(1)Object类相关方法解读 | 南贺神社</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">南贺神社</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">你写程序有写诗一样的感觉吗?</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">205</span></a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">24</span></a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">212</span></a></li>
+        <li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Object%E7%B1%BB%E7%9A%84%E5%B9%B6%E5%8F%91%E7%9B%B8%E5%85%B3%E6%96%B9%E6%B3%95"><span class="nav-number">1.</span> <span class="nav-text">Object类的并发相关方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#wait-%E6%96%B9%E6%B3%95"><span class="nav-number">1.1.</span> <span class="nav-text">wait()方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#public-final-native-void-wait-long-timeout-throws-InterruptedException"><span class="nav-number">1.2.</span> <span class="nav-text">public final native void wait(long timeout) throws InterruptedException;</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%AA%8C%E8%AF%81wait%E6%96%B9%E6%B3%95%E5%BF%85%E9%A1%BB%E8%8E%B7%E5%8F%96%E9%94%81"><span class="nav-number">1.2.1.</span> <span class="nav-text">验证wait方法必须获取锁</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Object-wait-%E5%92%8CThread-sleep-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">1.3.</span> <span class="nav-text">Object.wait()和Thread.sleep()的区别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%9A%E8%BF%87%E5%AD%97%E8%8A%82%E7%A0%81%E8%A7%82%E5%AF%9F"><span class="nav-number">1.4.</span> <span class="nav-text">通过字节码观察</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#public-final-void-wait-long-timeout-throws-InterruptedException"><span class="nav-number">1.5.</span> <span class="nav-text">public final void wait(long timeout) throws InterruptedException</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#public-final-void-wait-long-timeout-int-nanos"><span class="nav-number">1.6.</span> <span class="nav-text">public final void wait(long timeout, int nanos)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#notify-%E6%96%B9%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">notify()方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#notifyAll"><span class="nav-number">3.</span> <span class="nav-text">notifyAll</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E8%B7%B5"><span class="nav-number">5.</span> <span class="nav-text">实践</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89%E4%B8%80%E4%B8%AA%E5%AF%B9%E8%B1%A1%EF%BC%8C%E7%AE%A1%E7%90%86%E9%94%81%E7%9A%84%E8%8E%B7%E5%8F%96%E5%92%8C%E9%87%8A%E6%94%BE%EF%BC%8C%E4%BB%A5%E5%8F%8A%E5%8A%A0%E5%87%8F%E8%AE%A1%E6%95%B0"><span class="nav-number">5.1.</span> <span class="nav-text">定义一个对象，管理锁的获取和释放，以及加减计数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8A%A0%E4%B8%80%E8%AE%A1%E6%95%B0%E5%99%A8"><span class="nav-number">5.2.</span> <span class="nav-text">加一计数器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%87%8F%E4%B8%80%E8%AE%A1%E6%95%B0%E5%99%A8"><span class="nav-number">5.3.</span> <span class="nav-text">减一计数器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8%E6%96%B9%E6%B3%95"><span class="nav-number">5.4.</span> <span class="nav-text">启动方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%94%9F%E4%BA%A7%E5%92%8C%E6%B6%88%E8%B4%B9"><span class="nav-number">5.5.</span> <span class="nav-text">多线程生产和消费</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-overview">
+            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="CeaserWang"
+      src="/../0xcc/index/Uchiha.jpg">
+  <p class="site-author-name" itemprop="name">CeaserWang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">212</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">205</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tLzExNTY3MjE4NzQ=" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;1156721874"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmNlYXNlcndhbmdAb3V0bG9vay5jb20=" title="E-Mail → mailto:ceaserwang@outlook.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+  </div>
+  <div class="cc-license site-overview-item animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><img src="https://cdn.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-user-friends fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly90d29kcmFnb25sYWtlLmNvbQ==" title="https:&#x2F;&#x2F;twodragonlake.com">TwoDragonLake</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9yb290Y2x1c3Rlci5naXRodWIuaW8=" title="https:&#x2F;&#x2F;rootcluster.github.io">RootCluster</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9tdXNlZmxvdy5pbw==" title="https:&#x2F;&#x2F;museflow.io">MuseFlow</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9pbmNvZGVyLm9yZw==" title="https:&#x2F;&#x2F;incoder.org">BladeCode</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9rYWlmYS5kZXY=" title="https:&#x2F;&#x2F;kaifa.dev">Alyenc</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmRhemhpZGF5b25nLmNu" title="https:&#x2F;&#x2F;blog.dazhidayong.cn">Killua</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9qb2NlbHluc2hhbmcuY24v" title="https:&#x2F;&#x2F;jocelynshang.cn&#x2F;">Jocelyn</span>
+        </li>
+    </ul>
+  </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2019/08/11/Concurrent/concurrency(1)Object%E7%B1%BB%E7%9B%B8%E5%85%B3%E6%96%B9%E6%B3%95%E8%A7%A3%E8%AF%BB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
+      <meta itemprop="name" content="CeaserWang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="南贺神社">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          concurrency(1)Object类相关方法解读
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2019-08-11 14:05:45" itemprop="dateCreated datePublished" datetime="2019-08-11T14:05:45+00:00">2019-08-11</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2022-01-04 02:21:30" itemprop="dateModified" datetime="2022-01-04T02:21:30+00:00">2022-01-04</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/concurrency/" itemprop="url" rel="index"><span itemprop="name">concurrency</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2019/08/11/Concurrent/concurrency(1)Object%E7%B1%BB%E7%9B%B8%E5%85%B3%E6%96%B9%E6%B3%95%E8%A7%A3%E8%AF%BB/" class="post-meta-item leancloud_visitors" data-flag-title="concurrency(1)Object类相关方法解读" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h3 id="Object类的并发相关方法"><a href="#Object类的并发相关方法" class="headerlink" title="Object类的并发相关方法"></a>Object类的并发相关方法</h3><span id="more"></span>
+<p>-Object</p>
+<ul>
+<li>clone</li>
+<li>equals(Object)</li>
+<li>finalize</li>
+<li>getClass</li>
+<li>hashCode</li>
+<li>notify            *</li>
+<li>notifyAll         *</li>
+<li>registerNatives</li>
+<li>toString</li>
+<li>wait              *</li>
+<li>wait(long)        *</li>
+<li>wait(long,int)    *</li>
+</ul>
+<h4 id="wait-方法"><a href="#wait-方法" class="headerlink" title="wait()方法"></a>wait()方法</h4><h4 id="public-final-native-void-wait-long-timeout-throws-InterruptedException"><a href="#public-final-native-void-wait-long-timeout-throws-InterruptedException" class="headerlink" title="public final native void wait(long timeout) throws InterruptedException;"></a>public final native void wait(long timeout) throws InterruptedException;</h4><p>Causes the current thread to wait until another thread invokes the notify() method or the notifyAll() method for this object. In other words, this method behaves exactly as if it simply performs the call wait(0).<br>The current thread must own this object’s monitor. The thread releases ownership of this monitor and waits until another thread notifies threads waiting on this object’s monitor to wake up either through a call to the notify method or the notifyAll method. The thread then waits until it can re-obtain ownership of the monitor and resumes execution.<br>As in the one argument version, interrupts and spurious wakeups are possible, and this method should always be used in a loop:<br>           synchronized (obj) {<br>               while (<condition does not hold>)<br>                   obj.wait();<br>               … // Perform action appropriate to condition<br>           }</p>
+<p>This method should only be called by a thread that is the owner of this object’s monitor. See the notify method for a description of the ways in which a thread can become the owner of a monitor.</p>
+<p>Throws:<br>IllegalMonitorStateException – if the current thread is not the owner of the object’s monitor.<br>InterruptedException – if any thread interrupted the current thread before or while the current thread was waiting for a notification. The interrupted status of the current thread is cleared when this exception is thrown.<br>See Also:<br>notify(), notifyAll()</p>
+<p>wait()方法会让当前线程等待，直到其他线程调用了Object的notify()或者notifyAll()方法。<br>换句话说，这个方法和执行wait(0)的效果是一样的。</p>
+<p>当前线程必须要拥有对象(Object对象)的监视器(锁)，当调用了wait()方法的时候会释放锁的拥有权，然后进入等待，直到拥有这把锁的其他线程调用了这个对象的锁的notify或者notifyAll方法才会被唤醒，线程进入等待，直到可以重新获取锁的拥有权，并且回复执行。<br>对于单参数的版本来说，中断和虚假的唤醒是可能发生的，这个方法会用于一个循环当中：<br>synchronized (obj) {<br>    while (<condition does not hold>)<br>        obj.wait();<br>    … // Perform action appropriate to condition<br>}<br>wait放只能被拥有当前对象锁的线程去执行，请参看notify方法的描述一个线程怎么获取到一把锁。</p>
+<h5 id="验证wait方法必须获取锁"><a href="#验证wait方法必须获取锁" class="headerlink" title="验证wait方法必须获取锁"></a>验证wait方法必须获取锁</h5><p>编写代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public class MyTest1 &#123;</span><br><span class="line">    public static void main(String[] args) throws InterruptedException &#123;</span><br><span class="line">        Object object = new Object();</span><br><span class="line">        object.wait();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>抛出异常：<br>Exception in thread “main” java.lang.IllegalMonitorStateException<br>    at java.lang.Object.wait(Native Method)<br>    at java.lang.Object.wait(Object.java:502)<br>    at com.twodragonlake.concurrency1.MyTest1.main(MyTest1.java:13)</p>
+<p>如果我们先获取锁：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public static void main(String[] args) throws InterruptedException &#123;</span><br><span class="line">    Object object = new Object();</span><br><span class="line">    synchronized (object)&#123;</span><br><span class="line">        object.wait();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样不会出现异常。</p>
+<h4 id="Object-wait-和Thread-sleep-的区别"><a href="#Object-wait-和Thread-sleep-的区别" class="headerlink" title="Object.wait()和Thread.sleep()的区别"></a>Object.wait()和Thread.sleep()的区别</h4><p>Thread的sleep()的doc：<br>Causes the currently executing thread to sleep (temporarily cease execution) for the specified number of milliseconds, subject to the precision and accuracy of system timers and schedulers. The thread does not lose ownership of any monitors.</p>
+<p>让当前线程睡眠用户指定的毫秒数，当前线程不会丢失锁的拥有权。</p>
+<p>而Object的wait方法调用之后会释放锁。</p>
+<h4 id="通过字节码观察"><a href="#通过字节码观察" class="headerlink" title="通过字节码观察"></a>通过字节码观察</h4><p>反编译测试类MyTest1<br>javap -c  com.twodragonlake.concurrency1.MyTest1</p>
+<p>找到main方法的反编译部分：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">public static void main(java.lang.String[]) throws java.lang.InterruptedException;</span><br><span class="line">  Code:</span><br><span class="line">     0: new           #2                  // class java/lang/Object</span><br><span class="line">     3: dup</span><br><span class="line">     4: invokespecial #1                  // Method java/lang/Object.&quot;&lt;init&gt;&quot;:()V</span><br><span class="line">     7: astore_1</span><br><span class="line">     8: aload_1</span><br><span class="line">     9: dup</span><br><span class="line">    10: astore_2</span><br><span class="line">    11: monitorenter                     //synchronized开始的时候，获取监视器</span><br><span class="line">    12: aload_1</span><br><span class="line">    13: invokevirtual #3                  // Method java/lang/Object.wait:()V</span><br><span class="line">    16: aload_2</span><br><span class="line">    17: monitorexit</span><br><span class="line">    18: goto          26</span><br><span class="line">    21: astore_3</span><br><span class="line">    22: aload_2</span><br><span class="line">    23: monitorexit                      //监视器的退出。</span><br><span class="line">    24: aload_3</span><br><span class="line">    25: athrow</span><br><span class="line">    26: return</span><br><span class="line">  Exception table:</span><br><span class="line">     from    to  target type</span><br><span class="line">        12    18    21   any</span><br><span class="line">        21    24    21   any</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="public-final-void-wait-long-timeout-throws-InterruptedException"><a href="#public-final-void-wait-long-timeout-throws-InterruptedException" class="headerlink" title="public final void wait(long timeout) throws InterruptedException"></a>public final void wait(long timeout) throws InterruptedException</h4><p>doc：</p>
+<p>Causes the current thread to wait until either another thread invokes the notify() method or the notifyAll() method for this object, or a specified amount of time has elapsed.<br>The current thread must own this object’s monitor.<br>This method causes the current thread (call it T) to place itself in the wait set for this object and then to relinquish(放弃) any and all synchronization claims on this object. Thread T becomes disabled for thread scheduling purposes and lies dormant until one of four things happens:<br>Some other thread invokes the notify method for this object and thread T happens to be arbitrarily chosen as the thread to be awakened(唤醒).<br>Some other thread invokes the notifyAll method for this object.<br>Some other thread interrupts thread T.<br>The specified amount of real time has elapsed, more or less. If timeout is zero, however, then real time is not taken into consideration and the thread simply waits until notified.<br>The thread T is then removed from the wait set for this object and re-enabled for thread scheduling. It then competes in the usual manner with other threads for the right to synchronize on the object; once it has gained control of the object, all its synchronization claims on the object are restored to the status quo ante - that is, to the situation as of the time that the wait method was invoked. Thread T then returns from the invocation of the wait method. Thus, on return from the wait method, the synchronization state of the object and of thread T is exactly as it was when the wait method was invoked.<br>A thread can also wake up without being notified, interrupted, or timing out, a so-called spurious wakeup. While this will rarely occur in practice, applications must guard against it by testing for the condition that should have caused the thread to be awakened, and continuing to wait if the condition is not satisfied. In other words, waits should always occur in loops, like this one:<br>           synchronized (obj) {<br>               while (<condition does not hold>)<br>                   obj.wait(timeout);<br>               … // Perform action appropriate to condition<br>           }</p>
+<p>(For more information on this topic, see Section 3.2.3 in Doug Lea’s “Concurrent Programming in Java (Second Edition)” (Addison-Wesley, 2000), or Item 50 in Joshua Bloch’s “Effective Java Programming Language Guide” (Addison-Wesley, 2001).<br>If the current thread is interrupted by any thread before or while it is waiting, then an InterruptedException is thrown. This exception is not thrown until the lock status of this object has been restored as described above.<br>Note that the wait method, as it places the current thread into the wait set for this object, unlocks only this object; any other objects on which the current thread may be synchronized remain locked while the thread waits.<br>This method should only be called by a thread that is the owner of this object’s monitor. See the notify method for a description of the ways in which a thread can become the owner of a monitor.</p>
+<p>此方法会导致当前线程等待，直到其他线程调用object对象的notify或者notifyall方法，或者时间超时。<br>当前线程必须拥有obect对象的锁。<br>这个方法会导致当前线程将它自己放在一个object对象的等待集合当中，放弃对这个对象的同步声明，即放弃锁，这个线程无法进行线程调度，会进入休眠等待，直到下面的四件事情发生：</p>
+<ul>
+<li>其他线程调用了这个对象的notify方法，当前线程碰巧被选中成为被唤醒的线程。</li>
+<li>其他的额线程调用了对象的notifyall方法</li>
+<li>其他线程中断了当前线程。</li>
+<li>指定的时间超时，不过呢，如果timeout的值是0，实际上时间是不会考虑的，会一直等待。</li>
+</ul>
+<p>如果发生以上四件事情，当前线程就会从当前对象的等待队列移除，然后又可以进行线程的调度，会按照通常的方式和其他的线程进行竞争，竞争这个对象的同步控制权， 一旦获取了对象的控制权，所有对这个对象的同步声明都会恢复，恢复到wait方法曾经被调用的时候的状态。线程就会从wait方法调用当中返回， 这个时候对象和线程的状态和被调用wait方法的时候的状态是一模一样的。<br> 一个线程被唤醒也可以不通过notify，中断，或者超时，即一个虚假的唤醒，虽然在实际当中很少出现，但是应用也要做一些规避措施来避免线程被不正当的唤醒，即，wait应该总是发生在循环当中，就像如下：<br> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">synchronized (obj) &#123;</span><br><span class="line">    while (&lt;condition does not hold&gt;)</span><br><span class="line">        obj.wait(timeout);</span><br><span class="line">    ... // Perform action appropriate to condition</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>(更多的信息参考Doug Lea’sjava并发编程第二章节，或者Joshua Bloch’s的高效java 语言指南的50章节)</p>
+<p>如果当前线程在等待之前和等待过程之中被其他线程中断了，InterruptedException就会被抛出，异常会在对象的锁的状态已经恢复到之前描述的样子才会抛出，而不是立马抛出。</p>
+<p>这个wait方法会把当前的线程放到对象的等待集合当中，只会解锁这个对象，这个线程等待的其他锁所在的对象不会受到影响。</p>
+<p>这个方法应该被获取到对象锁的线程被调用，参考notify方法的介绍，了解对象怎么获取对象的锁。</p>
+<h4 id="public-final-void-wait-long-timeout-int-nanos"><a href="#public-final-void-wait-long-timeout-int-nanos" class="headerlink" title="public final void wait(long timeout, int nanos)"></a>public final void wait(long timeout, int nanos)</h4><p>nanos的范围是 0-999999.<br>会调用【public final void wait(long timeout) throws InterruptedException】</p>
+<h3 id="notify-方法"><a href="#notify-方法" class="headerlink" title="notify()方法"></a>notify()方法</h3><p>doc：<br>Wakes up a single thread that is waiting on this object’s monitor. If any threads are waiting on this object, one of them is chosen to be awakened. The choice is arbitrary and occurs at the discretion of the implementation. A thread waits on an object’s monitor by calling one of the wait methods.<br>The awakened thread will not be able to proceed until the current thread relinquishes the lock on this object. The awakened thread will compete in the usual manner with any other threads that might be actively competing to synchronize on this object; for example, the awakened thread enjoys no reliable privilege or disadvantage in being the next thread to lock this object.<br>This method should only be called by a thread that is the owner of this object’s monitor. A thread becomes the owner of the object’s monitor in one of three ways:<br>By executing a synchronized instance method of that object.<br>By executing the body of a synchronized statement that synchronizes on the object.<br>For objects of type Class, by executing a synchronized static method of that class.<br>Only one thread at a time can own an object’s monitor.</p>
+<p>唤醒等待在对象锁上的一个线程。<br>如果有多个等在在对象锁上，选择一个被唤醒。选择的随意性和慎重行根据不同的实现而不同。一个线程会通过调用对象的wait去等待。<br>被唤醒的线程是无法被执行的，除非它获取了正在执行的线程放弃的对象锁。被唤醒的线程会按照通常的方式和其他的线程进行竞争， 竞争对这个对象的同步权（谁拿到了锁 ，谁就有控制权），比如一个没有权限的或者没有缺陷的线程都有可能成为获取锁的线程。</p>
+<p>这个方法只能被获取了对象锁的线程所调用，一个线程获取锁的方式有如下三种方式：</p>
+<ul>
+<li>执行对象的synchronized的方法获取锁。</li>
+<li>执行对象当中synchronized代码块获取锁。</li>
+<li>对于class类型的对象，调用class的静态的synchronized方法获取锁。</li>
+</ul>
+<p>在某一时刻只有一个线程才持有对象的锁。</p>
+<h3 id="notifyAll"><a href="#notifyAll" class="headerlink" title="notifyAll"></a>notifyAll</h3><p>Wakes up all threads that are waiting on this object’s monitor. A thread waits on an object’s monitor by calling one of the wait methods.<br>The awakened threads will not be able to proceed until the current thread relinquishes the lock on this object. The awakened threads will compete in the usual manner with any other threads that might be actively competing to synchronize on this object; for example, the awakened threads enjoy no reliable privilege or disadvantage in being the next thread to lock this object.<br>This method should only be called by a thread that is the owner of this object’s monitor. See the notify method for a description of the ways in which a thread can become the owner of a monitor.</p>
+<p>唤醒所有等待在对象锁的所有线程，每个线程都是一个等在对象的锁上，通过调用对象的wait方法。<br>被释放的线程不能被继续处理，知道当前的线程释放了锁才可以。被唤醒的线程就会一种通常的方式和其他线程进行锁的竞争，比如，一个没有权限没有缺陷的线程都有可能成为获取到锁的线程。<br>这个方法只能被持有锁的线程调用，请参见notify方法描述一个线程是怎么成为锁的持有者。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ul>
+<li>但我们调用wait方法时，首先需要确保调用wait方法的线程已经持有了对象的锁。</li>
+<li>当调用wait后，该线程就会释放掉这个对象的锁，然后进入等待状态（wait set）。</li>
+<li>当线程调用了wait后进入等待状态时，他就可以等待其他线程调用相同对象的notify或notifyall方法使得自己被唤醒。</li>
+<li>一旦这个线程被其他线程唤醒后，该线程就会与其他线程一同开始竞争这个对象的锁（公平锁），只有当该线程获取到了对象的锁后，线程才会继续执行。</li>
+<li>调用wait方法的代码片段需要放在一个synchronized块或是synchronized方法中，，这样才可以确保线程在调用wait方法前已经获取了对象的锁。</li>
+<li>当调用对象的notify方法时，它会随机唤醒该对象等待集合（wait set）中的任意一个线程，当某个线程被唤醒后，它就会与其他线程一同竞争对象的锁。</li>
+<li>当调用对象的notifyall方法时，它会唤醒该对象等待集合（wait set）中的所有线程，这些线程被唤醒后，又会开始竞争对象的锁。</li>
+<li>在某一时刻，只有唯一一个线程可以拥有对象的锁。</li>
+</ul>
+<h3 id="实践"><a href="#实践" class="headerlink" title="实践"></a>实践</h3><p>编写一个多线程程序，实现这样一个目标：<br>1、存在一个对象，该对象有一个int类型的成员变量counter，该成员变量的初始值为0.<br>2、创建2个线程，其中一个线程对你该对象的成员变量counter增1，另一个线程对该对象的成员变量减一。<br>3、输出该对象成员变量counter每次变化后的值。<br>4、最终输出的结果应为：10101010101010.</p>
+<h4 id="定义一个对象，管理锁的获取和释放，以及加减计数"><a href="#定义一个对象，管理锁的获取和释放，以及加减计数" class="headerlink" title="定义一个对象，管理锁的获取和释放，以及加减计数"></a>定义一个对象，管理锁的获取和释放，以及加减计数</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">public class MyObject &#123;</span><br><span class="line"></span><br><span class="line">    private int counter;</span><br><span class="line"></span><br><span class="line">    public  synchronized  void increase()&#123;</span><br><span class="line">        if(0 != this.counter)&#123;</span><br><span class="line">            try &#123;</span><br><span class="line">                wait();</span><br><span class="line">            &#125; catch (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        this.counter++;</span><br><span class="line">        System.out.println(this.counter);</span><br><span class="line">        notify();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public synchronized  void  decrease()&#123;</span><br><span class="line">        if(this.counter == 0)&#123;</span><br><span class="line">            try &#123;</span><br><span class="line">                wait();</span><br><span class="line">            &#125; catch (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        this.counter--;</span><br><span class="line">        System.out.println(this.counter);</span><br><span class="line">        notify();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="加一计数器"><a href="#加一计数器" class="headerlink" title="加一计数器"></a>加一计数器</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">public class IncreaseThread extends Thread &#123;</span><br><span class="line"></span><br><span class="line">    private MyObject myObject;</span><br><span class="line"></span><br><span class="line">    public  IncreaseThread(MyObject myObject)&#123;</span><br><span class="line">        this.myObject = myObject;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void run() &#123;</span><br><span class="line">        for(int i=0;i&lt;30;i++)&#123;</span><br><span class="line">            try &#123;</span><br><span class="line">                Thread.sleep((long)Math.random() *1000 );</span><br><span class="line">                myObject.increase();</span><br><span class="line">            &#125; catch (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="减一计数器"><a href="#减一计数器" class="headerlink" title="减一计数器"></a>减一计数器</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">public class DecreaseThread extends Thread &#123;</span><br><span class="line"></span><br><span class="line">    private MyObject myObject;</span><br><span class="line"></span><br><span class="line">    public DecreaseThread(MyObject myObject)&#123;</span><br><span class="line">        this.myObject  = myObject;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void run() &#123;</span><br><span class="line">        for(int i=0;i&lt;30;i++)&#123;</span><br><span class="line">            try &#123;</span><br><span class="line">                Thread.sleep((long)Math.random() *1000 );</span><br><span class="line">                myObject.decrease();</span><br><span class="line">            &#125; catch (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="启动方法"><a href="#启动方法" class="headerlink" title="启动方法"></a>启动方法</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public class Client &#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        MyObject myObject = new MyObject();</span><br><span class="line"></span><br><span class="line">        IncreaseThread increaseThread = new IncreaseThread(myObject);</span><br><span class="line">        DecreaseThread decreaseThread = new DecreaseThread(myObject);</span><br><span class="line"></span><br><span class="line">        increaseThread.start();</span><br><span class="line">        decreaseThread.start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>输出：<br>1<br>0<br>1<br>0<br>1<br>略</p>
+<h4 id="多线程生产和消费"><a href="#多线程生产和消费" class="headerlink" title="多线程生产和消费"></a>多线程生产和消费</h4><p>现在我们打算由多个加法线程和多个减法线程同时运行，那么结果会是怎样的呢？<br>修改main函数：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public class Client &#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        MyObject myObject = new MyObject();</span><br><span class="line"></span><br><span class="line">        IncreaseThread increaseThread = new IncreaseThread(myObject);</span><br><span class="line">        DecreaseThread decreaseThread = new DecreaseThread(myObject);</span><br><span class="line"></span><br><span class="line">        increaseThread.start();</span><br><span class="line">        decreaseThread.start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>输出：<br>1<br>0<br>1<br>0<br>-1<br>-2<br>-3<br>-4<br>-5<br>-6<br>略<br>明显可以看到和之前的输出不一样，造成的这样的输出的原因是什么？<br>原因：<br>MyObject的increase和decrease，加入有2个减法线程都同时阻塞在decrease的wait方法上（wait会释放锁 ），这个时候有一个减法线程被加法线程唤醒，然后其中一个减法线程从wait方法返回，继续往下执行，使得counter变为0，然后同时执行了notify，但是被唤醒的是另一个减法线程，这个减法线程也从wait阻塞中返回，继续往下执行，这个时候counter是0又被减了一次变为-1，这就是出现负数的原因。<br>即，调wait之前counter是一个值，但是wait返回之后，这个值可能已经变了，我们不能用if去判断counter的值，而应该用while循环，修改MyObject的加法和减法方法如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">public  synchronized  void increase()&#123;</span><br><span class="line">    while(0 != this.counter)&#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            wait();</span><br><span class="line">        &#125; catch (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    this.counter++;</span><br><span class="line">    System.out.println(this.counter);</span><br><span class="line">    notify();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public synchronized  void  decrease()&#123;</span><br><span class="line">    while (this.counter == 0)&#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            wait();</span><br><span class="line">        &#125; catch (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    this.counter--;</span><br><span class="line">    System.out.println(this.counter);</span><br><span class="line">    notify();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>输出：<br>1<br>0<br>1<br>0<br>1<br>0<br>略</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>CeaserWang
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://ceaser.wang/2019/08/11/Concurrent/concurrency(1)Object%E7%B1%BB%E7%9B%B8%E5%85%B3%E6%96%B9%E6%B3%95%E8%A7%A3%E8%AF%BB/" title="concurrency(1)Object类相关方法解读">https://ceaser.wang/2019/08/11/Concurrent/concurrency(1)Object类相关方法解读/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Object-%E5%B9%B6%E5%8F%91/" rel="tag"><i class="fa fa-tag"></i> Object 并发</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/08/10/spring_boot_and_cloud/spring_boot_cloud(11)Spring_Boot%E5%AF%B9%E4%BA%8ESpring_MVC%E7%9A%84%E6%95%B4%E5%90%88%E5%8E%9F%E7%90%86%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90/" rel="prev" title="spring_boot_cloud(11)Spring_Boot对于Spring_MVC的整合原理深度解析">
+                  <i class="fa fa-chevron-left"></i> spring_boot_cloud(11)Spring_Boot对于Spring_MVC的整合原理深度解析
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/08/21/Concurrent/concurrency(2)synchronized%E5%85%B3%E9%94%AE%E5%AD%97%E8%AF%A6%E8%A7%A3/" rel="next" title="concurrency(2)synchronized关键字详解">
+                  concurrency(2)synchronized关键字详解 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CeaserWang</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":"forest","js":{"url":"https://cdn.jsdelivr.net/npm/mermaid@8.11.0/dist/mermaid.min.js","integrity":"sha256-sVAx+v/Q7v0Q2xm5vN7h5ccSna6gaLREhG9sF8pKT6I="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+  <script class="next-config" data-name="nprogress" type="application/json">{"enable":true,"spinner":true}</script>
+  <script src="/js/third-party/nprogress.js"></script>
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"ryAR9bttS7fex1FPEPAylmmJ-gzGzoHsz","app_key":"dYqygoN4Y01Bl38OdRoCHUYn","server_url":null,"security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+
+</body>
+</html>

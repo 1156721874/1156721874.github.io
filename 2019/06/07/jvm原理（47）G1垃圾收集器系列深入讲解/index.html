@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.css" integrity="sha256-no0c5ccDODBwp+9hSmV5VvPpKwHCpbVzXHexIkupM6U=" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.js" integrity="sha256-a5YRB27CcBwBFcT5EF/f3E4vzIqyHrSR878nseNYw64=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ceaser.wang","root":"/","images":"/images","scheme":"Muse","version":"8.6.1","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+<meta name="description" content="G1Garage First Collector">
+<meta property="og:type" content="article">
+<meta property="og:title" content="jvm原理（47）G1垃圾收集器系列深入讲解">
+<meta property="og:url" content="https://ceaser.wang/2019/06/07/jvm%E5%8E%9F%E7%90%86%EF%BC%8847%EF%BC%89G1%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8%E7%B3%BB%E5%88%97%E6%B7%B1%E5%85%A5%E8%AE%B2%E8%A7%A3/index.html">
+<meta property="og:site_name" content="南贺神社">
+<meta property="og:description" content="G1Garage First Collector">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://ceaser.wang/2019/06/07/jvm%E5%8E%9F%E7%90%86%EF%BC%8847%EF%BC%89G1%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8%E7%B3%BB%E5%88%97%E6%B7%B1%E5%85%A5%E8%AE%B2%E8%A7%A3/jvm-construct.png">
+<meta property="og:image" content="https://ceaser.wang/2019/06/07/jvm%E5%8E%9F%E7%90%86%EF%BC%8847%EF%BC%89G1%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8%E7%B3%BB%E5%88%97%E6%B7%B1%E5%85%A5%E8%AE%B2%E8%A7%A3/jvm-men-construct.png">
+<meta property="og:image" content="https://ceaser.wang/2019/06/07/jvm%E5%8E%9F%E7%90%86%EF%BC%8847%EF%BC%89G1%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8%E7%B3%BB%E5%88%97%E6%B7%B1%E5%85%A5%E8%AE%B2%E8%A7%A3/jvm-g1-construct.png">
+<meta property="og:image" content="https://ceaser.wang/2019/06/07/jvm%E5%8E%9F%E7%90%86%EF%BC%8847%EF%BC%89G1%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8%E7%B3%BB%E5%88%97%E6%B7%B1%E5%85%A5%E8%AE%B2%E8%A7%A3/g1-Rset.png">
+<meta property="og:image" content="https://ceaser.wang/2019/06/07/jvm%E5%8E%9F%E7%90%86%EF%BC%8847%EF%BC%89G1%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8%E7%B3%BB%E5%88%97%E6%B7%B1%E5%85%A5%E8%AE%B2%E8%A7%A3/g1-params.png">
+<meta property="og:image" content="https://ceaser.wang/2019/06/07/jvm%E5%8E%9F%E7%90%86%EF%BC%8847%EF%BC%89G1%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8%E7%B3%BB%E5%88%97%E6%B7%B1%E5%85%A5%E8%AE%B2%E8%A7%A3/g1-Rset2.png">
+<meta property="og:image" content="https://ceaser.wang/2019/06/07/jvm%E5%8E%9F%E7%90%86%EF%BC%8847%EF%BC%89G1%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8%E7%B3%BB%E5%88%97%E6%B7%B1%E5%85%A5%E8%AE%B2%E8%A7%A3/three-color.png">
+<meta property="og:image" content="https://ceaser.wang/2019/06/07/jvm%E5%8E%9F%E7%90%86%EF%BC%8847%EF%BC%89G1%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8%E7%B3%BB%E5%88%97%E6%B7%B1%E5%85%A5%E8%AE%B2%E8%A7%A3/three-color1.png">
+<meta property="og:image" content="https://ceaser.wang/2019/06/07/jvm%E5%8E%9F%E7%90%86%EF%BC%8847%EF%BC%89G1%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8%E7%B3%BB%E5%88%97%E6%B7%B1%E5%85%A5%E8%AE%B2%E8%A7%A3/three-color2.png">
+<meta property="og:image" content="https://ceaser.wang/2019/06/07/jvm%E5%8E%9F%E7%90%86%EF%BC%8847%EF%BC%89G1%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8%E7%B3%BB%E5%88%97%E6%B7%B1%E5%85%A5%E8%AE%B2%E8%A7%A3/three-color3.png">
+<meta property="og:image" content="https://ceaser.wang/2019/06/07/jvm%E5%8E%9F%E7%90%86%EF%BC%8847%EF%BC%89G1%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8%E7%B3%BB%E5%88%97%E6%B7%B1%E5%85%A5%E8%AE%B2%E8%A7%A3/three-color4.png">
+<meta property="og:image" content="https://ceaser.wang/2019/06/07/jvm%E5%8E%9F%E7%90%86%EF%BC%8847%EF%BC%89G1%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8%E7%B3%BB%E5%88%97%E6%B7%B1%E5%85%A5%E8%AE%B2%E8%A7%A3/three-color5.png">
+<meta property="og:image" content="https://ceaser.wang/2019/06/07/jvm%E5%8E%9F%E7%90%86%EF%BC%8847%EF%BC%89G1%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8%E7%B3%BB%E5%88%97%E6%B7%B1%E5%85%A5%E8%AE%B2%E8%A7%A3/three-color6.png">
+<meta property="article:published_time" content="2019-06-07T08:55:13.000Z">
+<meta property="article:modified_time" content="2022-01-04T02:21:30.836Z">
+<meta property="article:author" content="CeaserWang">
+<meta property="article:tag" content="G1，G1垃圾收集器">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ceaser.wang/2019/06/07/jvm%E5%8E%9F%E7%90%86%EF%BC%8847%EF%BC%89G1%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8%E7%B3%BB%E5%88%97%E6%B7%B1%E5%85%A5%E8%AE%B2%E8%A7%A3/jvm-construct.png">
+
+
+<link rel="canonical" href="https://ceaser.wang/2019/06/07/jvm%E5%8E%9F%E7%90%86%EF%BC%8847%EF%BC%89G1%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8%E7%B3%BB%E5%88%97%E6%B7%B1%E5%85%A5%E8%AE%B2%E8%A7%A3/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://ceaser.wang/2019/06/07/jvm%E5%8E%9F%E7%90%86%EF%BC%8847%EF%BC%89G1%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8%E7%B3%BB%E5%88%97%E6%B7%B1%E5%85%A5%E8%AE%B2%E8%A7%A3/","path":"2019/06/07/jvm原理（47）G1垃圾收集器系列深入讲解/","title":"jvm原理（47）G1垃圾收集器系列深入讲解"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>jvm原理（47）G1垃圾收集器系列深入讲解 | 南贺神社</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">南贺神社</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">你写程序有写诗一样的感觉吗?</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">205</span></a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">24</span></a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">212</span></a></li>
+        <li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#G1"><span class="nav-number">1.</span> <span class="nav-text">G1</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%90%9E%E5%90%90%E9%87%8F"><span class="nav-number">1.1.</span> <span class="nav-text">吞吐量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%93%8D%E5%BA%94%E8%83%BD%E5%8A%9B"><span class="nav-number">1.2.</span> <span class="nav-text">响应能力</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Garage-First-Collector"><span class="nav-number">1.3.</span> <span class="nav-text">Garage First Collector</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#G1%E6%94%B6%E9%9B%86%E5%99%A8%E7%9A%84%E8%AE%BE%E8%AE%A1%E7%9B%AE%E6%A0%87"><span class="nav-number">1.4.</span> <span class="nav-text">G1收集器的设计目标</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#G1%E7%9A%84%E8%AE%BE%E8%AE%A1%E8%A7%84%E5%88%92%E6%98%AF%E8%A6%81%E6%9B%BF%E6%8D%A2%E6%8E%89cms"><span class="nav-number">1.5.</span> <span class="nav-text">G1的设计规划是要替换掉cms</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#HotPot%E8%99%9A%E6%8B%9F%E6%9C%BA%E4%B8%BB%E8%A6%81%E6%9E%84%E6%88%90"><span class="nav-number">1.6.</span> <span class="nav-text">HotPot虚拟机主要构成</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BC%A0%E7%BB%9F%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8%E5%A0%86%E7%BB%93%E6%9E%84"><span class="nav-number">1.7.</span> <span class="nav-text">传统垃圾收集器堆结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#G1%E6%94%B6%E9%9B%86%E5%99%A8%E5%A0%86%E7%BB%93%E6%9E%84"><span class="nav-number">1.8.</span> <span class="nav-text">G1收集器堆结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#G1-vs-CMS"><span class="nav-number">1.9.</span> <span class="nav-text">G1 vs CMS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#G1%E9%87%8D%E8%A6%81%E6%A6%82%E5%BF%B5"><span class="nav-number">1.10.</span> <span class="nav-text">G1重要概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#G1%E7%9B%B8%E5%AF%B9%E4%BA%8ECMS%E7%9A%84%E4%BC%98%E5%8A%BF"><span class="nav-number">1.11.</span> <span class="nav-text">G1相对于CMS的优势</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#G1%E7%9A%84%E9%80%82%E5%90%88%E5%9C%BA%E6%99%AF"><span class="nav-number">1.12.</span> <span class="nav-text">G1的适合场景</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#G1-GC%E6%A8%A1%E5%BC%8F"><span class="nav-number">1.13.</span> <span class="nav-text">G1 GC模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#gloabal-concurrent-marking"><span class="nav-number">1.14.</span> <span class="nav-text">gloabal concurrent marking</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#G1%E5%9C%A8%E8%BF%90%E8%A1%8C%E8%BF%87%E7%A8%8B%E4%B8%AD%E4%B8%BB%E8%A6%81%E6%A8%A1%E5%BC%8F"><span class="nav-number">1.15.</span> <span class="nav-text">G1在运行过程中主要模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Mixed-GC"><span class="nav-number">1.16.</span> <span class="nav-text">Mixed GC</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#G1-Oracle%E5%AE%98%E6%96%B9doc"><span class="nav-number">1.17.</span> <span class="nav-text">G1 Oracle官方doc</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#G1%E6%94%B6%E9%9B%86%E6%A6%82%E8%A7%88"><span class="nav-number">1.18.</span> <span class="nav-text">G1收集概览</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Humongous%E5%8C%BA%E5%9F%9F"><span class="nav-number">1.19.</span> <span class="nav-text">Humongous区域</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#G1-Young-GC"><span class="nav-number">1.20.</span> <span class="nav-text">G1 Young GC</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#G1-Young-GC-1"><span class="nav-number">1.21.</span> <span class="nav-text">G1 Young GC</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%86%8D%E8%B0%88Mised-GC"><span class="nav-number">1.22.</span> <span class="nav-text">再谈Mised GC</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%89%E8%89%B2%E6%A0%87%E8%AE%B0%E7%AE%97%E6%B3%95"><span class="nav-number">1.23.</span> <span class="nav-text">三色标记算法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%B8%89%E8%89%B2%E6%A0%87%E8%AE%B0%E7%AE%97%E6%B3%95-1"><span class="nav-number">1.23.1.</span> <span class="nav-text">三色标记算法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SATB"><span class="nav-number">2.</span> <span class="nav-text">SATB</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#G1%E6%B7%B7%E5%90%88%E5%BC%8F%E5%9B%9E%E6%94%B6"><span class="nav-number">3.</span> <span class="nav-text">G1混合式回收</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#G1%E7%9A%84%E5%88%86%E4%BB%A3%E7%AE%97%E6%B3%95"><span class="nav-number">4.</span> <span class="nav-text">G1的分代算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SATB%E8%AF%A6%E8%A7%A3"><span class="nav-number">5.</span> <span class="nav-text">SATB详解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%81%9C%E9%A1%BF%E9%A2%84%E6%B5%8B%E6%A8%A1%E5%9E%8B"><span class="nav-number">6.</span> <span class="nav-text">停顿预测模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#G1%E7%9A%84%E6%94%B6%E9%9B%86%E6%A8%A1%E5%BC%8F"><span class="nav-number">7.</span> <span class="nav-text">G1的收集模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#G1%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-number">8.</span> <span class="nav-text">G1最佳实践</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#G1%E5%AE%9E%E4%BE%8B%E8%AE%B2%E8%A7%A3"><span class="nav-number">9.</span> <span class="nav-text">G1实例讲解</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-overview">
+            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="CeaserWang"
+      src="/../0xcc/index/Uchiha.jpg">
+  <p class="site-author-name" itemprop="name">CeaserWang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">212</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">205</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tLzExNTY3MjE4NzQ=" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;1156721874"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmNlYXNlcndhbmdAb3V0bG9vay5jb20=" title="E-Mail → mailto:ceaserwang@outlook.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+  </div>
+  <div class="cc-license site-overview-item animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><img src="https://cdn.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-user-friends fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly90d29kcmFnb25sYWtlLmNvbQ==" title="https:&#x2F;&#x2F;twodragonlake.com">TwoDragonLake</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9yb290Y2x1c3Rlci5naXRodWIuaW8=" title="https:&#x2F;&#x2F;rootcluster.github.io">RootCluster</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9tdXNlZmxvdy5pbw==" title="https:&#x2F;&#x2F;museflow.io">MuseFlow</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9pbmNvZGVyLm9yZw==" title="https:&#x2F;&#x2F;incoder.org">BladeCode</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9rYWlmYS5kZXY=" title="https:&#x2F;&#x2F;kaifa.dev">Alyenc</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmRhemhpZGF5b25nLmNu" title="https:&#x2F;&#x2F;blog.dazhidayong.cn">Killua</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9qb2NlbHluc2hhbmcuY24v" title="https:&#x2F;&#x2F;jocelynshang.cn&#x2F;">Jocelyn</span>
+        </li>
+    </ul>
+  </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2019/06/07/jvm%E5%8E%9F%E7%90%86%EF%BC%8847%EF%BC%89G1%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8%E7%B3%BB%E5%88%97%E6%B7%B1%E5%85%A5%E8%AE%B2%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
+      <meta itemprop="name" content="CeaserWang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="南贺神社">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          jvm原理（47）G1垃圾收集器系列深入讲解
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2019-06-07 08:55:13" itemprop="dateCreated datePublished" datetime="2019-06-07T08:55:13+00:00">2019-06-07</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2022-01-04 02:21:30" itemprop="dateModified" datetime="2022-01-04T02:21:30+00:00">2022-01-04</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/jvm/" itemprop="url" rel="index"><span itemprop="name">jvm</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2019/06/07/jvm%E5%8E%9F%E7%90%86%EF%BC%8847%EF%BC%89G1%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8%E7%B3%BB%E5%88%97%E6%B7%B1%E5%85%A5%E8%AE%B2%E8%A7%A3/" class="post-meta-item leancloud_visitors" data-flag-title="jvm原理（47）G1垃圾收集器系列深入讲解" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h3 id="G1"><a href="#G1" class="headerlink" title="G1"></a>G1</h3><p>Garage First Collector</p>
+<span id="more"></span>
+
+<h4 id="吞吐量"><a href="#吞吐量" class="headerlink" title="吞吐量"></a>吞吐量</h4><ul>
+<li>吞吐量关注的是，在一个指定的时间内，最大化一个应用的工作量。</li>
+<li>如下方式衡量一个系统吞吐量的好坏；<ul>
+<li>在一小时内同一个事物（或者任务、请求）完成的次数（tps）</li>
+<li>数据库一小时可以完成多少次查询</li>
+</ul>
+</li>
+<li>对于关注吞吐量的系统，卡顿是可以接受的，因为这个系统关注长时间的大量任务的执行能力，，单词快速的响应并不值得考虑。</li>
+</ul>
+<h4 id="响应能力"><a href="#响应能力" class="headerlink" title="响应能力"></a>响应能力</h4><ul>
+<li>响应能力指一个程序或者系统对请求是否能够及时响应，比如：<ul>
+<li>一个桌面UI能对快地响应一个事件</li>
+<li>一个网站能够对快返回一个页面请求</li>
+<li>数据库能够多块返回查询数据</li>
+</ul>
+</li>
+<li>对于这类对响应能力敏感的场景，长时间的停顿是无法接受的。</li>
+</ul>
+<h4 id="Garage-First-Collector"><a href="#Garage-First-Collector" class="headerlink" title="Garage First Collector"></a>Garage First Collector</h4><ul>
+<li>g1收集器是一个面向服务端的垃圾收集器，，适用于多核处理器、大内存容量的服务器系统。</li>
+<li>他满足短时间gc停顿的同时达到一个较高的吞吐量。</li>
+<li>jdk7以上版本适用。</li>
+</ul>
+<h4 id="G1收集器的设计目标"><a href="#G1收集器的设计目标" class="headerlink" title="G1收集器的设计目标"></a>G1收集器的设计目标</h4><ul>
+<li>与应用线程同时工作，几乎不需要同时 stop the word（与cms类似）</li>
+<li>整理剩余空间，不产生内存碎片（cms只能在full gc时，用stop the world整理内存碎片）</li>
+<li>GC的停顿更加可控；</li>
+<li>不牺牲系统的吞吐量；</li>
+<li>gc不需要额外的内存空间（cms需要预留空间存储浮动垃圾）;</li>
+</ul>
+<p>ps：举例，老年代50G，新生代30G，使用cms收集器收集垃圾的时候，他会在std的时候把老年代的50G和新生代的30G全部清理；<br>但是G1收集器不会这样，g1收集器可以设置std的时间，即要求g1的std的时间是多少秒，然后g1会对内存区域进行评估，在设定的时间内完成最大空间的释放，只回收部分区域，并不会收集所有的空间。</p>
+<h4 id="G1的设计规划是要替换掉cms"><a href="#G1的设计规划是要替换掉cms" class="headerlink" title="G1的设计规划是要替换掉cms"></a>G1的设计规划是要替换掉cms</h4><ul>
+<li>G1在某些方面弥补了cms的不足，比如，cms使用的是mark-sweep算法，自然会产生内存碎片，然后g1基于copying算法，高效的整理剩余内存，而不需要管理内存碎片。</li>
+<li>另外，g1提供更多手段，以达到对gc停顿时间的可控。</li>
+</ul>
+<h4 id="HotPot虚拟机主要构成"><a href="#HotPot虚拟机主要构成" class="headerlink" title="HotPot虚拟机主要构成"></a>HotPot虚拟机主要构成</h4><p><img src="jvm-construct.png" alt="jvm-construct.png"></p>
+<h4 id="传统垃圾收集器堆结构"><a href="#传统垃圾收集器堆结构" class="headerlink" title="传统垃圾收集器堆结构"></a>传统垃圾收集器堆结构</h4><p><img src="jvm-men-construct.png" alt="jvm-men-construct.png"></p>
+<h4 id="G1收集器堆结构"><a href="#G1收集器堆结构" class="headerlink" title="G1收集器堆结构"></a>G1收集器堆结构</h4><p><img src="jvm-g1-construct.png" alt="jvm-g1-construct.png"></p>
+<p>图中的每个区域，比如O区域，在随着时间的推移和内存的使用，可能会被定义为E或者S区域。<br>但是这三种类型是固定的，也是为了延续之前老的内存结构的概念名字。</p>
+<ul>
+<li>heap被划分为一个个的相等的不连续的内存区域（regions），每个region都有一个分代角色，eden，survivor、old。</li>
+<li>对每个角色的数量并没有强制的限定，也就是说对于每种分代内存大小，可以动态变化。</li>
+<li>g1最大的特点就是高效的执行回收，优先去执行那些大量对象可回收的区域（region）</li>
+<li>G1使用了G1停顿可预测的模型，来满足用户设定的gc停顿时间，根据用户设定的目标时间，g1会自动化地选择那些region要清除，一次清除多少个region。</li>
+<li>g1从多个region中复制存活的对象，然后集中放入一个region中，同时整理，清除内存（copying收集算法）<br>比如对2个E进行回收，然后每个E都可能会有存活的对象，那么他们存活的对象就会移动到一个survivor区域，原有的2个E被置位空闲区域。4</li>
+</ul>
+<h4 id="G1-vs-CMS"><a href="#G1-vs-CMS" class="headerlink" title="G1 vs CMS"></a>G1 vs CMS</h4><ul>
+<li>对比使用mark-sweep的CMS，G1使用的copying算法不会造成内存碎片；</li>
+<li>对比Parallel Scavange（基于copying）、Parallel Old收集器（基于mark-compact-sweep），Parallel会对整个区域做整理导致 gc停顿时间会比较长，而g1只是特定地整理几个region。</li>
+<li>G1并不是一个实时的收集器，与parallel Scanvenge一样，对gc停顿时间的设置并不会绝对生效，只是g1有较高的几率保证不超过设定的gc停顿时间，与之前的gc收集器对比，g1会根据用户设定的gc停顿时间，智能评估那几个region需要被回收可以满足用户的设定。</li>
+</ul>
+<h4 id="G1重要概念"><a href="#G1重要概念" class="headerlink" title="G1重要概念"></a>G1重要概念</h4><ul>
+<li>分区（region）：g1采用不同的策略来解决并行，串行和cms收集器的碎片、暂定时间不可空等问题—–g1将整个堆分成相同大小的分区（region）</li>
+<li>每个分区都可能是年轻代也可能是老年代，但是在同一个时刻只能属于某个代。年轻代、幸存区、老年代这些概念还存在，成为逻辑上的概念，<br>这样方便复用之前分代框架的逻辑。</li>
+<li>在物理上不需要连续，则带来额外的好处———有的分区内垃圾对象特别多，有的分区垃圾对象很少，g1会优先回收垃圾对象特别多的分区，<br>这样可以花费较少的时间来回收这些分区的垃圾，这也就是g1名字的由来，即首先收集垃圾最多的分区。</li>
+<li>依然是在新生代满了的时候，对整个新生代进行回收———-整个新生代的对象，要么被回收，要么晋级，至于新生代也采取分区机制的原因，则是因为这样跟老年代的策略统一，方便调整整代的大小。</li>
+<li>g1还是一种带压缩的收集器，在回收老年代的分区时，是将存活的对象从一个分区拷贝到另一个分区，这个拷贝的过程就实现了局部的压缩。</li>
+<li>收集集合（CSet）：一组可被回收的分区的集合，在Cset中存活的数据会被GC过程中被移动到另一个可用分区，CSet中的分区可以来自eden空间、survivor空间、或者老年代。</li>
+<li>记忆集合（RSet）：RSet记录了其他Region中的对象引用本region中对象的关系，属于point-into结构（谁引用了我的对象）。RSet的价值在于使用垃圾收集器不需要扫描整个堆找到谁引用了当前分区中的对象，只需要扫描RSet即可。</li>
+<li>Region1和Region3中的对象引用了Region2中的对象，因此在Region2的Rset中记录了这两个引用。<br><img src="g1-Rset.png" alt="g1-Rset.png"></li>
+<li>G1 GC是在point-out的card table之上再加了一层结构来构成point-into Rset：每个region会记录下到底哪些别的region有指向自己的指针，而这些指针分别在哪些card的范围内。</li>
+<li>这个Rset其实是一个hash table，key是别的region的起始地址，value是一个集合，里面元素是card table的index。举例来说，如果region A的Rset里有一项的key是regionB，value里有index为1234的card，它的意思就是regionB的一个card里有引用指向region A。所以对regionA来说，该Rset记录的是point-into的关系；而card table仍然记录了point-out的关系。</li>
+<li>Snapshot-At-The-Begining（SATB）：<br>SATB是G1 GC在并发标记阶段使用的增量式的标记算法（存在浮动垃圾）。</li>
+<li>并发标记是并发多线程的，但并发线程在同一时刻只扫描一个分区。</li>
+</ul>
+<h4 id="G1相对于CMS的优势"><a href="#G1相对于CMS的优势" class="headerlink" title="G1相对于CMS的优势"></a>G1相对于CMS的优势</h4><ul>
+<li>G1在压缩空间方面有优势</li>
+<li>G1通过将内存空间分片成区域（Region）的方式避免内存碎片问题</li>
+<li>Eden、Survivor、Old区不在固定，在内存使用效率上来说更灵活。</li>
+<li>G1可以通过设置停顿时间（Pause Time）来控制垃圾收集时间，避免应用雪崩现象。</li>
+<li>G1在回收内存后会马上同时做合并空内存的工作，而CCMS默认是在STW的时候做。</li>
+<li>G1会在Young GC中使用，而CMS只能在O区使用。</li>
+</ul>
+<h4 id="G1的适合场景"><a href="#G1的适合场景" class="headerlink" title="G1的适合场景"></a>G1的适合场景</h4><ul>
+<li>服务端多核CPU，kvm内存占用较大的应用</li>
+<li>应用子啊运行过程中会产生大量内存碎片、需要经常压缩空间</li>
+<li>想要更可控、可预测的GC停顿周期：防止高并发下应用的雪崩现象。</li>
+</ul>
+<h4 id="G1-GC模式"><a href="#G1-GC模式" class="headerlink" title="G1 GC模式"></a>G1 GC模式</h4><ul>
+<li><p>G1提供了两种模式，Young GC和Mixed GC两种都是完全stop the world的</p>
+</li>
+<li><p>Young GC：选定所有年轻代里 的Region。通过控制年轻代的Region个数，即年轻代内存大小，来控制Young GC的时间开销。</p>
+</li>
+<li><p>Mixed GC：选定所有年轻代里的Region，外加根据Global concurent marking统计得出收集收益高的若干老年代Region。在用户指的开销<br>目标范围内尽可能选择收益高的老年代Region。</p>
+</li>
+<li><p>Mixed GC不是Full GC，它只能回收部分老年代的region，如果Mixed GC实在无法跟上程序分配内存的速度，导致老年代填满无法继续进行mixed GC，就会使用serial old GC（full Gc）来收集整个GC heap所以本质上，G1是不提供full gc的。</p>
+</li>
+</ul>
+<h4 id="gloabal-concurrent-marking"><a href="#gloabal-concurrent-marking" class="headerlink" title="gloabal concurrent marking"></a>gloabal concurrent marking</h4><ul>
+<li><p> gloabal concurrent marking的执行过程类似于cms，但是不同的是，在G1 GC中，它主要是为Mixed GC提供标记服务的，并不是一次GC的一个必要环节</p>
+</li>
+<li><p> gloabal concurrent marking的执行过程分为四个步骤。</p>
+</li>
+<li><p>初始标记（initial mark ,stw）：它标记了从GC root开始直接可达的对象</p>
+</li>
+<li><p>开发标记（Concurrent Marking）：这个阶段从GC root开始对heap中的对象进行标记，标记线程与应用程序线程并发执行，并且收集各个Region的存活对象信息。</p>
+</li>
+<li><p>重新标记（Remark ，Stw）：标记那些在并发标记阶段发生变化的对象，将被回收。</p>
+</li>
+<li><p>清理（cleanUp）：清除空Region（没有存活对象的），加入到free list。</p>
+</li>
+<li><p>第一阶段initial mark是共用了 Young GC的暂停，只是因为他们可以复用root scan操作，所以可以说gloabal concurrent marking是伴随<br>young Gc 而发生的。</p>
+</li>
+<li><p>第四阶段Cleanup只是回收了没有存活对象的Region，所以它并不需要STW。</p>
+</li>
+</ul>
+<h4 id="G1在运行过程中主要模式"><a href="#G1在运行过程中主要模式" class="headerlink" title="G1在运行过程中主要模式"></a>G1在运行过程中主要模式</h4><ul>
+<li>YGC（不同于CMS）</li>
+<li>并发阶段 (为混合阶段提供数据支持，对区域进行标记)</li>
+<li>混合阶段 （首先进行YGC，然后根据并发阶段标记出来的区域进行最优化回收）</li>
+<li>Full GC（一般是G1出现问题时发生，G1出现问题时发生）</li>
+<li>G1 YGC在Eden充满时触发，在回收后所有之前属于Eden的区块全部变成空白，即不属于任何一个分区（Eden、Survivor、old）</li>
+</ul>
+<h4 id="Mixed-GC"><a href="#Mixed-GC" class="headerlink" title="Mixed GC"></a>Mixed GC</h4><ul>
+<li><p>什么时候触发Mixed GC?</p>
+</li>
+<li><p>由一些参数控制，另外也控制着那些老年代Region会被选入CSet（收集集合）</p>
+</li>
+<li><p>G1HeapWastePercent：在global concurrent marking结束之后，我们可以知道old gen regions中有多少空间要被回收，在每次YGC之后和再次发生Mixed GC之前，会检查垃圾占比是否达到此参数，只要达到了，下次才会发生Mixed GC</p>
+</li>
+<li><p>G1MixedGCLiveThresholdPercent：old generation region中的存活对象的占比，只有在此参数之下，才会被选入Cset（活着的对象比较少，就是垃圾比较多，才会纳入收集集合）。</p>
+</li>
+<li><p>G1MixedGCCountTarget：一次global concurrent marking之后，最多执行mixed gc的次数。</p>
+</li>
+<li><p>G1OldCSetRegionThresoldPercent：一次mixed Gc中能被选入CSet的最多old generation region数量。</p>
+</li>
+<li><p>G1 GC其他的参数<br><img src="g1-params.png" alt="g1-params.png"></p>
+</li>
+</ul>
+<h4 id="G1-Oracle官方doc"><a href="#G1-Oracle官方doc" class="headerlink" title="G1 Oracle官方doc"></a>G1 Oracle官方doc</h4><p><span class="exturl" data-url="aHR0cHM6Ly93d3cub3JhY2xlLmNvbS90ZWNobmV0d29yay90dXRvcmlhbHMvdHV0b3JpYWxzLTE4NzY1NzQuaHRtbA==">https://www.oracle.com/technetwork/tutorials/tutorials-1876574.html<i class="fa fa-external-link-alt"></i></span></p>
+<h4 id="G1收集概览"><a href="#G1收集概览" class="headerlink" title="G1收集概览"></a>G1收集概览</h4><ul>
+<li>G1算法将 堆划分为若干个区域（region）。它仍然是属于分代收集器，不过，这些区域的一部分包含新生代，新生代的垃圾收集器依然采用暂停所有应用线程的方式，将存活对象拷贝到老年代或者Survivor空间。老年代也分成很多区域，G1收集器通过将对象从一个区域复制到另外一个区域，完成清理工作。这就意味着，在正常的处理过程中，G1完成了堆压缩（至少是部分堆的压缩），这样也就不会有cms内存碎片的问题的存在了。</li>
+</ul>
+<h4 id="Humongous区域"><a href="#Humongous区域" class="headerlink" title="Humongous区域"></a>Humongous区域</h4><ul>
+<li>在G1中，还有一种特殊的区域，叫 Humongous区域。如果一个对象占用的空间达到或是超过了分区容量50%以上，G1收集器就会认为是一个巨型对象。这些巨型对象，默认直接会被分配在老年代，但是如果它是一个短暂存在的巨型对象，就会垃圾收集器造成负面影响。为了解决这个问题，G1划分了一个 Humongous区，它用来专门存放巨型对象，如果一个H区装不下一个巨型对象，那么G1会寻找连续的H区来存储。为了能找打连续的H区，有时候不得不启动Full GC</li>
+</ul>
+<h4 id="G1-Young-GC"><a href="#G1-Young-GC" class="headerlink" title="G1 Young GC"></a>G1 Young GC</h4><ul>
+<li><p> Young GC 主要是对Eden区进行GC，，它在Eden空间耗尽时会被触发。这种情况下，Eden空间的数据移动到Survivor空间中，如果Survivor空间不够，Eden空间的部分数据会直接晋升到老年代空间。survivor区的数据移动到新的Survivor区中，也有部分数据晋升到老年代空间中。最终Eden空间的数据为空，GC完成工作，应用线程继续执行（ Young GC 会STW）。</p>
+</li>
+<li><p>如果仅仅GC回收新生代对象，我们如何找到所有的根对象呢？老年代的所有对象都是根么？那这样扫描下来会耗费大量的时间。于是，G1引进了Rset的概念。它的全称是Remembered SET，作用是跟踪指向某个heap区内的对象引用。<br><img src="g1-Rset2.png" alt="g1-Rset2.png"></p>
+</li>
+<li><p>在CMS中，也有Rset的概念，在老年代中有一块区域用来记录指向新生代的引用。这是一种point-out，在进行Young GC时，扫描根时，仅仅需要扫描这一块区域，，而不需要扫描整个老年代。</p>
+</li>
+<li><p>但是G1中，并没有使用point-out，这是由于一个分区太小，分区数量太多，如果是用point-out的话，会造成大量的扫描浪费，有些根本不需要GC的分区引用也扫描了。</p>
+</li>
+<li><p>于是G1中使用point-in来解决，point-in的意思是那些分区引用了当前分区中的对象。这样，仅仅将这些对象当做根来扫描就避免了无效的扫描。</p>
+</li>
+<li><p>由于新生代有多个，那么我们需要在新生代之间记录引用吗？这是不必要的，原因在于每次GC时，所有新生代都会被扫描，所以只需要记录老年代到新生代之间的引用即可。</p>
+</li>
+<li><p>需要注意的是，如果引用的对象很多，赋值器需要对每个引用处理，赋值器开销很很大，为了解决赋值器开销这个问题，在G1中又引入另外一个概念，卡表（Card Table）。一个Card Table将一个分区在逻辑上划分为固定大小的连续区域，每个区域称为卡。卡通通常较小，介于128到512字节之间。card table通常为字节数组，由card的索引（即，数组下标）来标示每个分区的空间地址</p>
+</li>
+<li><p>默认情况下，每个卡都未被引用，当一个地址空间被引用时，这个地址空间对应的数组索引的值被标记为0，即标记为脏被引用，此外RSet也将这个数组下标记录下来，一般情况下，这个RSet其实是一个Hash Table，Key是别的Region的起始地址，Value是一个集合，里面的元素是Card Tabella的Index。</p>
+<h4 id="G1-Young-GC-1"><a href="#G1-Young-GC-1" class="headerlink" title="G1 Young GC"></a>G1 Young GC</h4></li>
+<li><p>阶段1：根扫描</p>
+<ul>
+<li>静态和本地对象被扫描</li>
+</ul>
+</li>
+<li><p>阶段2：更新RS</p>
+<ul>
+<li>处理dirty card队列更新RS</li>
+</ul>
+</li>
+<li><p>阶段3：处理RS</p>
+<ul>
+<li>检测从年轻代指向老年代的对象</li>
+</ul>
+</li>
+<li><p>阶段4：对象拷贝</p>
+<ul>
+<li>拷贝存活的对象到survivor/old区域</li>
+</ul>
+</li>
+<li><p>阶段5：处理引用队列</p>
+<ul>
+<li>软引用，弱引用，虚引用处理</li>
+</ul>
+</li>
+</ul>
+<h4 id="再谈Mised-GC"><a href="#再谈Mised-GC" class="headerlink" title="再谈Mised GC"></a>再谈Mised GC</h4><ul>
+<li>mixed GC不仅进行正常的新生代垃圾收集，同时也回收部分后台扫描线程标记的老年代分区。</li>
+<li>它的GC步骤分为2步：<ul>
+<li>全局的并发标记(gloabal concurrrent marking)</li>
+<li>拷贝存活对象(evacuation)</li>
+</ul>
+</li>
+<li>在G1中，gloabal concurrrent marking主要的是为mised gc提供标记服务，并不是一次过程gc过程的一个必要环节，blobal concurrent marking的执行过程分为四个步骤。</li>
+</ul>
+<h4 id="三色标记算法"><a href="#三色标记算法" class="headerlink" title="三色标记算法"></a>三色标记算法</h4><ul>
+<li>提到并发标记算法，我们不得不了解并发标记的三色标记算法。它是描述追踪式回收的一种有效的方法，利用它可以推演回收器的正确性。</li>
+</ul>
+<h5 id="三色标记算法-1"><a href="#三色标记算法-1" class="headerlink" title="三色标记算法"></a>三色标记算法</h5><ul>
+<li>我们将对象分成三种类型：<ul>
+<li>黑色：根对象，或者该对象与它的子对象都被扫描过（对象被标记了，且它的所有filed也被标记完了）</li>
+<li>灰色：对象本身被扫描，但还没有扫描完该对象中的子对象（它的field还没有被标记或标记完）</li>
+<li>白色：未被扫描对象，扫描完成所有对象之后，最终为白色的为不可达对象，即垃圾对象（对象没有被标记到）</li>
+</ul>
+</li>
+</ul>
+<p><img src="three-color.png" alt="three-color.png"></p>
+<p><img src="three-color1.png" alt="three-color1.png"></p>
+<p><img src="three-color2.png" alt="three-color2.png"></p>
+<p>但是如果在标记过程中，应用程序也运行，那么对象的指针就有可能改变。这样的话，我们就会遇到一个问题：对象丢失问题。</p>
+<ul>
+<li>当垃圾收集器扫描到下面情况时<br><img src="three-color3.png" alt="three-color3.png"></li>
+<li>这时候应用程序执行了以下操作：<ul>
+<li>A.c = C</li>
+<li>B.c = null</li>
+</ul>
+</li>
+<li>这样，对象的状态图变成如下情形：<br><img src="three-color4.png" alt="three-color4.png"><br>这时候垃圾收集器再标记扫描的时候就会变成下图这样<br><img src="three-color5.png" alt="three-color5.png"><br>这个时候A和C是矛盾的，A是黑色的，意味着他自己和他下面的也扫描完了，这样C会被认为是垃圾，但是A指向了C，如果回收了C是严重的不对。</li>
+<li>很显然，此时C是白色，被认为是垃圾需要清理掉，显然这是不合理的，出现了漏标。</li>
+</ul>
+<h3 id="SATB"><a href="#SATB" class="headerlink" title="SATB"></a>SATB</h3><ul>
+<li><p>在G1中，使用的是STAB(Snapsshot-At-The-Beginning)的方式，删除的时候记录所有的对象</p>
+</li>
+<li><p>它有3个步骤</p>
+<ul>
+<li>在开始标记的时候生成一个快照图，标记存活对象</li>
+<li>在并发标记的时候所有被改变的对象入队(在write barrier里把所有旧的引用所指向的对象都变成非白色的)</li>
+<li>可能存在浮动垃圾，将在下次被收集</li>
+</ul>
+<p>按照这个步骤，上面的三张图（ABC的关系图）C会标记为灰色，这样就避免了C成为垃圾的命运，因为只有白色的才会被回收。</p>
+</li>
+</ul>
+<h3 id="G1混合式回收"><a href="#G1混合式回收" class="headerlink" title="G1混合式回收"></a>G1混合式回收</h3><ul>
+<li>G1到现在可以知道哪些老的分区可回收垃圾最多，当全局并发标记完成后，在某个时刻，就开始了Mixed GC。这些垃圾回收被称作“混合式”是因为他们不仅仅进行正常的新生代垃圾回收，同时也回收部分后台扫描线程标记的分区</li>
+<li>混合式GC也是采用的复制清理策略，当GC完成后，会重新释放空间。<h3 id="G1的分代算法"><a href="#G1的分代算法" class="headerlink" title="G1的分代算法"></a>G1的分代算法</h3></li>
+<li>为老年代设置分区的目的是老年代里有的分区垃圾多，有的分区垃圾少，这样在回收的时候可以专注于收集垃圾多的分区，这也是G1名称的由来。</li>
+<li>不过这个算法并不适合新生代垃圾收集，因为新生代的垃圾收集算法是复制算法，但是新生代也使用了分区机制主要是因为便于代大小的调整</li>
+</ul>
+<h3 id="SATB详解"><a href="#SATB详解" class="headerlink" title="SATB详解"></a>SATB详解</h3><ul>
+<li><p>SATB是维持并发GC的一种手段，G1并发的基础就是SATB。SATB可以理解成在GC开始之前对堆内内存里的对象做一次快照，此时活的对象就认为是活的，从而形成一个对象图。</p>
+</li>
+<li><p>在GC收集的时候，新生代的对象也认为是活的对象，除此之外其他不可达的对象都认为是垃圾对象。</p>
+</li>
+<li><p>如何找到在GC过程中分配的对象呢？每个region记录着两个top-at-mark-start(TAMS)指针，分别为preTAMS和nextTAMS。在TAMS以上的对象就是新分配的，因而被视为隐式marked。</p>
+</li>
+<li><p>通过这种方式我们就找到了在GC过程中新分配的对象，并把这些对象认为是活的对象。</p>
+</li>
+<li><p>解决了对象在GC过程中分配的问题，那么在GC过程中引发变化的问题怎么解决呢？</p>
+</li>
+<li><p>G1 给出的解决办法是通过Write Barrier。Write Barrier就是对引用字段进行赋值做了额外处理。通过Write Barrier就可以了解到那些引用对象发生了什么样的变化（简单的理解就是在对象赋值的时候将赋值的对象变为非白色的）。</p>
+</li>
+<li><p>mark的过程就是遍历heap标记live object的过程，采用的是三色标记算法，这三种颜色为write（表示还未访问到）、gray（访问到但是它用到的引用还没有完全扫描）、black（访问到而且其用到的引用已经完全扫描完）</p>
+</li>
+<li><p>整个三色标记算法就是从GC roots出发遍历heap，针对可达对象先标记whrite 为gray，然后再标记gray为black：遍历完成之后所有可达对象都是black的，所有white都是可以被回收的。</p>
+</li>
+<li><p>SATB仅仅对于在marking开始阶段进行snapshot（marked all reachable at mark start），但是concurrent的时候并发修改可能造成对象漏标记。</p>
+</li>
+<li><p>对black新引用了一个white对象，然后又从gray对象中删除了对该white对象的引用，这样会造成了该white对象漏标记</p>
+</li>
+<li><p>对black新引用了一个white对象，然后从gray对象删除了一个引用该white对象的white对象，这样也造成了该white对象漏标记</p>
+</li>
+<li><p>对black新引用了一个刚new出来的white对象，没有其他gray对象引用该white对象，这样也会造成了该white对象漏标记。</p>
+</li>
+<li><p>对于三色算法在concurrent的时候可能产生的漏标记问题，SATB的marking阶段中，对于从gray对象移除的目标引用对象标记为gray，对于black引用的新产生的对象标记为black；由于是在开始的时候进行snapshot，因而可能存在Floating Garbage</p>
+</li>
+<li><p>漏标与误标</p>
+<ul>
+<li>误标没什么关系，顶多造成浮动垃圾，在下次gc还是可以回收的，但是漏标的后果是致命的，把本应该存活的对象给回收了，从而影响的程序的正确性。</li>
+</ul>
+</li>
+<li><p>漏标情况只会发生在白色对象中，且满足以下任意一个条件</p>
+<ul>
+<li>并发标记时，应用线程给一个黑色对象的引用类型字段赋值了该白色对象（黑色对象意味着自己和孩子都被扫描了，而黑色下边挂白色的，白色会被认为是垃圾）</li>
+<li>并发标记时，应用线程删除所有灰色对象到该白色对象的引用（灰色的意味着孩子还没有被扫描，此时删除孩子的引用）。<br><img src="three-color6.png" alt="three-color6.png"><br>三个灰色对象都指向一个白色对象，此时删除三个灰色对象到白色对象的引用，此时我们可能认为W会被当做垃圾回收，但是存在一种情况是一个黑色对象也引用了白色对象，这样 就回到了第一种情况。</li>
+</ul>
+</li>
+<li><p>对于第一种情况，利用post-write- barrier，记录所有新增得引用关系，然后根据这些引用关系为根重新扫描一遍</p>
+</li>
+<li><p>对于第二种情况，利用pre-write barrier，将所有即将删除的引用关系的旧引用记录下来，最后以这些引用为根重新扫描一遍。</p>
+</li>
+</ul>
+<h3 id="停顿预测模型"><a href="#停顿预测模型" class="headerlink" title="停顿预测模型"></a>停顿预测模型</h3><ul>
+<li>G1收集器突出表现出来的一点是通过一个停顿预测模型根据用户配置的停顿时间来选择CSet的大小，从而达到用户期待的应用程序停顿时间。</li>
+<li>通过-XX：MaxGCPauseMillis参数来设置。这一点有点类似于ParallelScanvenge收集器。关于停顿时间的设置并不是越短越好。</li>
+<li>设置的时间越短意味着 每次收集的CSet越小，导致垃圾逐步积累变多，最终不得不退化成Serial GC；停顿时间设置的过长，那么会导致每次都会产生长时间的停顿，影响了程序对外的响应时间。</li>
+</ul>
+<h3 id="G1的收集模式"><a href="#G1的收集模式" class="headerlink" title="G1的收集模式"></a>G1的收集模式</h3><ul>
+<li><p>Young GC：收集年轻代里的Region+</p>
+</li>
+<li><p>Mixed gc :年轻代的所有Region + 全局并发标记阶段选出的收益高的Regionold（old Region）</p>
+</li>
+<li><p>无无论是Young GC还是Mixed GC都只是并发拷贝的阶段。</p>
+</li>
+<li><p>分代G1的模式下选择CSet有两种子模式，分别对应Young GC和Mixed GC</p>
+</li>
+<li><p>Young GC：CSet就是所有年轻代里面的Region</p>
+</li>
+<li><p>Mixed GC：CSet是所有年轻代里的Region加上全局并发标记阶段标记出来的收益高的Region</p>
+</li>
+<li><p>G1的运行过程是这样的：会在Young GC和Mixed GC之间不断地切换运行，同时定期地做全局并发标记，在实在赶不上对象创建速度的情况下使用Full GC（Serial GC）</p>
+</li>
+<li><p>初始标记是在YoungGC上执行的，在进行全局并发标记的时候不会做Mixed GC，在做Mixed GC的时候也不会启动初始标记阶段。</p>
+</li>
+<li><p>当Mixed GC赶不上对象创建产生的速度的时候就会退化成Full GC，这一点需要重点调优的地方。</p>
+</li>
+</ul>
+<h3 id="G1最佳实践"><a href="#G1最佳实践" class="headerlink" title="G1最佳实践"></a>G1最佳实践</h3><ul>
+<li><p>不断调优暂停实践指标</p>
+<ul>
+<li>通过-XX：MaxGCPauseMillis=x可以设置启动应用程序暂停的时间，G1在运行的时候根据这个参数选择CSet来满足响应时间的设置。一般情况下这个值设置到100ms或者200ms都是可以的（不同情况会不一样），但如果设置成50ms就不太合理。暂停时间设置的太短，就会导致出现G1跟不上垃圾产生的速度，最终退化成full GC，所以对这个参数的调优是一个持续的过程，逐步调整到最佳状态。</li>
+</ul>
+</li>
+<li><p>不要设置新生代和老年代的大小</p>
+<ul>
+<li>G1收集器再运行的时候会调整新生代和老年代的大小，通过改变代的大小来调整对象晋升的速度以及晋升年龄，从而达到我们为收集器设置的暂停时间目标</li>
+<li>设置了新生代大小相当于放弃了G1为我们做的自动调优，我们需要做的只是设置整个堆内存的大小，剩下的交给G1自己去分配各个代的大小即可。</li>
+</ul>
+</li>
+<li><p>关注Evacuation Failure</p>
+<ul>
+<li>Evacuation Failure 类似于CMS里面的晋升失败，堆空间的垃圾太多导致无法完成Region之间的拷贝，于是不得不退化成Ful GC来做一次全局范围内的垃圾收集。</li>
+</ul>
+</li>
+</ul>
+<h3 id="G1实例讲解"><a href="#G1实例讲解" class="headerlink" title="G1实例讲解"></a>G1实例讲解</h3><p>  编写程序：<br>  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line">-verbose:gc</span><br><span class="line">-Xms10m</span><br><span class="line">-Xmx10m</span><br><span class="line">-XX:+UseG1GC</span><br><span class="line">-XX:+PrintGCDetails</span><br><span class="line">-XX:+PrintGCDateStamps</span><br><span class="line">-XX:MaxGCPauseMillis=200m</span><br><span class="line">*/</span><br><span class="line">public class MyTest &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        int size = 1024 * 1024;</span><br><span class="line">        byte[] myAlloc1 = new byte[size];</span><br><span class="line">        byte[] myAlloc2 = new byte[size];</span><br><span class="line">        byte[] myAlloc3 = new byte[size];</span><br><span class="line">        byte[] myAlloc4 = new byte[size];</span><br><span class="line">        System.out.println(&quot;hello world&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></p>
+<p>  运行结果：<br>  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line">2019-07-21T09:56:58.080+0800: [GC pause (G1 Humongous Allocation) (young) (initial-mark), 0.0022068 secs]</span><br><span class="line">【解释】：</span><br><span class="line">Humongous大对象空间的申请，因为我们创建了一个1M大小的字节数组。</span><br><span class="line">同时开始一次young GC，young GC会有一次初始标记。</span><br><span class="line">   [Parallel Time: 1.4 ms, GC Workers: 8]</span><br><span class="line">   【解释】：</span><br><span class="line">   并发时间是1.4 ms，一共有8个线程执行</span><br><span class="line">      [GC Worker Start (ms): Min: 293.7, Avg: 293.8, Max: 294.1, Diff: 0.4]</span><br><span class="line">      [Ext Root Scanning (ms): Min: 0.2, Avg: 0.7, Max: 1.3, Diff: 1.1, Sum: 5.9]</span><br><span class="line">      [Update RS (ms): Min: 0.0, Avg: 0.0, Max: 0.0, Diff: 0.0, Sum: 0.0]</span><br><span class="line">         [Processed Buffers: Min: 0, Avg: 0.0, Max: 0, Diff: 0, Sum: 0]</span><br><span class="line">      [Scan RS (ms): Min: 0.0, Avg: 0.0, Max: 0.0, Diff: 0.0, Sum: 0.0]</span><br><span class="line">      [Code Root Scanning (ms): Min: 0.0, Avg: 0.0, Max: 0.0, Diff: 0.0, Sum: 0.0]</span><br><span class="line">      [Object Copy (ms): Min: 0.0, Avg: 0.3, Max: 0.7, Diff: 0.7, Sum: 2.7]</span><br><span class="line">      [Termination (ms): Min: 0.0, Avg: 0.0, Max: 0.1, Diff: 0.1, Sum: 0.4]</span><br><span class="line">         [Termination Attempts: Min: 1, Avg: 4.5, Max: 9, Diff: 8, Sum: 36]</span><br><span class="line">      【解释】：</span><br><span class="line">      以上五个步骤对应之前的young GC理论;</span><br><span class="line">      - 阶段1：根扫描</span><br><span class="line">        - 静态和本地对象被扫描</span><br><span class="line">      - 阶段2：更新RS</span><br><span class="line">        - 处理dirty card队列更新RS</span><br><span class="line">      - 阶段3：处理RS</span><br><span class="line">        - 检测从年轻代指向老年代的对象</span><br><span class="line">      - 阶段4：对象拷贝</span><br><span class="line">        - 拷贝存活的对象到survivor/old区域</span><br><span class="line">      - 阶段5：处理引用队列</span><br><span class="line">        - 软引用，弱引用，虚引用处理        </span><br><span class="line"></span><br><span class="line">      [GC Worker Other (ms): Min: 0.0, Avg: 0.1, Max: 0.1, Diff: 0.1, Sum: 0.5]</span><br><span class="line">      [GC Worker Total (ms): Min: 1.0, Avg: 1.2, Max: 1.3, Diff: 0.4, Sum: 9.5]</span><br><span class="line">      [GC Worker End (ms): Min: 295.0, Avg: 295.0, Max: 295.0, Diff: 0.0]</span><br><span class="line">      【解释】：</span><br><span class="line">      GC线程在其他任务花费的时间，一些统计信息。</span><br><span class="line">   [Code Root Fixup: 0.0 ms]</span><br><span class="line">   [Code Root Purge: 0.0 ms]</span><br><span class="line">   [Clear CT: 0.2 ms]</span><br><span class="line">   【解释】：</span><br><span class="line">   CT：card table</span><br><span class="line">   [Other: 0.5 ms]</span><br><span class="line">      [Choose CSet: 0.0 ms]</span><br><span class="line">      【解释】：回收集合，选择那些回收集合</span><br><span class="line">      [Ref Proc: 0.2 ms]</span><br><span class="line">      【解释】：软引用，弱引用等花费的时间</span><br><span class="line">      [Ref Enq: 0.0 ms]</span><br><span class="line">      【解释】：引用的信息进入到队列当中</span><br><span class="line">      [Redirty Cards: 0.2 ms]</span><br><span class="line">      [Humongous Register: 0.0 ms]</span><br><span class="line">      [Humongous Reclaim: 0.0 ms]</span><br><span class="line">      [Free CSet: 0.0 ms]</span><br><span class="line">      【解释】：对回收集合进行释放，回收</span><br><span class="line">   [Eden: 3072.0K(4096.0K)-&gt;0.0B(2048.0K) Survivors: 0.0B-&gt;1024.0K Heap: 4291.8K(10.0M)-&gt;2900.1K(10.0M)]</span><br><span class="line">   【解释】：执行完young gc之后整个堆的一个状态；</span><br><span class="line">   Eden空间有原来的3072.0K变成了0，Survivors有原来的0变成了1024K，证明里边多了一个对象的大小，整个对象来自于eden，</span><br><span class="line">   Heap是堆的大小是10M，我们jvm参数指定的，释放完之后现在的大小是2900.1K</span><br><span class="line"> [Times: user=0.00 sys=0.00, real=0.00 secs]</span><br><span class="line">2019-07-21T09:56:58.083+0800: [GC concurrent-root-region-scan-start]</span><br><span class="line">2019-07-21T09:56:58.085+0800: [GC concurrent-root-region-scan-end, 0.0016524 secs]</span><br><span class="line">2019-07-21T09:56:58.085+0800: [GC concurrent-mark-start]</span><br><span class="line">【解释】：</span><br><span class="line">并发的一些处理，root scan的开始和结束</span><br><span class="line">并发标记的开始</span><br><span class="line">hello world</span><br><span class="line">2019-07-21T09:56:58.085+0800: [GC concurrent-mark-end, 0.0000945 secs]</span><br><span class="line">2019-07-21T09:56:58.085+0800: [GC remark 2019-07-21T09:56:58.085+0800: [Finalize Marking, 0.0002648 secs] 2019-07-21T09:56:58.085+0800: [GC ref-proc, 0.0004676 secs] 2019-07-21T09:56:58.086+0800: [Unloading, 0.0004559 secs], 0.0015282 secs]</span><br><span class="line"> [Times: user=0.00 sys=0.00, real=0.00 secs]</span><br><span class="line">2019-07-21T09:56:58.087+0800: [GC cleanup 5009K-&gt;5009K(10M), 0.0011514 secs]</span><br><span class="line"> [Times: user=0.00 sys=0.00, real=0.00 secs]</span><br><span class="line">Heap</span><br><span class="line"> garbage-first heap   total 10240K, used 4948K [0x00000000ff600000, 0x00000000ff700050, 0x0000000100000000)</span><br><span class="line">  region size 1024K, 2 young (2048K), 1 survivors (1024K)</span><br><span class="line"> Metaspace       used 3491K, capacity 4498K, committed 4864K, reserved 1056768K</span><br><span class="line">  class space    used 387K, capacity 390K, committed 512K, reserved 1048576K</span><br><span class="line">  【解释】：</span><br><span class="line">  G1收集器，堆大小10240K，已经使用4948K，region的大小是1024K，这个很重要，同时也说明了为什么会创建Humongous，因为1024K超出了region的一半的大小，2个young，有2个region是young，一个survivors是1024K，其他就是old区域。</span><br><span class="line">  Metaspace是元空间的一些情况。</span><br></pre></td></tr></table></figure></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>CeaserWang
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://ceaser.wang/2019/06/07/jvm%E5%8E%9F%E7%90%86%EF%BC%8847%EF%BC%89G1%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8%E7%B3%BB%E5%88%97%E6%B7%B1%E5%85%A5%E8%AE%B2%E8%A7%A3/" title="jvm原理（47）G1垃圾收集器系列深入讲解">https://ceaser.wang/2019/06/07/jvm原理（47）G1垃圾收集器系列深入讲解/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/G1%EF%BC%8CG1%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8/" rel="tag"><i class="fa fa-tag"></i> G1，G1垃圾收集器</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/05/19/spring_boot_and_cloud/spring_boot_cloud(1)%E5%BE%AE%E6%9C%8D%E5%8A%A1%E5%AE%8F%E8%A7%82%E6%8A%8A%E6%8E%A7%E4%B8%8E%E6%B7%B1%E5%85%A5%E5%89%96%E6%9E%90/" rel="prev" title="spring_boot_cloud(1)微服务宏观把控与深入剖析">
+                  <i class="fa fa-chevron-left"></i> spring_boot_cloud(1)微服务宏观把控与深入剖析
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/06/07/spring_boot_and_cloud/spring_boot_cloud(2)Spring_Boot%E6%89%93%E5%8C%85%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E6%B7%B1%E5%85%A5%E5%88%86%E6%9E%90%E6%BA%90%E7%A0%81%E8%AE%B2%E8%A7%A3/" rel="next" title="spring_boot_cloud(2)Spring_Boot打包文件结构深入分析源码讲解">
+                  spring_boot_cloud(2)Spring_Boot打包文件结构深入分析源码讲解 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CeaserWang</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":"forest","js":{"url":"https://cdn.jsdelivr.net/npm/mermaid@8.11.0/dist/mermaid.min.js","integrity":"sha256-sVAx+v/Q7v0Q2xm5vN7h5ccSna6gaLREhG9sF8pKT6I="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+  <script class="next-config" data-name="nprogress" type="application/json">{"enable":true,"spinner":true}</script>
+  <script src="/js/third-party/nprogress.js"></script>
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"ryAR9bttS7fex1FPEPAylmmJ-gzGzoHsz","app_key":"dYqygoN4Y01Bl38OdRoCHUYn","server_url":null,"security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+
+</body>
+</html>

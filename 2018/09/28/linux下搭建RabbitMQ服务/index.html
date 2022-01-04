@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.css" integrity="sha256-no0c5ccDODBwp+9hSmV5VvPpKwHCpbVzXHexIkupM6U=" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.js" integrity="sha256-a5YRB27CcBwBFcT5EF/f3E4vzIqyHrSR878nseNYw64=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ceaser.wang","root":"/","images":"/images","scheme":"Muse","version":"8.6.1","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+<meta name="description" content="引言你是否遇到过两个（多个）系统间需要通过定时任务来同步某些数据？你是否在为异构系统的不同进程间相互调用、通讯的问题而苦恼、挣扎？如果是，那么恭喜你，消息服务让你可以很轻松地解决这些问题。消息服务擅长于解决多系统、异构系统间的数据交换（消息通知&#x2F;通讯）问题，你也可以把它用于系统间服务的相互调用（RPC）。本文将要介绍的RabbitMQ就是当前最主流的消息中间件之一。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="linux下搭建RabbitMQ服务">
+<meta property="og:url" content="https://ceaser.wang/2018/09/28/linux%E4%B8%8B%E6%90%AD%E5%BB%BARabbitMQ%E6%9C%8D%E5%8A%A1/index.html">
+<meta property="og:site_name" content="南贺神社">
+<meta property="og:description" content="引言你是否遇到过两个（多个）系统间需要通过定时任务来同步某些数据？你是否在为异构系统的不同进程间相互调用、通讯的问题而苦恼、挣扎？如果是，那么恭喜你，消息服务让你可以很轻松地解决这些问题。消息服务擅长于解决多系统、异构系统间的数据交换（消息通知&#x2F;通讯）问题，你也可以把它用于系统间服务的相互调用（RPC）。本文将要介绍的RabbitMQ就是当前最主流的消息中间件之一。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://ceaser.wang/2018/09/28/linux%E4%B8%8B%E6%90%AD%E5%BB%BARabbitMQ%E6%9C%8D%E5%8A%A1/20160802101807942.png">
+<meta property="og:image" content="https://ceaser.wang/2018/09/28/linux%E4%B8%8B%E6%90%AD%E5%BB%BARabbitMQ%E6%9C%8D%E5%8A%A1/20160802101839630.png">
+<meta property="og:image" content="https://ceaser.wang/2018/09/28/linux%E4%B8%8B%E6%90%AD%E5%BB%BARabbitMQ%E6%9C%8D%E5%8A%A1/20160802101906459.png">
+<meta property="og:image" content="https://ceaser.wang/2018/09/28/linux%E4%B8%8B%E6%90%AD%E5%BB%BARabbitMQ%E6%9C%8D%E5%8A%A1/20160802101942194.png">
+<meta property="og:image" content="https://ceaser.wang/2018/09/28/linux%E4%B8%8B%E6%90%AD%E5%BB%BARabbitMQ%E6%9C%8D%E5%8A%A1/20160802102010282.png">
+<meta property="og:image" content="https://ceaser.wang/2018/09/28/linux%E4%B8%8B%E6%90%AD%E5%BB%BARabbitMQ%E6%9C%8D%E5%8A%A1/20160802102045118.png">
+<meta property="og:image" content="https://ceaser.wang/2018/09/28/linux%E4%B8%8B%E6%90%AD%E5%BB%BARabbitMQ%E6%9C%8D%E5%8A%A1/20160802102122048.png">
+<meta property="article:published_time" content="2018-09-28T21:55:04.000Z">
+<meta property="article:modified_time" content="2022-01-04T02:21:30.872Z">
+<meta property="article:author" content="CeaserWang">
+<meta property="article:tag" content="RabbitMQ linux">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ceaser.wang/2018/09/28/linux%E4%B8%8B%E6%90%AD%E5%BB%BARabbitMQ%E6%9C%8D%E5%8A%A1/20160802101807942.png">
+
+
+<link rel="canonical" href="https://ceaser.wang/2018/09/28/linux%E4%B8%8B%E6%90%AD%E5%BB%BARabbitMQ%E6%9C%8D%E5%8A%A1/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://ceaser.wang/2018/09/28/linux%E4%B8%8B%E6%90%AD%E5%BB%BARabbitMQ%E6%9C%8D%E5%8A%A1/","path":"2018/09/28/linux下搭建RabbitMQ服务/","title":"linux下搭建RabbitMQ服务"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>linux下搭建RabbitMQ服务 | 南贺神社</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">南贺神社</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">你写程序有写诗一样的感觉吗?</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">205</span></a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">24</span></a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">212</span></a></li>
+        <li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-overview">
+            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="CeaserWang"
+      src="/../0xcc/index/Uchiha.jpg">
+  <p class="site-author-name" itemprop="name">CeaserWang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">212</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">205</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tLzExNTY3MjE4NzQ=" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;1156721874"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmNlYXNlcndhbmdAb3V0bG9vay5jb20=" title="E-Mail → mailto:ceaserwang@outlook.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+  </div>
+  <div class="cc-license site-overview-item animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><img src="https://cdn.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-user-friends fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly90d29kcmFnb25sYWtlLmNvbQ==" title="https:&#x2F;&#x2F;twodragonlake.com">TwoDragonLake</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9yb290Y2x1c3Rlci5naXRodWIuaW8=" title="https:&#x2F;&#x2F;rootcluster.github.io">RootCluster</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9tdXNlZmxvdy5pbw==" title="https:&#x2F;&#x2F;museflow.io">MuseFlow</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9pbmNvZGVyLm9yZw==" title="https:&#x2F;&#x2F;incoder.org">BladeCode</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9rYWlmYS5kZXY=" title="https:&#x2F;&#x2F;kaifa.dev">Alyenc</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmRhemhpZGF5b25nLmNu" title="https:&#x2F;&#x2F;blog.dazhidayong.cn">Killua</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9qb2NlbHluc2hhbmcuY24v" title="https:&#x2F;&#x2F;jocelynshang.cn&#x2F;">Jocelyn</span>
+        </li>
+    </ul>
+  </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/09/28/linux%E4%B8%8B%E6%90%AD%E5%BB%BARabbitMQ%E6%9C%8D%E5%8A%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
+      <meta itemprop="name" content="CeaserWang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="南贺神社">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          linux下搭建RabbitMQ服务
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-09-28 21:55:04" itemprop="dateCreated datePublished" datetime="2018-09-28T21:55:04+00:00">2018-09-28</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2022-01-04 02:21:30" itemprop="dateModified" datetime="2022-01-04T02:21:30+00:00">2022-01-04</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/MQ/" itemprop="url" rel="index"><span itemprop="name">MQ</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2018/09/28/linux%E4%B8%8B%E6%90%AD%E5%BB%BARabbitMQ%E6%9C%8D%E5%8A%A1/" class="post-meta-item leancloud_visitors" data-flag-title="linux下搭建RabbitMQ服务" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p><strong>引言</strong><br>你是否遇到过两个（多个）系统间需要通过定时任务来同步某些数据？你是否在为异构系统的不同进程间相互调用、通讯的问题而苦恼、挣扎？如果是，那么恭喜你，消息服务让你可以很轻松地解决这些问题。<br>消息服务擅长于解决多系统、异构系统间的数据交换（消息通知/通讯）问题，你也可以把它用于系统间服务的相互调用（RPC）。本文将要介绍的RabbitMQ就是当前最主流的消息中间件之一。</p>
+<span id="more"></span>
+
+<p><strong>RabbitMQ简介</strong><br>AMQP，即Advanced Message Queuing Protocol，高级消息队列协议，是应用层协议的一个开放标准，为面向消息的中间件设计。消息中间件主要用于组件之间的解耦，消息的发送者无需知道消息使用者的存在，反之亦然。<br>AMQP的主要特征是面向消息、队列、路由（包括点对点和发布/订阅）、可靠性、安全。<br>RabbitMQ是一个开源的AMQP实现，服务器端用Erlang语言编写，支持多种客户端，如：Python、Ruby、.NET、Java、JMS、C、PHP、ActionScript、XMPP、STOMP等，支持AJAX。用于在分布式系统中存储转发消息，在易用性、扩展性、高可用性等方面表现不俗。<br>Rabbitmq试用业务范围：<br><strong>场景1：单发送单接收</strong><br>使用场景：简单的发送与接收，没有特别的处理。<br><strong>场景2：单发送多接收</strong><br>使用场景：一个发送端，多个接收端，如分布式的任务派发。为了保证消息发送的可靠性，不丢失消息，使消息持久化了。同时为了防止接收端在处理消息时down掉，只有在消息处理完成后才发送ack消息<br><strong>场景3：Publish/Subscribe</strong><br>使用场景：发布、订阅模式，发送端发送广播消息，多个接收端接收。<br><strong>场景4：Routing (按路线发送接收)</strong><br>使用场景：发送端按routing key发送消息，不同的接收端按不同的routing key接收消息。<br><strong>场景5：Topics (按topic发送接收)</strong><br>使用场景：发送端不只按固定的routing key发送消息，而是按字符串“匹配”发送，接收端同样如此。</p>
+<p>1:下载所需的tar.gz包<br> 1)ncurses-5.2.tar(它是一个可以使应用程序直接控制终端屏幕显示的库,在安装rabbitmq-server中会报错缺少这个库)<br> 2)simplejson-3.8.0.tar(它是 Python解析JSON的程序库。)<br> 3)otp_src_R15B01.tar(RabbitMQ是基于Erlang的，所以首先必须配置Erlang环境,otp_src_R15B01是提供该环境的包)<br> 4)rabbitmq-server-3.5.4.tar</p>
+<p>#########################搭建Erlang环境##############################<br> 2:登录到指定的一台linux服务器<br>   选择要创建一个文件夹，我选择的目录是(目录名称可随便)：<br>   /data/rabbitMQ<br><img src="20160802101807942.png" alt="这里写图片描述"><br>3：进入到该目录,做以下操作<br> cd  /data/rabbitMQ<br> tar xvzf otp_src_R15B01.tar.gz<br> cd otp_src_R15B01<br> ./configure</p>
+<p>最后一步执行完，可能会报一个错：<br> No curses library functions found(这是缺少ncurses-5.2.tar包)<br>把ncurses-5.2.tar放到指定路径，我这里放到的是/data/ncurses 下，最好和之前放同一个路径<br><img src="20160802101839630.png" alt="这里写图片描述"><br>执行以下操作：<br>tar zxvf ncurses-5.2.tar #解压缩并且释放 文件包<br>cd ncurses-5.2    #进入解压缩的目录（注意版本）<br>./configure #按照你的系统环境制作安装配置文件<br>make #编译源代码并且编译NCURSES库<br>su root #切换到root用户环境<br>make install #安装编译好的NCURSES库</p>
+<p>等操作完以上命令，在重新执行搭建Erlang环境的 ./configure 命令：<br>编译后的输出如下图<br><img src="20160802101906459.png" alt="这里写图片描述"><br> 提示没有wxWidgets和fop，但是问题不大。继续：<br> make<br> sudo make install</p>
+<p>如果没报错，说明已经安装完Erlang，开始安装RabbitMQ-Server。</p>
+<p>#########################搭建simplejson环境##############################<br>安装RabbitMQ-Server之前，必须先安装simplejson<br>主要参考官方文档：<span class="exturl" data-url="aHR0cDovL3d3dy5yYWJiaXRtcS5jb20vYnVpbGQtc2VydmVyLmh0bWw=">http://www.rabbitmq.com/build-server.html<i class="fa fa-external-link-alt"></i></span><br>需要安装simplejson。从此处下载最新的版本： <span class="exturl" data-url="aHR0cDovL3B5cGkucHl0aG9uLm9yZy9weXBpL3NpbXBsZWpzb24jZG93bmxvYWRz">http://pypi.python.org/pypi/simplejson#downloads<i class="fa fa-external-link-alt"></i></span> 。我下载的版本是 simplejson-3.8.0.tar.gz<br>安装这个很简单，执行以下3个步骤即可：<br>进入到该目录：<br><img src="20160802101942194.png" alt="这里写图片描述"><br>tar xvzf simplejson-3.8.0.tar.gz<br>cd simplejson-3.8.0<br>sudo python setup.py install</p>
+<p>#########################安装RabbitMQ Server环境##############################</p>
+<p>最后安装RabbitMQ Server。从此处下载源代码版本的RabbitMQ： <span class="exturl" data-url="aHR0cDovL3d3dy5yYWJiaXRtcS5jb20vc2VydmVyLmh0bWwlRTMlODAlODI=">http://www.rabbitmq.com/server.html。<i class="fa fa-external-link-alt"></i></span><br>我下载的版本是 rabbitmq-server-3.5.4.tar.gz</p>
+<p>进入该目录：<br><img src="20160802102010282.png" alt="这里写图片描述"><br>所需要的包<br>yum install xmlto</p>
+<p>tar xvzf rabbitmq-server-3.5.4.tar.gz<br> cd rabbitmq-server-3.5.4<br> make<br> TARGET_DIR=/usr/local SBIN_DIR=/usr/local/sbin MAN_DIR=/usr/local/man make install</p>
+<p>安装成功。</p>
+<p>运行<br>找到sbin/目录，默认目录在：/usr/local/sbin/下<br>运行程序：<br>rabbitmq-server –detached<br>停止程序：<br>rabbitmqctl stop</p>
+<p>安装管理插件<br>mkdir /etc/rabbitmq<br>cd /usr/local/sbin/<br>./rabbitmq-plugins enable rabbitmq_management</p>
+<p>./rabbitmq-server -detached</p>
+<p>重新启动RabbitMQ，输入<span class="exturl" data-url="aHR0cDovL3NlcnZlci1uYW1lOjE1NjcyLw==">http://server-name:15672<i class="fa fa-external-link-alt"></i></span> 就能够进入到监控页面。默认的用户名和密码是： guest 和 guest。<br>server-name:你指定的linux服务器ip，我的是10.1.100.67</p>
+<p>浏览器输入：<span class="exturl" data-url="aHR0cDovLzEwLjEuMTAwLjY3OjE1NjcyLw==">http://10.1.100.67:15672/<i class="fa fa-external-link-alt"></i></span> 则说明环境搭建成功<br><img src="20160802102045118.png" alt="这里写图片描述"><br>输入默认用户名和密码：guest ，提示登陆失败<br> 翻看官方的release文档后，得知由于账号guest具有所有的操作权限，并且又是默认账号，出于安全因素的考虑，guest用户只能通过localhost登陆使用，并建议修改guest用户的密码以及新建其他账号管理使用rabbitmq(该功能是在3.3.0版本引入的)。</p>
+<p>解决方法：<br>进入/data/rabbitMQ/rabbitmq-server/rabbitmq-server-3.5.4/ebin目录下rabbit.app中找到：loopback_users里的&lt;&lt;”guest”&gt;&gt;删除。<br> 并重启rabbitmq，则可以用guest账号登陆管理控制台。成功界面如下：<br><img src="20160802102122048.png" alt="这里写图片描述"></p>
+<pre><code>             Java 代码与spring集成
+</code></pre>
+<p>1：发送者配置文件：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span><br><span class="line">&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:context=&quot;http://www.springframework.org/schema/context&quot;</span><br><span class="line">	xmlns:rabbit=&quot;http://www.springframework.org/schema/rabbit&quot; xmlns:p=&quot;http://www.springframework.org/schema/p&quot; xmlns:c=&quot;http://www.springframework.org/schema/c&quot;</span><br><span class="line">	xsi:schemaLocation=&quot;</span><br><span class="line">		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd</span><br><span class="line">		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd</span><br><span class="line">		http://www.springframework.org/schema/rabbit http://www.springframework.org/schema/rabbit/spring-rabbit-1.3.xsd&quot;&gt;</span><br><span class="line"></span><br><span class="line">	&lt;!-- #################################################################### --&gt;</span><br><span class="line">	&lt;!-- # RabbitMQ 消息转换器 --&gt;</span><br><span class="line">	&lt;!-- #################################################################### --&gt;</span><br><span class="line">	&lt;bean id=&quot;rabbitMessageConverter&quot; class=&quot;org.springframework.amqp.support.converter.Jackson2JsonMessageConverter&quot;&gt;</span><br><span class="line">		&lt;property name=&quot;classMapper&quot;&gt;</span><br><span class="line">			&lt;bean class=&quot;org.springframework.amqp.support.converter.DefaultJackson2JavaTypeMapper&quot; /&gt;</span><br><span class="line">		&lt;/property&gt;</span><br><span class="line">	&lt;/bean&gt;</span><br><span class="line"></span><br><span class="line">	&lt;!-- #################################################################### --&gt;</span><br><span class="line">	&lt;!-- # RabbitMQ 异常处理程序 --&gt;</span><br><span class="line">	&lt;!-- #################################################################### --&gt;</span><br><span class="line">	&lt;bean id=&quot;logAndPropagateErrorHandler&quot; class=&quot;org.springframework.beans.factory.config.FieldRetrievingFactoryBean&quot;&gt;</span><br><span class="line">		&lt;property name=&quot;staticField&quot;&gt;</span><br><span class="line">			&lt;value&gt;org.springframework.scheduling.support.TaskUtils.LOG_AND_PROPAGATE_ERROR_HANDLER&lt;/value&gt;</span><br><span class="line">		&lt;/property&gt;</span><br><span class="line">	&lt;/bean&gt;</span><br><span class="line"></span><br><span class="line">	&lt;!-- #################################################################### --&gt;</span><br><span class="line">	&lt;!-- # rabbit 连接工厂 --&gt;</span><br><span class="line">	&lt;!-- #################################################################### --&gt;</span><br><span class="line">	&lt;rabbit:connection-factory id=&quot;rabbitConnectionFactory&quot; addresses=&quot;10.1.100.67&quot; username=&quot;guest&quot; password=&quot;guest&#125;&quot; /&gt;</span><br><span class="line"></span><br><span class="line">	&lt;!-- #################################################################### --&gt;</span><br><span class="line">	&lt;!-- # RabbitMQ 管理员 --&gt;</span><br><span class="line">	&lt;!-- #################################################################### --&gt;</span><br><span class="line">	&lt;rabbit:admin connection-factory=&quot;rabbitConnectionFactory&quot; /&gt;</span><br><span class="line"></span><br><span class="line">	&lt;!-- #################################################################### --&gt;</span><br><span class="line">	&lt;!-- # RabbitMQ 队列 --&gt;</span><br><span class="line">	&lt;!-- #################################################################### --&gt;</span><br><span class="line"></span><br><span class="line">	&lt;!-- 入库自动上架消息消息队列 --&gt;</span><br><span class="line">	&lt;rabbit:queue id=&quot;queues.inbound.putway&quot; name=&quot;queues.inbound.putway&quot;&gt;</span><br><span class="line">		&lt;rabbit:queue-arguments&gt;</span><br><span class="line">			&lt;!-- 开启集群环境镜像队列 --&gt;</span><br><span class="line">			&lt;entry key=&quot;x-ha-policy&quot; value=&quot;all&quot; /&gt;</span><br><span class="line">		&lt;/rabbit:queue-arguments&gt;</span><br><span class="line">	&lt;/rabbit:queue&gt;</span><br><span class="line"></span><br><span class="line">	&lt;!-- #################################################################### --&gt;</span><br><span class="line">	&lt;!-- # RabbitMQ Exchange --&gt;</span><br><span class="line">	&lt;!-- # PS：RabbitMQ 中所有生产者提交的消息都由 Exchange 来接受，再由 Exchange 按照特定的策略转发到 Queue 进行存储/处理 --&gt;</span><br><span class="line">	&lt;!-- # 策略规则：pattern 表达式中 # 表示0个或若干个关键字， * 表示一个关键字 --&gt;</span><br><span class="line">	&lt;!-- # 示例A：queues.# 能匹配 queues.sample 也能匹配 queues.sample.one --&gt;</span><br><span class="line">	&lt;!-- # 示例B：queues.* 能匹配 queues.sample 不能匹配 queues.sample.one --&gt;</span><br><span class="line">	&lt;!-- #################################################################### --&gt;</span><br><span class="line">	&lt;rabbit:topic-exchange name=&quot;amq.topic&quot;&gt;</span><br><span class="line">		&lt;rabbit:bindings&gt;</span><br><span class="line">			&lt;rabbit:binding queue=&quot;queues.inbound.putway&quot; pattern=&quot;queues.inbound.#&quot;/&gt;</span><br><span class="line">		&lt;/rabbit:bindings&gt;</span><br><span class="line">	&lt;/rabbit:topic-exchange&gt;</span><br><span class="line"></span><br><span class="line">	&lt;!-- #################################################################### --&gt;</span><br><span class="line">	&lt;!-- # RabbitMQ 模板（生产者） --&gt;</span><br><span class="line">	&lt;!-- #################################################################### --&gt;</span><br><span class="line">	&lt;rabbit:template id=&quot;rabbitTemplate&quot; connection-factory=&quot;rabbitConnectionFactory&quot; channel-transacted=&quot;true&quot; message-converter=&quot;rabbitMessageConverter&quot; /&gt;</span><br><span class="line">&lt;/beans&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>首先导入jar：spring-rabbit-1.2.2.RELEASE.jar<br>引入jar：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">@Autowired</span><br><span class="line">private RabbitTemplate rabbitTemplate;</span><br><span class="line">发送者java代码：</span><br><span class="line">rabbitTemplate.convertAndSend(&quot;queues.inbound.putway&quot;,productPutaway);</span><br><span class="line"></span><br><span class="line">Queues.inbound.putway :xml 里面定义的id</span><br><span class="line">productPutaway:要发送的消息，可以为字符串对象，集合，map等形式</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>2：消费者配置文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span><br><span class="line">&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:context=&quot;http://www.springframework.org/schema/context&quot;</span><br><span class="line">	xmlns:rabbit=&quot;http://www.springframework.org/schema/rabbit&quot; xmlns:p=&quot;http://www.springframework.org/schema/p&quot; xmlns:c=&quot;http://www.springframework.org/schema/c&quot;</span><br><span class="line">	xsi:schemaLocation=&quot;</span><br><span class="line">		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd</span><br><span class="line">		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd</span><br><span class="line">		http://www.springframework.org/schema/rabbit http://www.springframework.org/schema/rabbit/spring-rabbit-1.3.xsd&quot;&gt;</span><br><span class="line"></span><br><span class="line">	&lt;!-- #################################################################### --&gt;</span><br><span class="line">	&lt;!-- # RabbitMQ 消息转换器 --&gt;</span><br><span class="line">	&lt;!-- #################################################################### --&gt;</span><br><span class="line">	&lt;bean id=&quot;rabbitMessageConverter&quot; class=&quot;org.springframework.amqp.support.converter.Jackson2JsonMessageConverter&quot;&gt;</span><br><span class="line">		&lt;property name=&quot;classMapper&quot;&gt;</span><br><span class="line">			&lt;bean class=&quot;org.springframework.amqp.support.converter.DefaultJackson2JavaTypeMapper&quot; /&gt;</span><br><span class="line">		&lt;/property&gt;</span><br><span class="line">	&lt;/bean&gt;</span><br><span class="line"></span><br><span class="line">	&lt;!-- #################################################################### --&gt;</span><br><span class="line">	&lt;!-- # RabbitMQ 异常处理程序 --&gt;</span><br><span class="line">	&lt;!-- #################################################################### --&gt;</span><br><span class="line">	&lt;bean id=&quot;logAndPropagateErrorHandler&quot; class=&quot;org.springframework.beans.factory.config.FieldRetrievingFactoryBean&quot;&gt;</span><br><span class="line">		&lt;property name=&quot;staticField&quot;&gt;</span><br><span class="line">			&lt;value&gt;org.springframework.scheduling.support.TaskUtils.LOG_AND_PROPAGATE_ERROR_HANDLER&lt;/value&gt;</span><br><span class="line">		&lt;/property&gt;</span><br><span class="line">	&lt;/bean&gt;</span><br><span class="line"></span><br><span class="line">	&lt;!-- #################################################################### --&gt;</span><br><span class="line">	&lt;!-- # rabbit 连接工厂 --&gt;</span><br><span class="line">	&lt;!-- #################################################################### --&gt;</span><br><span class="line">	&lt;rabbit:connection-factory id=&quot;rabbitConnectionFactory&quot; addresses=&quot;10.1.100.67&quot; username=&quot;guest&quot; password=&quot;guest&#125;&quot; /&gt;</span><br><span class="line"></span><br><span class="line">	&lt;!-- #################################################################### --&gt;</span><br><span class="line">	&lt;!-- # RabbitMQ 管理员 --&gt;</span><br><span class="line">	&lt;!-- #################################################################### --&gt;</span><br><span class="line">	&lt;rabbit:admin connection-factory=&quot;rabbitConnectionFactory&quot; /&gt;</span><br><span class="line"></span><br><span class="line">	&lt;!-- #################################################################### --&gt;</span><br><span class="line">	&lt;!-- # RabbitMQ 队列 --&gt;</span><br><span class="line">	&lt;!-- #################################################################### --&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	&lt;!-- #################################################################### --&gt;</span><br><span class="line">	&lt;!-- # RabbitMQ 模板（生产者） --&gt;</span><br><span class="line">	&lt;!-- #################################################################### --&gt;</span><br><span class="line">	&lt;rabbit:template id=&quot;rabbitTemplate&quot; connection-factory=&quot;rabbitConnectionFactory&quot; channel-transacted=&quot;true&quot; message-converter=&quot;rabbitMessageConverter&quot; /&gt;</span><br><span class="line"></span><br><span class="line">	&lt;!-- #################################################################### --&gt;</span><br><span class="line">	&lt;!-- # RabbitMQ 监听容器（消费者） --&gt;</span><br><span class="line">	&lt;!-- #################################################################### --&gt;</span><br><span class="line">	&lt;rabbit:listener-container connection-factory=&quot;rabbitConnectionFactory&quot; message-converter=&quot;rabbitMessageConverter&quot; channel-transacted=&quot;true&quot; error-handler=&quot;logAndPropagateErrorHandler&quot;&gt;</span><br><span class="line">		&lt;!-- 货品上架单消费者 --&gt;</span><br><span class="line">		&lt;rabbit:listener queues=&quot;queues.inbound.putway&quot; ref=&quot;productPutAwayMessageConsumer&quot; method=&quot;saveProductPutaway&quot; /&gt;</span><br><span class="line">	&lt;/rabbit:listener-container&gt;</span><br><span class="line"></span><br><span class="line">&lt;/beans&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>接收者Java代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * 收货入库单插入上架单消息对象介绍处理类</span><br><span class="line"> * @author Min.Wang</span><br><span class="line"> *</span><br><span class="line"> */</span><br><span class="line">@Component</span><br><span class="line">public class ProductPutAwayMessageConsumer &#123;</span><br><span class="line">	 @Autowired</span><br><span class="line">	 private ProductPutawayService productPutawayService;</span><br><span class="line"></span><br><span class="line">	 /**</span><br><span class="line">     * 保存上架单/给收货完成是调用</span><br><span class="line">     * @author Min.Wang</span><br><span class="line">     */</span><br><span class="line">    public void saveProductPutaway(ProductPutaway productPutaway)&#123;</span><br><span class="line">    	//根据收到的消息数据，处理对应的业务逻辑</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">更多扩展请了解rabbitmq官网：http://www.rabbitmq.com/</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>CeaserWang
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://ceaser.wang/2018/09/28/linux%E4%B8%8B%E6%90%AD%E5%BB%BARabbitMQ%E6%9C%8D%E5%8A%A1/" title="linux下搭建RabbitMQ服务">https://ceaser.wang/2018/09/28/linux下搭建RabbitMQ服务/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/RabbitMQ-linux/" rel="tag"><i class="fa fa-tag"></i> RabbitMQ linux</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2018/09/28/%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%9C%A8%E6%9D%83%E9%99%90%E7%B3%BB%E7%BB%9F%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8/" rel="prev" title="二进制在权限系统中的应用">
+                  <i class="fa fa-chevron-left"></i> 二进制在权限系统中的应用
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2018/09/28/elasticsearch/ELK5.6.11_install/" rel="next" title="ELK5.6.11_install">
+                  ELK5.6.11_install <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CeaserWang</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":"forest","js":{"url":"https://cdn.jsdelivr.net/npm/mermaid@8.11.0/dist/mermaid.min.js","integrity":"sha256-sVAx+v/Q7v0Q2xm5vN7h5ccSna6gaLREhG9sF8pKT6I="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+  <script class="next-config" data-name="nprogress" type="application/json">{"enable":true,"spinner":true}</script>
+  <script src="/js/third-party/nprogress.js"></script>
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"ryAR9bttS7fex1FPEPAylmmJ-gzGzoHsz","app_key":"dYqygoN4Y01Bl38OdRoCHUYn","server_url":null,"security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+
+</body>
+</html>

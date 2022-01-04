@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.css" integrity="sha256-no0c5ccDODBwp+9hSmV5VvPpKwHCpbVzXHexIkupM6U=" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.js" integrity="sha256-a5YRB27CcBwBFcT5EF/f3E4vzIqyHrSR878nseNYw64=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ceaser.wang","root":"/","images":"/images","scheme":"Muse","version":"8.6.1","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+<meta name="description" content="上一节我们通过【ClassLoader.getSystemClassLoader()】得到系统类加载器，那么本节看一下这个方法的doc以及一些细节，方便我们更好的理解：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="jvm原理（20）Launcher类源码分析以及forName方法底层剖析">
+<meta property="og:url" content="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8820%EF%BC%89Launcher%E7%B1%BB%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E4%BB%A5%E5%8F%8AforName%E6%96%B9%E6%B3%95%E5%BA%95%E5%B1%82%E5%89%96%E6%9E%90/index.html">
+<meta property="og:site_name" content="南贺神社">
+<meta property="og:description" content="上一节我们通过【ClassLoader.getSystemClassLoader()】得到系统类加载器，那么本节看一下这个方法的doc以及一些细节，方便我们更好的理解：">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8820%EF%BC%89Launcher%E7%B1%BB%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E4%BB%A5%E5%8F%8AforName%E6%96%B9%E6%B3%95%E5%BA%95%E5%B1%82%E5%89%96%E6%9E%90/20180415145420761.png">
+<meta property="article:published_time" content="2018-10-04T16:17:22.000Z">
+<meta property="article:modified_time" content="2022-01-04T02:21:30.768Z">
+<meta property="article:author" content="CeaserWang">
+<meta property="article:tag" content="launcher">
+<meta property="article:tag" content="forName">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8820%EF%BC%89Launcher%E7%B1%BB%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E4%BB%A5%E5%8F%8AforName%E6%96%B9%E6%B3%95%E5%BA%95%E5%B1%82%E5%89%96%E6%9E%90/20180415145420761.png">
+
+
+<link rel="canonical" href="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8820%EF%BC%89Launcher%E7%B1%BB%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E4%BB%A5%E5%8F%8AforName%E6%96%B9%E6%B3%95%E5%BA%95%E5%B1%82%E5%89%96%E6%9E%90/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8820%EF%BC%89Launcher%E7%B1%BB%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E4%BB%A5%E5%8F%8AforName%E6%96%B9%E6%B3%95%E5%BA%95%E5%B1%82%E5%89%96%E6%9E%90/","path":"2018/10/04/jvm原理（20）Launcher类源码分析以及forName方法底层剖析/","title":"jvm原理（20）Launcher类源码分析以及forName方法底层剖析"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>jvm原理（20）Launcher类源码分析以及forName方法底层剖析 | 南贺神社</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">南贺神社</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">你写程序有写诗一样的感觉吗?</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">205</span></a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">24</span></a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">212</span></a></li>
+        <li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-overview">
+            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="CeaserWang"
+      src="/../0xcc/index/Uchiha.jpg">
+  <p class="site-author-name" itemprop="name">CeaserWang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">212</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">205</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tLzExNTY3MjE4NzQ=" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;1156721874"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmNlYXNlcndhbmdAb3V0bG9vay5jb20=" title="E-Mail → mailto:ceaserwang@outlook.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+  </div>
+  <div class="cc-license site-overview-item animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><img src="https://cdn.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-user-friends fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly90d29kcmFnb25sYWtlLmNvbQ==" title="https:&#x2F;&#x2F;twodragonlake.com">TwoDragonLake</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9yb290Y2x1c3Rlci5naXRodWIuaW8=" title="https:&#x2F;&#x2F;rootcluster.github.io">RootCluster</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9tdXNlZmxvdy5pbw==" title="https:&#x2F;&#x2F;museflow.io">MuseFlow</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9pbmNvZGVyLm9yZw==" title="https:&#x2F;&#x2F;incoder.org">BladeCode</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9rYWlmYS5kZXY=" title="https:&#x2F;&#x2F;kaifa.dev">Alyenc</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmRhemhpZGF5b25nLmNu" title="https:&#x2F;&#x2F;blog.dazhidayong.cn">Killua</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9qb2NlbHluc2hhbmcuY24v" title="https:&#x2F;&#x2F;jocelynshang.cn&#x2F;">Jocelyn</span>
+        </li>
+    </ul>
+  </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8820%EF%BC%89Launcher%E7%B1%BB%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E4%BB%A5%E5%8F%8AforName%E6%96%B9%E6%B3%95%E5%BA%95%E5%B1%82%E5%89%96%E6%9E%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
+      <meta itemprop="name" content="CeaserWang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="南贺神社">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          jvm原理（20）Launcher类源码分析以及forName方法底层剖析
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-10-04 16:17:22" itemprop="dateCreated datePublished" datetime="2018-10-04T16:17:22+00:00">2018-10-04</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2022-01-04 02:21:30" itemprop="dateModified" datetime="2022-01-04T02:21:30+00:00">2022-01-04</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/jvm/" itemprop="url" rel="index"><span itemprop="name">jvm</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8820%EF%BC%89Launcher%E7%B1%BB%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E4%BB%A5%E5%8F%8AforName%E6%96%B9%E6%B3%95%E5%BA%95%E5%B1%82%E5%89%96%E6%9E%90/" class="post-meta-item leancloud_visitors" data-flag-title="jvm原理（20）Launcher类源码分析以及forName方法底层剖析" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>上一节我们通过【ClassLoader.getSystemClassLoader()】得到系统类加载器，那么本节看一下这个方法的doc以及一些细节，方便我们更好的理解：<br><font color="#FF0000"></p>
+<span id="more"></span>
+<p>public static ClassLoader getSystemClassLoader()<br>Returns the system class loader for delegation. This is the default delegation parent for new ClassLoader instances, and is typically the class loader used to start the application.<br></font><br>返回用于代理的系统类加载器，对于一个类加载器实例来说这是默认的父级代理，也是最典型的用于启动应用的类加载器。<br><font color="#FF0000"><br>This method is first invoked early in the runtime’s startup sequence, at which point it creates the system class loader and sets it as the context class loader of the invoking Thread.<br></font><br>这个方法最早在运行时启动的就会被调用，在这个调用点上会去创建系统类加载器，并且将其设置在调用线程为【上下文加载器】。<br><font color="#FF0000"><br>The default system class loader is an implementation-dependent instance of this class.<br></font><br>默认的系统类加载器是一个与这个类实现相关的实例<br><font color="#FF0000"><br>If the system property “java.system.class.loader” is defined when this method is first invoked then the value of that property is taken to be the name of a class that will be returned as the system class loader. The class is loaded using the default system class loader and must define a public constructor that takes a single parameter of type ClassLoader which is used as the delegation parent. An instance is then created using this constructor with the default system class loader as the parameter. The resulting class loader is defined to be the system class loader.<br></font><br>如果系统属性【java.system.class.loader】被定义，那么这个属性的值对应的class会被默认的系统类加载器 加载，并且作为系统类加载器，这个被定义的加载器必须有一个单个参数的构造器，参数的类型是ClassLoader，用来代理父加载器，使用这个构造器传入默认的的系统类加载器会创建一个类加载器的实例，这个实例会成为系统类加载器。<br><font color="#FF0000"><br>If a security manager is present, and the invoker’s class loader is not null and the invoker’s class loader is not the same as or an ancestor of the system class loader, then this method invokes the security manager’s checkPermission method with a RuntimePermission(“getClassLoader”) permission to verify access to the system class loader. If not, a SecurityException will be thrown.<br></font><br>安全略过，主要是介绍一些安全接入的权限是否可以接入</p>
+<p>伏笔：<br>1、【上下文加载器】<br>2、定义ClassLoader类型的构造器<br>方法体：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public static ClassLoader getSystemClassLoader() &#123;</span><br><span class="line">    initSystemClassLoader();//初始化系统类加载器</span><br><span class="line">    if (scl == null) &#123;</span><br><span class="line">        return null;</span><br><span class="line">    &#125;</span><br><span class="line">    //下边的是安全相关的，不做介绍</span><br><span class="line">    SecurityManager sm = System.getSecurityManager();</span><br><span class="line">    if (sm != null) &#123;</span><br><span class="line">        checkClassLoaderPermission(scl, Reflection.getCallerClass());</span><br><span class="line">    &#125;</span><br><span class="line">    return scl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>进入到initSystemClassLoader():</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">PS:</span><br><span class="line">sclSet、scl 成员变量介绍：</span><br><span class="line">    // The class loader for the system</span><br><span class="line">    // @GuardedBy(&quot;ClassLoader.class&quot;)</span><br><span class="line">    系统类加载器在ClassLoader的引用</span><br><span class="line">    private static ClassLoader scl;</span><br><span class="line"></span><br><span class="line">    // Set to true once the system class loader has been set</span><br><span class="line">    // @GuardedBy(&quot;ClassLoader.class&quot;)</span><br><span class="line">    //如果系统类加载器被加载过，即scl成员变量不是null，那么sclSet的值为true</span><br><span class="line">    private static boolean sclSet;</span><br><span class="line"></span><br><span class="line">    private static synchronized void initSystemClassLoader() &#123;</span><br><span class="line">        //系统类加载器是否被设置</span><br><span class="line">        if (!sclSet) &#123;</span><br><span class="line">             //双重判断，即sclSet是true，但是系统类加载器是null，排除非法异常</span><br><span class="line">            if (scl != null)</span><br><span class="line">                throw new IllegalStateException(&quot;recursive invocation&quot;);</span><br><span class="line">                //通过sun.misc.Launcher获取系统类加载器。sun.misc.Launcher是系统类加载器，扩展类加载器上层的一个概念，并且Oracle不是开源的</span><br><span class="line">            sun.misc.Launcher l = sun.misc.Launcher.getLauncher();</span><br><span class="line">            if (l != null) &#123;</span><br><span class="line">                Throwable oops = null;</span><br><span class="line">                scl = l.getClassLoader();</span><br><span class="line">                try &#123;</span><br><span class="line">                    scl = AccessController.doPrivileged(</span><br><span class="line">                        new SystemClassLoaderAction(scl));</span><br><span class="line">                &#125; catch (PrivilegedActionException pae) &#123;</span><br><span class="line">                    oops = pae.getCause();</span><br><span class="line">                    if (oops instanceof InvocationTargetException) &#123;</span><br><span class="line">                        oops = oops.getCause();</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                if (oops != null) &#123;</span><br><span class="line">                    if (oops instanceof Error) &#123;</span><br><span class="line">                        throw (Error) oops;</span><br><span class="line">                    &#125; else &#123;</span><br><span class="line">                        // wrap the exception</span><br><span class="line">                        throw new Error(oops);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            sclSet = true;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>我们在idea里边看到的sun.misc.Launcher.getLauncher()的实现是反编译工具给出的，oracle并没有给出源码，但是我们可以去<span class="exturl" data-url="aHR0cDovL29wZW5qZGsuamF2YS5uZXQv">openjdk<i class="fa fa-external-link-alt"></i></span>获取他的源码，也可以使用<span class="exturl" data-url="aHR0cDovL2dyZXBjb2RlLmNvbS9zZWFyY2glRTYlOUYlQTUlRTclOUMlOEIlRTYlQkElOTAlRTclQTAlODElRUYlQkMlOUE=">http://grepcode.com/search查看源码：<i class="fa fa-external-link-alt"></i></span><br><span class="exturl" data-url="aHR0cDovL2dyZXBjb2RlLmNvbS9zZWFyY2gvP3F1ZXJ5PXN1bi5taXNjLmxhdW5jaGVy">http://grepcode.com/search/?query=sun.misc.launcher<i class="fa fa-external-link-alt"></i></span><br><span class="exturl" data-url="aHR0cDovL2dyZXBjb2RlLmNvbS9maWxlL3JlcG9zaXRvcnkuZ3JlcGNvZGUuY29tL2phdmEvcm9vdC9qZGsvb3Blbmpkay84dTQwLWIyNS9zdW4vbWlzYy9MYXVuY2hlci5qYXZhI0xhdW5jaGVy">http://grepcode.com/file/repository.grepcode.com/java/root/jdk/openjdk/8u40-b25/sun/misc/Launcher.java#Launcher<i class="fa fa-external-link-alt"></i></span><br>sun.misc.Launcher.getLauncher()z返回值是sun.misc.Launcher内部的一个静态成员变量【 private static Launcher launcher = new Launcher();】<br>那么我们看一下Launcher的构造器：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">public Launcher() &#123;</span><br><span class="line">68         // Create the extension class loader</span><br><span class="line">			//获得系统类加载器</span><br><span class="line">69         ClassLoader extcl;</span><br><span class="line">70         try &#123;</span><br><span class="line">				//ExtClassLoader是Launcher的一个内部类，getExtClassLoader()getExtClassLoader()获取扩展类加载器，</span><br><span class="line">				/**</span><br><span class="line">					getExtClassLoader()方法里边返回扩展类加载器实例，并且通过系统属性java.ext.dirs加载其需要加载的类</span><br><span class="line">				*/</span><br><span class="line">71             extcl = ExtClassLoader.getExtClassLoader();</span><br><span class="line">72         &#125; catch (IOException e) &#123;</span><br><span class="line">73             throw new InternalError(</span><br><span class="line">74                 &quot;Could not create extension class loader&quot;, e);</span><br><span class="line">75         &#125;</span><br><span class="line">76</span><br><span class="line">77         // Now create the class loader to use to launch the application</span><br><span class="line">			//获取系统类加载器，并且将扩展类加载器作为他的委托传入</span><br><span class="line">78         try &#123;</span><br><span class="line">79             loader = AppClassLoader.getAppClassLoader(extcl);</span><br><span class="line">80         &#125; catch (IOException e) &#123;</span><br><span class="line">81             throw new InternalError(</span><br><span class="line">82                 &quot;Could not create application class loader&quot;, e);</span><br><span class="line">83         &#125;</span><br><span class="line">84</span><br><span class="line">85         // Also set the context class loader for the primordial thread.</span><br><span class="line">			//将系统类加载器作为当前线程上下文的加载器</span><br><span class="line">86         Thread.currentThread().setContextClassLoader(loader);</span><br><span class="line">87</span><br><span class="line">88         // Finally, install a security manager if requested</span><br><span class="line">89         String s = System.getProperty(&quot;java.security.manager&quot;);</span><br><span class="line">90         if (s != null) &#123;</span><br><span class="line">91             SecurityManager sm = null;</span><br><span class="line">92             if (&quot;&quot;.equals(s) || &quot;default&quot;.equals(s)) &#123;</span><br><span class="line">93                 sm = new java.lang.SecurityManager();</span><br><span class="line">94             &#125; else &#123;</span><br><span class="line">95                 try &#123;</span><br><span class="line">96                     sm = (SecurityManager)loader.loadClass(s).newInstance();</span><br><span class="line">97                 &#125; catch (IllegalAccessException e) &#123;</span><br><span class="line">98                 &#125; catch (InstantiationException e) &#123;</span><br><span class="line">99                 &#125; catch (ClassNotFoundException e) &#123;</span><br><span class="line">100                &#125; catch (ClassCastException e) &#123;</span><br><span class="line">101                &#125;</span><br><span class="line">102            &#125;</span><br><span class="line">103            if (sm != null) &#123;</span><br><span class="line">104                System.setSecurityManager(sm);</span><br><span class="line">105            &#125; else &#123;</span><br><span class="line">106                throw new InternalError(</span><br><span class="line">107                    &quot;Could not create SecurityManager: &quot; + s);</span><br><span class="line">108            &#125;</span><br><span class="line">109        &#125;</span><br><span class="line">110    &#125;</span><br></pre></td></tr></table></figure>
+<p>扩展类加载器获取加载文件数组：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">169        private static File[]  getExtDirs() &#123;</span><br><span class="line">				//加载来源来自于系统属性java.ext.dirs</span><br><span class="line">170            String s = System.getProperty(&quot;java.ext.dirs&quot;);</span><br><span class="line">171            File[] dirs;</span><br><span class="line">172            if (s != null) &#123;</span><br><span class="line">173                StringTokenizer st =</span><br><span class="line">174                    new StringTokenizer(s, File.pathSeparator);</span><br><span class="line">175                int count = st.countTokens();</span><br><span class="line">176                dirs = new File[count];</span><br><span class="line">177                for (int i = 0; i &lt; count; i++) &#123;</span><br><span class="line">178                    dirs[i] = new File(st.nextToken());</span><br><span class="line">179                &#125;</span><br><span class="line">180            &#125; else &#123;</span><br><span class="line">181                dirs = new File[0];</span><br><span class="line">182            &#125;</span><br><span class="line">183            return dirs;</span><br><span class="line">184        &#125;</span><br></pre></td></tr></table></figure>
+<p>getAppClassLoader的方法：<br>入参是扩展类加载器</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">267        public static ClassLoader getAppClassLoader(final ClassLoader extcl)</span><br><span class="line">268            throws IOException</span><br><span class="line">269        &#123;</span><br><span class="line">				//通过系统属性java.class.path获取加载路径</span><br><span class="line">270            final String s = System.getProperty(&quot;java.class.path&quot;);</span><br><span class="line">271            final File[] path = (s == null) ? new File[0] : getClassPath(s);</span><br><span class="line">272</span><br><span class="line">273            // Note: on bugid 4256530</span><br><span class="line">274            // Prior implementations of this doPrivileged() block supplied</span><br><span class="line">275            // a rather restrictive ACC via a call to the private method</span><br><span class="line">276            // AppClassLoader.getContext(). This proved overly restrictive</span><br><span class="line">277            // when loading  classes. Specifically it prevent</span><br><span class="line">278            // accessClassInPackage.sun.* grants from being honored.</span><br><span class="line">279            //</span><br><span class="line">280            return AccessController.doPrivileged(</span><br><span class="line">281                new PrivilegedAction&lt;AppClassLoader&gt;() &#123;</span><br><span class="line">282                    public AppClassLoader More ...run() &#123;</span><br><span class="line">283                    URL[] urls =</span><br><span class="line">284                        (s == null) ? new URL[0] : pathToURLs(path);</span><br><span class="line">						//构造系统类加载器的时候将他的委托父类传入，以及加载路径数组</span><br><span class="line">285                    return new AppClassLoader(urls, extcl);</span><br><span class="line">286                &#125;</span><br><span class="line">287            &#125;);</span><br><span class="line">288        &#125;</span><br><span class="line">289</span><br><span class="line">290        final URLClassPath ucp;</span><br><span class="line">291</span><br><span class="line">292        /*</span><br><span class="line">293         * Creates a new AppClassLoader</span><br><span class="line">294         */</span><br><span class="line">295        AppClassLoader(URL[] urls, ClassLoader parent) &#123;</span><br><span class="line">				//调用父类URLClassLoader,注意不管是系统类加载器还是扩展类加载器都是继承来自ClassLoader</span><br><span class="line">				//CLassLoader里边之前说过有一个硬编码的成员变量【private final ClassLoader parent;】</span><br><span class="line">				//此处的parent一直溯源到ClassLoader 类，将ClassLoader 的parent赋值为当前方法传入的parent入参，</span><br><span class="line">				//也就说明了系统类加载器的委托父类就是扩展类加载器</span><br><span class="line">296            super(urls, parent, factory);</span><br><span class="line">297            ucp = SharedSecrets.getJavaNetAccess().getURLClassPath(this);</span><br><span class="line">298            ucp.initLookupCache(this);</span><br><span class="line">299        &#125;</span><br></pre></td></tr></table></figure>
+<p>然后我们再回过头来看看idea里边反编译出来的获取系统类加载器的方法：<br><img src="20180415145420761.png" alt="这里写图片描述"><br>大家可能会有疑问，为什么反编译出来的变量都是var1、var2之类的呢？其实这个在龙哥的<span class="exturl" data-url="aHR0cDovL3d3dy5pcHJvZ3JhbW1pbmcuY24va290bGluX2xlc3Nvbi5odG1s">kotlin<i class="fa fa-external-link-alt"></i></span>课程中【27_Kotlin函数使用综述与显式返回类型分析】一讲里边介绍过，Java中并不总是在class 字节码中携带变量名，但是在kotlin里边就不是这样的，因为kotlin里边有具名参数的概念。</p>
+<p>ok，我们回到initSystemClassLoader()方法,通过调用【 sun.misc.Launcher l = sun.misc.Launcher.getLauncher();】获取到系统类加载器之后，赋值给ClassLoader的scl成员变量之后，还有一块代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">try &#123;</span><br><span class="line">    scl = AccessController.doPrivileged(</span><br><span class="line">        new SystemClassLoaderAction(scl));</span><br><span class="line">&#125; catch (PrivilegedActionException pae) &#123;</span><br><span class="line">    oops = pae.getCause();</span><br><span class="line">    if (oops instanceof InvocationTargetException) &#123;</span><br><span class="line">        oops = oops.getCause();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这块逻辑的作用是看看是否设置了系统属性【java.system.class.loader】，即自定义的系统类加载器，如果设置了那么实例化自定义的系统类加载器返回，替代之前获取的系统类加载器，如果没有设置直接返回默认的系统类加载器。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">class SystemClassLoaderAction</span><br><span class="line">    implements PrivilegedExceptionAction&lt;ClassLoader&gt; &#123;</span><br><span class="line">    private ClassLoader parent;</span><br><span class="line"></span><br><span class="line">    SystemClassLoaderAction(ClassLoader parent) &#123;</span><br><span class="line">        this.parent = parent;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public ClassLoader run() throws Exception &#123;</span><br><span class="line">        String cls = System.getProperty(&quot;java.system.class.loader&quot;);</span><br><span class="line">        //自定义系统类加载器未定义，直接返回之前默认获取的系统类加载器</span><br><span class="line">        if (cls == null) &#123;</span><br><span class="line">            return parent;</span><br><span class="line">        &#125;</span><br><span class="line">		//如果定义了自定义的系统类加载器那么实例化并返回，替代默认的系统类加载器</span><br><span class="line">		//etDeclaredConstructor(new Class&lt;?&gt;[] &#123; ClassLoader.class &#125;)这个就是我们之前</span><br><span class="line">		//（https://blog.csdn.net/wzq6578702/article/details/79835695）</span><br><span class="line">		//在MyTest16里边加入一个参数是ClassLoader的构造器的原因，</span><br><span class="line">		//因为自定义的的加载器在这里会被反射调用，</span><br><span class="line">		//</span><br><span class="line">        Constructor&lt;?&gt; ctor = Class.forName(cls, true, parent)</span><br><span class="line">            .getDeclaredConstructor(new Class&lt;?&gt;[] &#123; ClassLoader.class &#125;);</span><br><span class="line">        ClassLoader sys = (ClassLoader) ctor.newInstance(</span><br><span class="line">            new Object[] &#123; parent &#125;);</span><br><span class="line">            //同样的道理 将自定义系统类加载器作为当前线程的上下文加载器。</span><br><span class="line">        Thread.currentThread().setContextClassLoader(sys);</span><br><span class="line">        return sys;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>那么接下来介绍一下 Class.forName(cls, true, parent)，Class.forName方法大部分做web开发的都是在开始写jdbc的时候接触，那么先看一下doc：<br>java.lang.Class<br>public static Class&lt;?&gt; forName(@NonNls String name,<br>                               boolean initialize,<br>                               ClassLoader loader)<br>                       throws ClassNotFoundException<br>接收三个参数。<br>第一参数是要被加载的类的全名，第二个参数是用来表示是否初始化这个要被加载的类，第三个参数是类加载器。<br><font color="#FF0000"><br>Returns the Class object associated with the class or interface with the given string name, using the given class loader. Given the fully qualified name for a class or interface (in the same format returned by getName) this method attempts to locate, load, and link the class or interface. The specified class loader is used to load the class or interface. If the parameter loader is null, the class is loaded through the bootstrap class loader. The class is initialized only if the initialize parameter is true and if it has not been initialized earlier.<br></font><br>通过给定的类加载器，即入参loader，返回入参name对应的类或接口的Class对象，通过给定的接口或者类的全名(通过getName方法获取)尝试去定位，加载，连接，给定的loader用来加载类或者接口，如果参数loader是null，那么就会使用启动类加载器去加载，，只在在入参initialize 为true并且类从来没有被加载的情况下才去初始化这个类。<br><font color="#FF0000"><br>If name denotes a primitive type or void, an attempt will be made to locate a user-defined class in the unnamed package whose name is name. Therefore, this method cannot be used to obtain any of the Class objects representing primitive types or void.<br></font><br>如果name是原生类型或者是void，那么就会尝试在用户定义类的没有包名的包（default package）下边去定位，因为这个方法不能用于包含原生类型或者void类型<br><font color="#FF0000"><br>If name denotes an array class, the component type of the array class is loaded but not initialized.<br></font><br>如果name对应的是一个数组类型，这个数组的组件类型会被加载但是不会初始化。<br><font color="#FF0000"><br>For example, in an instance method the expression:<br>Class.forName(“Foo”)<br>is equivalent to:<br>Class.forName(“Foo”, true, this.getClass().getClassLoader())<br>Note that this method throws errors related to loading, linking or initializing as specified in Sections 12.2, 12.3 and 12.4 of The Java Language Specification. Note that this method does not check whether the requested class is accessible to its caller.<br></font><br>这个方法会抛出Java语言规范的12.2，12.3，12.4章节里边的相关的对于加载，连接，初始化相关的异常，注意这个方法并不会检查对于调用者来说是否访问。<br><font color="#FF0000"><br>If the loader is null, and a securiy manager is present, and the caller’s class loader is not null, then this method calls the security manager’s checkPermission method with a RuntimePermissin(“getClassLoader”) permission to ensure it’s ok to access the bootstrap class loader.<br></font><br>如果laoder是null，并且安全管理器指定了，并且调用者的加载器不是null，那么这个方法会调用安全管理器的checkPermission 方法，使用RuntimePermissin(“getClassLoader”) 来确定是否可以接入启动类加载器【这块了解即可】<br>代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">   public static Class&lt;?&gt; forName(String name, boolean initialize,</span><br><span class="line">                                  ClassLoader loader)</span><br><span class="line">       throws ClassNotFoundException</span><br><span class="line">   &#123;</span><br><span class="line">       Class&lt;?&gt; caller = null;</span><br><span class="line">       SecurityManager sm = System.getSecurityManager();</span><br><span class="line">       if (sm != null) &#123;</span><br><span class="line">           // Reflective call to get caller class is only needed if a security manager</span><br><span class="line">           // is present.  Avoid the overhead of making this call otherwise.</span><br><span class="line">           //获取调用此forName方法的类的Class对象A</span><br><span class="line">           caller = Reflection.getCallerClass();</span><br><span class="line">           if (sun.misc.VM.isSystemDomainLoader(loader)) &#123;</span><br><span class="line">            //获取A的类加载器</span><br><span class="line">               ClassLoader ccl = ClassLoader.getClassLoader(caller);</span><br><span class="line">               //安全检查</span><br><span class="line">               if (!sun.misc.VM.isSystemDomainLoader(ccl)) &#123;</span><br><span class="line">                   sm.checkPermission(</span><br><span class="line">                       SecurityConstants.GET_CLASSLOADER_PERMISSION);</span><br><span class="line">               &#125;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">       //name：要被加载的|initialize：是否初始化|loader：指定的类加载器（自定义加载器此处是系统类加载器）|caller调用者的Class对象</span><br><span class="line">       return forName0(name, initialize, loader, caller);</span><br><span class="line">   &#125;</span><br><span class="line">//forName0是一个本地方法</span><br><span class="line">   /** Called after security check for system loader access checks have been made. */</span><br><span class="line">   private static native Class&lt;?&gt; forName0(String name, boolean initialize,</span><br><span class="line">                                           ClassLoader loader,</span><br><span class="line">                                           Class&lt;?&gt; caller)</span><br><span class="line">       throws ClassNotFoundException;</span><br></pre></td></tr></table></figure>
+<p>另外和只有一个参数的forName的区别：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public static Class&lt;?&gt; forName(String className)</span><br><span class="line">             throws ClassNotFoundException &#123;</span><br><span class="line">     Class&lt;?&gt; caller = Reflection.getCallerClass();</span><br><span class="line">     // className：要加载的Class名字 | 是否初始化：此处需要初始化 |调用者的类加载器 | 调用者的Class对象</span><br><span class="line">     return forName0(className, true, ClassLoader.getClassLoader(caller), caller);</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>CeaserWang
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8820%EF%BC%89Launcher%E7%B1%BB%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E4%BB%A5%E5%8F%8AforName%E6%96%B9%E6%B3%95%E5%BA%95%E5%B1%82%E5%89%96%E6%9E%90/" title="jvm原理（20）Launcher类源码分析以及forName方法底层剖析">https://ceaser.wang/2018/10/04/jvm原理（20）Launcher类源码分析以及forName方法底层剖析/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/launcher/" rel="tag"><i class="fa fa-tag"></i> launcher</a>
+              <a href="/tags/forName/" rel="tag"><i class="fa fa-tag"></i> forName</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8819%EF%BC%89%E5%B9%B3%E5%8F%B0%E7%89%B9%E5%AE%9A%E7%9A%84%E5%90%AF%E5%8A%A8%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E6%B7%B1%E5%85%A5%E5%88%86%E6%9E%90%E4%B8%8E%E8%87%AA%E5%AE%9A%E4%B9%89%E7%B3%BB%E7%BB%9F%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E8%AF%A6%E8%A7%A3/" rel="prev" title="jvm原理（19）平台特定的启动类加载器深入分析与自定义系统类加载器详解">
+                  <i class="fa fa-chevron-left"></i> jvm原理（19）平台特定的启动类加载器深入分析与自定义系统类加载器详解
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8821%EF%BC%89%E7%BA%BF%E7%A8%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%88%86%E6%9E%90%E4%B8%8E%E5%AE%9E%E7%8E%B0/" rel="next" title="jvm原理（21）线程上下文类加载器分析与实现">
+                  jvm原理（21）线程上下文类加载器分析与实现 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CeaserWang</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":"forest","js":{"url":"https://cdn.jsdelivr.net/npm/mermaid@8.11.0/dist/mermaid.min.js","integrity":"sha256-sVAx+v/Q7v0Q2xm5vN7h5ccSna6gaLREhG9sF8pKT6I="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+  <script class="next-config" data-name="nprogress" type="application/json">{"enable":true,"spinner":true}</script>
+  <script src="/js/third-party/nprogress.js"></script>
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"ryAR9bttS7fex1FPEPAylmmJ-gzGzoHsz","app_key":"dYqygoN4Y01Bl38OdRoCHUYn","server_url":null,"security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+
+</body>
+</html>

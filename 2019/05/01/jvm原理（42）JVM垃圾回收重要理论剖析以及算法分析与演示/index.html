@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.css" integrity="sha256-no0c5ccDODBwp+9hSmV5VvPpKwHCpbVzXHexIkupM6U=" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.js" integrity="sha256-a5YRB27CcBwBFcT5EF/f3E4vzIqyHrSR878nseNYw64=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ceaser.wang","root":"/","images":"/images","scheme":"Muse","version":"8.6.1","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+<meta name="description" content="内存区域的回顾垃圾收集器和java的内存分布有着紧密的联系，因此我们要对jvm的内存布局回顾一下，jvm的内存布局大致分为如下：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="jvm原理（42）JVM垃圾回收重要理论剖析以及算法分析与演示">
+<meta property="og:url" content="https://ceaser.wang/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/index.html">
+<meta property="og:site_name" content="南贺神社">
+<meta property="og:description" content="内存区域的回顾垃圾收集器和java的内存分布有着紧密的联系，因此我们要对jvm的内存布局回顾一下，jvm的内存布局大致分为如下：">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://ceaser.wang/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/memarea.png">
+<meta property="og:image" content="https://ceaser.wang/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/memarea1.png">
+<meta property="og:image" content="https://ceaser.wang/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/countreference.png">
+<meta property="og:image" content="https://ceaser.wang/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/runtimeStack-Heap.png">
+<meta property="og:image" content="https://ceaser.wang/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/runtimeStack-Heap1.png">
+<meta property="og:image" content="https://ceaser.wang/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/runtimeStack-Heap2.png">
+<meta property="og:image" content="https://ceaser.wang/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/runtimeStack-Heap3.png">
+<meta property="og:image" content="https://ceaser.wang/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/runtimeStack-Heap4.png">
+<meta property="og:image" content="https://ceaser.wang/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/coping1.png">
+<meta property="og:image" content="https://ceaser.wang/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/coping2.png">
+<meta property="og:image" content="https://ceaser.wang/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/coping3.png">
+<meta property="og:image" content="https://ceaser.wang/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/coping4.png">
+<meta property="og:image" content="https://ceaser.wang/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/coping5.png">
+<meta property="og:image" content="https://ceaser.wang/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/mark-compact1.png">
+<meta property="og:image" content="https://ceaser.wang/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/choice.png">
+<meta property="og:image" content="https://ceaser.wang/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/choice1.png">
+<meta property="og:image" content="https://ceaser.wang/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/memstruct.png">
+<meta property="og:image" content="https://ceaser.wang/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/Recycling_algorithm.png">
+<meta property="og:image" content="https://ceaser.wang/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/serial.png">
+<meta property="og:image" content="https://ceaser.wang/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/parallel_old.png">
+<meta property="article:published_time" content="2019-05-01T18:34:12.000Z">
+<meta property="article:modified_time" content="2022-01-04T02:21:30.812Z">
+<meta property="article:author" content="CeaserWang">
+<meta property="article:tag" content="垃圾收集器">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ceaser.wang/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/memarea.png">
+
+
+<link rel="canonical" href="https://ceaser.wang/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://ceaser.wang/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/","path":"2019/05/01/jvm原理（42）JVM垃圾回收重要理论剖析以及算法分析与演示/","title":"jvm原理（42）JVM垃圾回收重要理论剖析以及算法分析与演示"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>jvm原理（42）JVM垃圾回收重要理论剖析以及算法分析与演示 | 南贺神社</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">南贺神社</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">你写程序有写诗一样的感觉吗?</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">205</span></a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">24</span></a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">212</span></a></li>
+        <li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E5%8C%BA%E5%9F%9F%E7%9A%84%E5%9B%9E%E9%A1%BE"><span class="nav-number">1.</span> <span class="nav-text">内存区域的回顾</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9E%83%E5%9C%BE%E5%88%A4%E6%96%AD%E7%AE%97%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">垃圾判断算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BC%95%E7%94%A8%E8%AE%A1%E6%95%B0%E7%AE%97%E6%B3%95%EF%BC%88Reference-Counting%EF%BC%89"><span class="nav-number">2.1.</span> <span class="nav-text">引用计数算法（Reference Counting）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A0%B9%E6%90%9C%E7%B4%A2%E7%AE%97%E6%B3%95%EF%BC%88Root-Tracing%EF%BC%89"><span class="nav-number">2.2.</span> <span class="nav-text">根搜索算法（Root Tracing）</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E5%8C%BA"><span class="nav-number">2.2.1.</span> <span class="nav-text">方法区</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GC%E7%AE%97%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text">GC算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A0%87%E8%AE%B0-%E6%B8%85%E6%A5%9A%E7%AE%97%E6%B3%95-Mark-Sweep"><span class="nav-number">3.1.</span> <span class="nav-text">标记 -清楚算法(Mark-Sweep)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%8D%E5%88%B6-Coping-%E6%90%9C%E9%9B%86%E7%AE%97%E6%B3%95"><span class="nav-number">3.2.</span> <span class="nav-text">复制(Coping)搜集算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A0%87%E8%AE%B0%E6%95%B4%E7%90%86%E7%AE%97%E6%B3%95-Mark-Compact"><span class="nav-number">3.3.</span> <span class="nav-text">标记整理算法(Mark-Compact)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%86%E4%BB%A3%E6%94%B6%E9%9B%86%E7%AE%97%E6%B3%95-Genaratinal-Collecting"><span class="nav-number">3.4.</span> <span class="nav-text">分代收集算法(Genaratinal Collecting)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D"><span class="nav-number">4.</span> <span class="nav-text">内存分配</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E5%9B%9E%E6%94%B6"><span class="nav-number">5.</span> <span class="nav-text">内存回收</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GC%E7%9A%84%E6%97%B6%E6%9C%BA"><span class="nav-number">6.</span> <span class="nav-text">GC的时机</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%92%8C%E9%80%89%E6%8B%A9"><span class="nav-number">7.</span> <span class="nav-text">垃圾回收器的实现和选择</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%92%8C%E9%80%89%E6%8B%A9-1"><span class="nav-number">7.1.</span> <span class="nav-text">垃圾回收器的实现和选择</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8%E7%9A%84%E2%80%9C%E5%B9%B6%E8%A1%8C%E2%80%9D%E5%92%8C%E2%80%9C%E5%B9%B6%E5%8F%91%E2%80%9D"><span class="nav-number">7.2.</span> <span class="nav-text">垃圾收集器的“并行”和“并发”</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Serial%E6%94%B6%E9%9B%86%E5%99%A8"><span class="nav-number">7.3.</span> <span class="nav-text">Serial收集器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ParNew%E6%94%B6%E9%9B%86%E5%99%A8"><span class="nav-number">7.4.</span> <span class="nav-text">ParNew收集器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Parallel-Scavenge%E6%94%B6%E9%9B%86%E5%99%A8"><span class="nav-number">7.5.</span> <span class="nav-text">Parallel Scavenge收集器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#serial-Old%E6%94%B6%E9%9B%86%E5%99%A8"><span class="nav-number">7.6.</span> <span class="nav-text">serial Old收集器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Parallel-Old%E6%94%B6%E9%9B%86%E5%99%A8"><span class="nav-number">7.7.</span> <span class="nav-text">Parallel Old收集器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CMS%E6%94%B6%E9%9B%86%E5%99%A8-Concurrent-Mark-Sweep"><span class="nav-number">7.8.</span> <span class="nav-text">CMS收集器(Concurrent Mark Sweep)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#java%E5%86%85%E5%AD%98%E6%B3%84%E9%9C%B2%E7%9A%84%E7%BB%8F%E5%85%B8%E5%8E%9F%E5%9B%A0"><span class="nav-number">8.</span> <span class="nav-text">java内存泄露的经典原因</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E5%AE%9A%E4%B9%89%E5%9C%A8%E9%94%99%E8%AF%AF%E7%9A%84%E8%8C%83%E5%9B%B4-wrong-scope"><span class="nav-number">8.1.</span> <span class="nav-text">对象定义在错误的范围(wrong scope)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E4%B8%8D%E5%BD%93"><span class="nav-number">8.2.</span> <span class="nav-text">异常处理不当</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9B%86%E5%90%88%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86%E4%B8%8D%E5%BD%93"><span class="nav-number">8.3.</span> <span class="nav-text">集合数据管理不当</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-overview">
+            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="CeaserWang"
+      src="/../0xcc/index/Uchiha.jpg">
+  <p class="site-author-name" itemprop="name">CeaserWang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">212</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">205</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tLzExNTY3MjE4NzQ=" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;1156721874"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmNlYXNlcndhbmdAb3V0bG9vay5jb20=" title="E-Mail → mailto:ceaserwang@outlook.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+  </div>
+  <div class="cc-license site-overview-item animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><img src="https://cdn.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-user-friends fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly90d29kcmFnb25sYWtlLmNvbQ==" title="https:&#x2F;&#x2F;twodragonlake.com">TwoDragonLake</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9yb290Y2x1c3Rlci5naXRodWIuaW8=" title="https:&#x2F;&#x2F;rootcluster.github.io">RootCluster</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9tdXNlZmxvdy5pbw==" title="https:&#x2F;&#x2F;museflow.io">MuseFlow</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9pbmNvZGVyLm9yZw==" title="https:&#x2F;&#x2F;incoder.org">BladeCode</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9rYWlmYS5kZXY=" title="https:&#x2F;&#x2F;kaifa.dev">Alyenc</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmRhemhpZGF5b25nLmNu" title="https:&#x2F;&#x2F;blog.dazhidayong.cn">Killua</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9qb2NlbHluc2hhbmcuY24v" title="https:&#x2F;&#x2F;jocelynshang.cn&#x2F;">Jocelyn</span>
+        </li>
+    </ul>
+  </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
+      <meta itemprop="name" content="CeaserWang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="南贺神社">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          jvm原理（42）JVM垃圾回收重要理论剖析以及算法分析与演示
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2019-05-01 18:34:12" itemprop="dateCreated datePublished" datetime="2019-05-01T18:34:12+00:00">2019-05-01</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2022-01-04 02:21:30" itemprop="dateModified" datetime="2022-01-04T02:21:30+00:00">2022-01-04</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/jvm/" itemprop="url" rel="index"><span itemprop="name">jvm</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/" class="post-meta-item leancloud_visitors" data-flag-title="jvm原理（42）JVM垃圾回收重要理论剖析以及算法分析与演示" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h3 id="内存区域的回顾"><a href="#内存区域的回顾" class="headerlink" title="内存区域的回顾"></a>内存区域的回顾</h3><p>垃圾收集器和java的内存分布有着紧密的联系，因此我们要对jvm的内存布局回顾一下，jvm的内存布局大致分为如下：</p>
+<span id="more"></span>
+<p><img src="memarea.png" alt="memarea"><br><img src="memarea1.png" alt="memarea1"></p>
+<p>JVM运行时数据区域-例子</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public void method()&#123;</span><br><span class="line">  Object obj = new Object();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>生成了2个部分的内存区域，1）obj这个引用变量，因为是方法内的变量，放到JVM Stack里面，2）真正Object class的实例对象，放到Heap里面。</li>
+<li>上述的new 语句一共消耗12个bytes，JVM规定引用占用4个bytes（在JVM stack），而空对象是8个bytes（在 Heap）</li>
+<li>方法结束后，对应Stack中的变量马上回收，但是Heap中的对象要等到GC来回收。</li>
+</ul>
+<h3 id="垃圾判断算法"><a href="#垃圾判断算法" class="headerlink" title="垃圾判断算法"></a>垃圾判断算法</h3><h4 id="引用计数算法（Reference-Counting）"><a href="#引用计数算法（Reference-Counting）" class="headerlink" title="引用计数算法（Reference Counting）"></a>引用计数算法（Reference Counting）</h4><ul>
+<li>给对象添加一个引用计数器，当有一个地方引用它，计数器加1，当引用失效，计数器减一，任何时刻计数器为0的对象就是不可能再被使用的。</li>
+<li>引用计数器算法无法解决对象循环引用的问题。<br><img src="countreference.png" alt="countreference"><br>上图所示，A引用B，B引用A，但是外界引用都断了，不存在对“环”的引用，但是他们的引用计数器都是1，引用计数算法就不会对他们进行回收，会一直在内存中。</li>
+</ul>
+<h4 id="根搜索算法（Root-Tracing）"><a href="#根搜索算法（Root-Tracing）" class="headerlink" title="根搜索算法（Root Tracing）"></a>根搜索算法（Root Tracing）</h4><ul>
+<li><p>在实际的生产语言中（java、C#等）都是使用根搜索算法判定对象是否存活</p>
+</li>
+<li><p>算法基本思路 就是通过一系列的称为“GC Roots”的点作为起始进行向下搜索，当一个对象到GC Roots没有任何引用链（<br>Reference Chain）相连，则证明此对象是不可用的</p>
+</li>
+<li><p>在java语言中，GCRoots 包括</p>
+<ul>
+<li>在JVM栈(帧中的本地变量)中的引用</li>
+<li>方法区中的静态引用</li>
+<li>JNI(即一般说的Native方法)中的引用</li>
+</ul>
+</li>
+</ul>
+<h5 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h5><ul>
+<li>java虚拟机规范表示可以不要求虚拟机在这区实现GC，这区GC的“性价比”一般比较低。</li>
+<li>在堆中，尤其是在新生代，常规应用进行一次GC一般可以回收70%-95%的空间，而方法区的FC效率远小于此。</li>
+<li>当前的商业JVM都有实现方法区的GC，主要回收两部分内容：废弃常量与无用类。</li>
+<li>类回收需要满足如下三个条件<ul>
+<li>该类所有的实例都已经被GC，也就是JVM中不存在该Class的任何实例</li>
+<li>加载该类的ClassLoader已经被GC</li>
+<li>该类对应的java.lang.Class对象没有在任何地方呗引用，如不能在任何地方通过反射访问该类的方法。</li>
+<li>在大量使用反射、冬天代理、CGlib等字节码框架、动态生成jsp以及OSGI这类频繁自定义一ClassLoader的场景都需要<br>JVM具备类卸载的支持以保证方法区不会溢出。</li>
+</ul>
+</li>
+</ul>
+<h3 id="GC算法"><a href="#GC算法" class="headerlink" title="GC算法"></a>GC算法</h3><ul>
+<li>标记 -清楚算法(Mark-Sweep)</li>
+<li>标记-整理算法(Mark-Compact)</li>
+<li>复制算法(Copying)</li>
+<li>分代算法(Generational)</li>
+</ul>
+<h4 id="标记-清楚算法-Mark-Sweep"><a href="#标记-清楚算法-Mark-Sweep" class="headerlink" title="标记 -清楚算法(Mark-Sweep)"></a>标记 -清楚算法(Mark-Sweep)</h4><ul>
+<li><p>算法分为“标记”和”清除” 两个阶段，首先标记出所有需要回收的对象，然后回收所有需要回收的对象。</p>
+</li>
+<li><p>缺点</p>
+<ul>
+<li>效率问题，标记和清理两个过程效率都不高</li>
+<li>空间问题，标记清理之后会产生大量不连续的内存碎片，空间碎片太多可能会导致后续使用中无法找到足够的连续内存而提前<br>触发另一次的垃圾搜索集动作。<br><img src="runtimeStack-Heap.png" alt="runtimeStack-Heap.png"><br><img src="runtimeStack-Heap1.png" alt="runtimeStack-Heap1.png"><br><img src="runtimeStack-Heap2.png" alt="runtimeStack-Heap2.png"><br><img src="runtimeStack-Heap3.png" alt="runtimeStack-Heap3.png"><br><img src="runtimeStack-Heap4.png" alt="runtimeStack-Heap4.png"><br>最后阴影部分被回收掉，F、J、M不能被root trace到，因此也会被回收。</li>
+</ul>
+</li>
+<li><p>效率不高，需要扫描所有对象，堆越大，GC越大。碎片越严重。</p>
+</li>
+<li><p>存在内存碎片问题，GC次数越多，</p>
+</li>
+</ul>
+<h4 id="复制-Coping-搜集算法"><a href="#复制-Coping-搜集算法" class="headerlink" title="复制(Coping)搜集算法"></a>复制(Coping)搜集算法</h4><ul>
+<li>将可用内存划分为两块，每次只是用其中的一块，当半区内存用完了，仅将还存活的对象复制到另外一块上面，然后就把原来的整块内存空间一次性清理掉</li>
+<li>这样使得每次内存回收都是对整个半区的回收，内存分配时也就不用考虑内存碎片等复杂情况，只要移动堆顶指针、按顺序分配内存<br>就可以了，实现简单，运行效率高。<br>只是这种算法的代价是将内存缩小为原来的一半，代价昂贵。</li>
+<li>现在的商业虚拟机中都是用了这一种收集算法回收新生代。</li>
+<li>将内存分为一块较大的eden空间和快较少的survival空间，每次使用eden和其中一块survivor，当回收时将eden和survivor还存活的对象一次性<br>拷贝到另外一块survival空间上，然后清理掉eden和用过的survivor：</li>
+<li>Oracle Hotspot虚拟机默认eden和survivor的大小比例是8:1，也就是每次只有10% 的内存是”浪费”的。</li>
+<li>复制收集算法在对象存活率高的时候，效率有所下降。</li>
+<li>如果不想浪费50%的空间，就需要有额外的空间进行分配担保用于应付半区内存中所有对象都有100%存活的极端情况，所以在老年代一般不能直接选用这种算法。<br><img src="coping1.png" alt="coping1.png"><br><img src="coping2.png" alt="coping2.png"><br><img src="coping3.png" alt="coping3.png"><br><img src="coping4.png" alt="coping4.png"><br><img src="coping5.png" alt="coping5.png"></li>
+<li>只需要扫描存活的对象，效率更高</li>
+<li>不会产生碎片</li>
+<li>需要浪费额外的内存作为复制区</li>
+<li>复制的算法非常适合生命周期比较短的对象，每次GC总能回收大部分的对象，复制的开销比较小</li>
+<li>根据IBM的专门研究，98%的java对象只会存活一个GC周期，对这些对象很适合用复制算法。而且不用1:1的划分工作区和复制区的空间</li>
+</ul>
+<h4 id="标记整理算法-Mark-Compact"><a href="#标记整理算法-Mark-Compact" class="headerlink" title="标记整理算法(Mark-Compact)"></a>标记整理算法(Mark-Compact)</h4><ul>
+<li>标记过程仍然一样，但后续步骤不是进行直接清理，而是令所有存活的对象一端移动，然后直接清理掉这端边界以外的内存。<br><img src="mark-compact1.png" alt="mark-compact1.png"></li>
+<li>没有内存碎片</li>
+<li>比Mark-Sweep耗费更多的时间进行compact</li>
+</ul>
+<h4 id="分代收集算法-Genaratinal-Collecting"><a href="#分代收集算法-Genaratinal-Collecting" class="headerlink" title="分代收集算法(Genaratinal Collecting)"></a>分代收集算法(Genaratinal Collecting)</h4><ul>
+<li>当前商业虚拟机的垃圾收集都是采用“分代收集”算法根据对象不同存活周期将内存划分为几块</li>
+<li>一般是把java堆分作新生代和老年代，这样就可以根据各个年代的特点采用最适当的收集算法，譬如新生代每次GC都有大批量对象死去，<br>只有少量存活，那就选用复制算法只需要付出少量存活对象的复制成本就可以完成收集。</li>
+</ul>
+<p>综合前面几种GC算法的优缺点，针对不同生命周期的对象采用不同的GC算法。<br><img src="choice.png" alt="choice.png"></p>
+<ul>
+<li><p>Hotspot JVM 6(jdk8之前)中共划分为三个代：年轻代(Ypung Generation)\老年代(Old Generation)和永久代(Permanent Generation)<br><img src="choice1.png" alt="choice1.png"></p>
+</li>
+<li><p>年轻代</p>
+<ul>
+<li>新生代的对象都放在新生代，年轻代用复制算法进行GC（理论上年轻代的对象的生命周期非常短，所以适合复制算法）</li>
+<li>年轻代分三个区。一个Eden区，两个Survivor区（可以通过参数设置Survivor个数）。对象在Eden区中生成，当Eden区满时，<br>此区的存活对象被复制到另外一个survivor区，当第二个Survivor区也满了的时候，从第一个Survivor区复制过来的并且此时还存活的对象，将被复制到老年代，2个Survivor<br>是完全对称，轮流替换。</li>
+<li>Eden和2个Survivor的缺省比例是8:1:1，也就是10%的空间会被浪费，可以根据GC log的信息调整大小的比例。</li>
+</ul>
+</li>
+<li><p>老年代</p>
+<ul>
+<li>存放了经过一次或多次GC还存活的对象</li>
+<li>一般采用Mark-Sweep或者Mark-Compact算法进行GC</li>
+<li>有多种垃圾收集器可以选择。每种垃圾收集器可以看作一个GC算法的具体实现。可以根据具体应用的需求选用合适的垃圾收集器<br>(追求吞吐量？追求最短的响应时间？)</li>
+</ul>
+</li>
+<li><p><del>永久代</del></p>
+<ul>
+<li>比不属于堆(Heap)但是GC也会涉及到这个区域</li>
+<li>存放了每个Class的结构信息，包括常量池、字段描述、方法描述、与垃圾收集要收集的对象关系不大。</li>
+</ul>
+<p><img src="memstruct.png" alt="memstruct.png"></p>
+</li>
+</ul>
+<h3 id="内存分配"><a href="#内存分配" class="headerlink" title="内存分配"></a>内存分配</h3><ol>
+<li>堆上分配<br>大多数情况在eden上分配，偶尔会直接在old上分配</li>
+<li>栈上分配<br>原子类型的局部变量</li>
+</ol>
+<h3 id="内存回收"><a href="#内存回收" class="headerlink" title="内存回收"></a>内存回收</h3><ul>
+<li>GC要做的是将那些dead的对象所占用的内存回收掉<ul>
+<li>hotspot认为没有引用的对象是dead的</li>
+<li>hotspot将引用分为四种：Strong、Soft、Week、Phantom<ul>
+<li>Strong即默认通过Object o = newObject()这种方式赋值的引用‘</li>
+<li>Soft、Week、Phantom这三种则都是继承Reference</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>在Full GC时会对Reference类型的引用进行特殊处理<ul>
+<li>Soft：内存不够时一定会被GC、长期不用也会被GC</li>
+<li>Week：一定会被GC，当被mark为dead，会在ReferenceQueue中通知</li>
+<li>Phantom：贝莱就没有引用，当jvm heap中释放时会通知</li>
+</ul>
+</li>
+</ul>
+<p>###垃圾收集算法<br><img src="Recycling_algorithm.png" alt="Recycling_algorithm.png"></p>
+<h3 id="GC的时机"><a href="#GC的时机" class="headerlink" title="GC的时机"></a>GC的时机</h3><ul>
+<li>在分代模型的基础上，GC从时机上分为两种：scavenge GC和Full GC</li>
+<li>Scavenge GC(Minor GC)<ul>
+<li>触发时机：新对象生成时，Eden空间满了</li>
+<li>理论上Eden区大多数对象会在Scavenge GC回收，复制算法的执行效率会很高，Scavenge GC时间比较短。</li>
+</ul>
+</li>
+<li>Full GC<ul>
+<li>对整个JVM进行整理，包括Young、Old和Perm</li>
+<li>主要的触发时机：1）、old满了 2）Perm满了 3）system.gc()</li>
+<li>效率很低，尽量减少Full GC。</li>
+</ul>
+</li>
+</ul>
+<h3 id="垃圾回收器的实现和选择"><a href="#垃圾回收器的实现和选择" class="headerlink" title="垃圾回收器的实现和选择"></a>垃圾回收器的实现和选择</h3><h4 id="垃圾回收器的实现和选择-1"><a href="#垃圾回收器的实现和选择-1" class="headerlink" title="垃圾回收器的实现和选择"></a>垃圾回收器的实现和选择</h4><ul>
+<li>分代模型：GC的宏观愿景；</li>
+<li>垃圾回收器：GC的具体实现</li>
+<li>Hotspot JVM提供多种垃圾回收器，我们需要根据具体应用的需要采用不同的回收器</li>
+<li>没有万能的垃圾回收器，每种垃圾回收器都有自己的适合场景</li>
+</ul>
+<h4 id="垃圾收集器的“并行”和“并发”"><a href="#垃圾收集器的“并行”和“并发”" class="headerlink" title="垃圾收集器的“并行”和“并发”"></a>垃圾收集器的“并行”和“并发”</h4><ul>
+<li>并行(Parallel)：指多个收集器的线程同时工作，但是用户线程处于等待状态</li>
+<li>并发(Concurrent):指收集器工作的同时，可以允许用户线程工作。<ul>
+<li>并发不代表解决了GC停顿的问题，在关键的步骤还是要停顿。比如在收集器标记垃圾的时候但在清除垃圾的时候，用户线程可以和<br>GC线程并发执行。</li>
+</ul>
+</li>
+</ul>
+<h4 id="Serial收集器"><a href="#Serial收集器" class="headerlink" title="Serial收集器"></a>Serial收集器</h4><ul>
+<li>单线程收集器，收集时会暂停所有的工作线程(Stop The world，简称STW)，使用复制收集算法，虚拟机运行在client模式时的默认新生代收集器。</li>
+<li>最早的收集器，单线程进行GC</li>
+<li>new和Old Generation都可以使用</li>
+<li>在新生代，采用复制算法；在老年代，采用Mark-comopact算法</li>
+<li>因为是单线程GC，没有多线程切换的额外开销，简单实用</li>
+<li>Hotspot Client模式缺省的收集器<br><img src="serial.png" alt="serial.png"></li>
+</ul>
+<h4 id="ParNew收集器"><a href="#ParNew收集器" class="headerlink" title="ParNew收集器"></a>ParNew收集器</h4><ul>
+<li>ParNew收集器就是Serial的多线程版本，除了使用多个收集器线程外，其余行为包括算法、stw、对象分配规则、回收策略等都与serial收集器一模一样。</li>
+<li>对应的这种收集器是虚拟机运行在Server模式的默认新生代收集器，在单CPU的环境中，ParNew收集器并不会比Serial<br>收集器有更好的效果。</li>
+<li>使用复制算法(因为针对新生代)</li>
+<li>只有在多CPU的环境下，效率才会比Serial收集器高</li>
+<li>可以通过-XX:ParallelGCThreads来控制GC线程数的多少。需要结合具体CPU的个数</li>
+<li>Server模式下新生代的缺省收集器</li>
+</ul>
+<h4 id="Parallel-Scavenge收集器"><a href="#Parallel-Scavenge收集器" class="headerlink" title="Parallel Scavenge收集器"></a>Parallel Scavenge收集器</h4><ul>
+<li>Parallel Scavenge收集器也是单线程收集器，也是使用复制算法，但它的对象分配规则与回收策略都与ParNew收集器<br>有所不同，它是以吞吐量最大化(即GC时间占用运行时间最小)为目标的收集器实现，它允许较长时间的STW换取总吞吐量最大化。</li>
+</ul>
+<h4 id="serial-Old收集器"><a href="#serial-Old收集器" class="headerlink" title="serial Old收集器"></a>serial Old收集器</h4><ul>
+<li>serial Old是单线程收集器，使用标记-整理算法，是老年代的收集器</li>
+</ul>
+<h4 id="Parallel-Old收集器"><a href="#Parallel-Old收集器" class="headerlink" title="Parallel Old收集器"></a>Parallel Old收集器</h4><ul>
+<li>老年代版本吞吐量优先收集器，使用多线程和标记-整理算法，JVM 1.6提供，在此之前，新生代使用PS收集器的话，老年代除<br>serial OLd外别无选择，因为PS无法与CMS收集器配合工作</li>
+<li>Parallel Scavenge在老年代的实现</li>
+<li>在、具名 1.6才出现Parallel Old</li>
+<li>采用多线程，Mark-compact算法</li>
+<li>更注重吞吐量</li>
+<li>Parallel Scavenge + Parallel Old = 高吞吐量，但GC停顿可能不理想。<br><img src="parallel_old.png" alt="parallel_old.png"></li>
+</ul>
+<h4 id="CMS收集器-Concurrent-Mark-Sweep"><a href="#CMS收集器-Concurrent-Mark-Sweep" class="headerlink" title="CMS收集器(Concurrent Mark Sweep)"></a>CMS收集器(Concurrent Mark Sweep)</h4><ul>
+<li><p>CMS是一种以最短停顿时间为目标的收集器，使用CMS并不能达到GC效率最高(总体GC时间最小)，但它能尽可能降低GC时<br>服务的停顿时间，CMS收集器使用的是标记-清除算法</p>
+</li>
+<li><p>CMS以牺牲CPU资源的代价来减少用户线程的停顿。当CPU个数少的时候，有可能对吞吐量影响非常大。</p>
+</li>
+<li><p>CMS在并发清理的过程中，用户线程还在跑，这时候需要预留一部分空间给用户线程。</p>
+</li>
+<li><p>CMS用Mark-Sweep，会带来碎片问题，碎片过多的时候会容易频繁触发Ful GC</p>
+</li>
+</ul>
+<h3 id="java内存泄露的经典原因"><a href="#java内存泄露的经典原因" class="headerlink" title="java内存泄露的经典原因"></a>java内存泄露的经典原因</h3><ul>
+<li>对象定义在错误的范围内</li>
+<li>异常(Exception)处理不当。</li>
+<li>集合数据管理不当</li>
+</ul>
+<h4 id="对象定义在错误的范围-wrong-scope"><a href="#对象定义在错误的范围-wrong-scope" class="headerlink" title="对象定义在错误的范围(wrong scope)"></a>对象定义在错误的范围(wrong scope)</h4><ul>
+<li><p>如果Foo实例对象的生命较长，会导致临时性内存泄露。（这里指的names变量其实只有临时作用）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">class Foo&#123;</span><br><span class="line">  private String[] names;</span><br><span class="line">  public void doit(int length)&#123;</span><br><span class="line">    if(names == null || names.length &lt; length)</span><br><span class="line">      names = new String[length];</span><br><span class="line">    populate(names);</span><br><span class="line">    print(names);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>JVM 喜欢生命周期短的对象，这样做已经足够高效</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">class Foo&#123;</span><br><span class="line"></span><br><span class="line">  public void doit(int length)&#123;</span><br><span class="line">      private String[] names =  new String[length];</span><br><span class="line">      populate(names);</span><br><span class="line">      print(names);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="异常处理不当"><a href="#异常处理不当" class="headerlink" title="异常处理不当"></a>异常处理不当</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Connection con = new DriverManager.getConnection(url,name,passwd);</span><br><span class="line">try&#123;</span><br><span class="line">  String sql = &quot;do a query sql&quot;;</span><br><span class="line">  PrepareStatement stmt = conn.PrepareStatement(sql);</span><br><span class="line">  ResultStatment rs = stmt.executeQuery();</span><br><span class="line">  while(re.next())&#123;</span><br><span class="line">    doSomeStuff();</span><br><span class="line">  &#125;</span><br><span class="line">  rs.close();</span><br><span class="line">  conn.close();</span><br><span class="line">&#125;catch(Exception e)&#123;</span><br><span class="line">  //如果doSomeStuff()抛出异常</span><br><span class="line">  //rs.close和conn.close()不会被调用，</span><br><span class="line">  //会导致内存泄露和db连接泄露</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="集合数据管理不当"><a href="#集合数据管理不当" class="headerlink" title="集合数据管理不当"></a>集合数据管理不当</h4><ul>
+<li>当使用Array-based的数据结构(ArrayList,HashMap等)时，尽量减少resize<ul>
+<li>比如new ArrayList时，尽量估算size，在创建的时候把size确定</li>
+<li>减少resize可以避免没有必要的array coping，gc碎片等问题</li>
+</ul>
+</li>
+<li>如果一个List只需要顺序访问，不需要随机访问(Random Access),用LingkList代替ArrayList<ul>
+<li>LinkList本质是是链表，不需要resize，但是适用于顺序访问。</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>CeaserWang
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://ceaser.wang/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/" title="jvm原理（42）JVM垃圾回收重要理论剖析以及算法分析与演示">https://ceaser.wang/2019/05/01/jvm原理（42）JVM垃圾回收重要理论剖析以及算法分析与演示/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8/" rel="tag"><i class="fa fa-tag"></i> 垃圾收集器</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/04/30/jvm%E5%8E%9F%E7%90%86%EF%BC%8841%EF%BC%89jmap-jstat-jcmd-jmc-jhat%E8%AE%B2%E8%A7%A3%E4%B8%8E%E5%AE%9E%E6%88%98/" rel="prev" title="jvm原理（41）jmap_jstat_jcmd_jmc_jhat讲解与实战">
+                  <i class="fa fa-chevron-left"></i> jvm原理（41）jmap_jstat_jcmd_jmc_jhat讲解与实战
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/05/12/jvm%E5%8E%9F%E7%90%86%EF%BC%8843%EF%BC%89%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%97%A5%E5%BF%97%E4%B8%8E%E7%AE%97%E6%B3%95%E6%B7%B1%E5%BA%A6%E8%A7%A3%E8%AF%BB/" rel="next" title="jvm原理（43）垃圾回收日志与算法深度解读">
+                  jvm原理（43）垃圾回收日志与算法深度解读 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CeaserWang</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":"forest","js":{"url":"https://cdn.jsdelivr.net/npm/mermaid@8.11.0/dist/mermaid.min.js","integrity":"sha256-sVAx+v/Q7v0Q2xm5vN7h5ccSna6gaLREhG9sF8pKT6I="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+  <script class="next-config" data-name="nprogress" type="application/json">{"enable":true,"spinner":true}</script>
+  <script src="/js/third-party/nprogress.js"></script>
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"ryAR9bttS7fex1FPEPAylmmJ-gzGzoHsz","app_key":"dYqygoN4Y01Bl38OdRoCHUYn","server_url":null,"security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+
+</body>
+</html>

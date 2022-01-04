@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.css" integrity="sha256-no0c5ccDODBwp+9hSmV5VvPpKwHCpbVzXHexIkupM6U=" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.js" integrity="sha256-a5YRB27CcBwBFcT5EF/f3E4vzIqyHrSR878nseNYw64=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ceaser.wang","root":"/","images":"/images","scheme":"Muse","version":"8.6.1","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+<meta name="description" content="首先我们使用netty建立一个服务端和客户端，功能是相互之间发消息，代码我们把服务端的主要代码贴出来：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="netty源码分析(一)EventLoopGroup">
+<meta property="og:url" content="https://ceaser.wang/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E4%B8%80-EventLoopGroup/index.html">
+<meta property="og:site_name" content="南贺神社">
+<meta property="og:description" content="首先我们使用netty建立一个服务端和客户端，功能是相互之间发消息，代码我们把服务端的主要代码贴出来：">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E4%B8%80-EventLoopGroup/20170910175123805.png">
+<meta property="article:published_time" content="2018-10-04T14:12:37.000Z">
+<meta property="article:modified_time" content="2022-01-04T02:21:30.872Z">
+<meta property="article:author" content="CeaserWang">
+<meta property="article:tag" content="nio socket netty源码分析">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ceaser.wang/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E4%B8%80-EventLoopGroup/20170910175123805.png">
+
+
+<link rel="canonical" href="https://ceaser.wang/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E4%B8%80-EventLoopGroup/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://ceaser.wang/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E4%B8%80-EventLoopGroup/","path":"2018/10/04/netty源码分析-一-EventLoopGroup/","title":"netty源码分析(一)EventLoopGroup"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>netty源码分析(一)EventLoopGroup | 南贺神社</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">南贺神社</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">你写程序有写诗一样的感觉吗?</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">205</span></a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">24</span></a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">212</span></a></li>
+        <li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-overview">
+            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="CeaserWang"
+      src="/../0xcc/index/Uchiha.jpg">
+  <p class="site-author-name" itemprop="name">CeaserWang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">212</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">205</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tLzExNTY3MjE4NzQ=" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;1156721874"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmNlYXNlcndhbmdAb3V0bG9vay5jb20=" title="E-Mail → mailto:ceaserwang@outlook.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+  </div>
+  <div class="cc-license site-overview-item animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><img src="https://cdn.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-user-friends fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly90d29kcmFnb25sYWtlLmNvbQ==" title="https:&#x2F;&#x2F;twodragonlake.com">TwoDragonLake</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9yb290Y2x1c3Rlci5naXRodWIuaW8=" title="https:&#x2F;&#x2F;rootcluster.github.io">RootCluster</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9tdXNlZmxvdy5pbw==" title="https:&#x2F;&#x2F;museflow.io">MuseFlow</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9pbmNvZGVyLm9yZw==" title="https:&#x2F;&#x2F;incoder.org">BladeCode</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9rYWlmYS5kZXY=" title="https:&#x2F;&#x2F;kaifa.dev">Alyenc</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmRhemhpZGF5b25nLmNu" title="https:&#x2F;&#x2F;blog.dazhidayong.cn">Killua</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9qb2NlbHluc2hhbmcuY24v" title="https:&#x2F;&#x2F;jocelynshang.cn&#x2F;">Jocelyn</span>
+        </li>
+    </ul>
+  </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E4%B8%80-EventLoopGroup/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
+      <meta itemprop="name" content="CeaserWang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="南贺神社">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          netty源码分析(一)EventLoopGroup
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-10-04 14:12:37" itemprop="dateCreated datePublished" datetime="2018-10-04T14:12:37+00:00">2018-10-04</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2022-01-04 02:21:30" itemprop="dateModified" datetime="2022-01-04T02:21:30+00:00">2022-01-04</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/netty/" itemprop="url" rel="index"><span itemprop="name">netty</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E4%B8%80-EventLoopGroup/" class="post-meta-item leancloud_visitors" data-flag-title="netty源码分析(一)EventLoopGroup" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>首先我们使用netty建立一个服务端和客户端，功能是相互之间发消息，<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tLzExNTY3MjE4NzQvbmV0dHlfbGVjdHVyZS90cmVlL21hc3Rlci9zcmMvbWFpbi9qYXZhL2NvbS9jZWFzZXIvbmV0dHkvc2Vjb25kZXhhbXBsZQ==">代码<i class="fa fa-external-link-alt"></i></span><br>我们把服务端的主要代码贴出来：</p>
+<span id="more"></span>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">package com.ceaser.netty.secondexample;</span><br><span class="line"></span><br><span class="line">import io.netty.bootstrap.ServerBootstrap;</span><br><span class="line">import io.netty.channel.ChannelFuture;</span><br><span class="line">import io.netty.channel.EventLoopGroup;</span><br><span class="line">import io.netty.channel.nio.NioEventLoopGroup;</span><br><span class="line">import io.netty.channel.socket.nio.NioServerSocketChannel;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * Created by Administrator on 2017/5/20.</span><br><span class="line"> * 服务器和客户端互发程序</span><br><span class="line"> */</span><br><span class="line">public class MyServer &#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) throws InterruptedException &#123;</span><br><span class="line">        EventLoopGroup bossGroup = new NioEventLoopGroup();//第一步建立bossGroup 接受数据然后转发给workerGroup ，是一个死循环</span><br><span class="line">        EventLoopGroup workerGroup = new NioEventLoopGroup();//第二部 workerGroup 完成实际数据的处理，也是一个死循环</span><br><span class="line">        try&#123;</span><br><span class="line">            ServerBootstrap serverBootstrap = new ServerBootstrap();//第三步。启动bossGroup和workerGroup</span><br><span class="line">            serverBootstrap.group(bossGroup,workerGroup).channel(NioServerSocketChannel.class).</span><br><span class="line">            handler(new LoggingHandler(LogLevel.WARN))</span><br><span class="line">            .childHandler(new MyServerInitializer());</span><br><span class="line">            ChannelFuture channelFuture = serverBootstrap.bind(8899).sync();//第四部，指定服务端的端口。</span><br><span class="line">            channelFuture.channel().closeFuture().sync();</span><br><span class="line">        &#125;finally&#123;</span><br><span class="line">            bossGroup.shutdownGracefully();</span><br><span class="line">            workerGroup.shutdownGracefully();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们从EventLoopGroup 入手，看一下EventLoopGroup 的结构：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * Special &#123;@link EventExecutorGroup&#125; which allows registering &#123;@link Channel&#125;s that get</span><br><span class="line"> * processed for later selection during the event loop.</span><br><span class="line"> *EventLoopGroup 首先是一个接口，继承了EventExecutorGroup ，主要的功能是在时间循环对Channel的注册，</span><br><span class="line"> */</span><br><span class="line">public interface EventLoopGroup extends EventExecutorGroup &#123;</span><br><span class="line">    /**</span><br><span class="line">     * Return the next &#123;@link EventLoop&#125; to use</span><br><span class="line">     * 一个EventLoopGroup 有多个EventLoop ，地方法得到下一个EventLoop</span><br><span class="line">     */</span><br><span class="line">    @Override</span><br><span class="line">    EventLoop next();</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Register a &#123;@link Channel&#125; with this &#123;@link EventLoop&#125;. The returned &#123;@link ChannelFuture&#125;</span><br><span class="line">     * will get notified once the registration was complete.</span><br><span class="line">     * 将参数channel 注册到EventLoop当中，然后注册完毕之后会异步的ChannelFuture 返回到ChannelFuture 当中。</span><br><span class="line">     */</span><br><span class="line">    ChannelFuture register(Channel channel);</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Register a &#123;@link Channel&#125; with this &#123;@link EventLoop&#125; using a &#123;@link ChannelFuture&#125;. The passed</span><br><span class="line">     * &#123;@link ChannelFuture&#125; will get notified once the registration was complete and also will get returned.</span><br><span class="line">     * 也是讲channel注册到EventLoop当中，当时我们发现 参数是ChannelPromise 类型的，不是Channel 类型的，那只有一种可能，</span><br><span class="line">     * ChannelPromise 里边包含Channel 的引用，后续会展开讲解。</span><br><span class="line">     */</span><br><span class="line">    ChannelFuture register(ChannelPromise promise);</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Register a &#123;@link Channel&#125; with this &#123;@link EventLoop&#125;. The passed &#123;@link ChannelFuture&#125;</span><br><span class="line">     * will get notified once the registration was complete and also will get returned.</span><br><span class="line">     *</span><br><span class="line">     * @deprecated Use &#123;@link #register(ChannelPromise)&#125; instead.</span><br><span class="line">     * 废弃的注册，在 ChannelFuture register(ChannelPromise promise);方法当中ChannelPromise 已经包含了Channel 的引用，那么这个</span><br><span class="line">     * 方法把Channel 也作为参数，是一种功能上的重复，因此被Deprecated，不推荐使用。</span><br><span class="line">     */</span><br><span class="line">    @Deprecated</span><br><span class="line">    ChannelFuture register(Channel channel, ChannelPromise promise);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注册返回结果ChannelFuture:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">//ChannelFuture 的父类Future继承了java.util.concurrent.Future,是对结果的一些判断或者监听的操作。</span><br><span class="line">public interface ChannelFuture extends Future&lt;Void&gt; &#123;</span><br><span class="line">    Channel channel();</span><br><span class="line">    @Override</span><br><span class="line">    ChannelFuture addListener(GenericFutureListener&lt;? extends Future&lt;? super Void&gt;&gt; listener);</span><br><span class="line">    @Override</span><br><span class="line">    ChannelFuture addListeners(GenericFutureListener&lt;? extends Future&lt;? super Void&gt;&gt;... listeners);</span><br><span class="line">    @Override</span><br><span class="line">    ChannelFuture removeListener(GenericFutureListener&lt;? extends Future&lt;? super Void&gt;&gt; listener);</span><br><span class="line">    @Override</span><br><span class="line">    ChannelFuture removeListeners(GenericFutureListener&lt;? extends Future&lt;? super Void&gt;&gt;... listeners);</span><br><span class="line">    @Override</span><br><span class="line">    ChannelFuture sync() throws InterruptedException;</span><br><span class="line">    @Override</span><br><span class="line">    ChannelFuture syncUninterruptibly();</span><br><span class="line">    @Override</span><br><span class="line">    ChannelFuture await() throws InterruptedException;</span><br><span class="line">    @Override</span><br><span class="line">    ChannelFuture awaitUninterruptibly();</span><br><span class="line">    boolean isVoid();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>ChannelPromise 是怎么注册Channel 的呢，因为它内部有Channel 的引用</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public interface ChannelPromise extends ChannelFuture, Promise&lt;Void&gt; &#123;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    Channel channel();</span><br><span class="line">    ...略</span><br><span class="line">    ...</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>找一个ChannelPromise 的实现类：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public class DefaultChannelPromise extends DefaultPromise&lt;Void&gt; implements ChannelPromise, FlushCheckpoint &#123;</span><br><span class="line"></span><br><span class="line">    private final Channel channel;内部的Channel引用。</span><br><span class="line">    private long checkpoint;</span><br><span class="line">    ...</span><br><span class="line">    ...略</span><br><span class="line"> &#125;    </span><br></pre></td></tr></table></figure>
+
+<p>接着EventLoopGroup 继承接口EventExecutorGroup：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * The &#123;@link EventExecutorGroup&#125; is responsible for providing the &#123;@link EventExecutor&#125;&#x27;s to use</span><br><span class="line"> * via its &#123;@link #next()&#125; method. Besides this, it is also responsible for handling their</span><br><span class="line"> * life-cycle and allows shutting them down in a global fashion.</span><br><span class="line"> *</span><br><span class="line"> */</span><br><span class="line">public interface EventExecutorGroup extends ScheduledExecutorService, Iterable&lt;EventExecutor&gt; &#123;</span><br><span class="line">...</span><br><span class="line">...中间方法略</span><br><span class="line">...</span><br><span class="line">    /**</span><br><span class="line">     * Returns one of the &#123;@link EventExecutor&#125;s managed by this &#123;@link EventExecutorGroup&#125;.</span><br><span class="line">     * EventExecutorGroup内部管理了EventExecutor 。</span><br><span class="line">     */</span><br><span class="line">    EventExecutor next();</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>透过EventLoopGroup 和EventExecutorGroup我们知道他们都有自己的EventLoop和EventExecutor<br>回到：EventLoopGroup bossGroup = new NioEventLoopGroup();这行代码，NioEventLoopGroup()可以传递参数比如new NioEventLoopGroup(1)；代表有一个线程接受连接。<br>进入NioEventLoopGroup(Int nThreads）的构造器：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public NioEventLoopGroup(int nThreads) &#123;</span><br><span class="line">    this(nThreads, (Executor) null);//第二个参数传null</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>继续走：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public NioEventLoopGroup(int nThreads, Executor executor) &#123;</span><br><span class="line">    this(nThreads, executor, SelectorProvider.provider());//加入SelectorProvider,调SelectorProvider 的静态方法得到一个</span><br><span class="line">    //SelectorProvider</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>next:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public NioEventLoopGroup(</span><br><span class="line">        int nThreads, Executor executor, final SelectorProvider selectorProvider) &#123;</span><br><span class="line">    this(nThreads, executor, selectorProvider, DefaultSelectStrategyFactory.INSTANCE);</span><br><span class="line">    //DefaultSelectStrategyFactory.INSTANCE返回一个DefaultSelectStrategyFactory实例。</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>next：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public NioEventLoopGroup(int nThreads, Executor executor, final SelectorProvider selectorProvider,</span><br><span class="line">                         final SelectStrategyFactory selectStrategyFactory) &#123;</span><br><span class="line">    super(nThreads, executor, selectorProvider, selectStrategyFactory, RejectedExecutionHandlers.reject());</span><br><span class="line">    //RejectedExecutionHandlers提供了拒绝策略</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>next调父类MultithreadEventLoopGroup的构造器：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">protected MultithreadEventLoopGroup(int nThreads, Executor executor, Object... args) &#123;</span><br><span class="line">    super(nThreads == 0 ? DEFAULT_EVENT_LOOP_THREADS : nThreads, executor, args);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>DEFAULT_EVENT_LOOP_THREADS 初始化是在系统加载的时候：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">    static &#123;</span><br><span class="line">        DEFAULT_EVENT_LOOP_THREADS = Math.max(1, SystemPropertyUtil.getInt(</span><br><span class="line">                &quot;io.netty.eventLoopThreads&quot;, NettyRuntime.availableProcessors() * 2));</span><br><span class="line">//如果配置了io.netty.eventLoopThreads会取io.netty.eventLoopThreads的值，否则就去系统cpu的核数*2，注意，现在的cpu都有超频技术</span><br><span class="line">        if (logger.isDebugEnabled()) &#123;</span><br><span class="line">            logger.debug(&quot;-Dio.netty.eventLoopThreads: &#123;&#125;&quot;, DEFAULT_EVENT_LOOP_THREADS);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>我们可以测试一下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public class Test &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        int result = Math.max(1, SystemPropertyUtil.getInt(</span><br><span class="line">                &quot;io.netty.eventLoopThreads&quot;, NettyRuntime.availableProcessors() * 2));</span><br><span class="line">        System.out.println(result);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以为我的机器是8核的：<br><img src="20170910175123805.png" alt="这里写图片描述"><br>运行结果是16。<br>接着往下走调用MultithreadEventLoopGroup的父类MultithreadEventExecutorGroup的构造器：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">protected MultithreadEventExecutorGroup(int nThreads, Executor executor, Object... args) &#123;</span><br><span class="line">    this(nThreads, executor, DefaultEventExecutorChooserFactory.INSTANCE, args);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最后来到最终初始化的地方MultithreadEventExecutorGroup的：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line">public abstract class MultithreadEventExecutorGroup extends AbstractEventExecutorGroup &#123;</span><br><span class="line"></span><br><span class="line">    private final EventExecutor[] children;</span><br><span class="line">	....</span><br><span class="line">	....略</span><br><span class="line">	....</span><br><span class="line">    protected MultithreadEventExecutorGroup(int nThreads, Executor executor,</span><br><span class="line">                                            EventExecutorChooserFactory chooserFactory, Object... args) &#123;</span><br><span class="line">        if (nThreads &lt;= 0) &#123;</span><br><span class="line">            throw new IllegalArgumentException(String.format(&quot;nThreads: %d (expected: &gt; 0)&quot;, nThreads));</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        if (executor == null) &#123;</span><br><span class="line">            executor = new ThreadPerTaskExecutor(newDefaultThreadFactory());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        children = new EventExecutor[nThreads];</span><br><span class="line">		//循环对MultithreadEventExecutorGroup的数组EventExecutor初始化，根据指定的线程数量。</span><br><span class="line">        for (int i = 0; i &lt; nThreads; i ++) &#123;</span><br><span class="line">            boolean success = false;</span><br><span class="line">            try &#123;</span><br><span class="line">                children[i] = newChild(executor, args);</span><br><span class="line">                success = true;</span><br><span class="line">            &#125; catch (Exception e) &#123;</span><br><span class="line">                // TODO: Think about if this is a good exception type</span><br><span class="line">                throw new IllegalStateException(&quot;failed to create a child event loop&quot;, e);</span><br><span class="line">            &#125; finally &#123;</span><br><span class="line">                if (!success) &#123;</span><br><span class="line">                    for (int j = 0; j &lt; i; j ++) &#123;</span><br><span class="line">                        children[j].shutdownGracefully();</span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                    for (int j = 0; j &lt; i; j ++) &#123;</span><br><span class="line">                        EventExecutor e = children[j];</span><br><span class="line">                        try &#123;</span><br><span class="line">                            while (!e.isTerminated()) &#123;</span><br><span class="line">                                e.awaitTermination(Integer.MAX_VALUE, TimeUnit.SECONDS);</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125; catch (InterruptedException interrupted) &#123;</span><br><span class="line">                            // Let the caller handle the interruption.</span><br><span class="line">                            Thread.currentThread().interrupt();</span><br><span class="line">                            break;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        chooser = chooserFactory.newChooser(children);</span><br><span class="line"></span><br><span class="line">        final FutureListener&lt;Object&gt; terminationListener = new FutureListener&lt;Object&gt;() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public void operationComplete(Future&lt;Object&gt; future) throws Exception &#123;</span><br><span class="line">                if (terminatedChildren.incrementAndGet() == children.length) &#123;</span><br><span class="line">                    terminationFuture.setSuccess(null);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        for (EventExecutor e: children) &#123;</span><br><span class="line">            e.terminationFuture().addListener(terminationListener);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Set&lt;EventExecutor&gt; childrenSet = new LinkedHashSet&lt;EventExecutor&gt;(children.length);</span><br><span class="line">        Collections.addAll(childrenSet, children);</span><br><span class="line">        readonlyChildren = Collections.unmodifiableSet(childrenSet);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>由此完成初始化。<br>本节先到这儿~~</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>CeaserWang
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://ceaser.wang/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E4%B8%80-EventLoopGroup/" title="netty源码分析(一)EventLoopGroup">https://ceaser.wang/2018/10/04/netty源码分析-一-EventLoopGroup/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/nio-socket-netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" rel="tag"><i class="fa fa-tag"></i> nio socket netty源码分析</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2018/10/04/git-%E5%8D%81%E4%B8%83-git-rebase-%E5%AE%9E%E6%88%98/" rel="prev" title="git(十七) git rebase 实战">
+                  <i class="fa fa-chevron-left"></i> git(十七) git rebase 实战
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E4%BA%8C-Netty%E5%AF%B9Executor%E7%9A%84%E5%AE%9E%E7%8E%B0%E6%9C%BA%E5%88%B6%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" rel="next" title="netty源码分析(二)Netty对Executor的实现机制源码分析">
+                  netty源码分析(二)Netty对Executor的实现机制源码分析 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CeaserWang</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":"forest","js":{"url":"https://cdn.jsdelivr.net/npm/mermaid@8.11.0/dist/mermaid.min.js","integrity":"sha256-sVAx+v/Q7v0Q2xm5vN7h5ccSna6gaLREhG9sF8pKT6I="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+  <script class="next-config" data-name="nprogress" type="application/json">{"enable":true,"spinner":true}</script>
+  <script src="/js/third-party/nprogress.js"></script>
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"ryAR9bttS7fex1FPEPAylmmJ-gzGzoHsz","app_key":"dYqygoN4Y01Bl38OdRoCHUYn","server_url":null,"security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+
+</body>
+</html>

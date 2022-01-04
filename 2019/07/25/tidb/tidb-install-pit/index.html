@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.css" integrity="sha256-no0c5ccDODBwp+9hSmV5VvPpKwHCpbVzXHexIkupM6U=" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.js" integrity="sha256-a5YRB27CcBwBFcT5EF/f3E4vzIqyHrSR878nseNYw64=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ceaser.wang","root":"/","images":"/images","scheme":"Muse","version":"8.6.1","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+<meta name="description" content="前言近期随着公司的业务发展，现有的mysql分库分表，无缝动态扩容，分布式事物，分布式id等等一些问题得不到满足，为此我们做了一次对tidb的考察，此文是记录tidb的安装遇到的坑进行记录,并做了一些功能性和性能方面的测试，详情按照官方doc进行。  环境集群规模：node1 192.168.138.18  PD1, TiDB1        4c16G 200GHHDnode2 192.168">
+<meta property="og:type" content="article">
+<meta property="og:title" content="tidb-install-pit">
+<meta property="og:url" content="https://ceaser.wang/2019/07/25/tidb/tidb-install-pit/index.html">
+<meta property="og:site_name" content="南贺神社">
+<meta property="og:description" content="前言近期随着公司的业务发展，现有的mysql分库分表，无缝动态扩容，分布式事物，分布式id等等一些问题得不到满足，为此我们做了一次对tidb的考察，此文是记录tidb的安装遇到的坑进行记录,并做了一些功能性和性能方面的测试，详情按照官方doc进行。  环境集群规模：node1 192.168.138.18  PD1, TiDB1        4c16G 200GHHDnode2 192.168">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/186520/1564467485930-4cbeac67-1485-488b-850a-d4744af936dc.png#align=left&display=inline&height=746&name=mutil-schema-error.png&originHeight=746&originWidth=1366&size=74707&status=done&width=1366">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/186520/1564561812914-82ca10bb-9686-417e-af46-276341021cd9.png#align=left&display=inline&height=633&name=image.png&originHeight=633&originWidth=1360&size=88976&status=done&width=1360">
+<meta property="og:image" content="https://ceaser.wang/2019/07/25/tidb/tidb-install-pit/binlog.png">
+<meta property="og:image" content="https://ceaser.wang/2019/07/25/tidb/tidb-install-pit/manager.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/186520/1564482895735-883dcc49-2e4a-422b-be32-bd7ffa706d08.png#align=left&display=inline&height=400&name=oltp_point_select.png&originHeight=400&originWidth=1312&size=33302&status=done&width=1312">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/186520/1564483495647-455b41ad-0547-47dd-aa64-439eba7858e7.png#align=left&display=inline&height=400&name=oltp_update_index.png&originHeight=400&originWidth=1312&size=35286&status=done&width=1312">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/186520/1564487404538-aa194ea1-8f25-411f-adc8-a92502c2a8e0.png#align=left&display=inline&height=400&name=oltp_read_only.png&originHeight=400&originWidth=1312&size=34084&status=done&width=1312">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/186520/1564626255512-417c0a26-cd7a-4af9-a6c3-ae48919b56c8.png#align=left&display=inline&height=92&name=tpc-c-result.png&originHeight=92&originWidth=659&size=9234&status=done&width=659">
+<meta property="article:published_time" content="2019-07-25T14:05:45.000Z">
+<meta property="article:modified_time" content="2022-01-04T02:21:30.960Z">
+<meta property="article:author" content="CeaserWang">
+<meta property="article:tag" content="tidb-install">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2019/png/186520/1564467485930-4cbeac67-1485-488b-850a-d4744af936dc.png#align=left&display=inline&height=746&name=mutil-schema-error.png&originHeight=746&originWidth=1366&size=74707&status=done&width=1366">
+
+
+<link rel="canonical" href="https://ceaser.wang/2019/07/25/tidb/tidb-install-pit/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://ceaser.wang/2019/07/25/tidb/tidb-install-pit/","path":"2019/07/25/tidb/tidb-install-pit/","title":"tidb-install-pit"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>tidb-install-pit | 南贺神社</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">南贺神社</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">你写程序有写诗一样的感觉吗?</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">205</span></a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">24</span></a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">212</span></a></li>
+        <li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83"><span class="nav-number">2.</span> <span class="nav-text">环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%98%E6%96%B9%E5%AE%89%E8%A3%85doc"><span class="nav-number">3.</span> <span class="nav-text">官方安装doc</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9D%91-No-package-epel-release-available"><span class="nav-number">3.1.</span> <span class="nav-text">[坑]No package epel-release available</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9D%91-%E6%8F%90%E5%89%8D%E9%85%8D%E7%BD%AEGrafana-Dashboard-%E4%B8%8A%E7%9A%84-Report-%E6%8C%89%E9%92%AE%E5%8F%AF%E7%94%A8%E6%9D%A5%E7%94%9F%E6%88%90-PDF-%E6%96%87%E4%BB%B6"><span class="nav-number">3.2.</span> <span class="nav-text">[坑]提前配置Grafana Dashboard 上的 Report 按钮可用来生成 PDF 文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9D%91-PD-%E5%92%8C-TiDB-%E5%90%8C%E6%97%B6%E9%83%A8%E7%BD%B2%E7%9A%84%E6%9C%BA%E5%99%A8%E8%A6%81%E6%B1%82%E8%A6%81%E6%9C%898%E4%B8%AAcpu-core"><span class="nav-number">3.3.</span> <span class="nav-text">[坑]PD 和 TiDB 同时部署的机器要求要有8个cpu core</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9D%91-%E7%A3%81%E7%9B%98%E6%A3%80%E6%9F%A5%E5%BC%82%E5%B8%B8"><span class="nav-number">3.4.</span> <span class="nav-text">[坑]磁盘检查异常</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%B7%B3%E8%BF%87cpu%E3%80%81mem%E3%80%81disk%E6%A3%80%E6%9F%A5"><span class="nav-number">3.5.</span> <span class="nav-text">跳过cpu、mem、disk检查</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9-TiDB%E7%9A%84binlog%E5%BC%80%E5%90%AF"><span class="nav-number">3.6.</span> <span class="nav-text">[注意事项]TiDB的binlog开启</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9D%91-%E5%90%AF%E5%8A%A8%E4%B9%8B%E5%90%8Egrafana%E8%BF%9B%E7%A8%8B%E6%B2%A1%E6%9C%89"><span class="nav-number">3.7.</span> <span class="nav-text">[坑]启动之后grafana进程没有</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#tidb%E5%9C%A8navicat%E4%B8%8B%E4%BF%AE%E6%94%B9%E8%A1%A8%E7%BB%93%E6%9E%84%E9%97%AE%E9%A2%98"><span class="nav-number">3.8.</span> <span class="nav-text">tidb在navicat下修改表结构问题</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%99%BB%E9%99%86"><span class="nav-number">4.</span> <span class="nav-text">登陆</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%E4%B9%8B%E5%90%8E%E9%87%8D%E5%90%AF%E6%AD%A5%E9%AA%A4-%E9%9B%86%E7%BE%A4%E5%90%AF%E5%8A%A8-%E9%9B%86%E7%BE%A4%E5%85%B3%E9%97%AD"><span class="nav-number">5.</span> <span class="nav-text">修改集群配置之后重启步骤&#x2F;集群启动&#x2F;集群关闭</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Prometheus%E8%AE%BF%E9%97%AE%E5%9C%B0%E5%9D%80"><span class="nav-number">6.</span> <span class="nav-text">Prometheus访问地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Pushgateway%E8%AE%BF%E9%97%AE%E5%9C%B0%E5%9D%80"><span class="nav-number">7.</span> <span class="nav-text">Pushgateway访问地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Node-exporter%E8%AE%BF%E9%97%AE%E5%9C%B0%E5%9D%80"><span class="nav-number">8.</span> <span class="nav-text">Node_exporter访问地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#grafana%E8%AE%BF%E9%97%AE%E5%9C%B0%E5%9D%80"><span class="nav-number">9.</span> <span class="nav-text">grafana访问地址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%A8%E9%87%8F%E5%A4%87%E4%BB%BD%E4%B8%8E%E6%81%A2%E5%A4%8D"><span class="nav-number">10.</span> <span class="nav-text">全量备份与恢复</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A2%9E%E9%87%8F%E5%A4%87%E4%BB%BD%E4%B8%8E%E6%81%A2%E5%A4%8D"><span class="nav-number">11.</span> <span class="nav-text">增量备份与恢复</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#TiDB-Binlog%E4%BB%8Ekafka%E6%94%B6%E9%9B%86binlog%E7%BB%99Drainer"><span class="nav-number">11.1.</span> <span class="nav-text">TiDB Binlog从kafka收集binlog给Drainer</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Reparo%E4%BB%8EDrainer%E5%BE%97%E5%88%B0%E6%95%B0%E6%8D%AE%E6%81%A2%E5%A4%8D%E5%88%B0mysql-tidb"><span class="nav-number">11.2.</span> <span class="nav-text">Reparo从Drainer得到数据恢复到mysql&#x2F;tidb</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-number">11.3.</span> <span class="nav-text">注意事项</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E4%BD%8D%E6%85%A2%E6%9F%A5%E8%AF%A2"><span class="nav-number">12.</span> <span class="nav-text">定位慢查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%A9%E5%AE%B9%E7%BC%A9%E5%AE%B9"><span class="nav-number">13.</span> <span class="nav-text">扩容缩容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8E-MySQL-%E5%AE%89%E5%85%A8%E7%89%B9%E6%80%A7%E5%B7%AE%E5%BC%82"><span class="nav-number">14.</span> <span class="nav-text">与 MySQL 安全特性差异</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9mysql%E7%9A%84%E6%94%AF%E6%8C%81"><span class="nav-number">15.</span> <span class="nav-text">对mysql的支持</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8B%E7%89%A9"><span class="nav-number">16.</span> <span class="nav-text">事物</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%8B%E7%89%A9%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%ABSnapshot-Isolation"><span class="nav-number">16.1.</span> <span class="nav-text">事物隔离级别Snapshot Isolation</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B9%90%E8%A7%82%E9%94%81"><span class="nav-number">16.2.</span> <span class="nav-text">乐观锁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%8B%E5%8A%A1%E5%A4%A7%E5%B0%8F%E9%99%90%E5%88%B6"><span class="nav-number">16.3.</span> <span class="nav-text">事务大小限制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%94%AF%E6%8C%81%E6%82%B2%E8%A7%82%E9%94%81%EF%BC%8C%E4%BD%86%E6%98%AF%E5%AE%98%E6%96%B9%E4%B8%8D%E5%BB%BA%E8%AE%AE%E7%94%9F%E4%BA%A7%E7%8E%AF%E5%A2%83%E4%BD%BF%E7%94%A8%EF%BC%8C%E5%9B%A0%E4%B8%BA%E5%9C%A8%E5%AE%98%E6%96%B9%E5%B0%86%E5%85%B6%E5%AE%9A%E4%B9%89%E4%B8%BA%E5%AE%9E%E9%AA%8C%E6%80%A7%E7%9A%84%E7%89%B9%E6%80%A7"><span class="nav-number">16.4.</span> <span class="nav-text">支持悲观锁，但是官方不建议生产环境使用，因为在官方将其定义为实验性的特性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%8B%E7%89%A9%E9%99%90%E5%88%B6"><span class="nav-number">16.5.</span> <span class="nav-text">事物限制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93"><span class="nav-number">16.6.</span> <span class="nav-text">小结</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%98%E5%9C%A8%E6%95%B0%E6%8D%AE%E7%83%AD%E7%82%B9%E9%97%AE%E9%A2%98"><span class="nav-number">17.</span> <span class="nav-text">存在数据热点问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GC-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6"><span class="nav-number">18.</span> <span class="nav-text">GC 垃圾回收</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TiDB-%E7%9A%84%E6%9C%80%E4%BD%B3%E9%80%82%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-number">19.</span> <span class="nav-text">TiDB 的最佳适用场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8%E5%8D%95%E5%8F%B0tidb%E5%81%9Asybench"><span class="nav-number">20.</span> <span class="nav-text">在单台tidb做sybench</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9D%91-%E5%AF%BC%E5%85%A5%E6%95%B0%E6%8D%AE%E8%80%97%E6%97%B6%E8%BE%83%E9%95%BF%EF%BC%8C%E5%AF%BC%E5%85%A5%E6%95%B0%E6%8D%AE%E7%9A%84%E5%91%BD%E4%BB%A4%E8%A6%81%E4%BD%BF%E7%94%A8nohu%E6%89%A7%E8%A1%8C"><span class="nav-number">20.1.</span> <span class="nav-text">[坑]导入数据耗时较长，导入数据的命令要使用nohu执行</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#oltp-point-select"><span class="nav-number">20.2.</span> <span class="nav-text">oltp_point_select</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#oltp-update-index"><span class="nav-number">20.3.</span> <span class="nav-text">oltp_update_index</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#oltp-read-only"><span class="nav-number">20.4.</span> <span class="nav-text">oltp_read_only</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TPC-C%E6%B5%8B%E8%AF%95"><span class="nav-number">21.</span> <span class="nav-text">TPC-C测试</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#BenchmarkSQL-%E9%85%8D%E7%BD%AE"><span class="nav-number">21.1.</span> <span class="nav-text">BenchmarkSQL 配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">21.2.</span> <span class="nav-text">初始化数据库</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E6%B5%8B%E8%AF%95"><span class="nav-number">21.3.</span> <span class="nav-text">运行测试</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E7%BB%93%E6%9E%9C"><span class="nav-number">21.4.</span> <span class="nav-text">测试结果</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E4%BC%81%E4%B8%9A%E5%9C%A8tidb%E7%9A%84%E5%AE%9E%E8%B7%B5%E4%B8%8E%E5%88%86%E4%BA%AB"><span class="nav-number">22.</span> <span class="nav-text">其他企业在tidb的实践与分享</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-overview">
+            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="CeaserWang"
+      src="/../0xcc/index/Uchiha.jpg">
+  <p class="site-author-name" itemprop="name">CeaserWang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">212</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">205</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tLzExNTY3MjE4NzQ=" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;1156721874"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmNlYXNlcndhbmdAb3V0bG9vay5jb20=" title="E-Mail → mailto:ceaserwang@outlook.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+  </div>
+  <div class="cc-license site-overview-item animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><img src="https://cdn.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-user-friends fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly90d29kcmFnb25sYWtlLmNvbQ==" title="https:&#x2F;&#x2F;twodragonlake.com">TwoDragonLake</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9yb290Y2x1c3Rlci5naXRodWIuaW8=" title="https:&#x2F;&#x2F;rootcluster.github.io">RootCluster</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9tdXNlZmxvdy5pbw==" title="https:&#x2F;&#x2F;museflow.io">MuseFlow</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9pbmNvZGVyLm9yZw==" title="https:&#x2F;&#x2F;incoder.org">BladeCode</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9rYWlmYS5kZXY=" title="https:&#x2F;&#x2F;kaifa.dev">Alyenc</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmRhemhpZGF5b25nLmNu" title="https:&#x2F;&#x2F;blog.dazhidayong.cn">Killua</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9qb2NlbHluc2hhbmcuY24v" title="https:&#x2F;&#x2F;jocelynshang.cn&#x2F;">Jocelyn</span>
+        </li>
+    </ul>
+  </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2019/07/25/tidb/tidb-install-pit/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
+      <meta itemprop="name" content="CeaserWang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="南贺神社">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          tidb-install-pit
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2019-07-25 14:05:45" itemprop="dateCreated datePublished" datetime="2019-07-25T14:05:45+00:00">2019-07-25</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2022-01-04 02:21:30" itemprop="dateModified" datetime="2022-01-04T02:21:30+00:00">2022-01-04</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/cloud/" itemprop="url" rel="index"><span itemprop="name">cloud</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2019/07/25/tidb/tidb-install-pit/" class="post-meta-item leancloud_visitors" data-flag-title="tidb-install-pit" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p><a name="df368884"></a></p>
+<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>近期随着公司的业务发展，现有的mysql分库分表，无缝动态扩容，分布式事物，分布式id等等一些问题得不到满足，为此我们做了一次对tidb的考察，此文是记录tidb的安装遇到的坑进行记录,并做了一些功能性和性能方面的测试，详情按照官方doc进行。</p>
+<p><a name="fa405f59"></a></p>
+<h3 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h3><p>集群规模：<br>node1 192.168.138.18  PD1, TiDB1        4c16G 200GHHD<br>node2 192.168.138.19  PD2, TiDB2        4c16G 200GHHD<br>node3 192.168.138.21  PD3               2c16G 200GHHD<br>node4 192.168.138.22  TiKV1,zk,kakfka   2c16G 200GHHD<br>node5 192.168.138.23  TiKV2,zk,kakfka   2c16G 200GHHD<br>node6 192.168.138.24  TiKV3,zk,kakfka   2c16G 200GHHD<br>当前os环境：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># cat /etc/redhat-release</span><br><span class="line">CentOS Linux release 7.5.1804 (Core)</span><br></pre></td></tr></table></figure>
+
+<p>磁盘分布情况：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"># lsblk -f</span><br><span class="line">NAME            FSTYPE      LABEL UUID                                   MOUNTPOINT</span><br><span class="line">sda                                                                      </span><br><span class="line">├─sda1          xfs               70b07712-9842-4618-9680-a9e8f7617bf0   /boot</span><br><span class="line">└─sda2          LVM2_member       etR92Z-w9Jt-Cxao-louw-Lgb2-hveD-knEFcQ</span><br><span class="line">  ├─centos-root xfs               dda73e1e-afd7-4d76-9ac7-c30ed0ace8d4   /</span><br><span class="line">  └─centos-swap swap              93faea67-8660-4c7d-85c1-a67ba4c4aad0   [SWAP]</span><br><span class="line">sdb                                                                      </span><br><span class="line">├─sdb1                                                                   </span><br><span class="line">└─sdb5          ext4              055154ea-fafd-4ddf-8a8b-7d26de10f98f   /data</span><br><span class="line">sr0</span><br><span class="line">【sdb5是一块ext4文件系统格式的，这个是tidb要求的】</span><br><span class="line"># fdisk -l</span><br><span class="line"></span><br><span class="line">Disk /dev/sda: 107.4 GB, 107374182400 bytes, 209715200 sectors</span><br><span class="line">Units = sectors of 1 * 512 = 512 bytes</span><br><span class="line">Sector size (logical/physical): 512 bytes / 512 bytes</span><br><span class="line">I/O size (minimum/optimal): 512 bytes / 512 bytes</span><br><span class="line">Disk label type: dos</span><br><span class="line">Disk identifier: 0x000d73fc</span><br><span class="line"></span><br><span class="line">   Device Boot      Start         End      Blocks   Id  System</span><br><span class="line">/dev/sda1   *        2048      411647      204800   83  Linux</span><br><span class="line">/dev/sda2          411648   209715199   104651776   8e  Linux LVM</span><br><span class="line"></span><br><span class="line">Disk /dev/mapper/centos-root: 90.0 GB, 89980403712 bytes, 175742976 sectors</span><br><span class="line">Units = sectors of 1 * 512 = 512 bytes</span><br><span class="line">Sector size (logical/physical): 512 bytes / 512 bytes</span><br><span class="line">I/O size (minimum/optimal): 512 bytes / 512 bytes</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Disk /dev/mapper/centos-swap: 17.2 GB, 17179869184 bytes, 33554432 sectors</span><br><span class="line">Units = sectors of 1 * 512 = 512 bytes</span><br><span class="line">Sector size (logical/physical): 512 bytes / 512 bytes</span><br><span class="line">I/O size (minimum/optimal): 512 bytes / 512 bytes</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Disk /dev/sdb: 107.4 GB, 107374182400 bytes, 209715200 sectors</span><br><span class="line">Units = sectors of 1 * 512 = 512 bytes</span><br><span class="line">Sector size (logical/physical): 512 bytes / 512 bytes</span><br><span class="line">I/O size (minimum/optimal): 512 bytes / 512 bytes</span><br><span class="line">Disk label type: dos</span><br><span class="line">Disk identifier: 0x6ee43510</span><br><span class="line"></span><br><span class="line">   Device Boot      Start         End      Blocks   Id  System</span><br><span class="line">/dev/sdb1            2048   209715199   104856576    5  Extended</span><br><span class="line">/dev/sdb5            4096   209715199   104855552   83  Linux</span><br></pre></td></tr></table></figure>
+
+<p>每台机器有2块硬盘，按照官方要求外挂的那块文件系统是ext4的。<br />然后机器需要安装git。</p>
+<p><a name="374d66be"></a></p>
+<h3 id="官方安装doc"><a href="#官方安装doc" class="headerlink" title="官方安装doc"></a>官方安装doc</h3><p><span class="exturl" data-url="aHR0cHM6Ly9waW5nY2FwLmNvbS9kb2NzLWNuL3YzLjAvaG93LXRvL2RlcGxveS9vcmNoZXN0cmF0ZWQvYW5zaWJsZS8=">https://pingcap.com/docs-cn/v3.0/how-to/deploy/orchestrated/ansible/<i class="fa fa-external-link-alt"></i></span></p>
+<p>首先执行的是:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># yum -y install epel-release git curl sshpass</span><br><span class="line">Loaded plugins: fastestmirror, langpacks</span><br><span class="line">Loading mirror speeds from cached hostfile</span><br><span class="line">No package epel-release available.【lib未找到】</span><br><span class="line">Package git-1.8.3.1-13.el7.x86_64 already installed and latest version</span><br><span class="line">Package curl-7.29.0-46.el7.x86_64 already installed and latest version</span><br><span class="line">No package sshpass available.【lib未找到】</span><br><span class="line">Nothing to do</span><br></pre></td></tr></table></figure>
+
+<p><a name="34916830"></a></p>
+<h4 id="坑-No-package-epel-release-available"><a href="#坑-No-package-epel-release-available" class="headerlink" title="[坑]No package epel-release available"></a>[坑]No package epel-release available</h4><p>根据<span class="exturl" data-url="aHR0cHM6Ly93d3cuc2hlbGxoYWNrcy5jb20vZXBlbC1yZXBvLWNlbnRvcy03LTYtaW5zdGFsbC8=">epel-repo-centos-7<i class="fa fa-external-link-alt"></i></span>指南需要执行:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm</span><br></pre></td></tr></table></figure>
+
+<p>然后在执行[yum -y install epel-release git curl sshpass]才会成功.</p>
+<p><a name="129fc895"></a></p>
+<h4 id="坑-提前配置Grafana-Dashboard-上的-Report-按钮可用来生成-PDF-文件"><a href="#坑-提前配置Grafana-Dashboard-上的-Report-按钮可用来生成-PDF-文件" class="headerlink" title="[坑]提前配置Grafana Dashboard 上的 Report 按钮可用来生成 PDF 文件"></a>[坑]提前配置Grafana Dashboard 上的 Report 按钮可用来生成 PDF 文件</h4><p>在Grafana部署的机器上执行:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo yum install fontconfig open-sans-fonts</span><br></pre></td></tr></table></figure>
+
+<p><a name="5c9f0649"></a></p>
+<h4 id="坑-PD-和-TiDB-同时部署的机器要求要有8个cpu-core"><a href="#坑-PD-和-TiDB-同时部署的机器要求要有8个cpu-core" class="headerlink" title="[坑]PD 和 TiDB 同时部署的机器要求要有8个cpu core"></a>[坑]PD 和 TiDB 同时部署的机器要求要有8个cpu core</h4><p>异常如下：<br />[192.168.138.18]: Ansible FAILED! =&gt; playbook: bootstrap.yml; TASK: check_system_optional : Preflight check - Check TiDB server’s CPU; message: {“changed”: false, “msg”: “This machine does not have sufficient CPU to run TiDB, at least 8 cores.”}</p>
+<p>[192.168.138.19]: Ansible FAILED! =&gt; playbook: bootstrap.yml; TASK: check_system_optional : Preflight check - Check TiDB server’s CPU; message: {“changed”: false, “msg”: “This machine does not have sufficient CPU to run TiDB, at least 8 cores.”}<br />解决方式：</p>
+<ul>
+<li>找运维增加虚拟机的cpu core数量</li>
+<li>修改参数：vi roles/check_system_optional/defaults/main.yml</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">tidb_min_cpu: 2</span><br><span class="line">tikv_min_cpu: 2</span><br><span class="line">pd_min_cpu: 2</span><br><span class="line">monitor_min_cpu: 2</span><br></pre></td></tr></table></figure>
+
+<p>其他的内存和硬盘的检查参数也在这个文件配置。</p>
+<ul>
+<li>参考： <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3BpbmdjYXAvdGlkYi9pc3N1ZXMvNjQyMw==">https://github.com/pingcap/tidb/issues/6423<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p><a name="e1df35e7"></a></p>
+<h4 id="坑-磁盘检查异常"><a href="#坑-磁盘检查异常" class="headerlink" title="[坑]磁盘检查异常"></a>[坑]磁盘检查异常</h4><p>异常信息：<br />[192.168.138.22]: Ansible FAILED! =&gt; playbook: bootstrap.yml; TASK: machine_benchmark : Preflight check - Does fio randread iops of tikv_data_dir disk meet requirement; message: {“changed”: false, “msg”: “fio: randread iops of tikv_data_dir disk is too low: 7748 &lt; 40000, it is strongly recommended to use SSD disks for TiKV and PD, or there might be performance issues.”}</p>
+<p>[192.168.138.23]: Ansible FAILED! =&gt; playbook: bootstrap.yml; TASK: machine_benchmark : Preflight check - Does fio randread iops of tikv_data_dir disk meet requirement; message: {“changed”: false, “msg”: “fio: randread iops of tikv_data_dir disk is too low: 3128 &lt; 40000, it is strongly recommended to use SSD disks for TiKV and PD, or there might be performance issues.”}</p>
+<p>[192.168.138.24]: Ansible FAILED! =&gt; playbook: bootstrap.yml; TASK: machine_benchmark : Preflight check - Does fio randread iops of tikv_data_dir disk meet requirement; message: {“changed”: false, “msg”: “fio: randread iops of tikv_data_dir disk is too low: 8847 &lt; 40000, it is strongly recommended to use SSD disks for TiKV and PD, or there might be performance issues.”}</p>
+<p>解决方式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># vi roles/machine_benchmark/defaults/main.yml</span><br></pre></td></tr></table></figure>
+
+<p>修改min_ssd_randread_iops的大小。</p>
+<p><a name="244e1822"></a></p>
+<h4 id="跳过cpu、mem、disk检查"><a href="#跳过cpu、mem、disk检查" class="headerlink" title="跳过cpu、mem、disk检查"></a>跳过cpu、mem、disk检查</h4><p>有些企业由于成本问题，在开发测试环境都是HHD，没法满足tidb的硬件要求，因此我们可以使用开发模式，跳过cpu、内存、硬盘的检查。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># ansible-playbook bootstrap.yml --extra-vars &quot;dev_mode=True&quot;</span><br></pre></td></tr></table></figure>
+
+<p><a name="f023e41c"></a></p>
+<h4 id="注意事项-TiDB的binlog开启"><a href="#注意事项-TiDB的binlog开启" class="headerlink" title="[注意事项]TiDB的binlog开启"></a>[注意事项]TiDB的binlog开启</h4><p>/home/tidb/tidb-ansible/inventory.ini配置如果【enable_binlog = True 】<br>意味着需要配置<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3BpbmdjYXAvZG9jcy1jbi9ibG9iL21hc3Rlci92My4wL2hvdy10by9kZXBsb3kvdGlkYi1iaW5sb2cubWQ=">TiDB-Binlog<i class="fa fa-external-link-alt"></i></span>,当前集群按照<span class="exturl" data-url="aHR0cHM6Ly9waW5nY2FwLmNvbS9kb2NzLWNuL3YzLjAvaG93LXRvL2RlcGxveS90aWRiLWJpbmxvZy8=">官方doc<i class="fa fa-external-link-alt"></i></span>搭建了zk和kafka集群，然后部署了pump（抓取tidb的binlog塞到kafka集群）。</p>
+<p><a name="f20fc258"></a></p>
+<h4 id="坑-启动之后grafana进程没有"><a href="#坑-启动之后grafana进程没有" class="headerlink" title="[坑]启动之后grafana进程没有"></a>[坑]启动之后grafana进程没有</h4><p>切换到部署目录/data/deploy/scripts<br />手动执行: ./start_grafana.sh</p>
+<p><a name="bcf29c71"></a></p>
+<h4 id="tidb在navicat下修改表结构问题"><a href="#tidb在navicat下修改表结构问题" class="headerlink" title="tidb在navicat下修改表结构问题"></a>tidb在navicat下修改表结构问题</h4><p>tidb在navicat下修改表结构一次性不允许修改(添加或者修改)多个列，否则报错：<br /><img src="https://cdn.nlark.com/yuque/0/2019/png/186520/1564467485930-4cbeac67-1485-488b-850a-d4744af936dc.png#align=left&display=inline&height=746&name=mutil-schema-error.png&originHeight=746&originWidth=1366&size=74707&status=done&width=1366" alt="mutil-schema-error.png"></p>
+<p><a name="bb1c734e"></a></p>
+<h3 id="登陆"><a href="#登陆" class="headerlink" title="登陆"></a>登陆</h3><ul>
+<li>使用mysql客户端登陆<ul>
+<li>使用tidb(密码：tidb)登陆开发机，注意：必须是tidb用户。<ul>
+<li>mysql -u root -proot  -h 192.168.138.18 -P 4000</li>
+<li>mysql -u tnp_test -ptnp_test  -h 192.168.138.18 -P 4000</li>
+<li>PS:192.168.138.19 和 192.168.138.18都可以链接</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><a name="1346328c"></a></p>
+<h3 id="修改集群配置之后重启步骤-集群启动-集群关闭"><a href="#修改集群配置之后重启步骤-集群启动-集群关闭" class="headerlink" title="修改集群配置之后重启步骤/集群启动/集群关闭"></a>修改集群配置之后重启步骤/集群启动/集群关闭</h3><ul>
+<li><p>配置<br /><br>对【/home/tidb/tidb-ansible/inventory.ini】进行修改后需要执行：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># ansible-playbook deploy.yml</span><br></pre></td></tr></table></figure></li>
+<li><p>目的是把配置下放到所有的机器。</p>
+</li>
+<li><p>启动集群<br /><br>ansible-playbook start.yml</p>
+</li>
+<li><p>关闭集群<br /><br>ansible-playbook stop.yml <br/></p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>启动集群</th>
+<th>ansible-playbook start.yml</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>停止集群</td>
+<td>ansible-playbook stop.yml</td>
+</tr>
+<tr>
+<td>销毁集群</td>
+<td>ansible-playbook unsafe_cleanup.yml (若部署目录为挂载点，会报错，可忽略）</td>
+</tr>
+<tr>
+<td>清除数据(测试用)</td>
+<td>ansible-playbook cleanup_data.yml</td>
+</tr>
+<tr>
+<td>滚动升级</td>
+<td>ansible-playbook rolling_update.yml</td>
+</tr>
+<tr>
+<td>滚动升级 TiKV</td>
+<td>ansible-playbook rolling_update.yml –tags=tikv</td>
+</tr>
+<tr>
+<td>滚动升级除 PD 外模块</td>
+<td>ansible-playbook rolling_update.yml –skip-tags=pd</td>
+</tr>
+<tr>
+<td>滚动升级监控组件</td>
+<td>ansible-playbook rolling_update_monitor.yml</td>
+</tr>
+</tbody></table>
+<p><a name="5fca6be2"></a></p>
+<h3 id="Prometheus访问地址"><a href="#Prometheus访问地址" class="headerlink" title="Prometheus访问地址"></a>Prometheus访问地址</h3><p><span class="exturl" data-url="aHR0cDovLzE5Mi4xNjguMTM4LjE4OjkwOTAvZ3JhcGg=">http://192.168.138.18:9090/graph<i class="fa fa-external-link-alt"></i></span></p>
+<p><a name="d3a39edf"></a></p>
+<h3 id="Pushgateway访问地址"><a href="#Pushgateway访问地址" class="headerlink" title="Pushgateway访问地址"></a>Pushgateway访问地址</h3><p><span class="exturl" data-url="aHR0cDovLzE5Mi4xNjguMTM4LjE4OjkwOTEv">http://192.168.138.18:9091/<i class="fa fa-external-link-alt"></i></span></p>
+<p><a name="26614728"></a></p>
+<h3 id="Node-exporter访问地址"><a href="#Node-exporter访问地址" class="headerlink" title="Node_exporter访问地址"></a>Node_exporter访问地址</h3><p><span class="exturl" data-url="aHR0cDovLzE5Mi4xNjguMTM4LjE4OjkxMDAv">http://192.168.138.18:9100/<i class="fa fa-external-link-alt"></i></span></p>
+<p><a name="ea8acfdf"></a></p>
+<h3 id="grafana访问地址"><a href="#grafana访问地址" class="headerlink" title="grafana访问地址"></a>grafana访问地址</h3><p><span class="exturl" data-url="aHR0cDovLzE5Mi4xNjguMTM4LjE4OjMwMDAv">http://192.168.138.18:3000<i class="fa fa-external-link-alt"></i></span><br />用户名/密码:admin/admin<br /><img src="https://cdn.nlark.com/yuque/0/2019/png/186520/1564561812914-82ca10bb-9686-417e-af46-276341021cd9.png#align=left&display=inline&height=633&name=image.png&originHeight=633&originWidth=1360&size=88976&status=done&width=1360" alt="image.png"><br />指标解释：<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3BpbmdjYXAvZG9jcy1jbi9ibG9iL21hc3Rlci9kZXYvcmVmZXJlbmNlL2tleS1tb25pdG9yaW5nLW1ldHJpY3MvdGlkYi1kYXNoYm9hcmQubWQ=">https://github.com/pingcap/docs-cn/blob/master/dev/reference/key-monitoring-metrics/tidb-dashboard.md<i class="fa fa-external-link-alt"></i></span></p>
+<p><a name="5f2e4fbc"></a><br>binlog监控：<br><img src="binlog.png" alt="binlog.png"><br>manager监控：<br><img src="manager.png" alt="manager.png"></p>
+<h3 id="全量备份与恢复"><a href="#全量备份与恢复" class="headerlink" title="全量备份与恢复"></a>全量备份与恢复</h3><p><span class="exturl" data-url="aHR0cHM6Ly9waW5nY2FwLmNvbS9kb2NzLWNuL3YzLjAvaG93LXRvL21haW50YWluL2JhY2t1cC1hbmQtcmVzdG9yZS8=">https://pingcap.com/docs-cn/v3.0/how-to/maintain/backup-and-restore/<i class="fa fa-external-link-alt"></i></span></p>
+<h3 id="增量备份与恢复"><a href="#增量备份与恢复" class="headerlink" title="增量备份与恢复"></a>增量备份与恢复</h3><h4 id="TiDB-Binlog从kafka收集binlog给Drainer"><a href="#TiDB-Binlog从kafka收集binlog给Drainer" class="headerlink" title="TiDB Binlog从kafka收集binlog给Drainer"></a>TiDB Binlog从kafka收集binlog给Drainer</h4><p><span class="exturl" data-url="aHR0cHM6Ly9waW5nY2FwLmNvbS9kb2NzLWNuL3YzLjAvcmVmZXJlbmNlL3RpZGItYmlubG9nLW92ZXJ2aWV3Lw==">https://pingcap.com/docs-cn/v3.0/reference/tidb-binlog-overview/<i class="fa fa-external-link-alt"></i></span></p>
+<h4 id="Reparo从Drainer得到数据恢复到mysql-tidb"><a href="#Reparo从Drainer得到数据恢复到mysql-tidb" class="headerlink" title="Reparo从Drainer得到数据恢复到mysql/tidb"></a>Reparo从Drainer得到数据恢复到mysql/tidb</h4><p><span class="exturl" data-url="aHR0cHM6Ly9waW5nY2FwLmNvbS9kb2NzLWNuL3YzLjAvcmVmZXJlbmNlL3Rvb2xzL3RpZGItYmlubG9nL3JlcGFyby8=">https://pingcap.com/docs-cn/v3.0/reference/tools/tidb-binlog/reparo/<i class="fa fa-external-link-alt"></i></span></p>
+<h4 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h4><p>db-type = “file”是为了Reparo做恢复用，和官方文档不同的是要创建<br>drainer_file_drainer-cluster.toml文件，而不是drainer_file_drainer.toml。<br>相关问答：<span class="exturl" data-url="aHR0cHM6Ly9hc2t0dWcuY29tL3QvZHJhaW5lci1maWxlLWRyYWluZXItY2x1c3Rlci10b21sLzQwNi8z">https://asktug.com/t/drainer-file-drainer-cluster-toml/406/3<i class="fa fa-external-link-alt"></i></span></p>
+<h3 id="定位慢查询"><a href="#定位慢查询" class="headerlink" title="定位慢查询"></a>定位慢查询</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select `Query_time`, query from INFORMATION_SCHEMA.`SLOW_QUERY` where `Is_internal`=false order by `Query_time` desc limit 2;</span><br></pre></td></tr></table></figure>
+
+<p>官方doc：<span class="exturl" data-url="aHR0cHM6Ly9waW5nY2FwLmNvbS9kb2NzLWNuL3YzLjAvaG93LXRvL21haW50YWluL2lkZW50aWZ5LXNsb3ctcXVlcmllcy8=">https://pingcap.com/docs-cn/v3.0/how-to/maintain/identify-slow-queries/<i class="fa fa-external-link-alt"></i></span></p>
+<p><a name="531e2324"></a></p>
+<h3 id="扩容缩容"><a href="#扩容缩容" class="headerlink" title="扩容缩容"></a>扩容缩容</h3><p><span class="exturl" data-url="aHR0cHM6Ly9waW5nY2FwLmNvbS9kb2NzLWNuL3YzLjAvaG93LXRvL3NjYWxlL3dpdGgtYW5zaWJsZS8=">https://pingcap.com/docs-cn/v3.0/how-to/scale/with-ansible/<i class="fa fa-external-link-alt"></i></span></p>
+<p><a name="888fb2f9"></a></p>
+<h3 id="与-MySQL-安全特性差异"><a href="#与-MySQL-安全特性差异" class="headerlink" title="与 MySQL 安全特性差异"></a>与 MySQL 安全特性差异</h3><p>仅支持 mysql_native_password 身份验证方案。<br />不支持外部身份验证方式（如 LDAP）。<br />不支持列级别权限设置。<br />不支持使用证书验证身份。#9708<br />不支持密码过期，最后一次密码变更记录以及密码生存期。#9709<br />不支持权限属性 max_questions，max_updated，max_connections 以及 max_user_connections。<br />不支持密码验证。#9741<br />不支持透明数据加密（TDE）。</p>
+<p><a name="DOG0X"></a></p>
+<h3 id="对mysql的支持"><a href="#对mysql的支持" class="headerlink" title="对mysql的支持"></a>对mysql的支持</h3><p>TiDB 目前还不支持触发器、存储过程、自定义函数、外键，除此之外，TiDB 支持绝大部分 MySQL 5.7 的语法。</p>
+<ul>
+<li>支持分布式事物</li>
+<li>TiDB 字符集默认就是 UTF8 而且目前只支持 UTF8，字符串就是 memcomparable 格式的。</li>
+<li>自增id只保证自增和唯一，不保证顺序性(段式分配导致)。</li>
+</ul>
+<br />
+
+<p><a name="gCrcg"></a></p>
+<h3 id="事物"><a href="#事物" class="headerlink" title="事物"></a>事物</h3><p><a name="qA8ds"></a></p>
+<h4 id="事物隔离级别Snapshot-Isolation"><a href="#事物隔离级别Snapshot-Isolation" class="headerlink" title="事物隔离级别Snapshot Isolation"></a>事物隔离级别Snapshot Isolation</h4><p>tidb只支持Snapshot Isolation事物隔离级别，TiDB 实现了快照隔离 (Snapshot Isolation) 级别的一致性。为与 MySQL 保持一致，又称其为“可重复读”。MySQL 可重复读隔离级别的一致性要弱于 Snapshot 隔离级别，也弱于 TiDB 的可重复读隔离级别。<br />另外多线程操作同一行数据，一定会有一个失败，失败的事物默认不会重试，而是以异常的形式抛出，是否重试交给应用来判断，但是也可以开启自动重试，只不过开启之后，重试事务可能会导致更新丢失，因为 TiDB 自动重试机制会把事务第一次执行的所有语句重新执行一遍，当一个事务里的后续语句是否执行取决于前面语句执行结果的时候，自动重试会违反快照隔离，导致更新丢失。<br />doc：<span class="exturl" data-url="aHR0cHM6Ly9waW5nY2FwLmNvbS9kb2NzLWNuL3YzLjAvcmVmZXJlbmNlL3RyYW5zYWN0aW9ucy90cmFuc2FjdGlvbi1pc29sYXRpb24v">https://pingcap.com/docs-cn/v3.0/reference/transactions/transaction-isolation/<i class="fa fa-external-link-alt"></i></span></p>
+<p><a name="MII0H"></a></p>
+<h4 id="乐观锁"><a href="#乐观锁" class="headerlink" title="乐观锁"></a>乐观锁</h4><ul>
+<li>数据操作冲突比较验证不适，会产生大量的重试，如果访问冲突并不十分严重，那么乐观锁模型具备较高的效率。</li>
+<li>在冲突严重的场景下，推荐在系统架构层面解决问题，比如将计数器放在 Redis 中。</li>
+</ul>
+<p><a name="Z2FSN"></a></p>
+<h4 id="事务大小限制"><a href="#事务大小限制" class="headerlink" title="事务大小限制"></a>事务大小限制</h4><ul>
+<li>单个事务包含的 SQL 语句不超过 5000 条（默认）</li>
+<li>单条 KV entry 不超过 6MB</li>
+<li>KV entry 的总条数不超过 30W</li>
+<li>KV entry 的总大小不超过 100MB</li>
+</ul>
+<p>建议无论是 Insert，Update 还是 Delete 语句，都通过分 Batch 或者是加 Limit 的方式限制。<br />具体罗亿乔之前的sql技术分享。</p>
+<p><a name="NTzxl"></a></p>
+<h4 id="支持悲观锁，但是官方不建议生产环境使用，因为在官方将其定义为实验性的特性"><a href="#支持悲观锁，但是官方不建议生产环境使用，因为在官方将其定义为实验性的特性" class="headerlink" title="支持悲观锁，但是官方不建议生产环境使用，因为在官方将其定义为实验性的特性"></a>支持悲观锁，但是官方不建议生产环境使用，因为在官方将其定义为实验性的特性</h4><ul>
+<li>不支持 GAP Lock 和 Next Key Lock 在悲观事务内通过范围条件来更新多行数据的时候，其他的事务可以在这个范围内插入数据而不会被阻塞。<br /></li>
+<li>不支持 SELECT LOCK IN SHARE MODE。</li>
+</ul>
+<p><a name="IPbGO"></a></p>
+<h4 id="事物限制"><a href="#事物限制" class="headerlink" title="事物限制"></a>事物限制</h4><ul>
+<li>小事物比单机mysql性能要低，以为有网络参与，用显式事务代替 <code>auto_commit</code>，可优化该性能。</li>
+<li>事物惰性检查，执行insert语句，不在 <code>INSERT</code> 语句执行时进行唯一约束的检查，而在事务提交时进行唯一约束的检查。<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE T (I INT KEY);</span><br><span class="line">INSERT INTO T VALUES (1);</span><br><span class="line">BEGIN;</span><br><span class="line">INSERT INTO T VALUES (1); -- MySQL 返回错误；TiDB 返回成功</span><br><span class="line">INSERT INTO T VALUES (2);</span><br><span class="line">COMMIT; -- MySQL 提交成功；TiDB 返回错误，事务回滚</span><br><span class="line">SELECT * FROM T; -- MySQL 返回 1 2；TiDB 返回 1</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>这样做的目的是为了减少网络开销。</p>
+<p><a name="UX5Mw"></a></p>
+<h4 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h4><p>总的来说事物这方面的最贱实践是：乐观锁+事物失败应用级别处理+分布式锁加强，不建议开启事物失败重试机制（除非事物之间没有任何关系）。事物结束之后(commit之后)要判断返回值是否成功.</p>
+<p><a name="BuZyL"></a></p>
+<h3 id="存在数据热点问题"><a href="#存在数据热点问题" class="headerlink" title="存在数据热点问题"></a>存在数据热点问题</h3><p>相同的表数据会优先聚集到TiKV节点，如果某个表的数据比较热，那么TiKV很有可能成为系统的瓶颈，尤其是在很小范围的数据频繁操作，某个region会成为系统的热点。<br /><span class="exturl" data-url="aHR0cHM6Ly9waW5nY2FwLmNvbS9ibG9nLWNuL3RpZGItYmVzdC1wcmFjdGljZS8=">https://pingcap.com/blog-cn/tidb-best-practice/<i class="fa fa-external-link-alt"></i></span><br />解决之道（通过设置 <code>SHARD_ROW_ID_BITS</code> 来适度分解 Region 分片）：<span class="exturl" data-url="aHR0cHM6Ly9waW5nY2FwLmNvbS9kb2NzLWNuL3YzLjAvcmVmZXJlbmNlL2NvbmZpZ3VyYXRpb24vdGlkYi1zZXJ2ZXIvdGlkYi1zcGVjaWZpYy12YXJpYWJsZXMvI3NoYXJkLXJvdy1pZC1iaXRz">https://pingcap.com/docs-cn/v3.0/reference/configuration/tidb-server/tidb-specific-variables/#shard-row-id-bits<i class="fa fa-external-link-alt"></i></span><br />热点问题官方FAQ：<span class="exturl" data-url="aHR0cHM6Ly9hc2t0dWcuY29tL3QvdGlkYi8zNTg=">https://asktug.com/t/tidb/358<i class="fa fa-external-link-alt"></i></span></p>
+<p><a name="IOKxo"></a></p>
+<h3 id="GC-垃圾回收"><a href="#GC-垃圾回收" class="headerlink" title="GC 垃圾回收"></a>GC 垃圾回收</h3><p>tidb使用MVCC关林数据的版本，老版本的数据通过垃圾收集器进行删除，时间默认是10分钟执行一次回收，回收线程和频率可以在系统表设置。</p>
+<p><a name="KKFlJ"></a></p>
+<h3 id="TiDB-的最佳适用场景"><a href="#TiDB-的最佳适用场景" class="headerlink" title="TiDB 的最佳适用场景"></a>TiDB 的最佳适用场景</h3><ul>
+<li>数据量大，单机保存不下</li>
+<li>不希望做 Sharding 或者懒得做 Sharding</li>
+<li>访问模式上没有明显的热点</li>
+<li>需要事务、需要强一致、需要灾备</li>
+</ul>
+<p><a name="mlgPE"></a></p>
+<h3 id="在单台tidb做sybench"><a href="#在单台tidb做sybench" class="headerlink" title="在单台tidb做sybench"></a>在单台tidb做sybench</h3><p>参考官方doc:<span class="exturl" data-url="aHR0cHM6Ly9waW5nY2FwLmNvbS9kb2NzLWNuL3YzLjAvYmVuY2htYXJrL2hvdy10by1ydW4tc3lzYmVuY2gv">https://pingcap.com/docs-cn/v3.0/benchmark/how-to-run-sysbench/<i class="fa fa-external-link-alt"></i></span></p>
+<p><a name="0f4b6559"></a></p>
+<h4 id="坑-导入数据耗时较长，导入数据的命令要使用nohu执行"><a href="#坑-导入数据耗时较长，导入数据的命令要使用nohu执行" class="headerlink" title="[坑]导入数据耗时较长，导入数据的命令要使用nohu执行"></a>[坑]导入数据耗时较长，导入数据的命令要使用nohu执行</h4><p>官方doc导入数据的命令会执行很长一段时间，当xshell超时的时候，我们没法监控命令的执行日志，因此要使用nohup：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">nohup sysbench --config-file=config oltp_point_select --tables=32 --table-size=1000000 prepare 2&gt;&amp;1 &amp;</span><br><span class="line">nohup sysbench --config-file=config oltp_point_select --tables=32 --table-size=1000000 run 2&gt;&amp;1 &amp;</span><br><span class="line">nohup sysbench --config-file=config oltp_update_index --tables=32 --table-size=1000000 run 2&gt;&amp;1 &amp;</span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>样本数据<ul>
+<li>32张表、每张表100万条数据，每张表大约1M数据。</li>
+</ul>
+</li>
+<li>集群规模</li>
+</ul>
+<p>node1 192.168.138.18  PD1, TiDB1   4c16G 200GHHD<br />node2 192.168.138.19  PD2, TiDB2   4c16G 200GHHD<br />node3 192.168.138.21  PD3              2c16G 200GHHD<br />node4 192.168.138.22  TiKV1           2c16G 200GHHD<br />node5 192.168.138.23  TiKV2           2c16G 200GHHD<br />node6 192.168.138.24  TiKV3           2c16G 200GHHD<br /> <br />sysbench所有测试结果详情在[192.168.138.18]: vi /home/tidb/tidb-bench/nohup.out<br><a name="oltp-point-select"></a><br>###<br><a name="FMg4L"></a></p>
+<h4 id="oltp-point-select"><a href="#oltp-point-select" class="headerlink" title="oltp_point_select"></a>oltp_point_select</h4><ul>
+<li>nohup sysbench –config-file=config oltp_point_select –tables=32 –table-size=1000000 prepare 2&gt;&amp;1 &amp;</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>threads</th>
+<th>read</th>
+<th>write</th>
+<th>tps</th>
+<th>qps</th>
+<th>total time</th>
+<th>min</th>
+<th>avg</th>
+<th>max</th>
+<th>95th</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>8</td>
+<td>5937332</td>
+<td>0</td>
+<td>5937332 (9895.26 per sec.)</td>
+<td>5937332 (9895.26 per sec.)</td>
+<td>600.0156s</td>
+<td>0.40</td>
+<td>0.81</td>
+<td>223.17</td>
+<td>1.03</td>
+</tr>
+<tr>
+<td>16</td>
+<td>9396775</td>
+<td>0</td>
+<td>9396775 (15660.86 per sec.)</td>
+<td>9396775 (15660.86 per sec.)</td>
+<td>600.0148</td>
+<td>0.39</td>
+<td>1.02</td>
+<td>177.08</td>
+<td>1.52</td>
+</tr>
+<tr>
+<td>32</td>
+<td>12217819</td>
+<td>0</td>
+<td>12217819 (20362.72 per sec.)</td>
+<td>12217819 (20362.72 per sec.)</td>
+<td>600.0075s</td>
+<td>0.39</td>
+<td>1.57</td>
+<td>119.33</td>
+<td>3.75</td>
+</tr>
+<tr>
+<td>64</td>
+<td>13085444</td>
+<td>0</td>
+<td>13085444 (21808.49 per sec.)</td>
+<td>13085444 (21808.49 per sec.)</td>
+<td>600.0142s</td>
+<td>0.41</td>
+<td>2.93</td>
+<td>270.10</td>
+<td>8.43</td>
+</tr>
+<tr>
+<td>128</td>
+<td>13680931</td>
+<td>0</td>
+<td>13680931 (22800.08 per sec.)</td>
+<td>13680931 (22800.08 per sec.)</td>
+<td>600.0370s</td>
+<td>0.43</td>
+<td>5.61</td>
+<td>1033.14</td>
+<td>13.70</td>
+</tr>
+</tbody></table>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/186520/1564482895735-883dcc49-2e4a-422b-be32-bd7ffa706d08.png#align=left&display=inline&height=400&name=oltp_point_select.png&originHeight=400&originWidth=1312&size=33302&status=done&width=1312" alt="oltp_point_select.png"></p>
+<p>95th :<span class="exturl" data-url="aHR0cHM6Ly93d3cuemhpaHUuY29tL3F1ZXN0aW9uLzIwNTc1Mjkx">https://www.zhihu.com/question/20575291<i class="fa fa-external-link-alt"></i></span></p>
+<p><a name="tHki6"></a></p>
+<h4 id="oltp-update-index"><a href="#oltp-update-index" class="headerlink" title="oltp_update_index"></a>oltp_update_index</h4><ul>
+<li>nohup sysbench –config-file=config oltp_update_index –tables=32 –table-size=10000000 run 2&gt;&amp;1 &amp;</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>threads</th>
+<th>read</th>
+<th>write</th>
+<th>tps</th>
+<th>qps</th>
+<th>total time</th>
+<th>min</th>
+<th>avg</th>
+<th>max</th>
+<th>95th</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>8</td>
+<td>0</td>
+<td>149902</td>
+<td>149902 (249.82 per sec.)</td>
+<td>149902 (249.82 per sec.)</td>
+<td>600.0418s</td>
+<td>10.26</td>
+<td>32.02</td>
+<td>475.79</td>
+<td>46.63</td>
+</tr>
+<tr>
+<td>16</td>
+<td>0</td>
+<td>213850</td>
+<td>213850 (356.39 per sec.)</td>
+<td>213850 (356.39 per sec.)</td>
+<td>600.0444s</td>
+<td>9.30</td>
+<td>44.89</td>
+<td>659.85</td>
+<td>142.39</td>
+</tr>
+<tr>
+<td>32</td>
+<td>0</td>
+<td>483912</td>
+<td>483912 (806.47 per sec.)</td>
+<td>483912 (806.47 per sec.)</td>
+<td>600.0370s</td>
+<td>10.34</td>
+<td>39.68</td>
+<td>689.26</td>
+<td>54.83</td>
+</tr>
+<tr>
+<td>64</td>
+<td>0</td>
+<td>880168</td>
+<td>880168 (1466.72 per sec.)</td>
+<td>880168 (1466.72 per sec.)</td>
+<td>600.0897s</td>
+<td>10.60</td>
+<td>43.63</td>
+<td>1109.14</td>
+<td>58.92</td>
+</tr>
+<tr>
+<td>128</td>
+<td>0</td>
+<td>1344814</td>
+<td>1344814 (2241.17 per sec.)</td>
+<td>1344814 (2241.17 per sec.)</td>
+<td>600.0473s</td>
+<td>9.90</td>
+<td>57.11</td>
+<td>8177.34</td>
+<td>75.82</td>
+</tr>
+<tr>
+<td>256</td>
+<td>0</td>
+<td>1882603</td>
+<td>1882603 (3137.16 per sec.)</td>
+<td>1882603 (3137.16 per sec.)</td>
+<td>600.0950s</td>
+<td>11.88</td>
+<td>81.59</td>
+<td>1418.85</td>
+<td>211.60</td>
+</tr>
+</tbody></table>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/186520/1564483495647-455b41ad-0547-47dd-aa64-439eba7858e7.png#align=left&display=inline&height=400&name=oltp_update_index.png&originHeight=400&originWidth=1312&size=35286&status=done&width=1312" alt="oltp_update_index.png"><br><a name="c1OR4"></a></p>
+<h4 id="oltp-read-only"><a href="#oltp-read-only" class="headerlink" title="oltp_read_only"></a>oltp_read_only</h4><ul>
+<li>nohup sysbench –config-file=config oltp_read_only –tables=32 –table-size=10000000 run 2&gt;&amp;1 &amp;</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>threads</th>
+<th>total</th>
+<th>tps</th>
+<th>qps</th>
+<th>total time</th>
+<th>min</th>
+<th>avg</th>
+<th>max</th>
+<th>95th</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>8</td>
+<td>6204464</td>
+<td>387779 (646.28 per sec.)</td>
+<td>6204464 (10340.44 per sec.)</td>
+<td>600.0174s</td>
+<td>8.88</td>
+<td>12.38</td>
+<td>427.50</td>
+<td>16.41</td>
+</tr>
+<tr>
+<td>16</td>
+<td>9270576</td>
+<td>579411 (965.65 per sec.)</td>
+<td>9270576 (15450.37 per sec.)</td>
+<td>600.0211s</td>
+<td>10.03</td>
+<td>16.57</td>
+<td>1203.28</td>
+<td>26.20</td>
+</tr>
+<tr>
+<td>32</td>
+<td>11644768</td>
+<td>727798 (1212.92 per sec.)</td>
+<td>11644768 (19406.73 per sec.)</td>
+<td>600.0359s</td>
+<td>9.18</td>
+<td>26.38</td>
+<td>1132.08</td>
+<td>46.63</td>
+</tr>
+<tr>
+<td>64</td>
+<td>12632864</td>
+<td>789554 (1315.79 per sec.)</td>
+<td>12632864 (21052.63 per sec.)</td>
+<td>600.0590s</td>
+<td>11.66</td>
+<td>48.63</td>
+<td>423.32</td>
+<td>84.47</td>
+</tr>
+<tr>
+<td>128</td>
+<td>12792912</td>
+<td>799557 (1332.37 per sec.)</td>
+<td>12792912 (21317.86 per sec.)</td>
+<td>600.1013s</td>
+<td>10.65</td>
+<td>96.06</td>
+<td>3153.57</td>
+<td>150.29</td>
+</tr>
+</tbody></table>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/186520/1564487404538-aa194ea1-8f25-411f-adc8-a92502c2a8e0.png#align=left&display=inline&height=400&name=oltp_read_only.png&originHeight=400&originWidth=1312&size=34084&status=done&width=1312" alt="oltp_read_only.png"><br><a name="fqVte"></a><br>#<br><a name="xBFtr"></a></p>
+<h3 id="TPC-C测试"><a href="#TPC-C测试" class="headerlink" title="TPC-C测试"></a>TPC-C测试</h3><p><span class="exturl" data-url="aHR0cHM6Ly9waW5nY2FwLmNvbS9kb2NzLWNuL3YzLjAvYmVuY2htYXJrL2hvdy10by1ydW4tdHBjYy8=">https://pingcap.com/docs-cn/v3.0/benchmark/how-to-run-tpcc/<i class="fa fa-external-link-alt"></i></span><br />TPC-C 是一个对 OLTP（联机交易处理）系统进行测试的规范，使用一个商品销售模型对 OLTP 系统进行测试。<br />TPC-C 使用 tpmC 值（Transactions per Minute）来衡量系统最大有效吞吐量 (MQTh, Max Qualified Throughput)，其中 Transactions 以 NewOrder Transaction 为准，即最终衡量单位为每分钟处理的新订单数。</p>
+<p><a name="feB7I"></a></p>
+<h4 id="BenchmarkSQL-配置"><a href="#BenchmarkSQL-配置" class="headerlink" title="BenchmarkSQL 配置"></a>BenchmarkSQL 配置</h4><p>修改 <code>benchmarksql/run/props.mysql</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">conn=jdbc:mysql://&#123;HAPROXY-HOST&#125;:&#123;HAPROXY-PORT&#125;/tpcc?useSSL=false&amp;useServerPrepStmts=true&amp;useConfigs=maxPerformance</span><br><span class="line">warehouses=1000 # 使用 1000 个 warehouse</span><br><span class="line">terminals=500   # 使用 500 个终端</span><br><span class="line">loadWorkers=32  # 导入数据的并发数</span><br></pre></td></tr></table></figure>
+<p><a name="3blds"></a></p>
+<h4 id="初始化数据库"><a href="#初始化数据库" class="headerlink" title="初始化数据库"></a>初始化数据库</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">create database tpcc</span><br></pre></td></tr></table></figure>
+
+<p>之后在 shell 中运行 BenchmarkSQL 建表脚本：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd run</span><br><span class="line">nohup  ./runSQL.sh props.mysql sql.mysql/tableCreates.sql  2&gt;&amp;1 &amp;</span><br><span class="line">nohup ./runSQL.sh props.mysql sql.mysql/indexCreates.sql 2&gt;&amp;1 &amp;</span><br></pre></td></tr></table></figure>
+
+<p>运行导入数据脚本：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nohup ./runLoader.sh props.mysql 2&gt;&amp;1 &amp;</span><br></pre></td></tr></table></figure>
+<p>这个过程时间会有点长（我们的测试环境集群这条命令运行了6个小时，等的花儿都谢了。。。）。<br />验证导入的数据：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nohup  ./runSQL.sh props.mysql  sql.common/test.sql 2&gt;&amp;1 &amp;</span><br></pre></td></tr></table></figure>
+
+<p><a name="lc6vK"></a></p>
+<h4 id="运行测试"><a href="#运行测试" class="headerlink" title="运行测试"></a>运行测试</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nohup ./runBenchmark.sh props.mysql &amp;&gt; test.log 2&gt;&amp;1 &amp;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><a name="waCKQ"></a></p>
+<h4 id="测试结果"><a href="#测试结果" class="headerlink" title="测试结果"></a>测试结果</h4><p>[192.168.138.18]  vi /home/tidb/benchmarksql/run/test.log</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/186520/1564626255512-417c0a26-cd7a-4af9-a6c3-ae48919b56c8.png#align=left&display=inline&height=92&name=tpc-c-result.png&originHeight=92&originWidth=659&size=9234&status=done&width=659" alt="tpc-c-result.png"></p>
+<p>系统每分钟的吞吐量是在4399.16(官方机器配置结果是：77373.25)，即集群每分钟能承载的订单数量是4399个订单。</p>
+<p><a name="FUbxC"></a></p>
+<h3 id="其他企业在tidb的实践与分享"><a href="#其他企业在tidb的实践与分享" class="headerlink" title="其他企业在tidb的实践与分享"></a>其他企业在tidb的实践与分享</h3><p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3BpbmdjYXAvcHJlc2VudGF0aW9ucw==">https://github.com/pingcap/presentations<i class="fa fa-external-link-alt"></i></span></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>CeaserWang
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://ceaser.wang/2019/07/25/tidb/tidb-install-pit/" title="tidb-install-pit">https://ceaser.wang/2019/07/25/tidb/tidb-install-pit/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/tidb-install/" rel="tag"><i class="fa fa-tag"></i> tidb-install</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/07/16/elasticsearch/elasticsearch_center/" rel="prev" title="elasticsearch_center">
+                  <i class="fa fa-chevron-left"></i> elasticsearch_center
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/07/28/spring_boot_and_cloud/spring_boot_cloud(6)Spring_Boot%E6%97%A5%E5%BF%97%E5%A4%84%E7%90%86%E8%AF%A6%E8%A7%A3/" rel="next" title="spring_boot_cloud(6)Spring_Boot日志处理详解">
+                  spring_boot_cloud(6)Spring_Boot日志处理详解 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CeaserWang</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":"forest","js":{"url":"https://cdn.jsdelivr.net/npm/mermaid@8.11.0/dist/mermaid.min.js","integrity":"sha256-sVAx+v/Q7v0Q2xm5vN7h5ccSna6gaLREhG9sF8pKT6I="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+  <script class="next-config" data-name="nprogress" type="application/json">{"enable":true,"spinner":true}</script>
+  <script src="/js/third-party/nprogress.js"></script>
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"ryAR9bttS7fex1FPEPAylmmJ-gzGzoHsz","app_key":"dYqygoN4Y01Bl38OdRoCHUYn","server_url":null,"security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+
+</body>
+</html>

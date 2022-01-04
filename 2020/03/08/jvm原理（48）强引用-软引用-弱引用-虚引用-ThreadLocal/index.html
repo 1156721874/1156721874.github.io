@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.css" integrity="sha256-no0c5ccDODBwp+9hSmV5VvPpKwHCpbVzXHexIkupM6U=" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.js" integrity="sha256-a5YRB27CcBwBFcT5EF/f3E4vzIqyHrSR878nseNYw64=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ceaser.wang","root":"/","images":"/images","scheme":"Muse","version":"8.6.1","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+<meta name="description" content="强引用 我们日常开发中所遇到的绝大多数引用均是强引用  如果对象拥有强引用，就表示它是可达的，那么垃圾收集器就不会将其回收。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="jvm原理（48）强引用-软引用-弱引用-虚引用-ThreadLocal">
+<meta property="og:url" content="https://ceaser.wang/2020/03/08/jvm%E5%8E%9F%E7%90%86%EF%BC%8848%EF%BC%89%E5%BC%BA%E5%BC%95%E7%94%A8-%E8%BD%AF%E5%BC%95%E7%94%A8-%E5%BC%B1%E5%BC%95%E7%94%A8-%E8%99%9A%E5%BC%95%E7%94%A8-ThreadLocal/index.html">
+<meta property="og:site_name" content="南贺神社">
+<meta property="og:description" content="强引用 我们日常开发中所遇到的绝大多数引用均是强引用  如果对象拥有强引用，就表示它是可达的，那么垃圾收集器就不会将其回收。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://ceaser.wang/2020/03/08/jvm%E5%8E%9F%E7%90%86%EF%BC%8848%EF%BC%89%E5%BC%BA%E5%BC%95%E7%94%A8-%E8%BD%AF%E5%BC%95%E7%94%A8-%E5%BC%B1%E5%BC%95%E7%94%A8-%E8%99%9A%E5%BC%95%E7%94%A8-ThreadLocal/ThreadLocal.png">
+<meta property="og:image" content="https://ceaser.wang/2020/03/08/jvm%E5%8E%9F%E7%90%86%EF%BC%8848%EF%BC%89%E5%BC%BA%E5%BC%95%E7%94%A8-%E8%BD%AF%E5%BC%95%E7%94%A8-%E5%BC%B1%E5%BC%95%E7%94%A8-%E8%99%9A%E5%BC%95%E7%94%A8-ThreadLocal/ThreadLocal2.png">
+<meta property="article:published_time" content="2020-03-08T20:14:13.000Z">
+<meta property="article:modified_time" content="2022-01-04T02:21:30.844Z">
+<meta property="article:author" content="CeaserWang">
+<meta property="article:tag" content="强引用、软引用、弱引用、虚引用">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ceaser.wang/2020/03/08/jvm%E5%8E%9F%E7%90%86%EF%BC%8848%EF%BC%89%E5%BC%BA%E5%BC%95%E7%94%A8-%E8%BD%AF%E5%BC%95%E7%94%A8-%E5%BC%B1%E5%BC%95%E7%94%A8-%E8%99%9A%E5%BC%95%E7%94%A8-ThreadLocal/ThreadLocal.png">
+
+
+<link rel="canonical" href="https://ceaser.wang/2020/03/08/jvm%E5%8E%9F%E7%90%86%EF%BC%8848%EF%BC%89%E5%BC%BA%E5%BC%95%E7%94%A8-%E8%BD%AF%E5%BC%95%E7%94%A8-%E5%BC%B1%E5%BC%95%E7%94%A8-%E8%99%9A%E5%BC%95%E7%94%A8-ThreadLocal/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://ceaser.wang/2020/03/08/jvm%E5%8E%9F%E7%90%86%EF%BC%8848%EF%BC%89%E5%BC%BA%E5%BC%95%E7%94%A8-%E8%BD%AF%E5%BC%95%E7%94%A8-%E5%BC%B1%E5%BC%95%E7%94%A8-%E8%99%9A%E5%BC%95%E7%94%A8-ThreadLocal/","path":"2020/03/08/jvm原理（48）强引用-软引用-弱引用-虚引用-ThreadLocal/","title":"jvm原理（48）强引用-软引用-弱引用-虚引用-ThreadLocal"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>jvm原理（48）强引用-软引用-弱引用-虚引用-ThreadLocal | 南贺神社</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">南贺神社</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">你写程序有写诗一样的感觉吗?</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">205</span></a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">24</span></a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">212</span></a></li>
+        <li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%BA%E5%BC%95%E7%94%A8"><span class="nav-number">1.</span> <span class="nav-text">强引用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E4%B8%89%E7%A7%8D%E7%B1%BB%E5%9E%8B%E7%9A%84%E5%BC%95%E7%94%A8"><span class="nav-number">2.</span> <span class="nav-text">其他三种类型的引用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Reference"><span class="nav-number">2.1.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SoftReference"><span class="nav-number">2.2.</span> <span class="nav-text">SoftReference</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#ReferenceQueue"><span class="nav-number">2.2.1.</span> <span class="nav-text">ReferenceQueue</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#WeakReference"><span class="nav-number">2.3.</span> <span class="nav-text">WeakReference</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#PhantomReference"><span class="nav-number">2.4.</span> <span class="nav-text">PhantomReference</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%97%AE%E9%A2%98"><span class="nav-number">2.4.1.</span> <span class="nav-text">问题</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ThreadLocal"><span class="nav-number">3.</span> <span class="nav-text">ThreadLocal</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B"><span class="nav-number">3.1.</span> <span class="nav-text">实例</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AF%A6%E8%A7%A3"><span class="nav-number">3.2.</span> <span class="nav-text">详解</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-overview">
+            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="CeaserWang"
+      src="/../0xcc/index/Uchiha.jpg">
+  <p class="site-author-name" itemprop="name">CeaserWang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">212</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">205</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tLzExNTY3MjE4NzQ=" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;1156721874"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmNlYXNlcndhbmdAb3V0bG9vay5jb20=" title="E-Mail → mailto:ceaserwang@outlook.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+  </div>
+  <div class="cc-license site-overview-item animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><img src="https://cdn.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-user-friends fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly90d29kcmFnb25sYWtlLmNvbQ==" title="https:&#x2F;&#x2F;twodragonlake.com">TwoDragonLake</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9yb290Y2x1c3Rlci5naXRodWIuaW8=" title="https:&#x2F;&#x2F;rootcluster.github.io">RootCluster</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9tdXNlZmxvdy5pbw==" title="https:&#x2F;&#x2F;museflow.io">MuseFlow</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9pbmNvZGVyLm9yZw==" title="https:&#x2F;&#x2F;incoder.org">BladeCode</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9rYWlmYS5kZXY=" title="https:&#x2F;&#x2F;kaifa.dev">Alyenc</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmRhemhpZGF5b25nLmNu" title="https:&#x2F;&#x2F;blog.dazhidayong.cn">Killua</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9qb2NlbHluc2hhbmcuY24v" title="https:&#x2F;&#x2F;jocelynshang.cn&#x2F;">Jocelyn</span>
+        </li>
+    </ul>
+  </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2020/03/08/jvm%E5%8E%9F%E7%90%86%EF%BC%8848%EF%BC%89%E5%BC%BA%E5%BC%95%E7%94%A8-%E8%BD%AF%E5%BC%95%E7%94%A8-%E5%BC%B1%E5%BC%95%E7%94%A8-%E8%99%9A%E5%BC%95%E7%94%A8-ThreadLocal/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
+      <meta itemprop="name" content="CeaserWang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="南贺神社">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          jvm原理（48）强引用-软引用-弱引用-虚引用-ThreadLocal
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-03-08 20:14:13" itemprop="dateCreated datePublished" datetime="2020-03-08T20:14:13+00:00">2020-03-08</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2022-01-04 02:21:30" itemprop="dateModified" datetime="2022-01-04T02:21:30+00:00">2022-01-04</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/jvm/" itemprop="url" rel="index"><span itemprop="name">jvm</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2020/03/08/jvm%E5%8E%9F%E7%90%86%EF%BC%8848%EF%BC%89%E5%BC%BA%E5%BC%95%E7%94%A8-%E8%BD%AF%E5%BC%95%E7%94%A8-%E5%BC%B1%E5%BC%95%E7%94%A8-%E8%99%9A%E5%BC%95%E7%94%A8-ThreadLocal/" class="post-meta-item leancloud_visitors" data-flag-title="jvm原理（48）强引用-软引用-弱引用-虚引用-ThreadLocal" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h3 id="强引用"><a href="#强引用" class="headerlink" title="强引用"></a>强引用</h3><ul>
+<li><p>我们日常开发中所遇到的绝大多数引用均是强引用</p>
+</li>
+<li><p>如果对象拥有强引用，就表示它是可达的，那么垃圾收集器就不会将其回收。</p>
+<span id="more"></span></li>
+<li><p>如果将某个强引用显式置位null，就表示该引用不再指向对象，若该对象没有其他引用指向它，那么在适当时机就会被垃圾收集器回收。</p>
+</li>
+<li><p>参考ArrayList类的源代码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Removes all of the elements from this list.  The list will</span><br><span class="line"> * be empty after this call returns.</span><br><span class="line"> */</span><br><span class="line">public void clear() &#123;</span><br><span class="line">    modCount++;</span><br><span class="line"></span><br><span class="line">    // clear to let GC do its work</span><br><span class="line">    for (int i = 0; i &lt; size; i++)</span><br><span class="line">        elementData[i] = null;//显式将引用置为null</span><br><span class="line"></span><br><span class="line">    size = 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="其他三种类型的引用"><a href="#其他三种类型的引用" class="headerlink" title="其他三种类型的引用"></a>其他三种类型的引用</h3><ul>
+<li>软引用(soft Reference)</li>
+<li>弱引用(waek reference)</li>
+<li>虚引用(phantom reference)</li>
+<li>Reference 抽象类是这些引用的父类</li>
+<li>具体参见Reference类的JavaDoc文档</li>
+<li>ReferenceQueue</li>
+</ul>
+<h4 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h4><p>java.lang.ref public abstract class Reference<T><br>extends Object<br>Abstract base class for reference objects. This class defines the operations common to all reference objects. Because reference objects are implemented in close cooperation with the garbage collector, this class may not be subclassed directly.<br>Reference是引用对象的父类，这个类定义了一些适用于所有引用对象的操作，因为引用对象他的实现和垃圾收集器是紧密相关的，所以这个类是不可以被子类化的。<br>他的构造器：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Reference(T referent) &#123;</span><br><span class="line">    this(referent, null);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Reference(T referent, ReferenceQueue&lt;? super T&gt; queue) &#123;</span><br><span class="line">    this.referent = referent;</span><br><span class="line">    this.queue = (queue == null) ? ReferenceQueue.NULL : queue;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Reference的构造器不是public的，子类无法去super调用，而SoftReference、WeakReference、PhantomReference都是和Reference<br>同一个包下边，我们自己定义的类是无法去继承Reference的。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br></pre></td><td class="code"><pre><span class="line">public abstract class Reference&lt;T&gt; &#123;</span><br><span class="line"></span><br><span class="line">    /* A Reference instance is in one of four possible internal states:</span><br><span class="line">     *</span><br><span class="line">     *     Active: Subject to special treatment by the garbage collector.  Some</span><br><span class="line">     *     time after the collector detects that the reachability of the</span><br><span class="line">     *     referent has changed to the appropriate state, it changes the</span><br><span class="line">     *     instance&#x27;s state to either Pending or Inactive, depending upon</span><br><span class="line">     *     whether or not the instance was registered with a queue when it was</span><br><span class="line">     *     created.  In the former case it also adds the instance to the</span><br><span class="line">     *     pending-Reference list.  Newly-created instances are Active.</span><br><span class="line">     *</span><br><span class="line">     *     Pending: An element of the pending-Reference list, waiting to be</span><br><span class="line">     *     enqueued by the Reference-handler thread.  Unregistered instances</span><br><span class="line">     *     are never in this state.</span><br><span class="line">     *</span><br><span class="line">     *     Enqueued: An element of the queue with which the instance was</span><br><span class="line">     *     registered when it was created.  When an instance is removed from</span><br><span class="line">     *     its ReferenceQueue, it is made Inactive.  Unregistered instances are</span><br><span class="line">     *     never in this state.</span><br><span class="line">     *</span><br><span class="line">     *     Inactive: Nothing more to do.  Once an instance becomes Inactive its</span><br><span class="line">     *     state will never change again.</span><br><span class="line">     *</span><br><span class="line">     * The state is encoded in the queue and next fields as follows:</span><br><span class="line">     *</span><br><span class="line">     *     Active: queue = ReferenceQueue with which instance is registered, or</span><br><span class="line">     *     ReferenceQueue.NULL if it was not registered with a queue; next =</span><br><span class="line">     *     null.</span><br><span class="line">     *</span><br><span class="line">     *     Pending: queue = ReferenceQueue with which instance is registered;</span><br><span class="line">     *     next = this</span><br><span class="line">     *</span><br><span class="line">     *     Enqueued: queue = ReferenceQueue.ENQUEUED; next = Following instance</span><br><span class="line">     *     in queue, or this if at end of list.</span><br><span class="line">     *</span><br><span class="line">     *     Inactive: queue = ReferenceQueue.NULL; next = this.</span><br><span class="line">     *</span><br><span class="line">     * With this scheme the collector need only examine the next field in order</span><br><span class="line">     * to determine whether a Reference instance requires special treatment: If</span><br><span class="line">     * the next field is null then the instance is active; if it is non-null,</span><br><span class="line">     * then the collector should treat the instance normally.</span><br><span class="line">     *</span><br><span class="line">     * To ensure that a concurrent collector can discover active Reference</span><br><span class="line">     * objects without interfering with application threads that may apply</span><br><span class="line">     * the enqueue() method to those objects, collectors should link</span><br><span class="line">     * discovered objects through the discovered field. The discovered</span><br><span class="line">     * field is also used for linking Reference objects in the pending list.</span><br><span class="line">     */</span><br><span class="line"></span><br><span class="line">    private T referent;         /* Treated specially by GC */</span><br><span class="line"></span><br><span class="line">    volatile ReferenceQueue&lt;? super T&gt; queue;</span><br><span class="line"></span><br><span class="line">    /* When active:   NULL 还没有入队</span><br><span class="line">     *     pending:   this 表示也还没有入队，只是指向自己</span><br><span class="line">     *    Enqueued:   next reference in queue (or this if last) 入队，next指向是队列的下一个元素</span><br><span class="line">     *    Inactive:   this 他自己</span><br><span class="line">     */</span><br><span class="line">    @SuppressWarnings(&quot;rawtypes&quot;)</span><br><span class="line">    Reference next;</span><br><span class="line"></span><br><span class="line">    /* When active:   next element in a discovered reference list maintained by GC (or this if last)</span><br><span class="line">     *     pending:   next element in the pending list (or null if last)</span><br><span class="line">     *   otherwise:   NULL</span><br><span class="line">     */</span><br><span class="line">    transient private Reference&lt;T&gt; discovered;  /* used by VM */</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    /* Object used to synchronize with the garbage collector.  The collector</span><br><span class="line">     * must acquire this lock at the beginning of each collection cycle.  It is</span><br><span class="line">     * therefore critical that any code holding this lock complete as quickly</span><br><span class="line">     * as possible, allocate no new objects, and avoid calling user code.</span><br><span class="line">     */</span><br><span class="line">    static private class Lock &#123; &#125;</span><br><span class="line">    private static Lock lock = new Lock();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    /* List of References waiting to be enqueued.  The collector adds</span><br><span class="line">     * References to this list, while the Reference-handler thread removes</span><br><span class="line">     * them.  This list is protected by the above lock object. The</span><br><span class="line">     * list uses the discovered field to link its elements.</span><br><span class="line">     */</span><br><span class="line">    private static Reference&lt;Object&gt; pending = null;</span><br><span class="line"></span><br><span class="line">    /* High-priority thread to enqueue pending References</span><br><span class="line">     */</span><br><span class="line">    private static class ReferenceHandler extends Thread &#123;</span><br><span class="line"></span><br><span class="line">        private static void ensureClassInitialized(Class&lt;?&gt; clazz) &#123;</span><br><span class="line">            try &#123;</span><br><span class="line">                Class.forName(clazz.getName(), true, clazz.getClassLoader());</span><br><span class="line">            &#125; catch (ClassNotFoundException e) &#123;</span><br><span class="line">                throw (Error) new NoClassDefFoundError(e.getMessage()).initCause(e);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        static &#123;</span><br><span class="line">            // pre-load and initialize InterruptedException and Cleaner classes</span><br><span class="line">            // so that we don&#x27;t get into trouble later in the run loop if there&#x27;s</span><br><span class="line">            // memory shortage while loading/initializing them lazily.</span><br><span class="line">            ensureClassInitialized(InterruptedException.class);</span><br><span class="line">            ensureClassInitialized(Cleaner.class);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        ReferenceHandler(ThreadGroup g, String name) &#123;</span><br><span class="line">            super(g, name);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        public void run() &#123;</span><br><span class="line">            while (true) &#123;</span><br><span class="line">                tryHandlePending(true);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Try handle pending &#123;@link Reference&#125; if there is one.&lt;p&gt;</span><br><span class="line">     * Return &#123;@code true&#125; as a hint that there might be another</span><br><span class="line">     * &#123;@link Reference&#125; pending or &#123;@code false&#125; when there are no more pending</span><br><span class="line">     * &#123;@link Reference&#125;s at the moment and the program can do some other</span><br><span class="line">     * useful work instead of looping.</span><br><span class="line">     *</span><br><span class="line">     * @param waitForNotify if &#123;@code true&#125; and there was no pending</span><br><span class="line">     *                      &#123;@link Reference&#125;, wait until notified from VM</span><br><span class="line">     *                      or interrupted; if &#123;@code false&#125;, return immediately</span><br><span class="line">     *                      when there is no pending &#123;@link Reference&#125;.</span><br><span class="line">     * @return &#123;@code true&#125; if there was a &#123;@link Reference&#125; pending and it</span><br><span class="line">     *         was processed, or we waited for notification and either got it</span><br><span class="line">     *         or thread was interrupted before being notified;</span><br><span class="line">     *         &#123;@code false&#125; otherwise.</span><br><span class="line">     */</span><br><span class="line">    static boolean tryHandlePending(boolean waitForNotify) &#123;</span><br><span class="line">        Reference&lt;Object&gt; r;</span><br><span class="line">        Cleaner c;</span><br><span class="line">        try &#123;</span><br><span class="line">            synchronized (lock) &#123;</span><br><span class="line">                if (pending != null) &#123;</span><br><span class="line">                    r = pending;</span><br><span class="line">                    // &#x27;instanceof&#x27; might throw OutOfMemoryError sometimes</span><br><span class="line">                    // so do this before un-linking &#x27;r&#x27; from the &#x27;pending&#x27; chain...</span><br><span class="line">                    c = r instanceof Cleaner ? (Cleaner) r : null;</span><br><span class="line">                    // unlink &#x27;r&#x27; from &#x27;pending&#x27; chain</span><br><span class="line">                    pending = r.discovered;</span><br><span class="line">                    r.discovered = null;</span><br><span class="line">                &#125; else &#123;</span><br><span class="line">                    // The waiting on the lock may cause an OutOfMemoryError</span><br><span class="line">                    // because it may try to allocate exception objects.</span><br><span class="line">                    if (waitForNotify) &#123;</span><br><span class="line">                        lock.wait();</span><br><span class="line">                    &#125;</span><br><span class="line">                    // retry if waited</span><br><span class="line">                    return waitForNotify;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; catch (OutOfMemoryError x) &#123;</span><br><span class="line">            // Give other threads CPU time so they hopefully drop some live references</span><br><span class="line">            // and GC reclaims some space.</span><br><span class="line">            // Also prevent CPU intensive spinning in case &#x27;r instanceof Cleaner&#x27; above</span><br><span class="line">            // persistently throws OOME for some time...</span><br><span class="line">            Thread.yield();</span><br><span class="line">            // retry</span><br><span class="line">            return true;</span><br><span class="line">        &#125; catch (InterruptedException x) &#123;</span><br><span class="line">            // retry</span><br><span class="line">            return true;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        // Fast path for cleaners</span><br><span class="line">        if (c != null) &#123;</span><br><span class="line">            c.clean();</span><br><span class="line">            return true;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        ReferenceQueue&lt;? super Object&gt; q = r.queue;</span><br><span class="line">        if (q != ReferenceQueue.NULL) q.enqueue(r);</span><br><span class="line">        return true;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    static &#123;</span><br><span class="line">        ThreadGroup tg = Thread.currentThread().getThreadGroup();</span><br><span class="line">        for (ThreadGroup tgn = tg;</span><br><span class="line">             tgn != null;</span><br><span class="line">             tg = tgn, tgn = tg.getParent());</span><br><span class="line">        Thread handler = new ReferenceHandler(tg, &quot;Reference Handler&quot;);</span><br><span class="line">        /* If there were a special system-only priority greater than</span><br><span class="line">         * MAX_PRIORITY, it would be used here</span><br><span class="line">         */</span><br><span class="line">        handler.setPriority(Thread.MAX_PRIORITY);</span><br><span class="line">        handler.setDaemon(true);</span><br><span class="line">        handler.start();</span><br><span class="line"></span><br><span class="line">        // provide access in SharedSecrets</span><br><span class="line">        SharedSecrets.setJavaLangRefAccess(new JavaLangRefAccess() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public boolean tryHandlePendingReference() &#123;</span><br><span class="line">                return tryHandlePending(false);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /* -- Referent accessor and setters -- */</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Returns this reference object&#x27;s referent.  If this reference object has</span><br><span class="line">     * been cleared, either by the program or by the garbage collector, then</span><br><span class="line">     * this method returns &lt;code&gt;null&lt;/code&gt;.</span><br><span class="line">     *</span><br><span class="line">     * @return   The object to which this reference refers, or</span><br><span class="line">     *           &lt;code&gt;null&lt;/code&gt; if this reference object has been cleared</span><br><span class="line">     */</span><br><span class="line">    public T get() &#123;</span><br><span class="line">        return this.referent;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Clears this reference object.  Invoking this method will not cause this</span><br><span class="line">     * object to be enqueued.</span><br><span class="line">     *</span><br><span class="line">     * &lt;p&gt; This method is invoked only by Java code; when the garbage collector</span><br><span class="line">     * clears references it does so directly, without invoking this method.</span><br><span class="line">     */</span><br><span class="line">     调用这个方法并不会将对象入队。</span><br><span class="line">     当垃圾收集器清理的时候它会直接清理，而不会调用这个方法。</span><br><span class="line">    public void clear() &#123;</span><br><span class="line">        this.referent = null;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    /* -- Queue operations -- */</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Tells whether or not this reference object has been enqueued, either by</span><br><span class="line">     * the program or by the garbage collector.  If this reference object was</span><br><span class="line">     * not registered with a queue when it was created, then this method will</span><br><span class="line">     * always return &lt;code&gt;false&lt;/code&gt;.</span><br><span class="line">     *</span><br><span class="line">     * @return   &lt;code&gt;true&lt;/code&gt; if and only if this reference object has</span><br><span class="line">     *           been enqueued</span><br><span class="line">     */</span><br><span class="line">    public boolean isEnqueued() &#123;</span><br><span class="line">        return (this.queue == ReferenceQueue.ENQUEUED);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Adds this reference object to the queue with which it is registered,</span><br><span class="line">     * if any.</span><br><span class="line">     *</span><br><span class="line">     * &lt;p&gt; This method is invoked only by Java code; when the garbage collector</span><br><span class="line">     * enqueues references it does so directly, without invoking this method.</span><br><span class="line">     *</span><br><span class="line">     * @return   &lt;code&gt;true&lt;/code&gt; if this reference object was successfully</span><br><span class="line">     *           enqueued; &lt;code&gt;false&lt;/code&gt; if it was already enqueued or if</span><br><span class="line">     *           it was not registered with a queue when it was created</span><br><span class="line">     */</span><br><span class="line">    public boolean enqueue() &#123;</span><br><span class="line">        return this.queue.enqueue(this);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    /* -- Constructors -- */</span><br><span class="line"></span><br><span class="line">    Reference(T referent) &#123;</span><br><span class="line">        this(referent, null);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Reference(T referent, ReferenceQueue&lt;? super T&gt; queue) &#123;</span><br><span class="line">        this.referent = referent;</span><br><span class="line">        this.queue = (queue == null) ? ReferenceQueue.NULL : queue;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>ReferenceQueue java doc：<br>Reference queues, to which registered reference objects are appended by the garbage collector after the appropriate reachability changes are detected.<br>引用队列，当垃圾收集器检测到引用对象的可达性发生变化后，会把引用对象放到引用队列当中。</p>
+<p>一个引用实例可以是如下四种内部状态的其中之一：</p>
+<ul>
+<li>活跃状态<br>  他会被垃圾收集器进行一种特殊的对待 当垃圾收集器检测到被引用的对象的可达性达到一种恰当的状态的一段时间之后，就会改变实例的状态，要么变成pending或者inactive，这个取决于这个实例在注册的时候是否被注册到一个队列上面。在前者这种状态下（pending）实例会被添加到pending引用列表当中， 而新创建的总是活动状态。</li>
+<li>挂起状态<br>  引用队列里边的一个元素，等待引用处理线程将其入队，未注册的实例永远不会有这种状态。</li>
+<li>入队状态<br>  当一个实例创建的时候被注册了，那么实例将会作为队列的一个元素，当一个实例从他的引用队列中移除时，它会变成inactive状态，未注册的实例永远不会处于这种状态。</li>
+<li>不活跃状态<br>  没什么对它可做的，一个实例处于inactive，他的状态永远不会发生变化。</li>
+</ul>
+<p> 引用的状态在队列里边会被编码，next 成员变量是如下的逻辑：<br>    Active: quene = ReferenceQueue 他里边的实例是已经注册，或者ReferenceQueue.NULL 它没有被注册到引用队列里边去，next = null<br>    pending：quene = ReferenceQueue，next = this<br>    enquene：quene = ReferenceQueue.ENQUEUED;next = 队列中的下一个元素，或者是this，前提是位于列表的最末端.<br>    inactive:queue = ReferenceQueue.NULL;next = this.</p>
+<pre><code>在这种模式下，垃圾收集器就可以通过next成员变量判断引用实例是否需要特殊对待，如果next实例是null，那么实例就是活动状态，如果不是null，那么收集器就以正常的实例对待它。
+
+为了确保并发收集器能够探测到活动的引用对象，而不需要介入线程，应用可以使用enqueue()方法对待这些对象，收集器应该将发现的对象通过discovered变量连接起来，discovered变量也是用于在pending列表当中连接引用对象。
+
+观察构造器：
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Reference(T referent, ReferenceQueue&lt;? super T&gt; queue) &#123;</span><br><span class="line">    this.referent = referent;</span><br><span class="line">    this.queue = (queue == null) ? ReferenceQueue.NULL : queue;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+引用新创建的时候，是活动状态，Reference的queue = ReferenceQueue.NULL(如果没有传递引用队列的情况)，ReferenceQueue.NULL是什么？
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public class ReferenceQueue&lt;T&gt; &#123;</span><br><span class="line">  private static class Null&lt;S&gt; extends ReferenceQueue&lt;S&gt; &#123;</span><br><span class="line">  boolean enqueue(Reference&lt;? extends S&gt; r) &#123;</span><br><span class="line">          return false;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  static ReferenceQueue&lt;Object&gt; NULL = new Null&lt;&gt;();</span><br><span class="line">  static ReferenceQueue&lt;Object&gt; ENQUEUED = new Null&lt;&gt;();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+ReferenceQueue.NULL是ReferenceQueue里边的一个私有子类对象，他的enqueue()总是返回false。next并没有被复制，因此next是null。
+</code></pre>
+<h4 id="SoftReference"><a href="#SoftReference" class="headerlink" title="SoftReference"></a>SoftReference</h4><p>首先编写一个实例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">public class MyTest1 &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        Date date=  new Date();</span><br><span class="line">        SoftReference&lt;Date&gt; softReference = new SoftReference(date);</span><br><span class="line">        Date date1 = softReference.get();</span><br><span class="line">        //这里一定要判空，因为不一定什么时刻内存不够了，软引用就会被清理掉。</span><br><span class="line">        if(null != date1)&#123;</span><br><span class="line">            System.out.println(&quot;hello&quot;);</span><br><span class="line">        &#125;else&#123;</span><br><span class="line">            System.out.println(&quot;world&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(&quot;=========&quot;);</span><br><span class="line">        softReference.clear();</span><br><span class="line">        Date date2 = softReference.get();</span><br><span class="line">        System.out.println(date2);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行结果：<br>hello<br>=========<br>null</p>
+<p>那么接下来看一下SoftReference的文档：<br>Soft reference objects, which are cleared at the discretion of the garbage collector in response to memory demand. Soft references are most often used to implement memory-sensitive caches.<br>Suppose that the garbage collector determines at a certain point in time that an object is softly reachable. At that time it may choose to clear atomically all soft references to that object and all soft references to any other softly-reachable objects from which that object is reachable through a chain of strong references. At the same time or at some later time it will enqueue those newly-cleared soft references that are registered with reference queues.<br>All soft references to softly-reachable objects are guaranteed to have been cleared before the virtual machine throws an OutOfMemoryError. Otherwise no constraints are placed upon the time at which a soft reference will be cleared or the order in which a set of such references to different objects will be cleared. Virtual machine implementations are, however, encouraged to bias against clearing recently-created or recently-used soft references.<br>Direct instances of this class may be used to implement simple caches; this class or derived subclasses may also be used in larger data structures to implement more sophisticated caches. As long as the referent of a soft reference is strongly reachable, that is, is actually in use, the soft reference will not be cleared. Thus a sophisticated cache can, for example, prevent its most recently used entries from being discarded by keeping strong referents to those entries, leaving the remaining entries to be discarded at the discretion of the garbage collector.<br>软引用对象 当垃圾收集器去响应一些内存需求的时候软引用会被清理掉，软引用经常用于实现内存敏感的缓存。</p>
+<p>假如垃圾收集器检测到在某个时间点软引用是可达的（一个对象只有软引用指向它），他可以选择原子性的清理对象的所有的软引用，以及对于任何其他从这对象开始的，通过软引用链条可达的对象也会别清理，在这个时候或者这之后的某个时间，他会将新创建的被清理掉过的软引用入队列，这个队列是创建的时候注册的。</p>
+<p>所有软引用以及通过软引用链条可达的对象 可以确保在jvm抛出OOM错误之前被清理掉。</p>
+<p>这个类的直接事例就是实现简单的缓存，或者它延伸的子类可以用于在比较大的数据结构当中实现更为复杂的缓存，只要软引用里边的reference在实际使用当中是强可达的，那么软引用本身就不会被清理掉。 这样我们就可以设计一种复杂的缓存，可以避免最近被使用的实体被清除，通过对这些实体保持强引用就可以实现。</p>
+<h5 id="ReferenceQueue"><a href="#ReferenceQueue" class="headerlink" title="ReferenceQueue"></a>ReferenceQueue</h5><p>ReferenceQueue引用队列的设计目的是在于让我们能够知道或者是识别出垃圾收集器所执行的动作.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public class MyTests2 &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        Date date=  new Date();</span><br><span class="line">        ReferenceQueue&lt;Date&gt; referenceQueue = new ReferenceQueue&lt;&gt;();</span><br><span class="line">        SoftReference&lt;Date&gt; softReference = new SoftReference(date,referenceQueue);</span><br><span class="line"></span><br><span class="line">        System.out.println(softReference.get());</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>输出<br>Tue Mar 10 21:10:09 CST 2020</p>
+<p>时间可以正常得到，证明date并没有被回收，因为内存还没到紧急的时刻，还没到OOM之前的时刻，我们修改程序：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">public class MyTests2 &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        Date date=  new Date();</span><br><span class="line">        ReferenceQueue&lt;Date&gt; referenceQueue = new ReferenceQueue&lt;&gt;();</span><br><span class="line">        SoftReference&lt;Date&gt; softReference = new SoftReference(date,referenceQueue);</span><br><span class="line">        date = null;</span><br><span class="line">        System.gc();</span><br><span class="line">        System.out.println(softReference.get());</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>输出：<br>Wed Mar 11 20:21:18 CST 2020</p>
+<p>虽然我们将强引用去掉，但是软引用里边的referent还是没有被回收，因为没到内存吃紧的时候。只有在内存吃紧的时候，软引用才会被执行回收。</p>
+<h4 id="WeakReference"><a href="#WeakReference" class="headerlink" title="WeakReference"></a>WeakReference</h4><p>Weak reference objects, which do not prevent their referents from being made finalizable, finalized, and then reclaimed. Weak references are most often used to implement canonicalizing mappings.<br>Suppose that the garbage collector determines at a certain point in time that an object is weakly reachable. At that time it will atomically clear all weak references to that object and all weak references to any other weakly-reachable objects from which that object is reachable through a chain of strong and soft references. At the same time it will declare all of the formerly weakly-reachable objects to be finalizable. At the same time or at some later time it will enqueue those newly-cleared weak references that are registered with reference queues.</p>
+<p>弱引用对象，它不会阻止它里边的reference被回收掉，他经常用于映射。<br>假设垃圾收集器在某个时间点认为一个对象是弱引用可达的，这个时候会原子性的清除弱引用和弱引用可达的其他对象，她会声明之前的弱引用是可以回收的，同时或者过一段时间后这些新的被清理掉的引用背会入队到创建的时候注册的队列里边。</p>
+<p>实例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public class MyTests3 &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        Date date = new Date();</span><br><span class="line">        WeakReference&lt;Date&gt; weakReference = new WeakReference&lt;&gt;(date);</span><br><span class="line">        System.out.println(weakReference.get());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>输出：<br>Tue Mar 10 21:10:09 CST 2020</p>
+<p>如果一个对象指向它的引用最强的引用是弱引用并且是弱引用可达的，那么这个对象会在下一次垃圾收集周期当中被回收。<br>如果是软引用可能还会存活几个收集周期。</p>
+<p>但是这个要和内存的使用情况来分析，比如如下的使用，并不一定会被回收：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public class MyTests3 &#123;</span><br><span class="line">    public static void main(String[] args) throws InterruptedException &#123;</span><br><span class="line">        Date date = new Date();</span><br><span class="line">        WeakReference&lt;Date&gt; weakReference = new WeakReference&lt;&gt;(date);</span><br><span class="line">        System.gc();</span><br><span class="line">        Thread.sleep(5000);</span><br><span class="line">        System.out.println(weakReference.get());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>输出：<br>Tue Mar 10 21:28:16 CST 2020</p>
+<p>为什么没有被回收，原因其实是Date date = new Date();这个地方存在一个强引用，如果我们修改下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public class MyTests3 &#123;</span><br><span class="line">    public static void main(String[] args) throws InterruptedException &#123;</span><br><span class="line">        Date date = new Date();</span><br><span class="line">        WeakReference&lt;Date&gt; weakReference = new WeakReference&lt;&gt;(date);</span><br><span class="line">        date = null;</span><br><span class="line">        System.gc();</span><br><span class="line">        Thread.sleep(5000);</span><br><span class="line">        System.out.println(weakReference.get());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>输出：<br>null</p>
+<h4 id="PhantomReference"><a href="#PhantomReference" class="headerlink" title="PhantomReference"></a>PhantomReference</h4><p>Phantom reference objects, which are enqueued after the collector determines that their referents may otherwise be reclaimed. Phantom references are most often used for scheduling pre-mortem(在真正的清除之前) cleanup actions in a more flexible way than is possible with the Java finalization mechanism.<br>If the garbage collector determines at a certain point in time that the referent of a phantom reference is phantom reachable, then at that time or at some later time it will enqueue the reference.<br>In order to ensure that a reclaimable object remains so, the referent of a phantom reference may not be retrieved: The get method of a phantom reference always returns null.<br>Unlike soft and weak references, phantom references are not automatically cleared by the garbage collector as they are enqueued. An object that is reachable via phantom references will remain so until all such references are cleared or themselves become unreachable.<br>虚引用引用的对象，当垃圾收集器确定它们的引用可以被回收的情况下，会被入队,虚引用经常用于调度这种清除的动作，这个要比java的finalization的方式更加灵活，即在对象在被真正清理之前执行一些特殊的逻辑。<br>在垃圾收集器再确定的时间点可以确定虚引用包装对象里边的referent是虚引用可达的，在这个时刻或者之后的某个时刻，就会将这个引用执行入队操作。<br>为了确保一个可回收的对象遵守这样的规则，phantom reference 里边的referent就应该不应该被获取到，因此phantom reference 的get方法总是返回null。<br>试想，如果get方法能够被获取到，那么在外部我们可以使用强引用关联上这个referent，那么对象就不可能被回收掉，对象无法回收掉，就无法实现上面描述的规则，无法得到通知。<br>和弱引用软引用不用的是，对象入队的时候，虚引用的对象并不会被垃圾收集器自动清理掉，一个对象如果是虚引用可达的，它会依然保留，直到所有这样的引用都被清理掉或者它们自身都不可达的，才会被清理掉，虚引用的主要作用是虚引用的对象在被垃圾回收的时候，我们会收到一个通知。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public class PhantomReference&lt;T&gt; extends Reference&lt;T&gt; &#123;</span><br><span class="line"></span><br><span class="line">  //get方法直接返回null</span><br><span class="line">  public T get() &#123;</span><br><span class="line">         return null;</span><br><span class="line">  &#125;</span><br><span class="line"> //构造方法让使用者必须传递一个引用队列。</span><br><span class="line">  public PhantomReference(T referent, ReferenceQueue&lt;? super T&gt; q) &#123;</span><br><span class="line">      super(referent, q);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>实例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public class MyTests4 &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        Date date = new Date();</span><br><span class="line">        PhantomReference&lt;Date&gt; phantomReference = new PhantomReference(date, new ReferenceQueue&lt;&gt;());</span><br><span class="line">        System.out.println(phantomReference.get());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>输出：<br>null</p>
+<h5 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h5><ul>
+<li>为什么PhantomReference的get方法直接返回null?</li>
+<li>为什么PhantomReference的构造器只有接受2个参数(referent与queue)的这一种形式，而没有只接收referent这唯一参数的构造器?</li>
+</ul>
+<p>当我们将一个对象封装到PhantomReference中时，这就意味着我们永远也无法再访问到这个对象了，因为PhantomReference的get方法永远会返回null；PhantomReference的主要作用并不在于可以让我们获取到其中封装的referent，而是在于当垃圾收集器回收其referent时，这个PhantomReference会被放置到与其关联的队列中，并且得到相应的通知，这就是PhantomReference存在的唯一目的。</p>
+<h3 id="ThreadLocal"><a href="#ThreadLocal" class="headerlink" title="ThreadLocal"></a>ThreadLocal</h3><p>This class provides thread-local variables. These variables differ from their normal counterparts in that each thread that accesses one (via its get or set method) has its own, independently initialized copy of the variable. ThreadLocal instances are typically private static fields in classes that wish to associate state with a thread (e.g., a user ID or Transaction ID).<br>For example, the class below generates unique identifiers local to each thread. A thread’s id is assigned the first time it invokes ThreadId.get() and remains unchanged on subsequent calls.<br>   import java.util.concurrent.atomic.AtomicInteger;</p>
+<p>   public class ThreadId {<br>       // Atomic integer containing the next thread ID to be assigned<br>       private static final AtomicInteger nextId = new AtomicInteger(0);</p>
+<pre><code>   // Thread local variable containing each thread&#39;s ID
+   private static final ThreadLocal&lt;Integer&gt; threadId =
+       new ThreadLocal&lt;Integer&gt;() &#123;
+           @Override protected Integer initialValue() &#123;
+               return nextId.getAndIncrement();
+       &#125;
+   &#125;;
+
+   // Returns the current thread&#39;s unique ID, assigning it if necessary
+   public static int get() &#123;
+       return threadId.get();
+   &#125;
+</code></pre>
+<p>   }</p>
+<p>Each thread holds an implicit reference to its copy of a thread-local variable as long as the thread is alive and the ThreadLocal instance is accessible; after a thread goes away, all of its copies of thread-local instances are subject to garbage collection (unless other references to these copies exist).</p>
+<p>这个类提供一个 thread-local变量，不同的线程得到的这个值是不一样的。通过set和get方法设置和读取 thread-local变量，每个线程都有一个它自己的对这个变量的副本，ThreadLocal通常被定义成 private static 的成员变量。<br>下边这个实例会生成一个标识符，这个标识符归属一个线程，线程的id是首次调用get方法的时候初始化一个值，并且以后的流程中不会被修改</p>
+<p>每个线程都有持有一个thread-local副本的隐式引用，只要这个线程是存活的并且ThreadLocal是可以被访问，当一个线程消亡了，所有的thread-local的实例的副本都会被垃圾回收掉，除非有其他引用关联到这个副本。</p>
+<p>重要方法-get：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line">   * Returns the value in the current thread&#x27;s copy of this</span><br><span class="line">   * thread-local variable.  If the variable has no value for the</span><br><span class="line">   * current thread, it is first initialized to the value returned</span><br><span class="line">   * by an invocation of the &#123;@link #initialValue&#125; method.</span><br><span class="line">   *</span><br><span class="line">   * @return the current thread&#x27;s value of this thread-local</span><br><span class="line">   */</span><br><span class="line">  public T get() &#123;</span><br><span class="line">      Thread t = Thread.currentThread();</span><br><span class="line">      ThreadLocalMap map = getMap(t);</span><br><span class="line">      if (map != null) &#123;</span><br><span class="line">          ThreadLocalMap.Entry e = map.getEntry(this);</span><br><span class="line">          if (e != null) &#123;</span><br><span class="line">              @SuppressWarnings(&quot;unchecked&quot;)</span><br><span class="line">              T result = (T)e.value;</span><br><span class="line">              return result;</span><br><span class="line">          &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      return setInitialValue();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  /**</span><br><span class="line">   * Sets the current thread&#x27;s copy of this thread-local variable</span><br><span class="line">   * to the specified value.  Most subclasses will have no need to</span><br><span class="line">   * override this method, relying solely on the &#123;@link #initialValue&#125;</span><br><span class="line">   * method to set the values of thread-locals.</span><br><span class="line">   *</span><br><span class="line">   * @param value the value to be stored in the current thread&#x27;s copy of</span><br><span class="line">   *        this thread-local.</span><br><span class="line">   */</span><br><span class="line">  public void set(T value) &#123;</span><br><span class="line">      Thread t = Thread.currentThread();</span><br><span class="line">      ThreadLocalMap map = getMap(t);</span><br><span class="line">      if (map != null)</span><br><span class="line">          map.set(this, value);</span><br><span class="line">      else</span><br><span class="line">          createMap(t, value);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>get()方法：<br>获取到当前线程的thread-local副本的值，如果这个线程的变量的值不存在，那么initialValue()方法初始化的值会被返回。<br>set方法首先得到当前线程，然后调用getMap方法，那么getMap方法做了什么？</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Get the map associated with a ThreadLocal. Overridden in</span><br><span class="line"> * InheritableThreadLocal.</span><br><span class="line"> *</span><br><span class="line"> * @param  t the current thread</span><br><span class="line"> * @return the map</span><br><span class="line"> */</span><br><span class="line"> 获取到ThreadLocal关联的map对象</span><br><span class="line">ThreadLocalMap getMap(Thread t) &#123;</span><br><span class="line">    return t.threadLocals;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>得到Thread的threadLocals,进入到Thread类：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">/* ThreadLocal values pertaining to this thread. This map is maintained</span><br><span class="line"> * by the ThreadLocal class. */</span><br><span class="line"> 属于当前线程的ThreadLocal的值，这个map被ThreadLocal维护</span><br><span class="line">ThreadLocal.ThreadLocalMap threadLocals = null;</span><br></pre></td></tr></table></figure>
+<p>ThreadLocalMap是ThreadLocal的一个内部类。<br>回到ThreadLocal的set方法，得到map之后做了一个判断，map!=null,那么紧接着将value设置到map里边去，key是ThreadLocal，value就是set方法的参数value。<br>如果map是空的，那么就是执行  createMap(t, value)方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">void createMap(Thread t, T firstValue) &#123;</span><br><span class="line">    t.threadLocals = new ThreadLocalMap(this, firstValue);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>直接创建一个ThreadLocalMap对象赋值给了Thread的成员变量threadLocals，构造器参数是ThreadLocal和将要设置的value。</p>
+<p>get方法里边也是首先得到当前线程，通过当前线程得到ThreadLocalMap，如果map不是空的，就从ThreadLocalMap里边get一个Entry，<br>getEntry的key是ThreadLocal，那么ThreadLocalMap.Entry是什么？<br>ThreadLocalMap.Entry是ThreadLocalMap内部静态类，看定义：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">static class Entry extends WeakReference&lt;ThreadLocal&lt;?&gt;&gt; &#123;</span><br><span class="line">    /** The value associated with this ThreadLocal. */</span><br><span class="line">    Object value;</span><br><span class="line"></span><br><span class="line">    Entry(ThreadLocal&lt;?&gt; k, Object v) &#123;</span><br><span class="line">        super(k);//key是弱引用的reference</span><br><span class="line">        value = v;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Entry继承了WeakReference。<br>我们设置的value存储在ThreadLocalMap.Entry里边，得到ThreadLocalMap.Entry之后，得到里边的value。然后get方法返回。</p>
+<h4 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">public class MyTest5 &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        ThreadLocal&lt;String&gt; threadLocal = new ThreadLocal&lt;&gt;();</span><br><span class="line">        threadLocal.set(&quot;hello&quot;);</span><br><span class="line">        threadLocal.set(&quot;world&quot;);</span><br><span class="line">        System.out.println(threadLocal.get());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>输出：<br>world</p>
+<h4 id="详解"><a href="#详解" class="headerlink" title="详解"></a>详解</h4><p><img src="ThreadLocal.png" alt="ThreadLocal.png"><br><img src="ThreadLocal2.png" alt="ThreadLocal2.png"></p>
+<p>Entry为什么是WeakReference,是因为当线程执行完run方法之后，就会处于消亡的状态，也不会指向ThreadLocal对象，那么这个时候应该被回收，否则就会出现内存泄露。</p>
+<p>为什么Entry的key是一个弱引用，这样设计的目的是什么呢？<br>我们从2个方向分别论证：</p>
+<ul>
+<li>假如key指向的ThreadLocal对象的引用是强引用，那么当栈里边的指向ThreadLocal对象的引用消失的时候，这个时候ThreadLocal对象还不能被GC，因为Entry的Key还有强引用指向它，但是这个ThreadLocal对象再也没法被访问到，Entry里边只会越来越大，最后会造成内存泄露。</li>
+<li>假如key指向的ThreadLocal对象的引用是弱引用，那么当栈里边的指向ThreadLocal对象的引用消失的时候，此时ThreadLocal对象只有Entry的key指向它，并且是弱引用，那么此时ThreadLocal对象就会被回收，不会造成内存泄露。</li>
+</ul>
+<p>综上所述，使用Entry使用弱引用是合理的。</p>
+<p>另外还有一个地方需要知道，key指向的ThreadLocal对象如果被回收或者被置成了null，那么这个key-value对就无法被访问，一直存在这个threadLocals数组里边，这种情况也会被造成内存泄露，因此针对于这种情况也需要进行特殊处理：</p>
+<ul>
+<li>在ThreadLocal的set或者get方法都会有一个清理的过程，这个方法是：expungeStaleEntry，这个方法会对key为null的键值对进行清除。</li>
+<li>ThreadLocal的remove方法，显式的删除key-value对，但是也会调用expungeStaleEntry方法。</li>
+</ul>
+<p>应用程序开发角度：<br>我们经常定义ThreadLocal：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">public class Test&#123;</span><br><span class="line"></span><br><span class="line">private static final ThreadLocal&lt;String&gt; tl = new ThreadLocal();</span><br><span class="line"></span><br><span class="line">  //不需要ThreadLocal的时候的使用方式</span><br><span class="line">  try&#123;</span><br><span class="line">    .....</span><br><span class="line">  &#125;catch()&#123;</span><br><span class="line"></span><br><span class="line">  &#125;finally&#123;</span><br><span class="line">    //显式移除，防止内存泄露</span><br><span class="line">    tl.remove();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>CeaserWang
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://ceaser.wang/2020/03/08/jvm%E5%8E%9F%E7%90%86%EF%BC%8848%EF%BC%89%E5%BC%BA%E5%BC%95%E7%94%A8-%E8%BD%AF%E5%BC%95%E7%94%A8-%E5%BC%B1%E5%BC%95%E7%94%A8-%E8%99%9A%E5%BC%95%E7%94%A8-ThreadLocal/" title="jvm原理（48）强引用-软引用-弱引用-虚引用-ThreadLocal">https://ceaser.wang/2020/03/08/jvm原理（48）强引用-软引用-弱引用-虚引用-ThreadLocal/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E5%BC%BA%E5%BC%95%E7%94%A8%E3%80%81%E8%BD%AF%E5%BC%95%E7%94%A8%E3%80%81%E5%BC%B1%E5%BC%95%E7%94%A8%E3%80%81%E8%99%9A%E5%BC%95%E7%94%A8/" rel="tag"><i class="fa fa-tag"></i> 强引用、软引用、弱引用、虚引用</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/01/04/Concurrent/concurrency(6)Condition%E8%AF%A6%E8%A7%A3/" rel="prev" title="concurrency(6)Condition详解">
+                  <i class="fa fa-chevron-left"></i> concurrency(6)Condition详解
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/03/31/jvm%E5%8E%9F%E7%90%86%EF%BC%8849%EF%BC%89ThreadLocal%E5%86%85%E5%AD%98%E6%B3%84%E9%9C%B2%E9%97%AE%E9%A2%98%E6%9C%AC%E8%B4%A8%E5%88%86%E6%9E%90%E4%B8%8E%E6%8E%A8%E5%AF%BC/" rel="next" title="jvm原理（49）ThreadLocal内存泄露问题本质分析与推导">
+                  jvm原理（49）ThreadLocal内存泄露问题本质分析与推导 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CeaserWang</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":"forest","js":{"url":"https://cdn.jsdelivr.net/npm/mermaid@8.11.0/dist/mermaid.min.js","integrity":"sha256-sVAx+v/Q7v0Q2xm5vN7h5ccSna6gaLREhG9sF8pKT6I="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+  <script class="next-config" data-name="nprogress" type="application/json">{"enable":true,"spinner":true}</script>
+  <script src="/js/third-party/nprogress.js"></script>
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"ryAR9bttS7fex1FPEPAylmmJ-gzGzoHsz","app_key":"dYqygoN4Y01Bl38OdRoCHUYn","server_url":null,"security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.css" integrity="sha256-no0c5ccDODBwp+9hSmV5VvPpKwHCpbVzXHexIkupM6U=" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.js" integrity="sha256-a5YRB27CcBwBFcT5EF/f3E4vzIqyHrSR878nseNYw64=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ceaser.wang","root":"/","images":"/images","scheme":"Muse","version":"8.6.1","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+<meta name="description" content="在jdk8中什么是函数式接口：1、被@FunctionalInterface注解修饰的。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="函数式编程（jdk8-常用函数式编程基础类）">
+<meta property="og:url" content="https://ceaser.wang/2018/10/04/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%EF%BC%88jdk8-%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80%E7%B1%BB%EF%BC%89/index.html">
+<meta property="og:site_name" content="南贺神社">
+<meta property="og:description" content="在jdk8中什么是函数式接口：1、被@FunctionalInterface注解修饰的。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%EF%BC%88jdk8-%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80%E7%B1%BB%EF%BC%89/20170326140327392.png">
+<meta property="article:published_time" content="2018-10-04T10:25:22.000Z">
+<meta property="article:modified_time" content="2022-01-04T02:21:30.964Z">
+<meta property="article:author" content="CeaserWang">
+<meta property="article:tag" content="jdk8 lambda FunctionalInterface">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ceaser.wang/2018/10/04/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%EF%BC%88jdk8-%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80%E7%B1%BB%EF%BC%89/20170326140327392.png">
+
+
+<link rel="canonical" href="https://ceaser.wang/2018/10/04/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%EF%BC%88jdk8-%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80%E7%B1%BB%EF%BC%89/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://ceaser.wang/2018/10/04/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%EF%BC%88jdk8-%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80%E7%B1%BB%EF%BC%89/","path":"2018/10/04/函数式编程（jdk8-常用函数式编程基础类）/","title":"函数式编程（jdk8-常用函数式编程基础类）"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>函数式编程（jdk8-常用函数式编程基础类） | 南贺神社</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">南贺神社</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">你写程序有写诗一样的感觉吗?</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">205</span></a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">24</span></a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">212</span></a></li>
+        <li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-overview">
+            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="CeaserWang"
+      src="/../0xcc/index/Uchiha.jpg">
+  <p class="site-author-name" itemprop="name">CeaserWang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">212</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">205</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tLzExNTY3MjE4NzQ=" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;1156721874"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmNlYXNlcndhbmdAb3V0bG9vay5jb20=" title="E-Mail → mailto:ceaserwang@outlook.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+  </div>
+  <div class="cc-license site-overview-item animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><img src="https://cdn.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-user-friends fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly90d29kcmFnb25sYWtlLmNvbQ==" title="https:&#x2F;&#x2F;twodragonlake.com">TwoDragonLake</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9yb290Y2x1c3Rlci5naXRodWIuaW8=" title="https:&#x2F;&#x2F;rootcluster.github.io">RootCluster</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9tdXNlZmxvdy5pbw==" title="https:&#x2F;&#x2F;museflow.io">MuseFlow</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9pbmNvZGVyLm9yZw==" title="https:&#x2F;&#x2F;incoder.org">BladeCode</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9rYWlmYS5kZXY=" title="https:&#x2F;&#x2F;kaifa.dev">Alyenc</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmRhemhpZGF5b25nLmNu" title="https:&#x2F;&#x2F;blog.dazhidayong.cn">Killua</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9qb2NlbHluc2hhbmcuY24v" title="https:&#x2F;&#x2F;jocelynshang.cn&#x2F;">Jocelyn</span>
+        </li>
+    </ul>
+  </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/10/04/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%EF%BC%88jdk8-%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80%E7%B1%BB%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
+      <meta itemprop="name" content="CeaserWang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="南贺神社">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          函数式编程（jdk8-常用函数式编程基础类）
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-10-04 10:25:22" itemprop="dateCreated datePublished" datetime="2018-10-04T10:25:22+00:00">2018-10-04</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2022-01-04 02:21:30" itemprop="dateModified" datetime="2022-01-04T02:21:30+00:00">2022-01-04</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/javaBase/" itemprop="url" rel="index"><span itemprop="name">javaBase</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2018/10/04/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%EF%BC%88jdk8-%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80%E7%B1%BB%EF%BC%89/" class="post-meta-item leancloud_visitors" data-flag-title="函数式编程（jdk8-常用函数式编程基础类）" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>在jdk8中什么是函数式接口：<br>1、被@FunctionalInterface注解修饰的。</p>
+<span id="more"></span>
+<p>2、接口里边只有一个非default的方法。<br>满足以上2个条件的即为函数式接口，ps：即使一个接口没有被@FunctionalInterface修饰，但是满足2，那么这样的接口也会是函数式接口。<br><strong>Supplier</strong><br>概要：不接受参数，返回一个值。<br>jdk源码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"> */</span><br><span class="line">@FunctionalInterface</span><br><span class="line">public interface Supplier&lt;T&gt; &#123;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Gets a result.</span><br><span class="line">     *</span><br><span class="line">     * @return a result</span><br><span class="line">     */</span><br><span class="line">    T get();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>即：Supplier不接受参数，返回一个值。<br>example：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public class SupplierTest &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        Supplier&lt;Student&gt; supplier = Student::new;//这里使用了方法引用（后续解释）生成了一个对象。</span><br><span class="line">        System.out.println(supplier.get().getName());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>Function</strong><br>概要：接受一个参数返回一个值<br>jdk源码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">//类型T入参，类型R是返回值的类型</span><br><span class="line">@FunctionalInterface</span><br><span class="line">public interface Function&lt;T, R&gt; &#123;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">		接受一个参数，返回一个结果</span><br><span class="line">     */</span><br><span class="line">    R apply(T t);</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 默认方法是讲的课8新加入的一种类型，入参before是一个Function（接受参数V类型，输出T类型），从实现来看其首先调用before的行为得到输出T，</span><br><span class="line">     * 随后T作为当前Function的入参，最后当前Function输入R类型。即：compose函数传入的函数首先被调用，得到的结果作为当前Function的入参使用</span><br><span class="line">     */</span><br><span class="line">    default &lt;V&gt; Function&lt;V, R&gt; compose(Function&lt;? super V, ? extends T&gt; before) &#123;</span><br><span class="line">        Objects.requireNonNull(before);</span><br><span class="line">        return (V v) -&gt; apply(before.apply(v));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * andThen是和compose相反的操作，当前Function首先被调用，得到的结果作为参数after的入参，调用after。</span><br><span class="line">     */</span><br><span class="line">    default &lt;V&gt; Function&lt;T, V&gt; andThen(Function&lt;? super R, ? extends V&gt; after) &#123;</span><br><span class="line">        Objects.requireNonNull(after);</span><br><span class="line">        return (T t) -&gt; after.apply(apply(t));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 对接受的元素，不做处理</span><br><span class="line">     */</span><br><span class="line">    static &lt;T&gt; Function&lt;T, T&gt; identity() &#123;</span><br><span class="line">        return t -&gt; t;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>BiFunction</strong><br>概要：接受2个参数，返回一个值。<br>jdk源码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">//T和U类型是参数，R类型是返回值。</span><br><span class="line">@FunctionalInterface</span><br><span class="line">public interface BiFunction&lt;T, U, R&gt; &#123;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * BiFunction的主方法，接受2个参数，返回一个结果</span><br><span class="line">     */</span><br><span class="line">    R apply(T t, U u);</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 先执行当前BiFunction的行为，得到结果R类型，R类型最后作为Function的实例after的入参（泛型“? super R”即“？”是R类型或者是R类型的</span><br><span class="line">     * 父级）返回V类型的结果。PS：考虑为什么andThen的入参是一个Function，而不是一个BiFunction？</span><br><span class="line">     */</span><br><span class="line">    default &lt;V&gt; BiFunction&lt;T, U, V&gt; andThen(Function&lt;? super R, ? extends V&gt; after) &#123;</span><br><span class="line">        Objects.requireNonNull(after);</span><br><span class="line">        return (T t, U u) -&gt; after.apply(apply(t, u));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>example:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Created by CeaserWang on 2017/1/8.</span><br><span class="line"> */</span><br><span class="line">public class FunctionATest &#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        FunctionATest functionTestA = new FunctionATest();</span><br><span class="line">       // functionTestA.testfunction1();</span><br><span class="line">        System.out.println(functionTestA.computeA(3,value -&gt; value = value * 3,value -&gt; value+1));</span><br><span class="line"></span><br><span class="line">        System.out.println(functionTestA.computeB(3,value -&gt; value = value * 3,value -&gt; value+1));</span><br><span class="line"></span><br><span class="line">        System.out.println(functionTestA.computeC(3,4,(value1,value2) -&gt; &#123;return value1+value2;&#125;,value -&gt; value*value));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void testfunction1()&#123;</span><br><span class="line">        List&lt;String&gt; list = Arrays.asList(&quot;zhangsan&quot;,&quot;lisi&quot;,&quot;wangwu&quot;);</span><br><span class="line">         Collections.sort(list,(o1,o2) -&gt; &#123;return o1.compareTo(o2); &#125;);</span><br><span class="line">        Collections.sort(list,(o1,o2) -&gt;  o1.compareTo(o2));</span><br><span class="line"></span><br><span class="line">        list.forEach((item) -&gt; System.out.println(item));</span><br><span class="line">         list.forEach(String::toUpperCase);</span><br><span class="line">         list.stream().map(String::toUpperCase).forEach(item -&gt; System.out.println(item));</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public int  computeA(int a, Function&lt;Integer,Integer&gt; function,Function&lt;Integer,Integer&gt; befor )&#123;</span><br><span class="line">        return  function.compose(befor).apply(a);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public int  computeB(int a, Function&lt;Integer,Integer&gt; function,Function&lt;Integer,Integer&gt; after )&#123;</span><br><span class="line">        return  function.andThen(after).apply(a);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public int  computeC(int a,int b, BiFunction&lt;Integer, Integer,Integer&gt; bifunction, Function&lt;Integer,Integer&gt; function )&#123;</span><br><span class="line">        return  bifunction.andThen(function).apply(a,b);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p><strong>BinaryOperator</strong><br>概要：继承了BiFunction新加了2个求最大值和最小值的方法。<br>jdk源码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">//继承了BiFunction，入参和返回值都是同一种类型T，因为2中相同类型的元素做大小比较，返回的是其中一个，即还是原来入参的类型。</span><br><span class="line">@FunctionalInterface</span><br><span class="line">public interface BinaryOperator&lt;T&gt; extends BiFunction&lt;T,T,T&gt; &#123;</span><br><span class="line">    /**</span><br><span class="line">     * 根据比较器comparator求最小值</span><br><span class="line">     */</span><br><span class="line">    public static &lt;T&gt; BinaryOperator&lt;T&gt; minBy(Comparator&lt;? super T&gt; comparator) &#123;</span><br><span class="line">        Objects.requireNonNull(comparator);</span><br><span class="line">        return (a, b) -&gt; comparator.compare(a, b) &lt;= 0 ? a : b;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 根据比较器comparator求最大值</span><br><span class="line">     */</span><br><span class="line">    public static &lt;T&gt; BinaryOperator&lt;T&gt; maxBy(Comparator&lt;? super T&gt; comparator) &#123;</span><br><span class="line">        Objects.requireNonNull(comparator);</span><br><span class="line">        return (a, b) -&gt; comparator.compare(a, b) &gt;= 0 ? a : b;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>example:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Created by Administrator on 2017/1/8.</span><br><span class="line"> */</span><br><span class="line">public class BinaryOperatorTest &#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        BinaryOperatorTest  BinaryOperatorTest = new BinaryOperatorTest();</span><br><span class="line">        Integer rnum =   BinaryOperatorTest.compute(2,3,(num1,num2) -&gt; &#123;return num1 * num2;&#125;,value -&gt; 2*value);</span><br><span class="line">        System.out.println(rnum);</span><br><span class="line">        System.out.println(&quot;-------------------------------------&quot;);</span><br><span class="line">        Integer rnum2 =   BinaryOperatorTest.compute(2,3,(num1,num2) -&gt; &#123;return num1 * num2;&#125;);</span><br><span class="line">        System.out.println(rnum2);</span><br><span class="line">        System.out.println(&quot;-------------------------------------&quot;);</span><br><span class="line">        Integer rnum3 =   BinaryOperatorTest.computeA(2,3,(num1,num2) -&gt;   num1.compareTo(num2));</span><br><span class="line">        System.out.println(rnum3);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public Integer compute(Integer a, Integer b, BinaryOperator&lt;Integer&gt; binaryoperator, Function&lt;Integer,Integer&gt; function) &#123;</span><br><span class="line">        return binaryoperator.andThen(function).apply(a,b);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    public Integer compute(Integer a, Integer b, BinaryOperator&lt;Integer&gt; binaryoperator) &#123;</span><br><span class="line">        return binaryoperator.apply(a,b);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    public Integer computeA(Integer a, Integer b, Comparator&lt;Integer&gt; comparator)&#123;</span><br><span class="line">        return BinaryOperator.minBy(comparator).apply(a,b);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>Predicate</strong><br>概要：接受一个参数返回boolean类型，常用语filter过滤条件使用。<br>jdk源码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">@FunctionalInterface</span><br><span class="line">public interface Predicate&lt;T&gt; &#123;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 接受一个参数返回一个boolean值</span><br><span class="line">     */</span><br><span class="line">    boolean test(T t);</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     *与操作，支持短路与</span><br><span class="line">     */</span><br><span class="line">    default Predicate&lt;T&gt; and(Predicate&lt;? super T&gt; other) &#123;</span><br><span class="line">        Objects.requireNonNull(other);</span><br><span class="line">        return (t) -&gt; test(t) &amp;&amp; other.test(t);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 取反操作</span><br><span class="line">     */</span><br><span class="line">    default Predicate&lt;T&gt; negate() &#123;</span><br><span class="line">        return (t) -&gt; !test(t);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 或操作，支持短路或</span><br><span class="line">     */</span><br><span class="line">    default Predicate&lt;T&gt; or(Predicate&lt;? super T&gt; other) &#123;</span><br><span class="line">        Objects.requireNonNull(other);</span><br><span class="line">        return (t) -&gt; test(t) || other.test(t);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 比较2个对象是否相同</span><br><span class="line">     */</span><br><span class="line">    static &lt;T&gt; Predicate&lt;T&gt; isEqual(Object targetRef) &#123;</span><br><span class="line">        return (null == targetRef)</span><br><span class="line">                ? Objects::isNull</span><br><span class="line">                : object -&gt; targetRef.equals(object);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>example:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Created by CeaserWang on 2017/1/8.</span><br><span class="line"> */</span><br><span class="line">public class PredicateTest &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        Predicate&lt;String&gt; mypredicate = value -&gt; value.length()&gt;5;</span><br><span class="line">        System.out.println(mypredicate.test(&quot;hello55s&quot;));</span><br><span class="line"></span><br><span class="line">        List&lt;Integer&gt; nums = Arrays.asList(1,2,3,4,5,6,7,8,9);</span><br><span class="line">        PredicateTest predicatetest = new PredicateTest();</span><br><span class="line">        predicatetest.condationA(nums,value -&gt; value&gt;5);</span><br><span class="line">        System.out.println(&quot;\n---------------------------&quot;);</span><br><span class="line">        predicatetest.condationA(nums,value -&gt; value % 2 ==0);</span><br><span class="line">        System.out.println(&quot;\n---------------------------&quot;);</span><br><span class="line"></span><br><span class="line">        System.out.println(predicatetest.condationEqual(&quot;test&quot;).test(&quot;test&quot;));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void condationA(List&lt;Integer&gt; list, Predicate&lt;Integer&gt; predate)&#123;</span><br><span class="line">        for(Integer item : list)&#123;</span><br><span class="line">            if(predate.test(item))&#123;</span><br><span class="line">                System.out.print(item);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public Predicate&lt;String&gt; condationEqual(Object obj)&#123;</span><br><span class="line">        return Predicate.isEqual(obj) ;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>Optional</strong><br>概要：jdk8为了解决NPE问题提供的解决方案。<br>在jdk7中业务中很多代码都是这样：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">if(null!=XXX)&#123;</span><br><span class="line">	doSomeThing();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>开发人员需要警惕NPE问题，给开发带来了一些不便，现在我们不想用这三行固定的语句，为此jdk8有了Optional。<br>Optional内部维护了一个value的成员变量，为此Optional提供了诸多针对于此成员变量的方法。<br>Optional中的其中一个方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">//空对象</span><br><span class="line">   private static final Optional&lt;?&gt; EMPTY = new Optional&lt;&gt;();</span><br><span class="line"></span><br><span class="line">//Optional维护的值</span><br><span class="line"> private final T value;</span><br><span class="line">//是否是空值</span><br><span class="line">   public boolean isPresent() &#123;</span><br><span class="line">       return value != null;</span><br><span class="line">   &#125;</span><br><span class="line">   //如果不是空值，那么执行针对于value的行为。</span><br><span class="line">       public void ifPresent(Consumer&lt;? super T&gt; consumer) &#123;</span><br><span class="line">       if (value != null)</span><br><span class="line">           consumer.accept(value);</span><br><span class="line">   &#125;</span><br><span class="line">   //构造一个值为value的Optional对象，value不能为空，否则报错。</span><br><span class="line">   public static &lt;T&gt; Optional&lt;T&gt; of(T value) &#123;</span><br><span class="line">       return new Optional&lt;&gt;(value);</span><br><span class="line">   &#125;</span><br><span class="line">   //返回一个空值</span><br><span class="line">   public static&lt;T&gt; Optional&lt;T&gt; empty() &#123;</span><br><span class="line">       @SuppressWarnings(&quot;unchecked&quot;)</span><br><span class="line">       Optional&lt;T&gt; t = (Optional&lt;T&gt;) EMPTY;</span><br><span class="line">       return t;</span><br><span class="line">   &#125;</span><br><span class="line">   //创建一个允许空值的Optional对象</span><br><span class="line">      public static &lt;T&gt; Optional&lt;T&gt; ofNullable(T value) &#123;</span><br><span class="line">       return value == null ? empty() : of(value);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<p>example：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Created by CeaserWang on 2017/1/8.</span><br><span class="line"> * optional 不要作为成员变量或者参数，optional只是为了应对null异常而来的</span><br><span class="line"> */</span><br><span class="line">public class OptionalTest &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        OptionalTest OptionalTest = new OptionalTest();</span><br><span class="line">        OptionalTest.optionalA();</span><br><span class="line">        OptionalTest.optionalB();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    public void optionalA()&#123;</span><br><span class="line">        //Optional optional = Optional.of(&quot;hello&quot;);</span><br><span class="line">        Optional optional = Optional.ofNullable(null);//创建一个空的对象</span><br><span class="line">        optional.ifPresent(item -&gt; System.out.println(item));//如果为空此行代码不会报错。</span><br><span class="line"></span><br><span class="line">        System.out.println(optional.orElse(&quot;world&quot;));//如果为空输出word</span><br><span class="line">        System.out.println(optional.orElseGet(() -&gt; &quot;opop&quot;));//如果为空，取Supplier提供的值</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    public void optionalB()&#123;</span><br><span class="line">        Company company = new Company();</span><br><span class="line">        Employee e1 = new Employee();</span><br><span class="line">        Employee e2 = new Employee();</span><br><span class="line">        company.setEmployyee(Arrays.asList(e1,e2));</span><br><span class="line"></span><br><span class="line">        Optional&lt;Company&gt; optional = Optional.ofNullable(company);</span><br><span class="line">        System.out.println(optional.map(icompany -&gt; icompany.getEmployyee()).orElse(Collections.emptyList()));</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>函数式编程和以往的面向对象的方式有一定的区别，函数式编程方法的参数可以传递行为，这些行为包括但不限于以上介绍的这些，jdk8提供的函数式编程的辅助类在java.util.function包下边：<br><img src="20170326140327392.png" alt="这里写图片描述"></p>
+<p>这些针对于函数式编程的辅助类，对以后的收集器，流是基础，后续的jdk新加的框架都是使用这些基类展开的。</p>
+<p><strong>jdk8新加入的default方法</strong><br>default方法的加入是为了兼容jdk8以前的版本的需要。<br>（1）当前有两个接口MyInterface和MyInterface1，它们都有相同名字的default方法，之后实现类Myclass同时implements了MyInterface和MyInterface1，同时Myclass实现了default方法，此时Myclass调用default调的是谁的？<br>（2）一个接口I有一个default方法，另一个实现类A实现了了此接口，并且重写了default方法，之后另一个类B继承了实现类A并且实现了接口I，那么在这种情况下，实现类B调用的default方法又是谁的呢？针对这两种情况编写测试代码：</p>
+<p>接口MyInterface</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Created by CeaserWang on 2017/1/16.</span><br><span class="line"> */</span><br><span class="line">public interface MyInterface &#123;</span><br><span class="line">default void  meyhod()&#123;</span><br><span class="line">    System.out.println(&quot;MyInterface&quot;);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>接口MyInterface1</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public interface MyInterface1 &#123;</span><br><span class="line">    default void  meyhod()&#123;</span><br><span class="line">        System.out.println(&quot;MyInterface1&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>实现类ExtendsClass</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public class ExtendsClass implements  MyInterface &#123;</span><br><span class="line"></span><br><span class="line">    public void  meyhod()&#123;</span><br><span class="line">        System.out.println(&quot;ExtendsClass&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>实现类FixClass</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public class FixClass extends  ExtendsClass implements  MyInterface1 &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>测试类Myclass</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">public class Myclass implements  MyInterface,MyInterface1 &#123;</span><br><span class="line"></span><br><span class="line">  public  void  meyhod()&#123;</span><br><span class="line">       System.out.println(&quot;Myclass&quot;);</span><br><span class="line">      //MyInterface1.super.meyhod();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        Myclass myclass = new Myclass();</span><br><span class="line">        myclass.meyhod();</span><br><span class="line"></span><br><span class="line">        FixClass fixClass = new FixClass();</span><br><span class="line">        fixClass.meyhod();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>运行Myclass 结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Myclass</span><br><span class="line">ExtendsClass</span><br></pre></td></tr></table></figure>
+
+<p>结论:<br>针对于第一种情况，default方法调用的是自身的实现的default方法。<br>针对于第二种情况，default方法调用的是“就近原则”，ExtendsClass 首先被实现，那么首选是ExtendsClass 的default方法，因此输出“ExtendsClass”。</p>
+<p><strong>jdk8-方法引用</strong></p>
+<p><strong>方法引用的形式</strong><br>方法引用的标准形式是:类名::方法名。（注意：只需要写方法名，不需要写括号）</p>
+<p>有以下四种形式的方法引用:</p>
+<p>类型    示例<br>引用静态方法    ContainingClass::staticMethodName<br>引用某个对象的实例方法    containingObject::instanceMethodName<br>引用某个类型的任意对象的实例方法    ContainingType::methodName<br>引用构造方法    ClassName::new</p>
+<p>下面我们通过一个小Demo来分别学习这几种形式的方法引用:<br>Student 类：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">public class Student &#123;</span><br><span class="line">    private String name;</span><br><span class="line">    private int score;</span><br><span class="line"></span><br><span class="line">    public Student(String name, int score) &#123;</span><br><span class="line">        this.name = name;</span><br><span class="line">        this.score = score;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String getName() &#123;</span><br><span class="line">        return name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setName(String name) &#123;</span><br><span class="line">        this.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public int getScore() &#123;</span><br><span class="line">        return score;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setScore(int score) &#123;</span><br><span class="line">        this.score = score;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    public static int coompareStudentByScore(Student student1,Student student2)&#123;</span><br><span class="line">        return student1.getScore() - student2.getScore();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    public static int coompareStudentByName(Student student1,Student student2)&#123;</span><br><span class="line">        return student1.getName().compareToIgnoreCase(student2.getName());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public int compareScore(Student student)&#123;</span><br><span class="line">        return this.score-student.getScore();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>StudentComparator 比较器：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">public class StudentComparator &#123;</span><br><span class="line"></span><br><span class="line">    public  int coompareStudentByScore(Student student1,Student student2)&#123;</span><br><span class="line">        return student1.getScore() - student2.getScore();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public  int coompareStudentByName(Student student1,Student student2)&#123;</span><br><span class="line">        return student1.getName().compareToIgnoreCase(student2.getName());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>测试类：MethodReferenceTest</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"> * Created by CeaserWang on 2017/1/15.</span><br><span class="line"> */</span><br><span class="line">public class MethodReferenceTest &#123;</span><br><span class="line"></span><br><span class="line">    public String toString(Supplier&lt;String&gt; supplier)&#123;</span><br><span class="line">        return supplier.get()+&quot;test&quot;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String toString2(String str, Function&lt;String,String&gt; function)&#123;</span><br><span class="line">        return function.apply(str);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        Student student1   = new Student(&quot;zhangsan&quot;,20);</span><br><span class="line">        Student student2   = new Student(&quot;lisi&quot;,90);</span><br><span class="line">        Student student3   = new Student(&quot;wangwu&quot;,50);</span><br><span class="line">        Student student4   = new Student(&quot;zhaoliu&quot;,60);</span><br><span class="line"></span><br><span class="line">        List&lt;Student&gt; students = Arrays.asList(student1,student2,student3,student4);</span><br><span class="line">		//lambda形式</span><br><span class="line">       students.sort((studentparam1,studentparam2) -&gt; Student.coompareStudentByName(studentparam1,studentparam2));</span><br><span class="line">        students.forEach(student -&gt; System.out.println(student.getName()));*/</span><br><span class="line">       // 引用静态方法</span><br><span class="line">       /* students.sort( Student::coompareStudentByName);</span><br><span class="line">        students.forEach(student -&gt; System.out.println(student.getName()));</span><br><span class="line"></span><br><span class="line">        System.out.println(&quot;----------------------------------------------&quot;);</span><br><span class="line"></span><br><span class="line">		//引用某个对象的实例方法</span><br><span class="line">        StudentComparator studentComparator = new StudentComparator();</span><br><span class="line">        students.sort(studentComparator::coompareStudentByScore);</span><br><span class="line">        students.forEach(student -&gt; System.out.println(student.getScore()));</span><br><span class="line"></span><br><span class="line">        System.out.println(&quot;----------------------------------------------&quot;);</span><br><span class="line"></span><br><span class="line">        //引用某个类型的任意对象的实例方法</span><br><span class="line">        students.sort(Student::compareScore);</span><br><span class="line">        students.forEach(student -&gt; System.out.println(student.getScore()));</span><br><span class="line">        MethodReferenceTest methodReferenceTest =  new MethodReferenceTest();</span><br><span class="line">        //引用构造方法</span><br><span class="line">        System.out.println( methodReferenceTest.toString(String::new));</span><br><span class="line">        System.out.println( methodReferenceTest.toString2(&quot;hello&quot;,String::new));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>CeaserWang
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://ceaser.wang/2018/10/04/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%EF%BC%88jdk8-%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80%E7%B1%BB%EF%BC%89/" title="函数式编程（jdk8-常用函数式编程基础类）">https://ceaser.wang/2018/10/04/函数式编程（jdk8-常用函数式编程基础类）/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/jdk8-lambda-FunctionalInterface/" rel="tag"><i class="fa fa-tag"></i> jdk8 lambda FunctionalInterface</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2018/10/04/linux%E4%B8%8Bpython3-5-pip%E5%AE%89%E8%A3%85/" rel="prev" title="linux下python3.5+pip安装">
+                  <i class="fa fa-chevron-left"></i> linux下python3.5+pip安装
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2018/10/04/jdk8%E6%96%B0%E5%8A%A0%E5%85%A5%E7%9A%84default%E6%96%B9%E6%B3%95/" rel="next" title="jdk8新加入的default方法">
+                  jdk8新加入的default方法 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CeaserWang</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":"forest","js":{"url":"https://cdn.jsdelivr.net/npm/mermaid@8.11.0/dist/mermaid.min.js","integrity":"sha256-sVAx+v/Q7v0Q2xm5vN7h5ccSna6gaLREhG9sF8pKT6I="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+  <script class="next-config" data-name="nprogress" type="application/json">{"enable":true,"spinner":true}</script>
+  <script src="/js/third-party/nprogress.js"></script>
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"ryAR9bttS7fex1FPEPAylmmJ-gzGzoHsz","app_key":"dYqygoN4Y01Bl38OdRoCHUYn","server_url":null,"security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+
+</body>
+</html>

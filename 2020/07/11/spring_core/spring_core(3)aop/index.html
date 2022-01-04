@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.css" integrity="sha256-no0c5ccDODBwp+9hSmV5VvPpKwHCpbVzXHexIkupM6U=" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.js" integrity="sha256-a5YRB27CcBwBFcT5EF/f3E4vzIqyHrSR878nseNYw64=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ceaser.wang","root":"/","images":"/images","scheme":"Muse","version":"8.6.1","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+<meta name="description" content="理论部分Spring AOP目标 将分散在程序各处的横切关注点剥离出来并以集中的方式进行表达 使得开发人员能够专注于业务逻辑的实现而非繁杂的非功能代码，简化了程序编写与单元测试 应用场景 日志 安全 事物">
+<meta property="og:type" content="article">
+<meta property="og:title" content="spring_core(3)AOP剖析">
+<meta property="og:url" content="https://ceaser.wang/2020/07/11/spring_core/spring_core(3)aop/index.html">
+<meta property="og:site_name" content="南贺神社">
+<meta property="og:description" content="理论部分Spring AOP目标 将分散在程序各处的横切关注点剥离出来并以集中的方式进行表达 使得开发人员能够专注于业务逻辑的实现而非繁杂的非功能代码，简化了程序编写与单元测试 应用场景 日志 安全 事物">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://ceaser.wang/2020/07/11/spring_core/spring_core(3)aop/proxy.png">
+<meta property="og:image" content="https://ceaser.wang/2020/07/11/spring_core/spring_core(3)aop/MethodInvocation.png">
+<meta property="og:image" content="https://ceaser.wang/2020/07/11/spring_core/spring_core(3)aop/invokeJoinpointUsingReflection.png">
+<meta property="article:published_time" content="2020-07-11T18:31:00.000Z">
+<meta property="article:modified_time" content="2022-01-04T02:21:30.952Z">
+<meta property="article:author" content="CeaserWang">
+<meta property="article:tag" content="spring aop">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ceaser.wang/2020/07/11/spring_core/spring_core(3)aop/proxy.png">
+
+
+<link rel="canonical" href="https://ceaser.wang/2020/07/11/spring_core/spring_core(3)aop/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://ceaser.wang/2020/07/11/spring_core/spring_core(3)aop/","path":"2020/07/11/spring_core/spring_core(3)aop/","title":"spring_core(3)AOP剖析"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>spring_core(3)AOP剖析 | 南贺神社</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">南贺神社</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">你写程序有写诗一样的感觉吗?</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">205</span></a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">24</span></a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">212</span></a></li>
+        <li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%90%86%E8%AE%BA%E9%83%A8%E5%88%86"><span class="nav-number">1.</span> <span class="nav-text">理论部分</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Spring-AOP%E7%9B%AE%E6%A0%87"><span class="nav-number">1.1.</span> <span class="nav-text">Spring AOP目标</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#AOP-VS-%E7%BB%A7%E6%89%BF"><span class="nav-number">1.2.</span> <span class="nav-text">AOP VS 继承</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#AOP%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5"><span class="nav-number">1.3.</span> <span class="nav-text">AOP核心概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#spring-aop%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.4.</span> <span class="nav-text">spring aop实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ProxyFactoryBean%E7%9A%84%E6%9E%84%E6%88%90"><span class="nav-number">1.5.</span> <span class="nav-text">ProxyFactoryBean的构成</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ProxyFactoryBean%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="nav-number">1.6.</span> <span class="nav-text">ProxyFactoryBean的作用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%9B%AE%E6%A0%87%E4%BB%A3%E7%90%86%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%88%9B%E5%BB%BA"><span class="nav-number">1.7.</span> <span class="nav-text">目标代理对象的创建</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F"><span class="nav-number">1.8.</span> <span class="nav-text">代理模式</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#jdk%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86"><span class="nav-number">1.8.1.</span> <span class="nav-text">jdk动态代理</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#jdk%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.9.</span> <span class="nav-text">jdk动态代理的实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CGLIB%E4%BB%A3%E7%90%86"><span class="nav-number">1.10.</span> <span class="nav-text">CGLIB代理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#spring-aop%E7%9A%84%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF%EF%BC%9A%E4%BA%8B%E7%89%A9"><span class="nav-number">1.11.</span> <span class="nav-text">spring aop的应用场景：事物</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#spring%E4%BA%8B%E5%8A%A1%E7%9A%84%E5%88%9B%E5%BB%BA"><span class="nav-number">1.12.</span> <span class="nav-text">spring事务的创建</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">1.13.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#aop%E6%B5%81%E7%A8%8B%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.</span> <span class="nav-text">aop流程实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89%E7%9B%AE%E6%A0%87%E7%B1%BB%E7%9A%84%E6%8E%A5%E5%8F%A3"><span class="nav-number">2.1.</span> <span class="nav-text">定义目标类的接口</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89%E7%9B%AE%E6%A0%87%E7%B1%BB%E7%9A%84%E6%8E%A5%E5%8F%A3%E7%9A%84%E5%AE%9E%E7%8E%B0%E7%B1%BB"><span class="nav-number">2.2.</span> <span class="nav-text">定义目标类的接口的实现类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89%E9%80%9A%E7%9F%A5%E5%99%A8MyAdvisor"><span class="nav-number">2.3.</span> <span class="nav-text">定义通知器MyAdvisor</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%85%8D%E7%BD%AEProxyFactoryBean"><span class="nav-number">2.4.</span> <span class="nav-text">配置ProxyFactoryBean</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8Example"><span class="nav-number">2.5.</span> <span class="nav-text">启动Example</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#aop%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90"><span class="nav-number">3.</span> <span class="nav-text">aop实现方式源码解析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ProxyFactoryBean"><span class="nav-number">3.1.</span> <span class="nav-text">ProxyFactoryBean</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BE%AE%E8%A7%82%E8%A7%A3%E6%9E%90"><span class="nav-number">3.2.</span> <span class="nav-text">微观解析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B3%E4%BA%8ESpring-AOP%E4%BB%A3%E7%90%86%E7%9A%84%E7%94%9F%E6%88%90%E8%BF%87%E7%A8%8B%E5%B0%8F%E7%BB%93"><span class="nav-number">3.3.</span> <span class="nav-text">关于Spring AOP代理的生成过程小结</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#aop%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E6%96%B9%E6%B3%95%E7%9A%84%E6%89%A7%E8%A1%8C"><span class="nav-number">4.</span> <span class="nav-text">aop动态代理方法的执行</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-overview">
+            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="CeaserWang"
+      src="/../0xcc/index/Uchiha.jpg">
+  <p class="site-author-name" itemprop="name">CeaserWang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">212</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">205</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tLzExNTY3MjE4NzQ=" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;1156721874"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmNlYXNlcndhbmdAb3V0bG9vay5jb20=" title="E-Mail → mailto:ceaserwang@outlook.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+  </div>
+  <div class="cc-license site-overview-item animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><img src="https://cdn.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-user-friends fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly90d29kcmFnb25sYWtlLmNvbQ==" title="https:&#x2F;&#x2F;twodragonlake.com">TwoDragonLake</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9yb290Y2x1c3Rlci5naXRodWIuaW8=" title="https:&#x2F;&#x2F;rootcluster.github.io">RootCluster</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9tdXNlZmxvdy5pbw==" title="https:&#x2F;&#x2F;museflow.io">MuseFlow</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9pbmNvZGVyLm9yZw==" title="https:&#x2F;&#x2F;incoder.org">BladeCode</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9rYWlmYS5kZXY=" title="https:&#x2F;&#x2F;kaifa.dev">Alyenc</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmRhemhpZGF5b25nLmNu" title="https:&#x2F;&#x2F;blog.dazhidayong.cn">Killua</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9qb2NlbHluc2hhbmcuY24v" title="https:&#x2F;&#x2F;jocelynshang.cn&#x2F;">Jocelyn</span>
+        </li>
+    </ul>
+  </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2020/07/11/spring_core/spring_core(3)aop/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
+      <meta itemprop="name" content="CeaserWang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="南贺神社">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          spring_core(3)AOP剖析
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-07-11 18:31:00" itemprop="dateCreated datePublished" datetime="2020-07-11T18:31:00+00:00">2020-07-11</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2022-01-04 02:21:30" itemprop="dateModified" datetime="2022-01-04T02:21:30+00:00">2022-01-04</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/spring-core/" itemprop="url" rel="index"><span itemprop="name">spring_core</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2020/07/11/spring_core/spring_core(3)aop/" class="post-meta-item leancloud_visitors" data-flag-title="spring_core(3)AOP剖析" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h3 id="理论部分"><a href="#理论部分" class="headerlink" title="理论部分"></a>理论部分</h3><h4 id="Spring-AOP目标"><a href="#Spring-AOP目标" class="headerlink" title="Spring AOP目标"></a>Spring AOP目标</h4><ul>
+<li>将分散在程序各处的横切关注点剥离出来并以集中的方式进行表达</li>
+<li>使得开发人员能够专注于业务逻辑的实现而非繁杂的非功能代码，简化了程序编写与单元测试</li>
+<li>应用场景<ul>
+<li>日志</li>
+<li>安全</li>
+<li>事物<span id="more"></span>
+<h4 id="AOP-VS-继承"><a href="#AOP-VS-继承" class="headerlink" title="AOP VS 继承"></a>AOP VS 继承</h4></li>
+</ul>
+</li>
+<li>AOP重点考虑的是程序的横切逻辑</li>
+<li>继承重点考虑的是纵向的职责分派(面向对象推荐组合的方式，而不是滥用继承)</li>
+</ul>
+<h4 id="AOP核心概念"><a href="#AOP核心概念" class="headerlink" title="AOP核心概念"></a>AOP核心概念</h4><ul>
+<li>Advice(通知)<ul>
+<li>定义在连接点处的行为，围绕方法调用而进行注入</li>
+</ul>
+</li>
+<li>Pointcut(切点)<ul>
+<li>确定在哪些连接点处应用通知</li>
+</ul>
+</li>
+<li>Advisor(通知器)<ul>
+<li>组合Advice与Pointcut</li>
+</ul>
+</li>
+</ul>
+<h4 id="spring-aop实现"><a href="#spring-aop实现" class="headerlink" title="spring aop实现"></a>spring aop实现</h4><p>ProxyFactory</p>
+<ul>
+<li>FactoryBean implemention that builds an aop Proxy based on beans in spring BeanFactory</li>
+<li>Spring AOP的底层实现与源头</li>
+<li>FactoryBean可以理解为对BeanFactory中的bean的一个代理。</li>
+</ul>
+<h4 id="ProxyFactoryBean的构成"><a href="#ProxyFactoryBean的构成" class="headerlink" title="ProxyFactoryBean的构成"></a>ProxyFactoryBean的构成</h4><ul>
+<li>target<ul>
+<li>目标对象，需要对齐进行切面增强</li>
+</ul>
+</li>
+<li>proxyInterfaces<ul>
+<li>代理对象所实现的接口</li>
+</ul>
+</li>
+<li>interceptorNames<ul>
+<li>通知器(Advisor)列表，通知器中包含了通知(Advice)与切点(Pointcut)</li>
+</ul>
+</li>
+</ul>
+<h4 id="ProxyFactoryBean的作用"><a href="#ProxyFactoryBean的作用" class="headerlink" title="ProxyFactoryBean的作用"></a>ProxyFactoryBean的作用</h4><ul>
+<li>总的来说，ProxyFactoryBean的作用可用下面这句话概括<ul>
+<li>针对目标对象创建代理对象，将对目标对象方法的调用转到对应代理对象方法的调用，并且可以在代理对象方法调用前后执行与之匹配的各个通知器中定义好的方法</li>
+</ul>
+</li>
+</ul>
+<h4 id="目标代理对象的创建"><a href="#目标代理对象的创建" class="headerlink" title="目标代理对象的创建"></a>目标代理对象的创建</h4><ul>
+<li>spring通过3种方式创建目标代理对象<ul>
+<li>jdk动态代理</li>
+<li>cglib</li>
+<li>objenessCglibAopProxy</li>
+</ul>
+</li>
+</ul>
+<h4 id="代理模式"><a href="#代理模式" class="headerlink" title="代理模式"></a>代理模式</h4><ul>
+<li>代理模式的作用是：为其他对象提供一种代理以控制对这个对象的访问</li>
+<li>在某些情况下，一个客户端或者不能直接引用另一个对象，而代理对象可以在客户端和目标对象之间起到中介的作用</li>
+</ul>
+<h5 id="jdk动态代理"><a href="#jdk动态代理" class="headerlink" title="jdk动态代理"></a>jdk动态代理</h5><ul>
+<li>如果目标对象实现了接口，那么spring就会通过jdk动态代理为目标对象生成代理<br><img src="proxy.png" alt="proxy.png"></li>
+<li>java动态代理类似于java.lang.reflect包下，一般主要涉及到以下2个接口：<ul>
+<li>interface InvocationHandler：该接口仅仅定义一个方法:public object invoke(Object obj, Method method,Object[] args)<ul>
+<li>在实际使用时，第一个参数obj一般是指代理类，method是被代理的方法，args为该方法的参数数组，这个抽象方法在代理类中动态实现。</li>
+</ul>
+</li>
+<li>Proxy：该类即为动态代理类，其中主要包含以下内容<ul>
+<li>static Object newProxyInstance(classLoader loader,Class[] interfaces,InvocationHandler h)</li>
+<li>返回代理类的一个实例，返回后的代理类可以被代理类使用</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>动态代理是这样一种class：<ul>
+<li>在运行时生成class，在生成它时你必须提供一组interface给他，，然后该class就会声明它实现了这些interface。因此我们可以将该class的实例当做这些interface中的任何一个来用，当然，这个动态代理其实就是一个Proxy，他不会替你作实质的工作，在生成他的实例时你必须提供一个handler，由他接管实际的工作</li>
+</ul>
+</li>
+</ul>
+<h4 id="jdk动态代理的实现"><a href="#jdk动态代理的实现" class="headerlink" title="jdk动态代理的实现"></a>jdk动态代理的实现</h4><ol>
+<li>创建一个接口InvocationHandler的类，他必须实现invoke方法</li>
+<li>创建被代理的类以及接口</li>
+<li>通过Proxy的静态以及接口<br>newProxyInstance(classLoader loader,Class[] iterfaces,InvocationHandler h)创建一个被代理</li>
+<li>通过代理调用方法<br>参考之前的文章：<br><a href="https://ceaser.wang/2018/10/05/jvm%E5%8E%9F%E7%90%86%EF%BC%8836%EF%BC%89%E9%80%8F%E8%BF%87%E5%AD%97%E8%8A%82%E7%A0%81%E7%94%9F%E6%88%90%E5%AE%A1%E8%A7%86Java%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E8%BF%90%E4%BD%9C%E6%9C%BA%E5%88%B6/">jvm原理（36）透过字节码生成审视Java动态代理运作机制</a></li>
+</ol>
+<h4 id="CGLIB代理"><a href="#CGLIB代理" class="headerlink" title="CGLIB代理"></a>CGLIB代理</h4><ul>
+<li>如果目标类未实现接口，那么spring就会使用cglib库为其创建代理</li>
+</ul>
+<h4 id="spring-aop的应用场景：事物"><a href="#spring-aop的应用场景：事物" class="headerlink" title="spring aop的应用场景：事物"></a>spring aop的应用场景：事物</h4><ul>
+<li>事务是任何一个应用都要仔细考虑的问题</li>
+<li>事务代理经常是一些程式化代码</li>
+<li>手工处理程序事务较易出错</li>
+<li>事务是spring aop非常好的一个应用场景<ul>
+<li>极大减轻了程序员的工作量</li>
+<li>将事务传播属性等内容交给spring来做</li>
+<li>开发人员只需要考虑业务逻辑</li>
+<li>程序代码中将见不到事务相关代码(声明式事务)</li>
+</ul>
+</li>
+</ul>
+<h4 id="spring事务的创建"><a href="#spring事务的创建" class="headerlink" title="spring事务的创建"></a>spring事务的创建</h4><ul>
+<li>spring提供了一个统一的父类来表示不同的事务处理器<ul>
+<li>PlatformTransactionManager</li>
+</ul>
+</li>
+<li>事务的开启、提交、回滚等则由具体的事务管理器来实现</li>
+</ul>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><ul>
+<li>spring核心ioc与aop是整个审判日那个的基石</li>
+<li>spring aop实现方式有3种<ul>
+<li>动态代理</li>
+<li>cglib库</li>
+<li>ObjenessCgibAopProxy</li>
+</ul>
+</li>
+<li>事务是spring aop应用的最佳范例</li>
+</ul>
+<h3 id="aop流程实现"><a href="#aop流程实现" class="headerlink" title="aop流程实现"></a>aop流程实现</h3><h4 id="定义目标类的接口"><a href="#定义目标类的接口" class="headerlink" title="定义目标类的接口"></a>定义目标类的接口</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public interface MyService &#123;</span><br><span class="line">    void myMethod();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="定义目标类的接口的实现类"><a href="#定义目标类的接口的实现类" class="headerlink" title="定义目标类的接口的实现类"></a>定义目标类的接口的实现类</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public class MyServiceImpl implements MyService &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void myMethod() &#123;</span><br><span class="line">        System.out.println(&quot;my method invoke&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="定义通知器MyAdvisor"><a href="#定义通知器MyAdvisor" class="headerlink" title="定义通知器MyAdvisor"></a>定义通知器MyAdvisor</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">import org.aopalliance.intercept.MethodInterceptor;</span><br><span class="line">import org.aopalliance.intercept.MethodInvocation;</span><br><span class="line"></span><br><span class="line">public class MyAdvisor implements MethodInterceptor &#123;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public Object invoke(MethodInvocation invocation) throws Throwable &#123;</span><br><span class="line">        System.out.println(&quot;befor MyAdvisor invoke!&quot;);</span><br><span class="line">        Object result =  invocation.proceed();</span><br><span class="line">        System.out.println(&quot;after MyAdvisor invoke!&quot;);</span><br><span class="line">        return result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="配置ProxyFactoryBean"><a href="#配置ProxyFactoryBean" class="headerlink" title="配置ProxyFactoryBean"></a>配置ProxyFactoryBean</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span><br><span class="line">&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;</span><br><span class="line">       xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span><br><span class="line">       xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd&quot;&gt;</span><br><span class="line"></span><br><span class="line">    &lt;bean id=&quot;myService&quot; class=&quot;com.tdl.spring.aop.service.impl.MyServiceImpl&quot;&gt;</span><br><span class="line">    &lt;/bean&gt;</span><br><span class="line"></span><br><span class="line">    &lt;bean id=&quot;myAdvisor&quot; class=&quot;com.tdl.spring.aop.advisor.MyAdvisor&quot;&gt;</span><br><span class="line">    &lt;/bean&gt;</span><br><span class="line"></span><br><span class="line">    &lt;bean id=&quot;myAop&quot; class=&quot;org.springframework.aop.framework.ProxyFactoryBean&quot;&gt;</span><br><span class="line">        &lt;property name=&quot;proxyInterfaces&quot;&gt;</span><br><span class="line">            &lt;value&gt;com.tdl.spring.aop.service.MyService&lt;/value&gt;</span><br><span class="line">        &lt;/property&gt;</span><br><span class="line">        &lt;property name=&quot;interceptorNames&quot;&gt;</span><br><span class="line">            &lt;list&gt;</span><br><span class="line">                &lt;value&gt;myAdvisor&lt;/value&gt;</span><br><span class="line">            &lt;/list&gt;</span><br><span class="line">        &lt;/property&gt;</span><br><span class="line">        &lt;property name=&quot;target&quot;&gt;</span><br><span class="line">            &lt;ref bean=&quot;myService&quot;&gt;&lt;/ref&gt;</span><br><span class="line">        &lt;/property&gt;</span><br><span class="line">    &lt;/bean&gt;</span><br><span class="line"></span><br><span class="line">&lt;/beans&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="启动Example"><a href="#启动Example" class="headerlink" title="启动Example"></a>启动Example</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">public class SpringClientAop &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        Resource resource = new ClassPathResource(&quot;applicationContext2.xml&quot;);</span><br><span class="line">        DefaultListableBeanFactory defaultListableBeanFactory</span><br><span class="line">                = new DefaultListableBeanFactory();</span><br><span class="line">        BeanDefinitionReader beanDefinitionReader =</span><br><span class="line">                new XmlBeanDefinitionReader(defaultListableBeanFactory);</span><br><span class="line">        beanDefinitionReader.loadBeanDefinitions(resource);</span><br><span class="line"></span><br><span class="line">        MyService myService = (MyService)defaultListableBeanFactory.getBean(&quot;myAop&quot;);</span><br><span class="line">        myService.myMethod();</span><br><span class="line">        System.out.println(myService.getClass());</span><br><span class="line">        System.out.println(myService.getClass().getSuperclass());</span><br><span class="line">        System.out.println(myService.getClass().getInterfaces().length);</span><br><span class="line">        for( Class tclass : myService.getClass().getInterfaces())&#123;</span><br><span class="line">            System.out.println(tclass.getName());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>打印：<br>befor MyAdvisor invoke!<br>my method invoke<br>after MyAdvisor invoke!<br>class com.sun.proxy.$Proxy4<br>class java.lang.reflect.Proxy<br>4<br>com.tdl.spring.aop.service.MyService<br>org.springframework.aop.SpringProxy<br>org.springframework.aop.framework.Advised<br>org.springframework.core.DecoratingProxy</p>
+<p>从打印的接口可以看出，MyServiceImpl实现了MyService、SpringProxy、Advised、DecoratingProxy四个接口。</p>
+<h3 id="aop实现方式源码解析"><a href="#aop实现方式源码解析" class="headerlink" title="aop实现方式源码解析"></a>aop实现方式源码解析</h3><h4 id="ProxyFactoryBean"><a href="#ProxyFactoryBean" class="headerlink" title="ProxyFactoryBean"></a>ProxyFactoryBean</h4><p>ProxyFactoryBean构建出一个aop的代理，基于spring ioc管理的bean创建的代理对象。<br>ProxyFactoryBean代理了我们的业务类，内部粘合和接口列表，拦截器名字的集合，以及通知器。<br>ProxyFactoryBean实现了FactoryBean。<br>FactoryBean是BeanFactory内部的bean需要去实现的接口，而且，FactoryBean往外暴露的不是bean本身，而是以bean的工厂的方式暴露出来。</p>
+<p>org.springframework.beans.factory.FactoryBean:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">org.springframework.beans.factory.FactoryBean#getObject</span><br><span class="line">org.springframework.beans.factory.FactoryBean#getObjectType</span><br><span class="line">org.springframework.beans.factory.FactoryBean#isSingleton</span><br><span class="line">org.springframework.beans.factory.FactoryBean#OBJECT_TYPE_ATTRIBUTE</span><br></pre></td></tr></table></figure>
+<p>FactoryBean和BeanFactory的区别：<br>BeanFactory是一个factory，即是一个工厂，这个工厂是用来管理bean的。<br>FactoryBean也是受到beanfactory的管理，FactoryBean和普通的bean在创建的时候并没有什么区别，也是使用反射，也会进入到缓存的管理，不同的是，当一个class是一个FactoryBean的时候(实现了FactoryBean接口)，那么在创建完毕之后，返回之前加了一些逻辑，在返回之前会调用FactoryBean的getObject()方法，getObject()方法会根据FactoryBean的一些属性和定义执行一些逻辑，就拿ProxyFactoryBean举例，ProxyFactoryBean会根据proxyInterfaces、interceptorNames、target等属性动态生成另外一个类(代理类)的对象，然后将这个动态生成的对象返回。<br>beanfactory是spring ioc的工厂，它里面管理着spring所创建出来的各种bean对象，当我们在配置文件（注解）中声明了某个bean的id后，通过这个id就可以获取到与该id所对应的class对象的实例（可能新建，也可能从缓存中获取）</p>
+<p>FactoryBean本质上也是一个bean，它同其他bean一样，也是由BeanFactory所管理和维护的，当然它的实例也会缓存到spring的工厂中（如果是单例），它与普通的bean的唯一区别在于，当spring创建另一个FactoryBean的实例后，他接下来会判断当前所创建的bean是否是一个FactoryBean实例，如果不是，那么就直接将创建出来的bean返回给客户端；如果是，那么它会对其进行进一步的处理，根据配置文件所配置的target，advisor与interface等信息，在运行期间动态构建出一个类，并生成该类的一个实例，最后将该实例返回给客户端；因此，我们在声明一个FactoryBean时，通过id获取到的并非这个FactoryBean的实例，而是它的动态代理生成出来的一个代理对象（通过三种方式来进行生成）</p>
+<p>AopProxy：<br>Delegate interface for a configured AOP proxy, allowing for the creation of actual proxy objects.<br>Out-of-the-box implementations are available for JDK dynamic proxies and for CGLIB proxies, as applied by DefaultAopProxyFactory。<br>针对于可配置的aop代理的接口，允许创建真实的代理对象。<br>开箱即用的DefaultAopProxyFactory实现有jdk的动态代理和cglib的代理。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">public class DefaultAopProxyFactory implements AopProxyFactory, Serializable &#123;</span><br><span class="line"></span><br><span class="line">	@Override</span><br><span class="line">	public AopProxy createAopProxy(AdvisedSupport config) throws AopConfigException &#123;</span><br><span class="line">		if (config.isOptimize() || config.isProxyTargetClass() || hasNoUserSuppliedProxyInterfaces(config)) &#123;</span><br><span class="line">			Class&lt;?&gt; targetClass = config.getTargetClass();</span><br><span class="line">			if (targetClass == null) &#123;</span><br><span class="line">				throw new AopConfigException(&quot;TargetSource cannot determine target class: &quot; +</span><br><span class="line">						&quot;Either an interface or a target is required for proxy creation.&quot;);</span><br><span class="line">			&#125;</span><br><span class="line">			if (targetClass.isInterface() || Proxy.isProxyClass(targetClass)) &#123;</span><br><span class="line">				return new JdkDynamicAopProxy(config);</span><br><span class="line">			&#125;</span><br><span class="line">			return new ObjenesisCglibAopProxy(config);</span><br><span class="line">		&#125;</span><br><span class="line">		else &#123;</span><br><span class="line">			return new JdkDynamicAopProxy(config);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">  ......</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>CglibAopProxy\JdkDynamicAopProxy\ObjenesisCglibAopProxy这三个是AopProxy的三种实现方式，<br>ObjenesisCglibAopProxy是基于CglibAopProxy实现的，ObjenesisCglibAopProxy是基于字节码创建的代理，可以不使用构造器，spring4默认的代理方式。</p>
+<h4 id="微观解析"><a href="#微观解析" class="headerlink" title="微观解析"></a>微观解析</h4><p>我们的事例里边【MyService myService = (MyService)defaultListableBeanFactory.getBean(“myAop”);】返回了我们想要的aop事例。<br>我们只要来到具体的特化的创建aop的代理分支就可以，因为bean的创建和普通bean没有区别。</p>
+<p>org.springframework.beans.factory.support.AbstractBeanFactory<br>getBean(String name)<br>=&gt;<br>doGetBean(final String name, @Nullable final Class<T> requiredType,    @Nullable final Object[] args, boolean typeCheckOnly)<br>=&gt;<br>getObjectForBeanInstance(Object beanInstance, String name, String beanName, @Nullable RootBeanDefinition mbd)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br></pre></td><td class="code"><pre><span class="line">//返回bean，要么是bean自身，要么是FactoryBean创建出来的对象</span><br><span class="line">protected Object getObjectForBeanInstance(</span><br><span class="line">    Object beanInstance, String name, String beanName, @Nullable RootBeanDefinition mbd) &#123;</span><br><span class="line"></span><br><span class="line">  // Don&#x27;t let calling code try to dereference the factory if the bean isn&#x27;t a factory.</span><br><span class="line">  if (BeanFactoryUtils.isFactoryDereference(name)) &#123;</span><br><span class="line">    if (beanInstance instanceof NullBean) &#123;</span><br><span class="line">      return beanInstance;</span><br><span class="line">    &#125;</span><br><span class="line">    if (!(beanInstance instanceof FactoryBean)) &#123;</span><br><span class="line">      throw new BeanIsNotAFactoryException(beanName, beanInstance.getClass());</span><br><span class="line">    &#125;</span><br><span class="line">    if (mbd != null) &#123;</span><br><span class="line">      mbd.isFactoryBean = true;</span><br><span class="line">    &#125;</span><br><span class="line">    return beanInstance;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  // Now we have the bean instance, which may be a normal bean or a FactoryBean.</span><br><span class="line">  // If it&#x27;s a FactoryBean, we use it to create a bean instance, unless the</span><br><span class="line">  // caller actually wants a reference to the factory.</span><br><span class="line">    //判断创建出来的bean是不是FactoryBean</span><br><span class="line">  if (!(beanInstance instanceof FactoryBean)) &#123;</span><br><span class="line">    return beanInstance;</span><br><span class="line">  &#125;</span><br><span class="line">  //以下逻辑是FactoryBean的流程</span><br><span class="line">  Object object = null;</span><br><span class="line">  if (mbd != null) &#123;</span><br><span class="line">    mbd.isFactoryBean = true;</span><br><span class="line">  &#125;</span><br><span class="line">  else &#123;</span><br><span class="line">    //缓存可能得到为null</span><br><span class="line">    object = getCachedObjectForFactoryBean(beanName);</span><br><span class="line">  &#125;</span><br><span class="line">  if (object == null) &#123;</span><br><span class="line">    // Return bean instance from factory.</span><br><span class="line">    //将ProxyFactoryBean转换为接口的类型</span><br><span class="line">    FactoryBean&lt;?&gt; factory = (FactoryBean&lt;?&gt;) beanInstance;</span><br><span class="line">    // Caches object obtained from FactoryBean if it is a singleton.</span><br><span class="line">    //判断bean的定义在缓存是否存在</span><br><span class="line">    if (mbd == null &amp;&amp; containsBeanDefinition(beanName)) &#123;</span><br><span class="line">      mbd = getMergedLocalBeanDefinition(beanName);</span><br><span class="line">    &#125;</span><br><span class="line">    boolean synthetic = (mbd != null &amp;&amp; mbd.isSynthetic());</span><br><span class="line">    //从工厂bean返回代理对象</span><br><span class="line">    object = getObjectFromFactoryBean(factory, beanName, !synthetic);</span><br><span class="line">  &#125;</span><br><span class="line">  return object;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//factory：org.springframework.aop.framework.ProxyFactoryBean</span><br><span class="line">//beanName：myAop</span><br><span class="line">//shouldPostProcess: true</span><br><span class="line">protected Object getObjectFromFactoryBean(FactoryBean&lt;?&gt; factory, String beanName, boolean shouldPostProcess) &#123;</span><br><span class="line">  if (factory.isSingleton() &amp;&amp; containsSingleton(beanName)) &#123;</span><br><span class="line">    synchronized (getSingletonMutex()) &#123;</span><br><span class="line">      Object object = this.factoryBeanObjectCache.get(beanName);</span><br><span class="line">      if (object == null) &#123;</span><br><span class="line">        //真正工厂获取的动作</span><br><span class="line">        object = doGetObjectFromFactoryBean(factory, beanName);</span><br><span class="line">        // Only post-process and store if not put there already during getObject() call above</span><br><span class="line">        // (e.g. because of circular reference processing triggered by custom getBean calls)</span><br><span class="line">        Object alreadyThere = this.factoryBeanObjectCache.get(beanName);</span><br><span class="line">        if (alreadyThere != null) &#123;</span><br><span class="line">          object = alreadyThere;</span><br><span class="line">        &#125;</span><br><span class="line">        else &#123;</span><br><span class="line">          if (shouldPostProcess) &#123;</span><br><span class="line">            if (isSingletonCurrentlyInCreation(beanName)) &#123;</span><br><span class="line">              // Temporarily return non-post-processed object, not storing it yet..</span><br><span class="line">              return object;</span><br><span class="line">            &#125;</span><br><span class="line">            beforeSingletonCreation(beanName);</span><br><span class="line">            try &#123;</span><br><span class="line">              object = postProcessObjectFromFactoryBean(object, beanName);</span><br><span class="line">            &#125;</span><br><span class="line">            catch (Throwable ex) &#123;</span><br><span class="line">              throw new BeanCreationException(beanName,</span><br><span class="line">                  &quot;Post-processing of FactoryBean&#x27;s singleton object failed&quot;, ex);</span><br><span class="line">            &#125;</span><br><span class="line">            finally &#123;</span><br><span class="line">              afterSingletonCreation(beanName);</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">          if (containsSingleton(beanName)) &#123;</span><br><span class="line">            this.factoryBeanObjectCache.put(beanName, object);</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      return object;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  else &#123;</span><br><span class="line">    Object object = doGetObjectFromFactoryBean(factory, beanName);</span><br><span class="line">    if (shouldPostProcess) &#123;</span><br><span class="line">      try &#123;</span><br><span class="line">        object = postProcessObjectFromFactoryBean(object, beanName);</span><br><span class="line">      &#125;</span><br><span class="line">      catch (Throwable ex) &#123;</span><br><span class="line">        throw new BeanCreationException(beanName, &quot;Post-processing of FactoryBean&#x27;s object failed&quot;, ex);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return object;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//真正工厂获取的动作</span><br><span class="line">private Object doGetObjectFromFactoryBean(final FactoryBean&lt;?&gt; factory, final String beanName)</span><br><span class="line">    throws BeanCreationException &#123;</span><br><span class="line"></span><br><span class="line">  Object object;</span><br><span class="line">  try &#123;</span><br><span class="line">    if (System.getSecurityManager() != null) &#123;</span><br><span class="line">      AccessControlContext acc = getAccessControlContext();</span><br><span class="line">      try &#123;</span><br><span class="line">        object = AccessController.doPrivileged((PrivilegedExceptionAction&lt;Object&gt;) factory::getObject, acc);</span><br><span class="line">      &#125;</span><br><span class="line">      catch (PrivilegedActionException pae) &#123;</span><br><span class="line">        throw pae.getException();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    else &#123;</span><br><span class="line">      //调用FactoryBean的getObject方法，获取对象</span><br><span class="line">      object = factory.getObject();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  catch (FactoryBeanNotInitializedException ex) &#123;</span><br><span class="line">    throw new BeanCurrentlyInCreationException(beanName, ex.toString());</span><br><span class="line">  &#125;</span><br><span class="line">  catch (Throwable ex) &#123;</span><br><span class="line">    throw new BeanCreationException(beanName, &quot;FactoryBean threw exception on object creation&quot;, ex);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  // Do not accept a null value for a FactoryBean that&#x27;s not fully</span><br><span class="line">  // initialized yet: Many FactoryBeans just return null then.</span><br><span class="line">  if (object == null) &#123;</span><br><span class="line">    if (isSingletonCurrentlyInCreation(beanName)) &#123;</span><br><span class="line">      throw new BeanCurrentlyInCreationException(</span><br><span class="line">          beanName, &quot;FactoryBean which is currently in creation returned null from getObject&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    object = new NullBean();</span><br><span class="line">  &#125;</span><br><span class="line">  return object;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>FactoryBean的getObject()方法具体实现:<br>org.springframework.aop.framework.ProxyFactoryBean:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br></pre></td><td class="code"><pre><span class="line">//获取对象</span><br><span class="line">public Object getObject() throws BeansException &#123;</span><br><span class="line">  initializeAdvisorChain();</span><br><span class="line">  if (isSingleton()) &#123;</span><br><span class="line">    //返回代理对象的单例的实例</span><br><span class="line">    return getSingletonInstance();</span><br><span class="line">  &#125;</span><br><span class="line">  else &#123;</span><br><span class="line">    if (this.targetName == null) &#123;</span><br><span class="line">      logger.info(&quot;Using non-singleton proxies with singleton targets is often undesirable. &quot; +</span><br><span class="line">          &quot;Enable prototype proxies by setting the &#x27;targetName&#x27; property.&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    return newPrototypeInstance();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">//创建单例的实例</span><br><span class="line">private synchronized Object getSingletonInstance() &#123;</span><br><span class="line">  if (this.singletonInstance == null) &#123;</span><br><span class="line">    //targetSource内部引用了com.tdl.spring.aop.service.impl.MyServiceImpl</span><br><span class="line">    //即得到目标增强的目标对象</span><br><span class="line">    this.targetSource = freshTargetSource();</span><br><span class="line">    if (this.autodetectInterfaces &amp;&amp; getProxiedInterfaces().length == 0 &amp;&amp; !isProxyTargetClass()) &#123;</span><br><span class="line">      // Rely on AOP infrastructure to tell us what interfaces to proxy.</span><br><span class="line">      Class&lt;?&gt; targetClass = getTargetClass();</span><br><span class="line">      if (targetClass == null) &#123;</span><br><span class="line">        throw new FactoryBeanNotInitializedException(&quot;Cannot determine target class for proxy&quot;);</span><br><span class="line">      &#125;</span><br><span class="line">      setInterfaces(ClassUtils.getAllInterfacesForClass(targetClass, this.proxyClassLoader));</span><br><span class="line">    &#125;</span><br><span class="line">    // Initialize the shared singleton instance.</span><br><span class="line">    super.setFrozen(this.freezeProxy);</span><br><span class="line">    //getProxy得到代理</span><br><span class="line">    //createAopProxy方法在org.springframework.aop.framework.ProxyCreatorSupport内部实现</span><br><span class="line">    this.singletonInstance = getProxy(createAopProxy());</span><br><span class="line">  &#125;</span><br><span class="line">  return this.singletonInstance;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//初始化通知器链</span><br><span class="line">private synchronized void initializeAdvisorChain() throws AopConfigException, BeansException &#123;</span><br><span class="line">  if (this.advisorChainInitialized) &#123;</span><br><span class="line">    return;</span><br><span class="line">  &#125;</span><br><span class="line">  //检查interceptorNames（myAop配置了interceptorNames字符串数组）</span><br><span class="line">  if (!ObjectUtils.isEmpty(this.interceptorNames)) &#123;</span><br><span class="line">    if (this.beanFactory == null) &#123;</span><br><span class="line">      throw new IllegalStateException(&quot;No BeanFactory available anymore (probably due to serialization) &quot; +</span><br><span class="line">          &quot;- cannot resolve interceptor names &quot; + Arrays.asList(this.interceptorNames));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // Globals can&#x27;t be last unless we specified a targetSource using the property...</span><br><span class="line">    if (this.interceptorNames[this.interceptorNames.length - 1].endsWith(GLOBAL_SUFFIX) &amp;&amp;</span><br><span class="line">        this.targetName == null &amp;&amp; this.targetSource == EMPTY_TARGET_SOURCE) &#123;</span><br><span class="line">      throw new AopConfigException(&quot;Target required after globals&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // Materialize interceptor chain from bean names.</span><br><span class="line">    for (String name : this.interceptorNames) &#123;</span><br><span class="line">      if (name.endsWith(GLOBAL_SUFFIX)) &#123;</span><br><span class="line">        if (!(this.beanFactory instanceof ListableBeanFactory)) &#123;</span><br><span class="line">          throw new AopConfigException(</span><br><span class="line">              &quot;Can only use global advisors or interceptors with a ListableBeanFactory&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">        addGlobalAdvisors((ListableBeanFactory) this.beanFactory,</span><br><span class="line">            name.substring(0, name.length() - GLOBAL_SUFFIX.length()));</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      else &#123;</span><br><span class="line">        // If we get here, we need to add a named interceptor.</span><br><span class="line">        // We must check if it&#x27;s a singleton or prototype.</span><br><span class="line">        Object advice;</span><br><span class="line">        if (this.singleton || this.beanFactory.isSingleton(name)) &#123;</span><br><span class="line">          // Add the real Advisor/Advice to the chain.</span><br><span class="line">          //从beanFactoy获取bean(beanFactory是DefaultListableBeanFactory)</span><br><span class="line">          //这里又会执行getBean的流程。</span><br><span class="line">          //获取通知器/通知</span><br><span class="line">          advice = this.beanFactory.getBean(name);</span><br><span class="line">        &#125;</span><br><span class="line">        else &#123;</span><br><span class="line">          // It&#x27;s a prototype Advice or Advisor: replace with a prototype.</span><br><span class="line">          // Avoid unnecessary creation of prototype bean just for advisor chain initialization.</span><br><span class="line">          advice = new PrototypePlaceholderAdvisor(name);</span><br><span class="line">        &#125;</span><br><span class="line">        //把Advisor添加到链表当中</span><br><span class="line">        addAdvisorOnChainCreation(advice);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  this.advisorChainInitialized = true;</span><br><span class="line">&#125;</span><br><span class="line">//aopProxy是JdkDynamicAopProxy</span><br><span class="line">protected Object getProxy(AopProxy aopProxy) &#123;</span><br><span class="line">  return aopProxy.getProxy(this.proxyClassLoader);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>addAdvisorOnChainCreation将通知器包装成Advisor，添加到通知器列表当中<br>org.springframework.aop.framework.AdvisedSupport:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">private List&lt;Advisor&gt; advisors = new ArrayList&lt;&gt;();</span><br></pre></td></tr></table></figure>
+<p>org.springframework.aop.framework.ProxyCreatorSupport:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">//DefaultAopFactory</span><br><span class="line">private AopProxyFactory aopProxyFactory;</span><br><span class="line">public ProxyCreatorSupport() &#123;</span><br><span class="line">  this.aopProxyFactory = new DefaultAopProxyFactory();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">protected final synchronized AopProxy createAopProxy() &#123;</span><br><span class="line">  if (!this.active) &#123;</span><br><span class="line">    //监听器的触发</span><br><span class="line">    activate();</span><br><span class="line">  &#125;</span><br><span class="line">  return getAopProxyFactory().createAopProxy(this);</span><br><span class="line">&#125;</span><br><span class="line">public AopProxyFactory getAopProxyFactory() &#123;</span><br><span class="line">  //aopProxyFactory是DefaultAopFactory，其在ProxyCreatorSupport构造器里边被初始的。</span><br><span class="line">  return this.aopProxyFactory;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>getAopProxyFactory().createAopProxy(this)会来到DefaultAopFactory的createAopProxy方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">//spring4开始。使用ObjenesisCglibAopProxy代替CglibAopProxy，因此此处没有CglibAopProxy</span><br><span class="line">public class DefaultAopProxyFactory implements AopProxyFactory, Serializable &#123;</span><br><span class="line"></span><br><span class="line">	@Override</span><br><span class="line">	public AopProxy createAopProxy(AdvisedSupport config) throws AopConfigException &#123;</span><br><span class="line">		if (config.isOptimize() || config.isProxyTargetClass() || hasNoUserSuppliedProxyInterfaces(config)) &#123;</span><br><span class="line">			Class&lt;?&gt; targetClass = config.getTargetClass();</span><br><span class="line">			if (targetClass == null) &#123;</span><br><span class="line">				throw new AopConfigException(&quot;TargetSource cannot determine target class: &quot; +</span><br><span class="line">						&quot;Either an interface or a target is required for proxy creation.&quot;);</span><br><span class="line">			&#125;</span><br><span class="line">			if (targetClass.isInterface() || Proxy.isProxyClass(targetClass)) &#123;</span><br><span class="line">				return new JdkDynamicAopProxy(config);</span><br><span class="line">			&#125;</span><br><span class="line">			return new ObjenesisCglibAopProxy(config);</span><br><span class="line">		&#125;</span><br><span class="line">		else &#123;</span><br><span class="line">			return new JdkDynamicAopProxy(config);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">  ......</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>myAop实现了接口，这里会使用JdkDynamicAopProxy。<br>JdkDynamicAopProxy:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">final class JdkDynamicAopProxy implements AopProxy, InvocationHandler, Serializable &#123;</span><br><span class="line">  public JdkDynamicAopProxy(AdvisedSupport config) throws AopConfigException &#123;</span><br><span class="line">    Assert.notNull(config, &quot;AdvisedSupport must not be null&quot;);</span><br><span class="line">    if (config.getAdvisors().length == 0 &amp;&amp; config.getTargetSource() == AdvisedSupport.EMPTY_TARGET_SOURCE) &#123;</span><br><span class="line">      throw new AopConfigException(&quot;No advisors and no TargetSource specified&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    this.advised = config;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  public Object getProxy(@Nullable ClassLoader classLoader) &#123;</span><br><span class="line">    if (logger.isTraceEnabled()) &#123;</span><br><span class="line">      logger.trace(&quot;Creating JDK dynamic proxy: &quot; + this.advised.getTargetSource());</span><br><span class="line">    &#125;</span><br><span class="line">    //interface com.tdl.spring.aop.service.MyService</span><br><span class="line">    //interface org.springframework.aop.SpringProxy</span><br><span class="line">    //interface org.springframework.aop.framework.Advised</span><br><span class="line">    //interface org.springframework.core.DecoratingProxy</span><br><span class="line">    Class&lt;?&gt;[] proxiedInterfaces = AopProxyUtils.completeProxiedInterfaces(this.advised, true);</span><br><span class="line">    //对equals和hashcode方法的特殊处理</span><br><span class="line">    findDefinedEqualsAndHashCodeMethods(proxiedInterfaces);</span><br><span class="line">    //调用jdk的api创建代理，完成真正的代理类和对象的创建</span><br><span class="line">    return Proxy.newProxyInstance(classLoader, proxiedInterfaces, this);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>org.springframework.aop.framework.AopProxyUtils:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">//得到目标代理对象需要的接口数组</span><br><span class="line">static Class&lt;?&gt;[] completeProxiedInterfaces(AdvisedSupport advised, boolean decoratingProxy) &#123;</span><br><span class="line">  Class&lt;?&gt;[] specifiedInterfaces = advised.getProxiedInterfaces();</span><br><span class="line">  if (specifiedInterfaces.length == 0) &#123;</span><br><span class="line">    // No user-specified interfaces: check whether target class is an interface.</span><br><span class="line">    //interface com.tdl.spring.aop.service.MyService</span><br><span class="line">    Class&lt;?&gt; targetClass = advised.getTargetClass();</span><br><span class="line">    if (targetClass != null) &#123;</span><br><span class="line">      if (targetClass.isInterface()) &#123;</span><br><span class="line">        advised.setInterfaces(targetClass);</span><br><span class="line">      &#125;</span><br><span class="line">      else if (Proxy.isProxyClass(targetClass)) &#123;</span><br><span class="line">        advised.setInterfaces(targetClass.getInterfaces());</span><br><span class="line">      &#125;</span><br><span class="line">      specifiedInterfaces = advised.getProxiedInterfaces();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  boolean addSpringProxy = !advised.isInterfaceProxied(SpringProxy.class);</span><br><span class="line">  boolean addAdvised = !advised.isOpaque() &amp;&amp; !advised.isInterfaceProxied(Advised.class);</span><br><span class="line">  boolean addDecoratingProxy = (decoratingProxy &amp;&amp; !advised.isInterfaceProxied(DecoratingProxy.class));</span><br><span class="line">  //非用户添加的接口数量</span><br><span class="line">  int nonUserIfcCount = 0;</span><br><span class="line">  if (addSpringProxy) &#123;</span><br><span class="line">    nonUserIfcCount++;</span><br><span class="line">  &#125;</span><br><span class="line">  if (addAdvised) &#123;</span><br><span class="line">    nonUserIfcCount++;</span><br><span class="line">  &#125;</span><br><span class="line">  if (addDecoratingProxy) &#123;</span><br><span class="line">    nonUserIfcCount++;</span><br><span class="line">  &#125;</span><br><span class="line">  //长度为4的数组</span><br><span class="line">  Class&lt;?&gt;[] proxiedInterfaces = new Class&lt;?&gt;[specifiedInterfaces.length + nonUserIfcCount];</span><br><span class="line">  System.arraycopy(specifiedInterfaces, 0, proxiedInterfaces, 0, specifiedInterfaces.length);</span><br><span class="line">  int index = specifiedInterfaces.length;</span><br><span class="line">  if (addSpringProxy) &#123;</span><br><span class="line">    proxiedInterfaces[index] = SpringProxy.class;</span><br><span class="line">    index++;</span><br><span class="line">  &#125;</span><br><span class="line">  if (addAdvised) &#123;</span><br><span class="line">    proxiedInterfaces[index] = Advised.class;</span><br><span class="line">    index++;</span><br><span class="line">  &#125;</span><br><span class="line">  if (addDecoratingProxy) &#123;</span><br><span class="line">    proxiedInterfaces[index] = DecoratingProxy.class;</span><br><span class="line">  &#125;</span><br><span class="line">  return proxiedInterfaces;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="关于Spring-AOP代理的生成过程小结"><a href="#关于Spring-AOP代理的生成过程小结" class="headerlink" title="关于Spring AOP代理的生成过程小结"></a>关于Spring AOP代理的生成过程小结</h4><ol>
+<li>通过ProxyFactoryBean[FactoryBean接口的实现]来去配置相应的代理对象相关的信息。<br>即如下的信息:<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;bean id=&quot;myAop&quot; class=&quot;org.springframework.aop.framework.ProxyFactoryBean&quot;&gt;</span><br><span class="line">    &lt;property name=&quot;proxyInterfaces&quot;&gt;</span><br><span class="line">        &lt;value&gt;com.tdl.spring.aop.service.MyService&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">    &lt;property name=&quot;interceptorNames&quot;&gt;</span><br><span class="line">        &lt;list&gt;</span><br><span class="line">            &lt;value&gt;myAdvisor&lt;/value&gt;</span><br><span class="line">        &lt;/list&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">    &lt;property name=&quot;target&quot;&gt;</span><br><span class="line">        &lt;ref bean=&quot;myService&quot;&gt;&lt;/ref&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">&lt;/bean&gt;</span><br></pre></td></tr></table></figure></li>
+<li>在获取ProxyFactoryBean实例时，本质上并不是获取ProxyFactoryBean的对象，而是获取到了ProxyFactoryBean所返回(getObject方法)的那个对象实例。</li>
+<li>在ProxyFactoryBean实例的构建与缓存的过程中，其流程与普通的bean对象完全一致</li>
+<li>差别在于，当创建了ProxyFactoryBean对象后，spring会判断当前所创建的对象是否是一个FactoryBean实例。</li>
+<li>如果不是，那么spring就直接将所创建的对象返回。</li>
+<li>如果是，spring则会进入到一个新的流程分支当中</li>
+<li>spring会根据我们在配置信息中所指定的各种元素，如目标对象是否实现了接口以及Advisor等信息，使用动态代理或是cglib等方式为目标对象创建相应的代理对象。</li>
+<li>当相应的代理对象创建完毕后，spring就会通过ProxyFactoryBean的getObject方法，将所创建的对象返回</li>
+<li>对象返回到调用端(客户端)，它本质上是一个代理对象，可以代理对目标对象的访问与调用；这个代理对象对用户来说，就好像一个目标对象一样。</li>
+<li>客户在使用代理对象时，可以正常调用目标对象的方法，同时在执行过程中，会根据我们在配置文件中所配置的信息在调用前后执行额外的附加逻辑</li>
+</ol>
+<p>注意：我们在使用idea调试动态代理的时候，动态代理对象的toString会被idea持续不断的调用，来更新调试窗口变量的名字，因此就会在控制台出现动态代理类invoke方法的内部的一些打印。</p>
+<h3 id="aop动态代理方法的执行"><a href="#aop动态代理方法的执行" class="headerlink" title="aop动态代理方法的执行"></a>aop动态代理方法的执行</h3><p>先看下之前的实例代码:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">MyService myService = (MyService)defaultListableBeanFactory.getBean(&quot;myAop&quot;);</span><br><span class="line">myService.myMethod();</span><br></pre></td></tr></table></figure>
+<p>myService是返回的一个代理对象。<br>myMethod调用的时候，会来到org.springframework.aop.framework.JdkDynamicAopProxy的invoke方法:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br></pre></td><td class="code"><pre><span class="line">public Object invoke(Object proxy, Method method, Object[] args) throws Throwable &#123;</span><br><span class="line">  Object oldProxy = null;</span><br><span class="line">  boolean setProxyContext = false;</span><br><span class="line">  //目标对象SingletonTargetSource：包装了com.tdl.spring.aop.service.impl.MyServiceImpl</span><br><span class="line">  TargetSource targetSource = this.advised.targetSource;</span><br><span class="line">  Object target = null;</span><br><span class="line"></span><br><span class="line">  try &#123;</span><br><span class="line">    if (!this.equalsDefined &amp;&amp; AopUtils.isEqualsMethod(method)) &#123;</span><br><span class="line">      // The target does not implement the equals(Object) method itself.</span><br><span class="line">      return equals(args[0]);</span><br><span class="line">    &#125;</span><br><span class="line">    else if (!this.hashCodeDefined &amp;&amp; AopUtils.isHashCodeMethod(method)) &#123;</span><br><span class="line">      // The target does not implement the hashCode() method itself.</span><br><span class="line">      return hashCode();</span><br><span class="line">    &#125;</span><br><span class="line">    else if (method.getDeclaringClass() == DecoratingProxy.class) &#123;</span><br><span class="line">      // There is only getDecoratedClass() declared -&gt; dispatch to proxy config.</span><br><span class="line">      return AopProxyUtils.ultimateTargetClass(this.advised);</span><br><span class="line">    &#125;</span><br><span class="line">    else if (!this.advised.opaque &amp;&amp; method.getDeclaringClass().isInterface() &amp;&amp;</span><br><span class="line">        method.getDeclaringClass().isAssignableFrom(Advised.class)) &#123;</span><br><span class="line">      // Service invocations on ProxyConfig with the proxy config...</span><br><span class="line">      return AopUtils.invokeJoinpointUsingReflection(this.advised, method, args);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Object retVal;</span><br><span class="line"></span><br><span class="line">    if (this.advised.exposeProxy) &#123;</span><br><span class="line">      // Make invocation available if necessary.</span><br><span class="line">      oldProxy = AopContext.setCurrentProxy(proxy);</span><br><span class="line">      setProxyContext = true;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // Get as late as possible to minimize the time we &quot;own&quot; the target,</span><br><span class="line">    // in case it comes from a pool.</span><br><span class="line">    //目标对象：com.tdl.spring.aop.service.impl.MyServiceImpl</span><br><span class="line">    target = targetSource.getTarget();</span><br><span class="line">    Class&lt;?&gt; targetClass = (target != null ? target.getClass() : null);</span><br><span class="line"></span><br><span class="line">    // Get the interception chain for this method.</span><br><span class="line">    //获取方法的拦截器链，我们只配置了一个：myAdvisor</span><br><span class="line">    List&lt;Object&gt; chain = this.advised.getInterceptorsAndDynamicInterceptionAdvice(method, targetClass);</span><br><span class="line"></span><br><span class="line">    // Check whether we have any advice. If we don&#x27;t, we can fallback on direct</span><br><span class="line">    // reflective invocation of the target, and avoid creating a MethodInvocation.</span><br><span class="line">    if (chain.isEmpty()) &#123;</span><br><span class="line">      // We can skip creating a MethodInvocation: just invoke the target directly</span><br><span class="line">      // Note that the final invoker must be an InvokerInterceptor so we know it does</span><br><span class="line">      // nothing but a reflective operation on the target, and no hot swapping or fancy proxying.</span><br><span class="line">      Object[] argsToUse = AopProxyUtils.adaptArgumentsIfNecessary(method, args);</span><br><span class="line">      retVal = AopUtils.invokeJoinpointUsingReflection(target, method, argsToUse);</span><br><span class="line">    &#125;</span><br><span class="line">    else &#123;</span><br><span class="line">      // We need to create a method invocation...</span><br><span class="line">      封装一个方法调用</span><br><span class="line">      MethodInvocation invocation =</span><br><span class="line">          new ReflectiveMethodInvocation(proxy, target, method, args, targetClass, chain);</span><br><span class="line">      // Proceed to the joinpoint through the interceptor chain.</span><br><span class="line">      //执行方法调用</span><br><span class="line">      retVal = invocation.proceed();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // Massage return value if necessary.</span><br><span class="line">    Class&lt;?&gt; returnType = method.getReturnType();</span><br><span class="line">    if (retVal != null &amp;&amp; retVal == target &amp;&amp;</span><br><span class="line">        returnType != Object.class &amp;&amp; returnType.isInstance(proxy) &amp;&amp;</span><br><span class="line">        !RawTargetAccess.class.isAssignableFrom(method.getDeclaringClass())) &#123;</span><br><span class="line">      // Special case: it returned &quot;this&quot; and the return type of the method</span><br><span class="line">      // is type-compatible. Note that we can&#x27;t help if the target sets</span><br><span class="line">      // a reference to itself in another returned object.</span><br><span class="line">      retVal = proxy;</span><br><span class="line">    &#125;</span><br><span class="line">    else if (retVal == null &amp;&amp; returnType != Void.TYPE &amp;&amp; returnType.isPrimitive()) &#123;</span><br><span class="line">      throw new AopInvocationException(</span><br><span class="line">          &quot;Null return value from advice does not match primitive return type for: &quot; + method);</span><br><span class="line">    &#125;</span><br><span class="line">    return retVal;</span><br><span class="line">  &#125;</span><br><span class="line">  finally &#123;</span><br><span class="line">    if (target != null &amp;&amp; !targetSource.isStatic()) &#123;</span><br><span class="line">      // Must have come from TargetSource.</span><br><span class="line">      targetSource.releaseTarget(target);</span><br><span class="line">    &#125;</span><br><span class="line">    if (setProxyContext) &#123;</span><br><span class="line">      // Restore old proxy.</span><br><span class="line">      AopContext.setCurrentProxy(oldProxy);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="MethodInvocation.png" alt="MethodInvocation.png"></p>
+<p>org.springframework.aop.framework.ReflectiveMethodInvocation#proceed():</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">public Object proceed() throws Throwable &#123;</span><br><span class="line">  // We start with an index of -1 and increment early.</span><br><span class="line">  if (this.currentInterceptorIndex == this.interceptorsAndDynamicMethodMatchers.size() - 1) &#123;</span><br><span class="line">    return invokeJoinpoint();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  Object interceptorOrInterceptionAdvice =</span><br><span class="line">      this.interceptorsAndDynamicMethodMatchers.get(++this.currentInterceptorIndex);</span><br><span class="line">  if (interceptorOrInterceptionAdvice instanceof InterceptorAndDynamicMethodMatcher) &#123;</span><br><span class="line">    // Evaluate dynamic method matcher here: static part will already have</span><br><span class="line">    // been evaluated and found to match.</span><br><span class="line">    InterceptorAndDynamicMethodMatcher dm =</span><br><span class="line">        (InterceptorAndDynamicMethodMatcher) interceptorOrInterceptionAdvice;</span><br><span class="line">    Class&lt;?&gt; targetClass = (this.targetClass != null ? this.targetClass : this.method.getDeclaringClass());</span><br><span class="line">    if (dm.methodMatcher.matches(this.method, targetClass, this.arguments)) &#123;</span><br><span class="line">      return dm.interceptor.invoke(this);</span><br><span class="line">    &#125;</span><br><span class="line">    else &#123;</span><br><span class="line">      // Dynamic matching failed.</span><br><span class="line">      // Skip this interceptor and invoke the next in the chain.</span><br><span class="line">      //可能的递归调用</span><br><span class="line">      return proceed();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  else &#123;</span><br><span class="line">    // It&#x27;s an interceptor, so we just invoke it: The pointcut will have</span><br><span class="line">    // been evaluated statically before this object was constructed.</span><br><span class="line">    //interceptorOrInterceptionAdvice是MyAdvisor,MyAdvisor实现了MethodInterceptor</span><br><span class="line">    //这里会进入MyAdvisor的invoke方法。</span><br><span class="line">    return ((MethodInterceptor) interceptorOrInterceptionAdvice).invoke(this);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>MyAdvisor的逻辑：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public class MyAdvisor implements MethodInterceptor &#123;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public Object invoke(MethodInvocation invocation) throws Throwable &#123;</span><br><span class="line">        System.out.println(&quot;befor MyAdvisor invoke!&quot;);</span><br><span class="line">        Object result =  invocation.proceed();</span><br><span class="line">        System.out.println(&quot;after MyAdvisor invoke!&quot;);</span><br><span class="line">        return result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>invocation.proceed()会进入org.springframework.aop.framework.ReflectiveMethodInvocation的process()：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">if (this.currentInterceptorIndex == this.interceptorsAndDynamicMethodMatchers.size() - 1) &#123;</span><br><span class="line">  最后一个，即目标方法，会被调用，MyServiceImpl的myMethod方法被调用</span><br><span class="line">  return invokeJoinpoint();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>invokeJoinpoint方法逻辑：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">protected Object invokeJoinpoint() throws Throwable &#123;</span><br><span class="line">  return AopUtils.invokeJoinpointUsingReflection(this.target, this.method, this.arguments);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="invokeJoinpointUsingReflection.png" alt="invokeJoinpointUsingReflection.png"></p>
+<p>【本章代码位置：<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tLzExNTY3MjE4NzQvc3ByaW5nLWtlcm5lbC1sZWN0dXJlJUUzJTgwJTkx">https://github.com/1156721874/spring-kernel-lecture】<i class="fa fa-external-link-alt"></i></span></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>CeaserWang
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://ceaser.wang/2020/07/11/spring_core/spring_core(3)aop/" title="spring_core(3)AOP剖析">https://ceaser.wang/2020/07/11/spring_core/spring_core(3)aop/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/spring-aop/" rel="tag"><i class="fa fa-tag"></i> spring aop</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/07/05/spring_core/spring_core(2)BeanInitinalAndInject/" rel="prev" title="spring_core(2)Bean的初始化和注入">
+                  <i class="fa fa-chevron-left"></i> spring_core(2)Bean的初始化和注入
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/07/13/spring_core/spring_core(4)aop-transaction/" rel="next" title="spring_core(4)aop-transaction">
+                  spring_core(4)aop-transaction <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CeaserWang</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":"forest","js":{"url":"https://cdn.jsdelivr.net/npm/mermaid@8.11.0/dist/mermaid.min.js","integrity":"sha256-sVAx+v/Q7v0Q2xm5vN7h5ccSna6gaLREhG9sF8pKT6I="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+  <script class="next-config" data-name="nprogress" type="application/json">{"enable":true,"spinner":true}</script>
+  <script src="/js/third-party/nprogress.js"></script>
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"ryAR9bttS7fex1FPEPAylmmJ-gzGzoHsz","app_key":"dYqygoN4Y01Bl38OdRoCHUYn","server_url":null,"security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+
+</body>
+</html>

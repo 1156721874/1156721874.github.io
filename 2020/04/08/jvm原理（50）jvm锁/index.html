@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.css" integrity="sha256-no0c5ccDODBwp+9hSmV5VvPpKwHCpbVzXHexIkupM6U=" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.js" integrity="sha256-a5YRB27CcBwBFcT5EF/f3E4vzIqyHrSR878nseNYw64=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ceaser.wang","root":"/","images":"/images","scheme":"Muse","version":"8.6.1","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+<meta name="description" content="synchronized关键字">
+<meta property="og:type" content="article">
+<meta property="og:title" content="jvm原理（50）jvm锁">
+<meta property="og:url" content="https://ceaser.wang/2020/04/08/jvm%E5%8E%9F%E7%90%86%EF%BC%8850%EF%BC%89jvm%E9%94%81/index.html">
+<meta property="og:site_name" content="南贺神社">
+<meta property="og:description" content="synchronized关键字">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-04-08T21:27:13.000Z">
+<meta property="article:modified_time" content="2022-01-04T02:21:30.852Z">
+<meta property="article:author" content="CeaserWang">
+<meta property="article:tag" content="CAS、锁升级、重入锁、公平锁、非公平锁">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://ceaser.wang/2020/04/08/jvm%E5%8E%9F%E7%90%86%EF%BC%8850%EF%BC%89jvm%E9%94%81/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://ceaser.wang/2020/04/08/jvm%E5%8E%9F%E7%90%86%EF%BC%8850%EF%BC%89jvm%E9%94%81/","path":"2020/04/08/jvm原理（50）jvm锁/","title":"jvm原理（50）jvm锁"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>jvm原理（50）jvm锁 | 南贺神社</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">南贺神社</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">你写程序有写诗一样的感觉吗?</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">205</span></a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">24</span></a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">212</span></a></li>
+        <li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#synchronized%E5%85%B3%E9%94%AE%E5%AD%97"><span class="nav-number">1.</span> <span class="nav-text">synchronized关键字</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#java%E9%94%81%E7%9A%84%E5%88%86%E7%B1%BB%E7%BB%B4%E5%BA%A6"><span class="nav-number">2.</span> <span class="nav-text">java锁的分类维度</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#CAS-campare-and-swap-%EF%BC%8C%E6%AF%94%E8%BE%83%E4%B8%8E%E4%BA%A4%E6%8D%A2"><span class="nav-number">2.1.</span> <span class="nav-text">CAS (campare and swap)，比较与交换</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#CAS%E7%AE%97%E6%B3%95%E6%9C%AC%E8%B4%A8%E4%B8%8A%E6%B6%89%E5%8F%8A%E5%88%B0%E4%B8%89%E4%B8%AA%E6%95%B0%E5%AD%97"><span class="nav-number">2.1.1.</span> <span class="nav-text">CAS算法本质上涉及到三个数字:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#CAS%E7%9A%84%E4%B8%BB%E8%A6%81%E9%97%AE%E9%A2%98-ABA"><span class="nav-number">2.1.2.</span> <span class="nav-text">CAS的主要问题:ABA</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%87%AA%E6%97%8B"><span class="nav-number">2.2.</span> <span class="nav-text">自旋</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%97%A0%E9%94%81%E3%80%81%E5%81%8F%E5%90%91%E9%94%81%E3%80%81%E8%BD%BB%E9%87%8F%E7%BA%A7%E9%94%81%E4%B8%8E%E9%87%8D%E9%87%8F%E7%BA%A7%E9%94%81"><span class="nav-number">2.3.</span> <span class="nav-text">无锁、偏向锁、轻量级锁与重量级锁</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%81%8F%E5%90%91%E9%94%81"><span class="nav-number">2.3.1.</span> <span class="nav-text">偏向锁</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%BD%BB%E9%87%8F%E7%BA%A7%E9%94%81"><span class="nav-number">2.3.2.</span> <span class="nav-text">轻量级锁</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%87%8D%E9%87%8F%E7%BA%A7%E9%94%81"><span class="nav-number">2.3.3.</span> <span class="nav-text">重量级锁</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#JIT%E6%9D%A5%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%BA%9B%E4%BC%98%E5%8C%96%E6%8E%AA%E6%96%BD%EF%BC%9A"><span class="nav-number">2.4.</span> <span class="nav-text">JIT来实现一些优化措施：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%AC%E5%B9%B3%E9%94%81%E4%B8%8E%E9%9D%9E%E5%85%AC%E5%B9%B3%E9%94%81"><span class="nav-number">2.5.</span> <span class="nav-text">公平锁与非公平锁</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AF%E9%87%8D%E5%85%A5%E9%94%81%E4%B8%8E%E9%9D%9E%E5%8F%AF%E9%87%8D%E5%85%A5%E9%94%81"><span class="nav-number">3.</span> <span class="nav-text">可重入锁与非可重入锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B1%E4%BA%AB%E9%94%81%E5%92%8C%E6%8E%92%E5%AE%83%E9%94%81"><span class="nav-number">4.</span> <span class="nav-text">共享锁和排它锁</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-overview">
+            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="CeaserWang"
+      src="/../0xcc/index/Uchiha.jpg">
+  <p class="site-author-name" itemprop="name">CeaserWang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">212</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">205</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tLzExNTY3MjE4NzQ=" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;1156721874"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmNlYXNlcndhbmdAb3V0bG9vay5jb20=" title="E-Mail → mailto:ceaserwang@outlook.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+  </div>
+  <div class="cc-license site-overview-item animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><img src="https://cdn.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-user-friends fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly90d29kcmFnb25sYWtlLmNvbQ==" title="https:&#x2F;&#x2F;twodragonlake.com">TwoDragonLake</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9yb290Y2x1c3Rlci5naXRodWIuaW8=" title="https:&#x2F;&#x2F;rootcluster.github.io">RootCluster</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9tdXNlZmxvdy5pbw==" title="https:&#x2F;&#x2F;museflow.io">MuseFlow</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9pbmNvZGVyLm9yZw==" title="https:&#x2F;&#x2F;incoder.org">BladeCode</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9rYWlmYS5kZXY=" title="https:&#x2F;&#x2F;kaifa.dev">Alyenc</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmRhemhpZGF5b25nLmNu" title="https:&#x2F;&#x2F;blog.dazhidayong.cn">Killua</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9qb2NlbHluc2hhbmcuY24v" title="https:&#x2F;&#x2F;jocelynshang.cn&#x2F;">Jocelyn</span>
+        </li>
+    </ul>
+  </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2020/04/08/jvm%E5%8E%9F%E7%90%86%EF%BC%8850%EF%BC%89jvm%E9%94%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
+      <meta itemprop="name" content="CeaserWang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="南贺神社">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          jvm原理（50）jvm锁
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2020-04-08 21:27:13" itemprop="dateCreated datePublished" datetime="2020-04-08T21:27:13+00:00">2020-04-08</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2022-01-04 02:21:30" itemprop="dateModified" datetime="2022-01-04T02:21:30+00:00">2022-01-04</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/jvm/" itemprop="url" rel="index"><span itemprop="name">jvm</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2020/04/08/jvm%E5%8E%9F%E7%90%86%EF%BC%8850%EF%BC%89jvm%E9%94%81/" class="post-meta-item leancloud_visitors" data-flag-title="jvm原理（50）jvm锁" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h3 id="synchronized关键字"><a href="#synchronized关键字" class="headerlink" title="synchronized关键字"></a>synchronized关键字</h3><span id="more"></span>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 当我们使用synchronized关键字来修饰同步代码块时，本质上在字节码层面上是通过monitorenter</span><br><span class="line"> * 与monitorexit指令来实现同步的，当进入monitorenter指令后，线程将会持有monitor对象，</span><br><span class="line"> * 当退出monitorexit后，线程将会释放掉该monitor对象，在线程整个执行过程中，他会始终持有monitor对象的，</span><br><span class="line"> * 这样就确保了共享资源的同步访问。</span><br><span class="line"> *</span><br><span class="line"> * monitor对象到底是什么？</span><br><span class="line"> *</span><br><span class="line"> * 当我们使用new关键字创建一个java对象时，底层的jvm会自动为该创建的对象创建一个所谓的object header，并且</span><br><span class="line"> * 将该object header附加到该对象上，java中的每个对象在创建后，都会拥有一个与之相关联的monitor对象，</span><br><span class="line"> * 这也是为什么我们synchronized关键字修饰同步代码块时，我们使用什么对象（如Object，string，Date）都可以的原因所在。</span><br><span class="line"> *</span><br><span class="line"> * Object Header里面包含了很多信息，如monitor信息，锁相关的信息等。</span><br><span class="line"> *</span><br><span class="line"> *  对于同步方法的字节码来说，在反编译的字节码中并没有出现monitor与monitor相关的指令，</span><br><span class="line"> *  而是出现了一个ACC_SYNCHRONIZED标记。</span><br><span class="line"> *</span><br><span class="line"> *  本质上，jvm使用ACC_SYNCHRONIZED访问标记来判断某个方法是否是一个同步方法。</span><br><span class="line"> *</span><br><span class="line"> *  当方法调用时，调用指令会先检查该方法是否拥有ACC_SYNCHRONIZED访问标记，如果发现了该标记，那么执行的线程</span><br><span class="line"> *  将会首先持有monitor对象，接下来再去执行方法；在该方法运行期间，其他任何线程都将无法获取到monitor对象，</span><br><span class="line"> *  当方法执行完毕后，线程会释放掉所有持有的monitor对象。</span><br><span class="line"> *</span><br><span class="line"> *  那么线程所持有的的monitor对象又是什么呢？</span><br><span class="line"> *  1、如果被synchronized修饰的方法是普通实例方法，那么monitor对象就是当前被调用方法所在的那个对象。</span><br><span class="line"> *  2、如果被synchronized修饰的方法是静态方法，那么monitor对象就是当前类所对应的class对象。</span><br><span class="line"> *</span><br><span class="line"> */</span><br><span class="line">public class MyTest1 &#123;</span><br><span class="line">    private Object object = new Object();</span><br><span class="line"></span><br><span class="line">    public void myMethod()&#123;</span><br><span class="line">        synchronized (object)&#123;</span><br><span class="line">            System.out.println(&quot;hello world&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public synchronized void method2()&#123;</span><br><span class="line">        System.out.println(&quot;hello world&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>反编译：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">Compiled from &quot;MyTest1.java&quot;</span><br><span class="line">public class com.twodragonlake.jvm.lock.MyTest1 &#123;</span><br><span class="line">  public com.twodragonlake.jvm.lock.MyTest1();</span><br><span class="line">    Code:</span><br><span class="line">       0: aload_0</span><br><span class="line">       1: invokespecial #1                  // Method java/lang/Object.&quot;&lt;init&gt;&quot;:()V</span><br><span class="line">       4: aload_0</span><br><span class="line">       5: new           #2                  // class java/lang/Object</span><br><span class="line">       8: dup</span><br><span class="line">       9: invokespecial #1                  // Method java/lang/Object.&quot;&lt;init&gt;&quot;:()V</span><br><span class="line">      12: putfield      #3                  // Field object:Ljava/lang/Object;</span><br><span class="line">      15: return</span><br><span class="line"></span><br><span class="line">  public void myMethod();</span><br><span class="line">    Code:</span><br><span class="line">       0: aload_0</span><br><span class="line">       1: getfield      #3                  // Field object:Ljava/lang/Object;</span><br><span class="line">       4: dup</span><br><span class="line">       5: astore_1</span><br><span class="line">       6: monitorenter</span><br><span class="line">       7: getstatic     #4                  // Field java/lang/System.out:Ljava/io/PrintStream;</span><br><span class="line">      10: ldc           #5                  // String hello world</span><br><span class="line">      12: invokevirtual #6                  // Method java/io/PrintStream.println:(Ljava/lang/String;)V</span><br><span class="line">      15: aload_1</span><br><span class="line">      16: monitorexit</span><br><span class="line">      17: goto          25</span><br><span class="line">      20: astore_2</span><br><span class="line">      21: aload_1</span><br><span class="line">      22: monitorexit</span><br><span class="line">      23: aload_2</span><br><span class="line">      24: athrow</span><br><span class="line">      25: return</span><br><span class="line">    Exception table:</span><br><span class="line">       from    to  target type</span><br><span class="line">           7    17    20   any</span><br><span class="line">          20    23    20   any</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="java锁的分类维度"><a href="#java锁的分类维度" class="headerlink" title="java锁的分类维度"></a>java锁的分类维度</h3><ol>
+<li>共享角度：多个线程是否可以共享同一把锁，能：共享锁，不能：排它锁。</li>
+<li>同一个线程在执行过程中是否可以获取到同一把锁：能：可重入锁，不能：非可重入锁。</li>
+<li>资源角度：线程在执行更新操作时，是否需要利用锁来锁住同步资源：需要：悲观锁，不需要：乐观锁(CAS)。</li>
+<li>多线程在竞争锁资源时是否需要排队等待：排队：公平锁，不排队：非公平锁。</li>
+<li>当线程尝试锁住同步资源，但却失败了，那么线程是否需要阻塞：阻塞：，不阻塞：自旋锁。如果线程在自旋过程中一直没有获取到同步资源，那么该线程最终还是会被阻塞，进入到内核态（自适应自旋）</li>
+<li>多线程在竞争同步资源的过程中的区别，无锁：多线程会同时进行资源的修改，并且不锁住资源，在这种情况下，某一个时刻只会有一个线程对资源的修改是成功的，其他线程均会失败，失败的线程则会进行不断的重试（CAS）；同一个线程在执行时，如果遇到了同步资源，那么它会自动的获取到这个锁资源，而不必进行其他任何操作（偏向锁）;多个线程同时在尝试竞争锁资源，同一时刻，只会有一个线程能够获取到锁，那么其他没有获取到锁的线程就会进行自旋等待锁的释放(轻量级锁);多个线程同时在尝试竞争锁资源，并且进行了自旋，但是经过一段时间后，线程依然无法获取到锁资源，这个时候，没有获取到锁资源的线程将会进入到阻塞状态，等待cpu的唤醒(重量级锁)。</li>
+<li>关于悲观锁和乐观锁的适用场景:</li>
+</ol>
+<ul>
+<li>乐观锁：非常适合读操作非常多的场景，因为本身不加锁，所以可以使得操作的性能有非常明显的提升。</li>
+<li>悲观锁：非常适合写操作非常多的场景，因为首先需要对资源进行加锁操作，所以完全可以保证写入操作的正确性和健壮。</li>
+</ul>
+<h4 id="CAS-campare-and-swap-，比较与交换"><a href="#CAS-campare-and-swap-，比较与交换" class="headerlink" title="CAS (campare and swap)，比较与交换"></a>CAS (campare and swap)，比较与交换</h4><h5 id="CAS算法本质上涉及到三个数字"><a href="#CAS算法本质上涉及到三个数字" class="headerlink" title="CAS算法本质上涉及到三个数字:"></a>CAS算法本质上涉及到三个数字:</h5><ol>
+<li>需要进行读写的内存值V</li>
+<li>需要进行比较的值A</li>
+<li>需要进行写入的新的值B<br>如果V和A相等，那么当前线程将B写入，否则当前线程会进行重试。<br>比较与更新本质上是一个原子操作，它在cpu层面上是一个指令来完成。</li>
+</ol>
+<h5 id="CAS的主要问题-ABA"><a href="#CAS的主要问题-ABA" class="headerlink" title="CAS的主要问题:ABA"></a>CAS的主要问题:ABA</h5><p>  AtomaticStampedReference</p>
+<h4 id="自旋"><a href="#自旋" class="headerlink" title="自旋"></a>自旋</h4><p>  减少cpu状态的切换，从而减少线程在用户与内核态之间的切换，从而达到提升效率的目的。<br>  自旋会有一个上限(阈值)，默认情况下，线程会自旋10次，PreBlockSpin参数来设置线程默认的自旋次数。<br>  自旋锁是在jdk1.4中引入的，我们可以通过UseSpinning来开启自旋，从jdk1.6开始，自旋是默认开启的，同时该版本的jdk又引入了适应性自旋锁。<br>  适应性自旋锁：前边的线程或者大部分的线程自旋拿到了锁，那么当前线程在自旋的时候会大概率的自旋成功，因此可以放大自旋的次数，如果之前的线程或者大部分的线程自旋失败，那么本次线程自旋大概率也会是失败，那么本次自旋可能会让线程进入阻塞状态。</p>
+<h4 id="无锁、偏向锁、轻量级锁与重量级锁"><a href="#无锁、偏向锁、轻量级锁与重量级锁" class="headerlink" title="无锁、偏向锁、轻量级锁与重量级锁"></a>无锁、偏向锁、轻量级锁与重量级锁</h4><p>  这几种本质上都是针对于synchronized关键字的。<br>  关于java对象头：<br>   Mark Word:</p>
+<ol>
+<li>无锁标记</li>
+<li>偏向锁标记</li>
+<li>轻量级锁标记</li>
+<li>重量级锁标记</li>
+<li>GC标记<br>锁升级的功能主要是依赖于Mark Word中的锁标记位与是否偏向锁来达成的，synchronized关键字其实就是从偏向锁开始，然后升级为轻量级锁，最终升级为重量级锁。<br>Monitor中拥有一个owner字段，用来标示持有该锁的线程的唯一标识，表示这个锁被该线程所持有。<br>synchronized本质上是通过Monitor来实现的，Monitor本质上又是依赖底层操作系统的互斥锁(mutex lock)来实现的。<br>Klaass Pointer: 指向当前对象的类的指针。</li>
+</ol>
+<h5 id="偏向锁"><a href="#偏向锁" class="headerlink" title="偏向锁"></a>偏向锁</h5><p>  针对于同一个线程访问一个同步代码块的场景，减少了频繁获取与释放锁的代价。 UseBiaseLocking = false</p>
+<h5 id="轻量级锁"><a href="#轻量级锁" class="headerlink" title="轻量级锁"></a>轻量级锁</h5><p>  jvm会在Stack Frame中建立一个名为Lock Record的空间，用于存储锁对象目前的Mark Word的副本，同时它会将对象头中的Mark Word复制到锁记录中；如果成功，那么jvm会将对象的Mark Word更新为指向Lock record的指针，同时会将Lock Record中的owner指针指向对象的Mark word，如果该操作成功，就表示线程拥有了对象的锁，这样，对象就会处于轻量级锁的状态之中。<br>  如果当前只有一个线程等待，那么这个线程会自旋，当前自旋是由次数限制的；如果有三个线程在争夺锁资源，这个时候会升级为重量级锁；</p>
+<h5 id="重量级锁"><a href="#重量级锁" class="headerlink" title="重量级锁"></a>重量级锁</h5><p>  是锁的最终状态。等待的线程会进入到阻塞状态(内核态)。</p>
+<h4 id="JIT来实现一些优化措施："><a href="#JIT来实现一些优化措施：" class="headerlink" title="JIT来实现一些优化措施："></a>JIT来实现一些优化措施：</h4><p>  逃逸分析的技术。<br>  锁粗化：<br>  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public void Method()&#123;</span><br><span class="line">  synchronized(object)&#123;&#125;</span><br><span class="line">  synchronized(object)&#123;&#125;</span><br><span class="line">  synchronized(object)&#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>   会将三个synchronized合并为一个synchronized<br>  减小锁的粒度：<br>  ConcurrentHashMap</p>
+<h4 id="公平锁与非公平锁"><a href="#公平锁与非公平锁" class="headerlink" title="公平锁与非公平锁"></a>公平锁与非公平锁</h4><p>  ReetrantLock提供了公平锁与非公平锁的实现，默认使用的是非公平锁。</p>
+<p>  公平锁的获取：<br>  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">protected final boolean tryAcquire(int acquires) &#123;</span><br><span class="line">    final Thread current = Thread.currentThread();</span><br><span class="line">    int c = getState();</span><br><span class="line">    if (c == 0) &#123;</span><br><span class="line">      //判断当前线程是否是队列的第一个</span><br><span class="line">        if (!hasQueuedPredecessors() &amp;&amp;</span><br><span class="line">            compareAndSetState(0, acquires)) &#123;</span><br><span class="line">            setExclusiveOwnerThread(current);</span><br><span class="line">            return true;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    else if (current == getExclusiveOwnerThread()) &#123;</span><br><span class="line">        int nextc = c + acquires;</span><br><span class="line">        if (nextc &lt; 0)</span><br><span class="line">            throw new Error(&quot;Maximum lock count exceeded&quot;);</span><br><span class="line">        setState(nextc);</span><br><span class="line">        return true;</span><br><span class="line">    &#125;</span><br><span class="line">    return false;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>  非公平锁的获取：<br>  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">final boolean nonfairTryAcquire(int acquires) &#123;</span><br><span class="line">    final Thread current = Thread.currentThread();</span><br><span class="line">    int c = getState();</span><br><span class="line">    if (c == 0) &#123;</span><br><span class="line">      //没有判断当前线程是否是队列的第一个</span><br><span class="line">        if (compareAndSetState(0, acquires)) &#123;</span><br><span class="line">            setExclusiveOwnerThread(current);</span><br><span class="line">            return true;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    else if (current == getExclusiveOwnerThread()) &#123;</span><br><span class="line">        int nextc = c + acquires;</span><br><span class="line">        if (nextc &lt; 0) // overflow</span><br><span class="line">            throw new Error(&quot;Maximum lock count exceeded&quot;);</span><br><span class="line">        setState(nextc);</span><br><span class="line">        return true;</span><br><span class="line">    &#125;</span><br><span class="line">    return false;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>  判断当前线程是不是队列的第一个线程：<br>  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public final boolean hasQueuedPredecessors() &#123;</span><br><span class="line">    // The correctness of this depends on head being initialized</span><br><span class="line">    // before tail and on head.next being accurate if the current</span><br><span class="line">    // thread is first in queue.</span><br><span class="line">    Node t = tail; // Read fields in reverse initialization order</span><br><span class="line">    Node h = head;</span><br><span class="line">    Node s;</span><br><span class="line">    return h != t &amp;&amp;</span><br><span class="line">        ((s = h.next) == null || s.thread != Thread.currentThread());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="可重入锁与非可重入锁"><a href="#可重入锁与非可重入锁" class="headerlink" title="可重入锁与非可重入锁"></a>可重入锁与非可重入锁</h3><p>java中的reentrantLock与synchronized都是可重入锁，他最大的优势在于防止死锁的出现。</p>
+<h3 id="共享锁和排它锁"><a href="#共享锁和排它锁" class="headerlink" title="共享锁和排它锁"></a>共享锁和排它锁</h3><p>reentrantLock 是排它锁的典型实现，如果reentrantLock拿到锁之后，其他线程无论是读还是写都是拿不到这个对象的锁。</p>
+<p>ReentrantReadWriteLock 是共享锁的实现，里边有读锁和写锁，只有所有的线程度都是读取操作的时候，是共享的，如果都是<br>写的操作，那么就是排他的。</p>
+<p>AQS中：状态字段，高16位表示读状态，低16位表示写状态。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>CeaserWang
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://ceaser.wang/2020/04/08/jvm%E5%8E%9F%E7%90%86%EF%BC%8850%EF%BC%89jvm%E9%94%81/" title="jvm原理（50）jvm锁">https://ceaser.wang/2020/04/08/jvm原理（50）jvm锁/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/CAS%E3%80%81%E9%94%81%E5%8D%87%E7%BA%A7%E3%80%81%E9%87%8D%E5%85%A5%E9%94%81%E3%80%81%E5%85%AC%E5%B9%B3%E9%94%81%E3%80%81%E9%9D%9E%E5%85%AC%E5%B9%B3%E9%94%81/" rel="tag"><i class="fa fa-tag"></i> CAS、锁升级、重入锁、公平锁、非公平锁</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/03/31/jvm%E5%8E%9F%E7%90%86%EF%BC%8849%EF%BC%89ThreadLocal%E5%86%85%E5%AD%98%E6%B3%84%E9%9C%B2%E9%97%AE%E9%A2%98%E6%9C%AC%E8%B4%A8%E5%88%86%E6%9E%90%E4%B8%8E%E6%8E%A8%E5%AF%BC/" rel="prev" title="jvm原理（49）ThreadLocal内存泄露问题本质分析与推导">
+                  <i class="fa fa-chevron-left"></i> jvm原理（49）ThreadLocal内存泄露问题本质分析与推导
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/05/04/Concurrent/concurrency(7)volatile%E5%85%B3%E9%94%AE%E5%AD%97%E4%BD%9C%E7%94%A8%E4%B8%8E%E9%94%81%E7%9A%84%E5%85%B3%E7%B3%BB%E4%BB%A5%E5%8F%8A%E5%86%85%E5%AD%98%E5%B1%8F%E9%9A%9C%E8%AF%AD%E4%B9%89/" rel="next" title="concurrency(7)volatile关键字作用与锁的关系以及内存屏障语义">
+                  concurrency(7)volatile关键字作用与锁的关系以及内存屏障语义 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CeaserWang</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":"forest","js":{"url":"https://cdn.jsdelivr.net/npm/mermaid@8.11.0/dist/mermaid.min.js","integrity":"sha256-sVAx+v/Q7v0Q2xm5vN7h5ccSna6gaLREhG9sF8pKT6I="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+  <script class="next-config" data-name="nprogress" type="application/json">{"enable":true,"spinner":true}</script>
+  <script src="/js/third-party/nprogress.js"></script>
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"ryAR9bttS7fex1FPEPAylmmJ-gzGzoHsz","app_key":"dYqygoN4Y01Bl38OdRoCHUYn","server_url":null,"security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+
+</body>
+</html>

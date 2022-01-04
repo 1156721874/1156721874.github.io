@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.css" integrity="sha256-no0c5ccDODBwp+9hSmV5VvPpKwHCpbVzXHexIkupM6U=" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.js" integrity="sha256-a5YRB27CcBwBFcT5EF/f3E4vzIqyHrSR878nseNYw64=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ceaser.wang","root":"/","images":"/images","scheme":"Muse","version":"8.6.1","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+<meta name="description" content="一、Hadoop2.5.1编译zlib的安装与使用 zlib是一个很好的压缩解压缩库，今天我们分别介绍如何在Linux与Windows上安装与使用：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="hadoop2.5.1+Hbase0.98安装">
+<meta property="og:url" content="https://ceaser.wang/2018/09/28/hadoop2-5-1-Hbase0-98%E5%AE%89%E8%A3%85/index.html">
+<meta property="og:site_name" content="南贺神社">
+<meta property="og:description" content="一、Hadoop2.5.1编译zlib的安装与使用 zlib是一个很好的压缩解压缩库，今天我们分别介绍如何在Linux与Windows上安装与使用：">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://ceaser.wang/2018/09/28/hadoop2-5-1-Hbase0-98%E5%AE%89%E8%A3%85/20151211140929829.png">
+<meta property="og:image" content="https://ceaser.wang/2018/09/28/hadoop2-5-1-Hbase0-98%E5%AE%89%E8%A3%85/20151211140958933.png">
+<meta property="og:image" content="https://ceaser.wang/2018/09/28/hadoop2-5-1-Hbase0-98%E5%AE%89%E8%A3%85/20151211141028540.png">
+<meta property="og:image" content="https://ceaser.wang/2018/09/28/hadoop2-5-1-Hbase0-98%E5%AE%89%E8%A3%85/20151211141128852.png">
+<meta property="og:image" content="https://ceaser.wang/2018/09/28/hadoop2-5-1-Hbase0-98%E5%AE%89%E8%A3%85/20151211141159862.png">
+<meta property="og:image" content="https://ceaser.wang/2018/09/28/hadoop2-5-1-Hbase0-98%E5%AE%89%E8%A3%85/20151211141228405.png">
+<meta property="og:image" content="https://ceaser.wang/2018/09/28/hadoop2-5-1-Hbase0-98%E5%AE%89%E8%A3%85/20151211142336518.png">
+<meta property="og:image" content="https://ceaser.wang/2018/09/28/hadoop2-5-1-Hbase0-98%E5%AE%89%E8%A3%85/20151211142510437.png">
+<meta property="og:image" content="https://ceaser.wang/2018/09/28/hadoop2-5-1-Hbase0-98%E5%AE%89%E8%A3%85/20151211142610720.png">
+<meta property="og:image" content="https://ceaser.wang/2018/09/28/hadoop2-5-1-Hbase0-98%E5%AE%89%E8%A3%85/20151211142652408.png">
+<meta property="article:published_time" content="2018-09-28T21:05:36.000Z">
+<meta property="article:modified_time" content="2022-01-04T02:21:30.640Z">
+<meta property="article:author" content="CeaserWang">
+<meta property="article:tag" content="hadoop hbase">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ceaser.wang/2018/09/28/hadoop2-5-1-Hbase0-98%E5%AE%89%E8%A3%85/20151211140929829.png">
+
+
+<link rel="canonical" href="https://ceaser.wang/2018/09/28/hadoop2-5-1-Hbase0-98%E5%AE%89%E8%A3%85/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://ceaser.wang/2018/09/28/hadoop2-5-1-Hbase0-98%E5%AE%89%E8%A3%85/","path":"2018/09/28/hadoop2-5-1-Hbase0-98安装/","title":"hadoop2.5.1+Hbase0.98安装"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>hadoop2.5.1+Hbase0.98安装 | 南贺神社</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">南贺神社</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">你写程序有写诗一样的感觉吗?</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">205</span></a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">24</span></a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">212</span></a></li>
+        <li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-overview">
+            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="CeaserWang"
+      src="/../0xcc/index/Uchiha.jpg">
+  <p class="site-author-name" itemprop="name">CeaserWang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">212</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">205</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tLzExNTY3MjE4NzQ=" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;1156721874"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmNlYXNlcndhbmdAb3V0bG9vay5jb20=" title="E-Mail → mailto:ceaserwang@outlook.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+  </div>
+  <div class="cc-license site-overview-item animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><img src="https://cdn.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-user-friends fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly90d29kcmFnb25sYWtlLmNvbQ==" title="https:&#x2F;&#x2F;twodragonlake.com">TwoDragonLake</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9yb290Y2x1c3Rlci5naXRodWIuaW8=" title="https:&#x2F;&#x2F;rootcluster.github.io">RootCluster</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9tdXNlZmxvdy5pbw==" title="https:&#x2F;&#x2F;museflow.io">MuseFlow</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9pbmNvZGVyLm9yZw==" title="https:&#x2F;&#x2F;incoder.org">BladeCode</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9rYWlmYS5kZXY=" title="https:&#x2F;&#x2F;kaifa.dev">Alyenc</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmRhemhpZGF5b25nLmNu" title="https:&#x2F;&#x2F;blog.dazhidayong.cn">Killua</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9qb2NlbHluc2hhbmcuY24v" title="https:&#x2F;&#x2F;jocelynshang.cn&#x2F;">Jocelyn</span>
+        </li>
+    </ul>
+  </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/09/28/hadoop2-5-1-Hbase0-98%E5%AE%89%E8%A3%85/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
+      <meta itemprop="name" content="CeaserWang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="南贺神社">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          hadoop2.5.1+Hbase0.98安装
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-09-28 21:05:36" itemprop="dateCreated datePublished" datetime="2018-09-28T21:05:36+00:00">2018-09-28</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2022-01-04 02:21:30" itemprop="dateModified" datetime="2022-01-04T02:21:30+00:00">2022-01-04</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/cloud/" itemprop="url" rel="index"><span itemprop="name">cloud</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2018/09/28/hadoop2-5-1-Hbase0-98%E5%AE%89%E8%A3%85/" class="post-meta-item leancloud_visitors" data-flag-title="hadoop2.5.1+Hbase0.98安装" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p><strong>一、Hadoop2.5.1编译zlib的安装与使用</strong></p>
+<p>zlib是一个很好的压缩解压缩库，今天我们分别介绍如何在Linux与Windows上安装与使用：</p>
+<span id="more"></span>
+<p><strong>一：Linux平台</strong><br>首先看看自己的机器上是不是已经安装好zlib了：<br>whereis zlib<br>如果安装好了，会输出zlib的路径，这样直接跳过前2步。</p>
+<p><em>1.    下载</em><br>在<span class="exturl" data-url="aHR0cDovL3d3dy56bGliLm5ldC8lRTQlQjglOEIlRTglQkQlQkR6bGliJUU3JTlBJTg0JUU2JTlDJTgwJUU2JTk2JUIwJUU3JTg5JTg4JUVGJUJDJThDJUU2JTg4JTkxJUU3JTlBJTg0JUU2JTk4JUFGMS4yLjMlRUYlQkMlODglRTUlQUUlOTglRTclQkQlOTElRTglQjIlOEMlRTQlQkMlQkMlRTQlQjglOEElRTQlQjglOEQlRTUlOEUlQkIlRUYlQkMlOEMlRTUlOEYlQUYlRTQlQkIlQTUlRTYlODklQkUlRTUlODglQUIlRTclOUElODQlRTUlOUMlQjAlRTYlOTYlQjklRTQlQjglOEIlRTglQkQlQkQlRUYlQkMlODk=">http://www.zlib.net/下载zlib的最新版，我的是1.2.3（官网貌似上不去，可以找别的地方下载）<i class="fa fa-external-link-alt"></i></span><br><em>2.解压，编译：</em><br>./configure<br>make<br>sudo make install<br>再进行配置一下系统的文件，加载刚才编译安装的zlib生成的库文件<br> vi /etc/ld.so.conf.d/zlib.conf<br>加入如下内容后保存退出<br>/data/program/zlib/lib<br>也就是添加安装目录的文件路径，库文件。ldconfig  运行之后就会加载安装的库文件了</p>
+<p>Openssl安装：<br>yum install openssl-devel</p>
+<p><strong>Protobuf 安装：</strong><br>Tar –xzvf protobuf-2.5.0.tar.gz<br>执行：<br>   cd protobuf-2.5.0<br>   ./configure –prefix=/usr/local/protoc/<br>   make<br>   make install<br><strong>添加环境变量：</strong><br>exportPATH=.:/usr/local/protoc/bin:$PATH<br>更新配置文件source /etc/profile<br>   验证 protoc –version    libprotoc 2.5.0<br><strong>Hadoop2.5.1编译</strong><br> 初次运行：<br>    $mvn package -Pdist,native -Dskiptests -Dtar<br>    再次运行：<br>    $mvn clean package -Dmaven.test.skip=true<br>    $mvn package -Pdist,native -Dskiptests -Dtar<br>    正常编译需要等待40分钟左右<br>$cp hadoop-2.5.1-src/hadoop-dist/target/hadoop-2.5.1/lib/native</p>
+<p><strong>二、hadoop的安装预配置</strong><br>1、Hadoop2.5.1环境变量配置（配置/etc/profile）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">export JAVA_HOME=/usr/java/jdk1.7.0_55</span><br><span class="line">export HADOOP_HOME=/usr/hadoop</span><br><span class="line">export HBASE_HOME=/usr/hbase-0.94.20</span><br><span class="line">export PIG_HOME=/usr/pig-0.12.0</span><br><span class="line">export HIVE_HOME=/usr/hive</span><br><span class="line">export SQOOP_HOME=/usr/sqoop</span><br><span class="line">export MAVEN_HOME=/usr/apache-maven-3.0.5</span><br><span class="line">export FINDBUGS_HOME=/usr/findbugs-3.0.0</span><br><span class="line">export ANT_HOME=/usr/apache-ant-1.9.4</span><br><span class="line">export PATH=.:$HADOOP_HOME/bin:$HADOOP_HOME/sbin:$JAVA_HOME/bin:$HBASE_HOME/bin:$PIG_HOME/bin:$HIVE_HOME/bin:$SQOOP_HOME:$PATH:$MAVEN_HOME/bin:/usr/local/protoc/bin:/usr/local/zlib/lib:$FINDBUGS_HOME/bin:$ANT_HOME/bin</span><br><span class="line">export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar</span><br><span class="line">export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native</span><br><span class="line">export HADOOP_OPTS=&quot;-Djava.library.path=$HADOOP_HOME/lib/native&quot;</span><br><span class="line">export	JAVA_LIBRARY_PATH=$JAVA_LIBRARY_PATH:$HADOOP_HOME/lib/nativeexport PIG_CLASSPATH=$HADOOP_HOME/conf/</span><br><span class="line">export JAVA_HOME</span><br><span class="line">export PATH</span><br><span class="line">export CLASSPATH</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>2、hadoop-env.sh</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">export JAVA_HOME=/usr/java/jdk1.7.0_55</span><br><span class="line">#export HADOOP_HOME=/usr/hadoop</span><br><span class="line">export HADOOP_PREFIX=/usr/hadoop</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>3、core-site.xml</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&lt;configuration&gt;</span><br><span class="line">          &lt;property&gt;        </span><br><span class="line">            &lt;name&gt;fs.defaultFS&lt;/name&gt;        </span><br><span class="line">            &lt;value&gt;hdfs://hadoop:9000&lt;/value&gt;   </span><br><span class="line">            &lt;description&gt;&lt;/description&gt;   </span><br><span class="line">           &lt;/property&gt;    </span><br><span class="line"></span><br><span class="line">	&lt;property&gt;</span><br><span class="line">	    &lt;name&gt;io.file.buffer.size&lt;/name&gt;        </span><br><span class="line">            &lt;value&gt;&lt;/value&gt;   </span><br><span class="line">        &lt;/property&gt;              </span><br><span class="line">           &lt;property&gt;        </span><br><span class="line">            &lt;name&gt;hadoop.tmp.dir&lt;/name&gt;       </span><br><span class="line">            &lt;value&gt;/usr/hadoop/tmp&lt;/value&gt;   </span><br><span class="line">            &lt;description&gt;自己设置tmp，默认位置会被定期清除&lt;/description&gt;             </span><br><span class="line">           &lt;/property&gt;</span><br><span class="line">	&lt;property&gt;</span><br><span class="line">	    &lt;name&gt;hadoop.native.lib&lt;/name&gt;        </span><br><span class="line">            &lt;value&gt;false&lt;/value&gt;   </span><br><span class="line">        &lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>4、Hdfs-site.xml</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">&lt;configuration&gt;</span><br><span class="line">	&lt;property&gt;  </span><br><span class="line">            &lt;name&gt;dfs.replication&lt;/name&gt;    </span><br><span class="line">            &lt;value&gt;1&lt;/value&gt;  </span><br><span class="line">            &lt;description&gt;dfs备份数量&lt;/description&gt;    </span><br><span class="line">         &lt;/property&gt;</span><br><span class="line">&lt;!--</span><br><span class="line">            &lt;property&gt;    </span><br><span class="line">            &lt;name&gt;dfs.namenode.handler.count&lt;/name&gt;    </span><br><span class="line">            &lt;value&gt;100&lt;/value&gt;    </span><br><span class="line">            &lt;/property&gt;</span><br><span class="line">--&gt;</span><br><span class="line">            &lt;property&gt;    </span><br><span class="line">            &lt;name&gt;dfs.namenode.name.dir&lt;/name&gt;    </span><br><span class="line">            &lt;value&gt;/usr/hadoop/tmp/dfs/name&lt;/value&gt;    </span><br><span class="line">            &lt;/property&gt;</span><br><span class="line"></span><br><span class="line">            &lt;property&gt;    </span><br><span class="line">            &lt;name&gt;dfs.namenode.data.dir&lt;/name&gt;    </span><br><span class="line">            &lt;value&gt;/usr/hadoop/tmp/dfs/data&lt;/value&gt;      </span><br><span class="line">            &lt;/property&gt;</span><br><span class="line"></span><br><span class="line">            &lt;property&gt;    </span><br><span class="line">            &lt;name&gt;dfs.permissions &lt;/name&gt;    </span><br><span class="line">            &lt;value&gt;true&lt;/value&gt;     </span><br><span class="line">&lt;description&gt;文件读写的权限检查 &lt;/description&gt;  </span><br><span class="line">            &lt;/property&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&lt;/configuration&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>5、Yarn-site.xml</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">&lt;configuration&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- Site specific YARN configuration properties --&gt;</span><br><span class="line">&lt;!--</span><br><span class="line">&lt;property&gt;   </span><br><span class="line">    &lt;name&gt;yarn.nodemanager.aux-services&lt;/name&gt;   </span><br><span class="line">    &lt;value&gt;mapreduce_shuffle&lt;/value&gt;     </span><br><span class="line">  &lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;property&gt;   </span><br><span class="line">    &lt;name&gt;yarn.ac1.enable&lt;/name&gt;   </span><br><span class="line">    &lt;value&gt;false&lt;/value&gt;     </span><br><span class="line">  &lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;property&gt;   </span><br><span class="line">    &lt;name&gt;yarn.admin.ac1&lt;/name&gt;   </span><br><span class="line">    &lt;value&gt;Admin ACL&lt;/value&gt;     </span><br><span class="line">  &lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;property&gt;   </span><br><span class="line">    &lt;name&gt;yarn.log-aggregation-enable&lt;/name&gt;   </span><br><span class="line">    &lt;value&gt;false&lt;/value&gt;     </span><br><span class="line">  &lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;property&gt;   </span><br><span class="line">    &lt;name&gt;yarn.log-aggregation-enable&lt;/name&gt;   </span><br><span class="line">    &lt;value&gt;false&lt;/value&gt;     </span><br><span class="line">  &lt;/property&gt;</span><br><span class="line">--&gt;</span><br><span class="line">  &lt;property&gt;   </span><br><span class="line">    &lt;name&gt;yarn.nodemanager.aux-services&lt;/name&gt;   </span><br><span class="line">    &lt;value&gt;mapreduce_shuffle&lt;/value&gt;     </span><br><span class="line">  &lt;/property&gt;         </span><br><span class="line">  &lt;property&gt;  </span><br><span class="line">    &lt;description&gt;The address of the applications manager interface in the RM.&lt;/description&gt;           </span><br><span class="line">    &lt;name&gt;yarn.resourcemanager.address&lt;/name&gt;             </span><br><span class="line">    &lt;value&gt;hadoop:18040&lt;/value&gt;               </span><br><span class="line">  &lt;/property&gt;  </span><br><span class="line">  &lt;property&gt;   </span><br><span class="line">    &lt;description&gt;The address of the scheduler interface.&lt;/description&gt;   </span><br><span class="line">    &lt;name&gt;yarn.resourcemanager.scheduler.address&lt;/name&gt;     </span><br><span class="line">    &lt;value&gt;hadoop:18030&lt;/value&gt;       </span><br><span class="line">  &lt;/property&gt;  </span><br><span class="line">  &lt;property&gt;   </span><br><span class="line">    &lt;description&gt;The address of the RM web application.&lt;/description&gt;   </span><br><span class="line">    &lt;name&gt;yarn.resourcemanager.webapp.address&lt;/name&gt;     </span><br><span class="line">    &lt;value&gt;hadoop:18088&lt;/value&gt;       </span><br><span class="line">  &lt;/property&gt;  </span><br><span class="line">  &lt;property&gt;   </span><br><span class="line">    &lt;description&gt;The address of the resource tracker interface.&lt;/description&gt;   </span><br><span class="line">    &lt;name&gt;yarn.resourcemanager.resource-tracker.address&lt;/name&gt;     </span><br><span class="line">     &lt;value&gt;hadoop:8025&lt;/value&gt;      </span><br><span class="line">  &lt;/property&gt;  </span><br><span class="line">&lt;/configuration&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><strong>三、Hbase 0.98搭建</strong></p>
+<p><strong>hbase-env.sh</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># The java implementation to use.  Java 1.6 required.</span><br><span class="line">export JAVA_HOME=/usr/java/jdk1.7.0_71</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><strong>hbase-site.xml</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">&lt;configuration&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">&lt;name&gt;hbase.rootdir&lt;/name&gt;</span><br><span class="line">&lt;value&gt;hdfs://hadoopmaster:9000/hbase&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;property&gt;  </span><br><span class="line">  &lt;name&gt;hbase.cluster.distributed&lt;/name&gt;  </span><br><span class="line">  &lt;value&gt;true&lt;/value&gt;  </span><br><span class="line">&lt;/property&gt;  </span><br><span class="line">&lt;property&gt;  </span><br><span class="line">  &lt;name&gt;hbase.master&lt;/name&gt;  </span><br><span class="line">  &lt;value&gt;hdfs://hadoopmaster:60000&lt;/value&gt;  </span><br><span class="line">&lt;/property&gt;  </span><br><span class="line">&lt;property&gt;  </span><br><span class="line">  &lt;name&gt;hbase.tmp.dir&lt;/name&gt;  </span><br><span class="line">  &lt;value&gt;/home/hbase/tmp&lt;/value&gt;  </span><br><span class="line">&lt;/property&gt;  </span><br><span class="line">&lt;property&gt;  </span><br><span class="line">  &lt;name&gt;hbase.zookeeper.quorum&lt;/name&gt;  </span><br><span class="line">  &lt;value&gt;hadoopmaster&lt;/value&gt;  </span><br><span class="line">&lt;/property&gt;  </span><br><span class="line">&lt;property&gt;  </span><br><span class="line">  &lt;name&gt;hbase.zookeeper.property.clientPort&lt;/name&gt;  </span><br><span class="line">  &lt;value&gt;2181&lt;/value&gt;  </span><br><span class="line">&lt;/property&gt;  </span><br><span class="line">&lt;property&gt;  </span><br><span class="line">  &lt;name&gt;hbase.zookeeper.property.dataDir&lt;/name&gt;  </span><br><span class="line">  &lt;value&gt;/home/hbase/zookeeper&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>Conf下增加文件regionservers 加入节点名字，比如hadoopmaster。</p>
+<p>至此，进程如下：<br>[root@hadoopmaster conf]# jps<br>5841 NodeManager<br>5739 ResourceManager<br>5386 DataNode<br>7482 HRegionServer<br>5526 SecondaryNameNode<br>7348 HMaster<br>5290 NameNode<br>7563 Jps<br>7280 HQuorumPeer<br>注：启动hbase的时候 hadoop的slf4j-log4j12-1.7.5.jar与hbase 的slf4j-log4j12-1.6.4.jar会发生冲突 把hbase的删除即可。<br>查看所有监控的ip以及端口启动情况<br>Netstat –tnlp<br><strong>四、部分配置与hadoop原理</strong><br>1 、启动HDFS<br><img src="20151211140929829.png" alt="这里写图片描述"><br>2、日志文件结构：<br><img src="20151211140958933.png" alt="这里写图片描述"><br><img src="20151211141028540.png" alt="这里写图片描述"><br>3、Uber模式:<br><img src="20151211141128852.png" alt="这里写图片描述"><br>4、Uber作业条件:<br><img src="20151211141159862.png" alt="这里写图片描述"><br>5、历史服务器:<br><img src="20151211141228405.png" alt="这里写图片描述"><br>6、secondary namenode<br><img src="20151211142336518.png" alt="这里写图片描述"><br>7、安全模式;<br>    安全模式(系统升级时使用)：<br>    查看namenode出于那个状态<br>    Hadoop dfsadmin –safemode  get<br>    进入安全模式（hadoop启动的时候是安全模式）<br>    Hadoop dfsadmin –safemode enter<br>    离开安全模式<br>    Hadoop dfsadmin –safemode leave<br>8 、文件读取过程<br><img src="20151211142510437.png" alt="这里写图片描述"><br>9、文件写入过程<br><img src="20151211142610720.png" alt="这里写图片描述"><br>10、Hadoop管理员常用命令<br><img src="20151211142652408.png" alt="这里写图片描述"></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>CeaserWang
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://ceaser.wang/2018/09/28/hadoop2-5-1-Hbase0-98%E5%AE%89%E8%A3%85/" title="hadoop2.5.1+Hbase0.98安装">https://ceaser.wang/2018/09/28/hadoop2-5-1-Hbase0-98安装/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/hadoop-hbase/" rel="tag"><i class="fa fa-tag"></i> hadoop hbase</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2018/09/28/hadoop-1-1-2-hbase0-98-hive-pig-sqoop-mysql-vsftp-tomcat-linux%E6%90%AD%E5%BB%BA%E5%91%BD%E4%BB%A4/" rel="prev" title="hadoop(1.1.2)+hbase0.98+hive+pig+sqoop+mysql+vsftp+tomcat+linux搭建命令">
+                  <i class="fa fa-chevron-left"></i> hadoop(1.1.2)+hbase0.98+hive+pig+sqoop+mysql+vsftp+tomcat+linux搭建命令
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2018/09/28/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%8811%EF%BC%89-%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/" rel="next" title="设计模式（11）-组合模式">
+                  设计模式（11）-组合模式 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CeaserWang</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":"forest","js":{"url":"https://cdn.jsdelivr.net/npm/mermaid@8.11.0/dist/mermaid.min.js","integrity":"sha256-sVAx+v/Q7v0Q2xm5vN7h5ccSna6gaLREhG9sF8pKT6I="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+  <script class="next-config" data-name="nprogress" type="application/json">{"enable":true,"spinner":true}</script>
+  <script src="/js/third-party/nprogress.js"></script>
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"ryAR9bttS7fex1FPEPAylmmJ-gzGzoHsz","app_key":"dYqygoN4Y01Bl38OdRoCHUYn","server_url":null,"security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+
+</body>
+</html>

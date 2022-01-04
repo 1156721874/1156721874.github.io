@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.css" integrity="sha256-no0c5ccDODBwp+9hSmV5VvPpKwHCpbVzXHexIkupM6U=" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.js" integrity="sha256-a5YRB27CcBwBFcT5EF/f3E4vzIqyHrSR878nseNYw64=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ceaser.wang","root":"/","images":"/images","scheme":"Muse","version":"8.6.1","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+<meta name="description" content="使用IDE调试一条简单的SQL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="hive原理与源码分析-序列化器与反序列化器（三）">
+<meta property="og:url" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%BA%8F%E5%88%97%E5%8C%96%E5%99%A8%E4%B8%8E%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%99%A8%EF%BC%88%E4%B8%89%EF%BC%89/index.html">
+<meta property="og:site_name" content="南贺神社">
+<meta property="og:description" content="使用IDE调试一条简单的SQL">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%BA%8F%E5%88%97%E5%8C%96%E5%99%A8%E4%B8%8E%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%99%A8%EF%BC%88%E4%B8%89%EF%BC%89/20170507201653831.png">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%BA%8F%E5%88%97%E5%8C%96%E5%99%A8%E4%B8%8E%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%99%A8%EF%BC%88%E4%B8%89%EF%BC%89/20170507203959466.png">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%BA%8F%E5%88%97%E5%8C%96%E5%99%A8%E4%B8%8E%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%99%A8%EF%BC%88%E4%B8%89%EF%BC%89/20170507212442779.png">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%BA%8F%E5%88%97%E5%8C%96%E5%99%A8%E4%B8%8E%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%99%A8%EF%BC%88%E4%B8%89%EF%BC%89/20170507220329675.png">
+<meta property="article:published_time" content="2018-10-04T10:53:35.000Z">
+<meta property="article:modified_time" content="2022-01-04T02:21:30.680Z">
+<meta property="article:author" content="CeaserWang">
+<meta property="article:tag" content="hive">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%BA%8F%E5%88%97%E5%8C%96%E5%99%A8%E4%B8%8E%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%99%A8%EF%BC%88%E4%B8%89%EF%BC%89/20170507201653831.png">
+
+
+<link rel="canonical" href="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%BA%8F%E5%88%97%E5%8C%96%E5%99%A8%E4%B8%8E%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%99%A8%EF%BC%88%E4%B8%89%EF%BC%89/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%BA%8F%E5%88%97%E5%8C%96%E5%99%A8%E4%B8%8E%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%99%A8%EF%BC%88%E4%B8%89%EF%BC%89/","path":"2018/10/04/hive原理与源码分析-序列化器与反序列化器（三）/","title":"hive原理与源码分析-序列化器与反序列化器（三）"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>hive原理与源码分析-序列化器与反序列化器（三） | 南贺神社</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">南贺神社</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">你写程序有写诗一样的感觉吗?</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">205</span></a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">24</span></a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">212</span></a></li>
+        <li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-overview">
+            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="CeaserWang"
+      src="/../0xcc/index/Uchiha.jpg">
+  <p class="site-author-name" itemprop="name">CeaserWang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">212</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">205</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tLzExNTY3MjE4NzQ=" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;1156721874"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmNlYXNlcndhbmdAb3V0bG9vay5jb20=" title="E-Mail → mailto:ceaserwang@outlook.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+  </div>
+  <div class="cc-license site-overview-item animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><img src="https://cdn.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-user-friends fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly90d29kcmFnb25sYWtlLmNvbQ==" title="https:&#x2F;&#x2F;twodragonlake.com">TwoDragonLake</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9yb290Y2x1c3Rlci5naXRodWIuaW8=" title="https:&#x2F;&#x2F;rootcluster.github.io">RootCluster</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9tdXNlZmxvdy5pbw==" title="https:&#x2F;&#x2F;museflow.io">MuseFlow</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9pbmNvZGVyLm9yZw==" title="https:&#x2F;&#x2F;incoder.org">BladeCode</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9rYWlmYS5kZXY=" title="https:&#x2F;&#x2F;kaifa.dev">Alyenc</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmRhemhpZGF5b25nLmNu" title="https:&#x2F;&#x2F;blog.dazhidayong.cn">Killua</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9qb2NlbHluc2hhbmcuY24v" title="https:&#x2F;&#x2F;jocelynshang.cn&#x2F;">Jocelyn</span>
+        </li>
+    </ul>
+  </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%BA%8F%E5%88%97%E5%8C%96%E5%99%A8%E4%B8%8E%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%99%A8%EF%BC%88%E4%B8%89%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
+      <meta itemprop="name" content="CeaserWang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="南贺神社">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          hive原理与源码分析-序列化器与反序列化器（三）
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-10-04 10:53:35" itemprop="dateCreated datePublished" datetime="2018-10-04T10:53:35+00:00">2018-10-04</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2022-01-04 02:21:30" itemprop="dateModified" datetime="2022-01-04T02:21:30+00:00">2022-01-04</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/cloud/" itemprop="url" rel="index"><span itemprop="name">cloud</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%BA%8F%E5%88%97%E5%8C%96%E5%99%A8%E4%B8%8E%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%99%A8%EF%BC%88%E4%B8%89%EF%BC%89/" class="post-meta-item leancloud_visitors" data-flag-title="hive原理与源码分析-序列化器与反序列化器（三）" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p><strong>使用IDE调试一条简单的SQL</strong></p>
+<span id="more"></span>
+<p>画出AST<br>画出Operator Tree</p>
+<p><strong>已有表结构：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; desc src;</span><br><span class="line">OK</span><br><span class="line">key                     int                                         </span><br><span class="line">value                   string</span><br></pre></td></tr></table></figure>
+<p><strong>执行计划：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; explain select * from src a join src b on a.key=b.key where a.key&lt;100;</span><br><span class="line">OK</span><br><span class="line">STAGE DEPENDENCIES:</span><br><span class="line">  Stage-4 is a root stage</span><br><span class="line">  Stage-3 depends on stages: Stage-4</span><br><span class="line">  Stage-0 depends on stages: Stage-3</span><br><span class="line"></span><br><span class="line">STAGE PLANS:</span><br><span class="line">  Stage: Stage-4</span><br><span class="line">    Map Reduce Local Work</span><br><span class="line">      Alias -&gt; Map Local Tables:</span><br><span class="line">        a</span><br><span class="line">          Fetch Operator</span><br><span class="line">            limit: -1</span><br><span class="line">      Alias -&gt; Map Local Operator Tree:</span><br><span class="line">        a</span><br><span class="line">          TableScan</span><br><span class="line">            alias: a</span><br><span class="line">            Statistics: Num rows: 55 Data size: 5812 Basic stats: COMPLETE Column stats: NONE</span><br><span class="line">            Filter Operator</span><br><span class="line">              predicate: (key &lt; 100) (type: boolean)</span><br><span class="line">              Statistics: Num rows: 18 Data size: 1902 Basic stats: COMPLETE Column stats: NONE</span><br><span class="line">              HashTable Sink Operator</span><br><span class="line">                keys:</span><br><span class="line">                  0 key (type: int)</span><br><span class="line">                  1 key (type: int)</span><br><span class="line"></span><br><span class="line">  Stage: Stage-3</span><br><span class="line">    Map Reduce</span><br><span class="line">      Map Operator Tree:</span><br><span class="line">          TableScan</span><br><span class="line">            alias: b</span><br><span class="line">            Statistics: Num rows: 55 Data size: 5812 Basic stats: COMPLETE Column stats: NONE</span><br><span class="line">            Filter Operator</span><br><span class="line">              predicate: (key &lt; 100) (type: boolean)</span><br><span class="line">              Statistics: Num rows: 18 Data size: 1902 Basic stats: COMPLETE Column stats: NONE</span><br><span class="line">              Map Join Operator</span><br><span class="line">                condition map:</span><br><span class="line">                     Inner Join 0 to 1</span><br><span class="line">                keys:</span><br><span class="line">                  0 key (type: int)</span><br><span class="line">                  1 key (type: int)</span><br><span class="line">                outputColumnNames: _col0, _col1, _col5, _col6</span><br><span class="line">                Statistics: Num rows: 19 Data size: 2092 Basic stats: COMPLETE Column stats: NONE</span><br><span class="line">                Select Operator</span><br><span class="line">                  expressions: _col0 (type: int), _col1 (type: string), _col5 (type: int), _col6 (type: string)</span><br><span class="line">                  outputColumnNames: _col0, _col1, _col2, _col3</span><br><span class="line">                  Statistics: Num rows: 19 Data size: 2092 Basic stats: COMPLETE Column stats: NONE</span><br><span class="line">                  File Output Operator</span><br><span class="line">                    compressed: false</span><br><span class="line">                    Statistics: Num rows: 19 Data size: 2092 Basic stats: COMPLETE Column stats: NONE</span><br><span class="line">                    table:</span><br><span class="line">                        input format: org.apache.hadoop.mapred.TextInputFormat</span><br><span class="line">                        output format: org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat</span><br><span class="line">                        serde: org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe</span><br><span class="line">      Local Work:</span><br><span class="line">        Map Reduce Local Work</span><br><span class="line"></span><br><span class="line">  Stage: Stage-0</span><br><span class="line">    Fetch Operator</span><br><span class="line">      limit: -1</span><br><span class="line">      Processor Tree:</span><br><span class="line">        ListSink</span><br></pre></td></tr></table></figure>
+<p>Stage-4:是小表序列化<br>Stage-3：mr任务<br>Stage-0：对mr输出文件的输出</p>
+<p><strong>逻辑执行计划Stage-3</strong><br><img src="20170507201653831.png" alt="这里写图片描述"></p>
+<p>TableScanOperator:  from src  a /from src b 【a表加载进入内存，b在磁盘上边】<br>FilterOperator: where  a.key&lt;100<br>SelectOperator : select *<br>MapJoinOperator : on a.key = b.key<br>FileSyncOperator:输出<br>整个流程：从b表加载一条数据 FilterOperator一下，SelectOperator 选择出记录，用MapJoinOperator 和内存中的ajoin一下，然后输出</p>
+<p><strong>SerDe简介</strong><br>SerDe是Serializer和Deserializer的缩写<br>序列化器与反序列化器<br>Hive使用SerDe接口去完成IO操作<br>接口三个主要功能：<br>序列化(Serialization)，从Hive写FS<br>反序列化（Deserialization），从FS读入Hive<br>解释读写字段，加起文件到字段结构的桥梁</p>
+<p><strong>Hive核心三大组件</strong><br>Hive有三大核心组件：<br>Query Processor：查询处理工具，源码ql包<br>SerDe：序列化与反序列化器，源码serde包<br>MetaStore：元数据存储及服务，源码metastore包<br>请注意：<br>HiveServer2、MR和Tez引擎并不是Hive的三大核心组件，只是周边，后续我们会做分析<br>关于MR和Tez的性能比较点这：<span class="exturl" data-url="aHR0cDovL3d3dy5jbmJsb2dzLmNvbS9saW5uL3AvNTMyNTE0Ny5odG1s">http://www.cnblogs.com/linn/p/5325147.html<i class="fa fa-external-link-alt"></i></span></p>
+<p><strong>SerDe所处的位置</strong><br><img src="20170507203959466.png" alt="这里写图片描述"></p>
+<p><strong>序列化和反序列化的目的</strong><br>Serde是用于序列化和反序列化。<br>序列化的目的是Hive格式输出成为特定格式，包括：<br>分隔符（tab、逗号、CTRL-A）<br>Thrift 协议<br>反序列化的目的是HDFS格式读入Hive内存中，包括：<br>Java Integer/String/ArrayList/HashMap<br>Hadoop Writable 类<br>用户自定义类</p>
+<p><strong>内置SerDe与外置SerDe</strong><br>内置SerDe<br>LazySimpleSerde<br>ColumnarSerde<br>AvroSerde<br>ORC<br>RegexSerde<br>Thrift<br>Parquet<br>CSV<br>JSONSerde<br>自定义Serde，读写自定义格式的数据</p>
+<p><strong>例子:使用RegexSerDe</strong><br>分析http请求日志。<br>CREATE TABLE apache_log(<br>host STRING, identity STRING, user STRING,<br>time STRING, request STRING, status STRING,<br>size STRING, referer STRING, agent STRING)<br>ROW FORMAT SERDE ‘org.apache.hadoop.hive.contrib.serde2.RegexSerDe’<br>WITH SERDEPROPERTIES<br>( “input.regex” = “([^ ]<em>) ([^ ]</em>) ([^ ]<em>) (-|\^\*\]) ([^ &quot;]</em>|&quot;[^&quot;]<em>&quot;) (-|[0-9]</em>) (-|[0-9]<em>)(?: ([^ &quot;]</em>|&quot;[^&quot;]<em>&quot;) ([^ &quot;]</em>|&quot;[^&quot;]<em>&quot;))?”,<br>“output.format.string” = “%1$s %2$s %3$s %4$s %5$s %6$s %7$s %8$s %9$s”<br>) STORED AS TEXTFILE;<br>( “input.regex” = “([^ ]</em>) ([^ ]<em>) ([^ ]</em>) (-|\^\<em>\]) ([^ &quot;]</em>|&quot;[^&quot;]<em>&quot;) (-|[0-9]</em>) (-|[0-9]<em>)(?: ([^ &quot;]</em>|&quot;[^&quot;]<em>&quot;) ([^ &quot;]</em>|&quot;[^&quot;]<em>&quot;))?”<br>这个正则表达式是Serializer的过程，<br>( “input.regex” = “([^ ]</em>) ([^ ]<em>) ([^ ]</em>) (-|\^\<em>\]) ([^ &quot;]</em>|&quot;[^&quot;]<em>&quot;) (-|[0-9]</em>) (-|[0-9]<em>)(?: ([^ &quot;]</em>|&quot;[^&quot;]<em>&quot;) ([^ &quot;]</em>|&quot;[^&quot;]*&quot;))?”<br>这条正则表达式是DeSerializer的过程。</p>
+<p><strong>SerDe的源码分析</strong><br>相对于SemanticAnalyzer，Serde的编写较为规范，也较为好懂<br><span class="exturl" data-url="aHR0cHM6Ly93d3cuY29kYXRsYXMuY29tL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvbWFzdGVyL3NlcmRlL3NyYy9qYXZhL29yZy9hcGFjaGUvaGFkb29wL2hpdmUvc2VyZGUyLw==">https://www.codatlas.com/github.com/apache/hive/master/serde/src/java/org/apache/hadoop/hive/serde2/<i class="fa fa-external-link-alt"></i></span></p>
+<p><strong>AbstractSerde</strong><br><span class="exturl" data-url="aHR0cHM6Ly93d3cuY29kYXRsYXMuY29tL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvbWFzdGVyL3NlcmRlL3NyYy9qYXZhL29yZy9hcGFjaGUvaGFkb29wL2hpdmUvc2VyZGUyL0Fic3RyYWN0U2VyRGUuamF2YQ==">https://www.codatlas.com/github.com/apache/hive/master/serde/src/java/org/apache/hadoop/hive/serde2/AbstractSerDe.java<i class="fa fa-external-link-alt"></i></span><br>AbstractSerde<br>serialize() 接口：Object -&gt; Writable<br>deserialize()接口：Writable -&gt; Object</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Abstract class for implementing SerDe. The abstract class has been created, so that</span><br><span class="line"> * new methods can be added in the underlying interface, SerDe, and only implementations</span><br><span class="line"> * that need those methods overwrite it.</span><br><span class="line"> */</span><br><span class="line">public abstract class AbstractSerDe implements Deserializer, Serializer &#123;</span><br><span class="line">。。。。。。。。。。略</span><br><span class="line">  /**</span><br><span class="line">   * Initialize the HiveSerializer.</span><br><span class="line">   * @param conf System properties. Can be null in compile time</span><br><span class="line">   * @param tbl table properties</span><br><span class="line">   * @throws SerDeException</span><br><span class="line">   */</span><br><span class="line">   //初始化</span><br><span class="line">  @Deprecated</span><br><span class="line">  public abstract void initialize(@Nullable Configuration conf, Properties tbl)</span><br><span class="line">      throws SerDeException;</span><br><span class="line">。。。。。。略</span><br><span class="line">  /**</span><br><span class="line">   * Serialize an object by navigating inside the Object with the</span><br><span class="line">   * ObjectInspector. In most cases, the return value of this function will be</span><br><span class="line">   * constant since the function will reuse the Writable object. If the client</span><br><span class="line">   * wants to keep a copy of the Writable, the client needs to clone the</span><br><span class="line">   * returned value.</span><br><span class="line">   */</span><br><span class="line">   //序列化操作，参数obj是hive中的对象，Writable 是hadoop中的数据格式描述抽象</span><br><span class="line">  public abstract Writable serialize(Object obj, ObjectInspector objInspector)</span><br><span class="line">      throws SerDeException;</span><br><span class="line"></span><br><span class="line">。。。。。。。。。。略</span><br><span class="line">  /**</span><br><span class="line">   * Deserialize an object out of a Writable blob. In most cases, the return</span><br><span class="line">   * value of this function will be constant since the function will reuse the</span><br><span class="line">   * returned object. If the client wants to keep a copy of the object, the</span><br><span class="line">   * client needs to clone the returned value by calling</span><br><span class="line">   * ObjectInspectorUtils.getStandardObject().</span><br><span class="line">   *</span><br><span class="line">   * @param blob The Writable object containing a serialized object</span><br><span class="line">   * @return A Java object representing the contents in the blob.</span><br><span class="line">   */</span><br><span class="line">   //反序列化 blob是hadoop中的数据抽象格式，返回的是Object是hive中的对象</span><br><span class="line">  public abstract Object deserialize(Writable blob) throws SerDeException;</span><br><span class="line">..........略。。。。。。。</span><br></pre></td></tr></table></figure>
+
+<p>具体的SerDe <span class="exturl" data-url="aHR0cHM6Ly9pbnNpZ2h0LmlvL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvYmxvYi9tYXN0ZXIvc2VyZGUvc3JjL2phdmEvb3JnL2FwYWNoZS9oYWRvb3AvaGl2ZS9zZXJkZTIvbGF6eS9MYXp5U2ltcGxlU2VyRGUuamF2YQ==">https://insight.io/github.com/apache/hive/blob/master/serde/src/java/org/apache/hadoop/hive/serde2/lazy/LazySimpleSerDe.java<i class="fa fa-external-link-alt"></i></span></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">@Public</span><br><span class="line">@Stable</span><br><span class="line">@SerDeSpec(schemaProps = &#123;</span><br><span class="line">    serdeConstants.LIST_COLUMNS, serdeConstants.LIST_COLUMN_TYPES,</span><br><span class="line">    serdeConstants.FIELD_DELIM, serdeConstants.COLLECTION_DELIM, serdeConstants.MAPKEY_DELIM,</span><br><span class="line">    serdeConstants.SERIALIZATION_FORMAT, serdeConstants.SERIALIZATION_NULL_FORMAT,</span><br><span class="line">    serdeConstants.SERIALIZATION_ESCAPE_CRLF,</span><br><span class="line">    serdeConstants.SERIALIZATION_LAST_COLUMN_TAKES_REST,</span><br><span class="line">    serdeConstants.ESCAPE_CHAR,</span><br><span class="line">    serdeConstants.SERIALIZATION_ENCODING,</span><br><span class="line">    LazySerDeParameters.SERIALIZATION_EXTEND_NESTING_LEVELS,</span><br><span class="line">    LazySerDeParameters.SERIALIZATION_EXTEND_ADDITIONAL_NESTING_LEVELS</span><br><span class="line">    &#125;)</span><br><span class="line">public class LazySimpleSerDe extends AbstractEncodingAwareSerDe &#123;</span><br><span class="line">。。。。。。。。略。。。。。</span><br></pre></td></tr></table></figure>
+<p>如果我们想要改变存储在文件上的分隔符在哪个地方改动呢？打开<span class="exturl" data-url="aHR0cHM6Ly9pbnNpZ2h0LmlvL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvYmxvYi9tYXN0ZXIvc2VyZGUvc3JjL2dlbi90aHJpZnQvZ2VuLWphdmFiZWFuL29yZy9hcGFjaGUvaGFkb29wL2hpdmUvc2VyZGUvc2VyZGVDb25zdGFudHMuamF2YT9saW5lPTYx">serdeConstants<i class="fa fa-external-link-alt"></i></span>这个类：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public static final String FIELD_DELIM = &quot;field.delim&quot;;//字段域分隔符</span><br><span class="line">public static final String COLLECTION_DELIM = &quot;colelction.delim&quot;;//集合内部元素之间分隔符</span><br><span class="line">public static final String MAPKEY_DELIM = &quot;mapkey.delim&quot;;//map的key和value之间的分割符</span><br></pre></td></tr></table></figure>
+
+<p><strong>ObjectInspector</strong><br>ObjectInspector作用相当大，它解耦了数据使用和数据格式<br>ObjectInspector接口使得Hive可以不拘泥于一种特定数据格式<br>在输入端和输出端切换不同的输入/输出格式<br>在不同的Operator上使用不同的数据格式<br><span class="exturl" data-url="aHR0cHM6Ly9pbnNpZ2h0LmlvL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvYmxvYi9tYXN0ZXIvc2VyZGUvc3JjL2phdmEvb3JnL2FwYWNoZS9oYWRvb3AvaGl2ZS9zZXJkZTIvb2JqZWN0aW5zcGVjdG9yL09iamVjdEluc3BlY3Rvci5qYXZh">https://insight.io/github.com/apache/hive/blob/master/serde/src/java/org/apache/hadoop/hive/serde2/objectinspector/ObjectInspector.java<i class="fa fa-external-link-alt"></i></span><br><img src="20170507212442779.png" alt="这里写图片描述"></p>
+<p>我们在上文的 explain select * from src a join src b on a.key=b.key where a.key&lt;100;执行计划的时候，在stage-3有一个 Map Operator，这个操作是一个读操作，即反序列化Deserializer。<br><strong>Deserializer是如何工作的</strong><br><span class="exturl" data-url="aHR0cHM6Ly9pbnNpZ2h0LmlvL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvYmxvYi9tYXN0ZXIvcWwvc3JjL2phdmEvb3JnL2FwYWNoZS9oYWRvb3AvaGl2ZS9xbC9leGVjL01hcE9wZXJhdG9yLmphdmE/bGluZT0xMjU=">https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/hadoop/hive/ql/exec/MapOperator.java?line=125<i class="fa fa-external-link-alt"></i></span><br>value : hadoop中一条数据；context：hadoop的配置</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">private Object readRow(Writable value, ExecMapperContext context) throws SerDeException &#123;</span><br><span class="line">  Object deserialized = deserializer.deserialize(value);</span><br><span class="line">  Object row = partTblObjectInspectorConverter.convert(deserialized);</span><br><span class="line">  if (hasVC()) &#123;</span><br><span class="line">    rowWithPartAndVC[0] = row;</span><br><span class="line">    if (context != null) &#123;</span><br><span class="line">      populateVirtualColumnValues(context, vcs, vcValues, deserializer);</span><br><span class="line">    &#125;</span><br><span class="line">    int vcPos = isPartitioned() ? 2 : 1;</span><br><span class="line">    rowWithPartAndVC[vcPos] = vcValues;</span><br><span class="line">    return  rowWithPartAndVC;</span><br><span class="line">  &#125; else if (isPartitioned()) &#123;</span><br><span class="line">    rowWithPart[0] = row;</span><br><span class="line">    return rowWithPart;</span><br><span class="line">  &#125;</span><br><span class="line">  return row;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>Serializer是如何工作的</strong><br>源码：<span class="exturl" data-url="aHR0cHM6Ly9pbnNpZ2h0LmlvL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvYmxvYi9tYXN0ZXIvcWwvc3JjL2phdmEvb3JnL2FwYWNoZS9oYWRvb3AvaGl2ZS9xbC9leGVjL1JlZHVjZVNpbmtPcGVyYXRvci5qYXZhP2xpbmU9MTEy">https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/hadoop/hive/ql/exec/ReduceSinkOperator.java?line=112<i class="fa fa-external-link-alt"></i></span></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">。。。。。。。。。。略</span><br><span class="line">  protected transient Serializer keySerializer;</span><br><span class="line">  protected transient boolean keyIsText;</span><br><span class="line">  protected transient Serializer valueSerializer;</span><br><span class="line">  。。。。。。。。。。。。。略</span><br><span class="line">    protected transient ObjectInspector keyObjectInspector;</span><br><span class="line">  protected transient ObjectInspector valueObjectInspector;</span><br></pre></td></tr></table></figure>
+<p>我们在写数据的时候serialize(Object obj, ObjectInspector objInspector) obj是个什么对象我们是通过objInspector来描述的。</p>
+<p>FileSinkOperator：<br><span class="exturl" data-url="aHR0cHM6Ly9pbnNpZ2h0LmlvL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvYmxvYi9tYXN0ZXIvcWwvc3JjL2phdmEvb3JnL2FwYWNoZS9oYWRvb3AvaGl2ZS9xbC9leGVjL0ZpbGVTaW5rT3BlcmF0b3IuamF2YT9saW5lPTky">https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/hadoop/hive/ql/exec/FileSinkOperator.java?line=92<i class="fa fa-external-link-alt"></i></span></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public class FileSinkOperator extends TerminalOperator&lt;FileSinkDesc&gt; implements</span><br><span class="line">    Serializable &#123;</span><br><span class="line">    。。。。。。。。。略。。。。</span><br></pre></td></tr></table></figure>
+<p>FileSinkDesc：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@Explain(displayName = &quot;File Output Operator&quot;, explainLevels = &#123; Level.USER, Level.DEFAULT, Level.EXTENDED &#125;)</span><br><span class="line">public class FileSinkDesc extends AbstractOperatorDesc &#123;</span><br></pre></td></tr></table></figure>
+<p><span class="exturl" data-url="aHR0cHM6Ly9pbnNpZ2h0LmlvL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvYmxvYi9tYXN0ZXIvcWwvc3JjL2phdmEvb3JnL2FwYWNoZS9oYWRvb3AvaGl2ZS9xbC9wbGFuL1JlZHVjZVNpbmtEZXNjLmphdmE/bGluZT00Mg==">ReduceSinkDesc<i class="fa fa-external-link-alt"></i></span>原理也是如此：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@Explain(displayName = &quot;Reduce Output Operator&quot;, explainLevels = &#123; Level.USER, Level.DEFAULT, Level.EXTENDED &#125;)</span><br><span class="line">public class ReduceSinkDesc extends AbstractOperatorDesc &#123;</span><br></pre></td></tr></table></figure>
+
+<p>在FileSinkDesc的注解@Explain中有个displayName=File Output Operator和我们之前的执行计划中的输出：<br><img src="20170507220329675.png" alt="这里写图片描述"><br>由此我们在根据执行bebug的时候就是根据类似于这种注解去判断的。</p>
+<p>Hive的本质是一条SQL生成的一系列Operators，并执行它们 每个Operators的原理和适应条件，决定查询的性能 这里的代码是<span class="exturl" data-url="aHR0cHM6Ly9pbnNpZ2h0LmlvL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvYmxvYi9tYXN0ZXIvcWwvc3JjL2phdmEvb3JnL2FwYWNoZS9oYWRvb3AvaGl2ZS9xbC9leGVjL1JlZHVjZVNpbmtPcGVyYXRvci5qYXZhP2xpbmU9NTYw">ReduceSinkOperator<i class="fa fa-external-link-alt"></i></span>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">private BytesWritable makeValueWritable(Object row) throws Exception &#123;</span><br><span class="line">  int length = valueEval.length;</span><br><span class="line"></span><br><span class="line">  // Evaluate the value</span><br><span class="line">  for (int i = 0; i &lt; length; i++) &#123;</span><br><span class="line">    cachedValues[i] = valueEval[i].evaluate(row);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  // Serialize the value</span><br><span class="line">  return (BytesWritable) valueSerializer.serialize(cachedValues, valueObjectInspector);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>valueSerializer.serialize(cachedValues, valueObjectInspector);将row序列化最终为为BytesWritable【hadoop的数据类型】<br>ReduceSinkOperator的Sink是下沉的意思，此处是map的输出结果输入到reduce中，row是map的结果，输出是BytesWritable，即用BytesWritable作为reduce的输入。<br>由此可以看出，hive的主要功能是对一条sql解析生成若干operator，并且执行他们，和关系型数据库还有很大的不同的，关系型数据库还有存储 功能。</p>
+<p><strong>创建自定义Serde</strong><br>参考：<span class="exturl" data-url="aHR0cHM6Ly9jd2lraS5hcGFjaGUub3JnL2NvbmZsdWVuY2UvZGlzcGxheS9IaXZlL0RldmVsb3Blckd1aWRl">https://cwiki.apache.org/confluence/display/Hive/DeveloperGuide<i class="fa fa-external-link-alt"></i></span></p>
+<p><strong>何时添加自定义SerDe</strong><br>用户有更有效的序列化磁盘数据的方法，添加Ser（不常出现）<br>用户的数据有特殊的序列化格式，当前的 Hive 不支持，而用户又不想在将数据加载至 Hive 前转换数据格式，添加De（经常出现）</p>
+<p><strong>Hive常用可编程用户接口</strong>文件格式FileFormats<br>序列化与反序列化器Serde<br>Map-Reduce脚本<br>UDxF(UDF, UDAF, UDTF)</p>
+<p><strong>创建自定义SerDe</strong><br>大多数情况，只需要De而不是SerDe<br>只需要读取（反序列化）特殊格式的数据，而不是写（序列化）数据<br>读完之后用Hive内置的数据结构处理会更高效</p>
+<p><strong>创建自定义SerDe的过程</strong><br>1.准备数据<br>2.使用IDE，继承AbstractSerde接口<br>3.实现serialize()和deserialize()方法<br>4.将创建的类打包为serde.jar<br>5.Add serde.jar 命令添加分布式缓存<br>6.建表，指定刚才编写的类<br>7.读写数据</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>CeaserWang
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%BA%8F%E5%88%97%E5%8C%96%E5%99%A8%E4%B8%8E%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%99%A8%EF%BC%88%E4%B8%89%EF%BC%89/" title="hive原理与源码分析-序列化器与反序列化器（三）">https://ceaser.wang/2018/10/04/hive原理与源码分析-序列化器与反序列化器（三）/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/hive/" rel="tag"><i class="fa fa-tag"></i> hive</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90%E5%99%A8%E5%92%8C%E8%AF%AD%E4%B9%89%E5%88%86%E6%9E%90%E5%99%A8%EF%BC%88%E4%BA%8C%EF%BC%89/" rel="prev" title="hive原理与源码分析-语法分析器和语义分析器（二）">
+                  <i class="fa fa-chevron-left"></i> hive原理与源码分析-语法分析器和语义分析器（二）
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%AE%97%E5%AD%90Operators%E5%8F%8A%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96%E5%99%A8Optimizers%EF%BC%88%E5%9B%9B%EF%BC%89/" rel="next" title="hive原理与源码分析-算子Operators及查询优化器Optimizers（四）">
+                  hive原理与源码分析-算子Operators及查询优化器Optimizers（四） <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CeaserWang</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":"forest","js":{"url":"https://cdn.jsdelivr.net/npm/mermaid@8.11.0/dist/mermaid.min.js","integrity":"sha256-sVAx+v/Q7v0Q2xm5vN7h5ccSna6gaLREhG9sF8pKT6I="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+  <script class="next-config" data-name="nprogress" type="application/json">{"enable":true,"spinner":true}</script>
+  <script src="/js/third-party/nprogress.js"></script>
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"ryAR9bttS7fex1FPEPAylmmJ-gzGzoHsz","app_key":"dYqygoN4Y01Bl38OdRoCHUYn","server_url":null,"security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+
+</body>
+</html>

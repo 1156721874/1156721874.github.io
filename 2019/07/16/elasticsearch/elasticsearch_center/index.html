@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.css" integrity="sha256-no0c5ccDODBwp+9hSmV5VvPpKwHCpbVzXHexIkupM6U=" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.js" integrity="sha256-a5YRB27CcBwBFcT5EF/f3E4vzIqyHrSR878nseNYw64=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ceaser.wang","root":"/","images":"/images","scheme":"Muse","version":"8.6.1","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+<meta name="description" content="背景  公司内部要对搜索中心进行改造，降低运维成本，leader让我负责整块的设计和编码以及前端展示，整个开发历时30个工作日，完成第一期，现在把一些当中的点做一次share，各位看官轻喷。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="elasticsearch_center">
+<meta property="og:url" content="https://ceaser.wang/2019/07/16/elasticsearch/elasticsearch_center/index.html">
+<meta property="og:site_name" content="南贺神社">
+<meta property="og:description" content="背景  公司内部要对搜索中心进行改造，降低运维成本，leader让我负责整块的设计和编码以及前端展示，整个开发历时30个工作日，完成第一期，现在把一些当中的点做一次share，各位看官轻喷。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://ceaser.wang/2019/07/16/elasticsearch/elasticsearch_center/old_structure.png">
+<meta property="og:image" content="https://ceaser.wang/2019/07/16/elasticsearch/elasticsearch_center/remappinh_reindex.png">
+<meta property="og:image" content="https://ceaser.wang/2019/07/16/elasticsearch/elasticsearch_center/dataTypeMapping.png">
+<meta property="og:image" content="https://ceaser.wang/2019/07/16/elasticsearch/elasticsearch_center/topic-list.png">
+<meta property="og:image" content="https://ceaser.wang/2019/07/16/elasticsearch/elasticsearch_center/topic-insert-edit.png">
+<meta property="og:image" content="https://ceaser.wang/2019/07/16/elasticsearch/elasticsearch_center/database-list.png">
+<meta property="og:image" content="https://ceaser.wang/2019/07/16/elasticsearch/elasticsearch_center/database-insert-edit.png">
+<meta property="og:image" content="https://ceaser.wang/2019/07/16/elasticsearch/elasticsearch_center/table-list.png">
+<meta property="og:image" content="https://ceaser.wang/2019/07/16/elasticsearch/elasticsearch_center/table-insert.png">
+<meta property="og:image" content="https://ceaser.wang/2019/07/16/elasticsearch/elasticsearch_center/table-column-insert.png">
+<meta property="og:image" content="https://ceaser.wang/2019/07/16/elasticsearch/elasticsearch_center/table-column-relation.png">
+<meta property="og:image" content="https://ceaser.wang/2019/07/16/elasticsearch/elasticsearch_center/table-list-operation.png">
+<meta property="og:image" content="https://ceaser.wang/2019/07/16/elasticsearch/elasticsearch_center/distribute.png">
+<meta property="og:image" content="https://ceaser.wang/2019/07/16/elasticsearch/elasticsearch_center/delay-list.png">
+<meta property="og:image" content="https://ceaser.wang/2019/07/16/elasticsearch/elasticsearch_center/delay-top-view.png">
+<meta property="og:image" content="https://ceaser.wang/2019/07/16/elasticsearch/elasticsearch_center/delay-top-view.png">
+<meta property="og:image" content="https://ceaser.wang/2019/07/16/elasticsearch/elasticsearch_center/snapshot_list.png">
+<meta property="og:image" content="https://ceaser.wang/2019/07/16/elasticsearch/elasticsearch_center/dynamic_words.png">
+<meta property="og:image" content="https://ceaser.wang/2019/07/16/elasticsearch/elasticsearch_center/new_structure.png">
+<meta property="og:image" content="https://ceaser.wang/2019/07/16/elasticsearch/elasticsearch_center/delay.png">
+<meta property="og:image" content="https://ceaser.wang/2019/07/16/elasticsearch/elasticsearch_center/SearchCenterCLassDiagram.jpg">
+<meta property="og:image" content="https://ceaser.wang/2019/07/16/elasticsearch/elasticsearch_center/boot-sequence.png">
+<meta property="og:image" content="https://ceaser.wang/2019/07/16/elasticsearch/elasticsearch_center/SerarchCenterJobSequenceDiagram.jpg">
+<meta property="og:image" content="https://ceaser.wang/2019/07/16/elasticsearch/elasticsearch_center/SerarchCenterConsumerSequenceDiagram.jpg">
+<meta property="article:published_time" content="2019-07-16T14:05:45.000Z">
+<meta property="article:modified_time" content="2022-01-04T02:21:30.576Z">
+<meta property="article:author" content="CeaserWang">
+<meta property="article:tag" content="elasticsearch">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ceaser.wang/2019/07/16/elasticsearch/elasticsearch_center/old_structure.png">
+
+
+<link rel="canonical" href="https://ceaser.wang/2019/07/16/elasticsearch/elasticsearch_center/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://ceaser.wang/2019/07/16/elasticsearch/elasticsearch_center/","path":"2019/07/16/elasticsearch/elasticsearch_center/","title":"elasticsearch_center"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>elasticsearch_center | 南贺神社</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">南贺神社</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">你写程序有写诗一样的感觉吗?</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">205</span></a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">24</span></a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">212</span></a></li>
+        <li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%83%8C%E6%99%AF"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%8E%B0%E6%9C%89%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%8A%B6%E6%80%81"><span class="nav-number">1.1.</span> <span class="nav-text">现有系统的状态</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%B9%8B%E5%89%8D%E7%9A%84%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1"><span class="nav-number">1.1.1.</span> <span class="nav-text">之前的架构设计</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%8E%B0%E6%9C%89%E7%B3%BB%E7%BB%9F%E5%AD%98%E5%9C%A8%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">1.2.</span> <span class="nav-text">现有系统存在的问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%8E%B0%E6%9C%89%E8%BD%AE%E5%AD%90%E8%80%83%E5%AF%9F"><span class="nav-number">1.3.</span> <span class="nav-text">现有轮子考察</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B0%E6%94%B9%E9%80%A0%E6%94%AF%E6%8C%81%E7%9A%84%E7%89%B9%E6%80%A7"><span class="nav-number">1.4.</span> <span class="nav-text">新改造支持的特性</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%9F%E8%83%BD%E6%BC%94%E7%A4%BA"><span class="nav-number">2.</span> <span class="nav-text">功能演示</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1"><span class="nav-number">3.</span> <span class="nav-text">架构设计</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%95%B4%E4%BD%93%E6%9E%B6%E6%9E%84%E5%9B%BE"><span class="nav-number">3.1.</span> <span class="nav-text">整体架构图</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E5%88%9B%E5%BB%BA%E6%B5%81%E7%A8%8B"><span class="nav-number">3.2.</span> <span class="nav-text">索引创建流程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%E7%9B%91%E5%90%AC%E6%B5%81%E7%A8%8B"><span class="nav-number">3.3.</span> <span class="nav-text">消息监听流程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Delay%E5%BB%B6%E8%BF%9F%E5%88%B7%E6%96%B0"><span class="nav-number">3.4.</span> <span class="nav-text">Delay延迟刷新</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0"><span class="nav-number">3.4.1.</span> <span class="nav-text">问题描述</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="nav-number">3.4.2.</span> <span class="nav-text">解决方案</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%AE%B0%E5%BD%95%E6%A1%88%E5%8F%91%E7%8E%B0%E5%9C%BA"><span class="nav-number">3.4.3.</span> <span class="nav-text">记录案发现场</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#zk%E6%A0%91%E5%BD%A2%E7%BB%93%E6%9E%84"><span class="nav-number">3.4.4.</span> <span class="nav-text">zk树形结构</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%88%86%E7%89%87%E7%AD%96%E7%95%A5"><span class="nav-number">3.4.5.</span> <span class="nav-text">分片策略</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E6%96%B9%E6%A1%88%E4%B8%80%E3%80%90%E5%9F%BA%E4%BA%8E%E6%8A%BD%E8%B1%A1%E3%80%91"><span class="nav-number">3.4.5.1.</span> <span class="nav-text">方案一【基于抽象】</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E6%96%B9%E6%A1%88%E4%BA%8C%E3%80%90%E5%9F%BA%E4%BA%8E%E6%95%B0%E6%8D%AE%E3%80%91"><span class="nav-number">3.4.5.2.</span> <span class="nav-text">方案二【基于数据】</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E6%96%B9%E6%A1%88%E4%B8%89%E3%80%90%E6%B7%B7%E5%90%88%E3%80%91"><span class="nav-number">3.4.5.3.</span> <span class="nav-text">方案三【混合】</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%B0%83%E5%BA%A6"><span class="nav-number">3.5.</span> <span class="nav-text">调度</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%B1%BB%E5%9B%BE"><span class="nav-number">3.6.</span> <span class="nav-text">类图</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B%E5%9B%BE"><span class="nav-number">3.7.</span> <span class="nav-text">启动流程图</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E5%88%9B%E5%BB%BA%E6%B5%81%E7%A8%8B%E5%9B%BE"><span class="nav-number">3.8.</span> <span class="nav-text">索引创建流程图</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%E6%B6%88%E8%B4%B9%E6%B5%81%E7%A8%8B%E5%9B%BE"><span class="nav-number">3.9.</span> <span class="nav-text">消息消费流程图</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DDL-SQL"><span class="nav-number">3.10.</span> <span class="nav-text">DDL-SQL</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E6%9D%9F"><span class="nav-number">4.</span> <span class="nav-text">结束</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-overview">
+            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="CeaserWang"
+      src="/../0xcc/index/Uchiha.jpg">
+  <p class="site-author-name" itemprop="name">CeaserWang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">212</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">205</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tLzExNTY3MjE4NzQ=" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;1156721874"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmNlYXNlcndhbmdAb3V0bG9vay5jb20=" title="E-Mail → mailto:ceaserwang@outlook.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+  </div>
+  <div class="cc-license site-overview-item animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><img src="https://cdn.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-user-friends fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly90d29kcmFnb25sYWtlLmNvbQ==" title="https:&#x2F;&#x2F;twodragonlake.com">TwoDragonLake</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9yb290Y2x1c3Rlci5naXRodWIuaW8=" title="https:&#x2F;&#x2F;rootcluster.github.io">RootCluster</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9tdXNlZmxvdy5pbw==" title="https:&#x2F;&#x2F;museflow.io">MuseFlow</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9pbmNvZGVyLm9yZw==" title="https:&#x2F;&#x2F;incoder.org">BladeCode</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9rYWlmYS5kZXY=" title="https:&#x2F;&#x2F;kaifa.dev">Alyenc</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmRhemhpZGF5b25nLmNu" title="https:&#x2F;&#x2F;blog.dazhidayong.cn">Killua</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9qb2NlbHluc2hhbmcuY24v" title="https:&#x2F;&#x2F;jocelynshang.cn&#x2F;">Jocelyn</span>
+        </li>
+    </ul>
+  </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2019/07/16/elasticsearch/elasticsearch_center/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
+      <meta itemprop="name" content="CeaserWang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="南贺神社">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          elasticsearch_center
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2019-07-16 14:05:45" itemprop="dateCreated datePublished" datetime="2019-07-16T14:05:45+00:00">2019-07-16</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2022-01-04 02:21:30" itemprop="dateModified" datetime="2022-01-04T02:21:30+00:00">2022-01-04</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/cloud/" itemprop="url" rel="index"><span itemprop="name">cloud</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2019/07/16/elasticsearch/elasticsearch_center/" class="post-meta-item leancloud_visitors" data-flag-title="elasticsearch_center" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>  公司内部要对搜索中心进行改造，降低运维成本，leader让我负责整块的设计和编码以及前端展示，整个开发历时30个工作日，完成第一期，现在把一些当中的点做一次share，各位看官轻喷。</p>
+<span id="more"></span>
+
+<h4 id="现有系统的状态"><a href="#现有系统的状态" class="headerlink" title="现有系统的状态"></a>现有系统的状态</h4><p>  所在团队做的是跨境电商的服务，海量的商品存在mysql集群当中，当商品上架的时刻，需要将mysql的数据同步到elasticsearch集群当中，目的是为了给用户提供快速的搜索服务，同步的最小单元是表，即将一张表同步到es集群，老的系统的做法是当随着业务的增长，表结构会变化，或者增加，修改表等等一些DDL操作，之前的做法是每当这些变化发生的时候，需要在搜索中心的工程当中编写正对于变化的表的同步代码，适配mysql的变化，比如新增加了一张表，需要对这张表的数据同步到es，就需要写一个正对于此表的同步任务，修改表也是如此，需要制定开发周期，排工作量，测试计划等等。</p>
+<h5 id="之前的架构设计"><a href="#之前的架构设计" class="headerlink" title="之前的架构设计"></a>之前的架构设计</h5><p>  针对于每一个mysql数据库实例都对接一个<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2FsaWJhYmEvY2FuYWw=">canal<i class="fa fa-external-link-alt"></i></span>服务,canal监听mysql的binlog日志，然后将日志push到mq（canal支持kafka和rocketmq）里边，然后我们的app就是mq的消费者，消费mq的消息，消费的过程就是从mq的broker执行poll，拉取消息，然后将消息解析，得到消息里边的业务id，通过业务id去真实的mysql数据查询数据（重新查询一次mysql，这么做的原因是保证数据的强一致性），然后将数据刷新到es集群，完成消息的消费。<br>  <img src="old_structure.png" alt="old_structure.png"></p>
+<h4 id="现有系统存在的问题"><a href="#现有系统存在的问题" class="headerlink" title="现有系统存在的问题"></a>现有系统存在的问题</h4><ul>
+<li>新增表需要进行针对性编码</li>
+<li>修改表需要进行针对性编码</li>
+<li>新增加数据库需要进行针对性编码</li>
+<li>索引的版本管理混乱<ul>
+<li>需要手动掉es的http api切换别名(开发人员在使用es的搜索api查询的时候都是使用的别名，一个别名只能同时指向一个索引，如果发生索引升级，需要指向新的索引版本，别名的存在就是为了做无缝切换)<br><img src="remappinh_reindex.png" alt="remappinh_reindex.png"></li>
+</ul>
+</li>
+<li>数据类型映射管理刀工火种，人工做jdbc到es的数据类型映射太繁琐，还容易出错。<br><img src="dataTypeMapping.png" alt="dataTypeMapping.png"></li>
+</ul>
+<h4 id="现有轮子考察"><a href="#现有轮子考察" class="headerlink" title="现有轮子考察"></a>现有轮子考察</h4><ul>
+<li><p>Elasticsearch-jdbc</p>
+<ul>
+<li>Not support Elasticsearch 5.0</li>
+<li>Not support delete and unfriendly incremental update</li>
+<li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2pwcmFudGUvZWxhc3RpY3NlYXJjaC1qZGJjL2lzc3Vlcy85MTU=">https://github.com/jprante/elasticsearch-jdbc/issues/915<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+</li>
+<li><p>logstash-jdbc</p>
+<ul>
+<li>Create new config need restart server</li>
+<li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2xvZ3N0YXNoLXBsdWdpbnMvbG9nc3Rhc2gtaW5wdXQtamRiYy5naXQ=">https://github.com/logstash-plugins/logstash-input-jdbc.git<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+</li>
+<li><p>elasticsearch-river-mysq</p>
+<ul>
+<li>Stop maintain</li>
+</ul>
+</li>
+<li><p>go-mysql-elasticsearch</p>
+<ul>
+<li>Unstable</li>
+<li>Can not alter table format at runtime</li>
+<li>Can not change too many rows at same time in one SQL</li>
+<li><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3NpZGRvbnRhbmcvZ28tbXlzcWwtZWxhc3RpY3NlYXJjaA==">https://github.com/siddontang/go-mysql-elasticsearch<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p>现有轮子都存在各种各样的问题，阿里的dataX对增量是同步不太友好，而且对es的一些特性支持不友好,比如parent-child关系映射直接不支持。</p>
+</li>
+</ul>
+<h4 id="新改造支持的特性"><a href="#新改造支持的特性" class="headerlink" title="新改造支持的特性"></a>新改造支持的特性</h4><ul>
+<li>动态创建主题(mq topic)<ul>
+<li>前提是预先创建canal实例</li>
+</ul>
+</li>
+<li>动态创建数据库</li>
+<li>动态创建表</li>
+<li>支持es的<span class="exturl" data-url="aHR0cHM6Ly93d3cuZWxhc3RpYy5jby9ndWlkZS9jbi9lbGFzdGljc2VhcmNoL2d1aWRlL2N1cnJlbnQvcGFyZW50LWNoaWxkLmh0bWw=">Parent-child<i class="fa fa-external-link-alt"></i></span> 关系</li>
+<li>支持es映射的递归嵌套(支持nest嵌套)</li>
+<li>同步异常，支持断点续传</li>
+<li>表的一对多，一对一关联</li>
+<li>索引的区域更新</li>
+<li>索引版本管理</li>
+<li>日常数据增量校验，保证每天的数据一致性（避免各类bug导致数据不一致，一个数据一致性保险检查程序）</li>
+<li>在大表的情况，分布式创建索引</li>
+<li>元数据类型的业务数据，当元数据修改的时候，需要将其关联的业务索引更新，这里支持延迟任务调度，并且是分布式的方式。</li>
+<li>Ik的动态词库</li>
+</ul>
+<h3 id="功能演示"><a href="#功能演示" class="headerlink" title="功能演示"></a>功能演示</h3><ul>
+<li><p><span class="exturl" data-url="aHR0cHM6Ly8xMTU2NzIxODc0LmdpdGh1Yi5pby8yMDE4LzA5LzI4L0VMSy1FbGFzdGljU2VhcmNoLUxvZ3N0YXNoLUtpYmFuYSVFNiU5MCVBRCVFNSVCQiVCQSVFNSVBRSU5RSVFNiU5NyVCNiVFNiU5NyVBNSVFNSVCRiU5NyVFNSU4OCU4NiVFNiU5RSU5MCVFNSVCOSVCMyVFNSU4RiVCMC8=">es集群搭建<i class="fa fa-external-link-alt"></i></span>、<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2N0cmlwY29ycC9hcG9sbG8=">apollo配置中心部署<i class="fa fa-external-link-alt"></i></span>此处不在熬述，参考官方和之前的博客。</p>
+</li>
+<li><p>数据库脚本配置请使用工程里边的init.sql执行初始化.</p>
+</li>
+<li><p>项目分为三个工程：</p>
+<ul>
+<li>tdl-mysql-elasticsearch 核心引擎配合apollo</li>
+<li>tdl-mysql-elasticsearch-api api层，为前端提供接口，配合apollo</li>
+<li>tdl-mysql-elasticsearch-web vue前端展示工程</li>
+</ul>
+</li>
+<li><p>topic</p>
+<ul>
+<li>topic 列表<br><img src="topic-list.png" alt="topic-list.png"></li>
+<li>topic 新增或者修改<br><img src="topic-insert-edit.png" alt="topic-insert-edit.png"></li>
+</ul>
+</li>
+<li><p>数据库操作</p>
+<ul>
+<li>数据库列表<br><img src="database-list.png" alt="database-list.png"></li>
+<li>数据库新增和修改<br><img src="database-insert-edit.png" alt="database-insert-edit.png"></li>
+</ul>
+</li>
+<li><p>表</p>
+<ul>
+<li><p>表的列表<br><img src="table-list.png" alt="table-list.png"><br>一张表对应es里边的一个索引;<br>如果是parent-child关系，是多张表映射到一个索引上，每一张表代表一个类型;</p>
+</li>
+<li><p>表新增修改<br><img src="table-insert.png" alt="table-insert.png"><br>IndexName：表对应的索引名称<br>IndexType：索引的type，一个索引有多个type<br>IndexAlias：索引的别名，线上都是用的别名，如果索引发生了升级，只需要将别名指向新的索引版本即可，完成无缝切换<br>DailyCheckColumn：日常检查的字段，一般是修改时间字段，用来对数据做校验，同步的时候也会用到这个字段，用时间戳做增量同步<br>BucketColumn: 分布式创建索引或者分布式延迟刷新元数据的时候根据这个值对表进行分桶，一般是表的创建时间<br>ParentIndexType：父子关系的时候，当前是child，ParentIndexType指向的是parent的index type，父子关系中父是一个type，child是一个type，2个type必须在同一个索引里边。<br>ParentIndexColumnName：子表中父表的pid字段名称。<br>ToCopy：参考es官网解释：<span class="exturl" data-url="aHR0cHM6Ly93d3cuZWxhc3RpYy5jby9ndWlkZS9lbi9lbGFzdGljc2VhcmNoL3JlZmVyZW5jZS9jdXJyZW50L2NvcHktdG8uaHRtbA==">https://www.elastic.co/guide/en/elasticsearch/reference/current/copy-to.html<i class="fa fa-external-link-alt"></i></span><br>DelayEffect: 是否延迟刷新，当一张表设置了这个属性为true，那么这张表的binlog在消费的时候，不会刷新到索引，而且保存在mysql数据库里边，这些快照数据等待调度任务去消费，刷新到索引里边去，因此是延迟的方式，而且支持分布式的方式，被设置为true的表会在【delay】菜单展示，后续会对delay菜单做介绍。<br>Add One Column操作：添加一列<br>Auto Gen Column: 根据左侧填写的表名，自动拉取所有的列</p>
+</li>
+<li><p>表字段添加<br><img src="table-column-insert.png" alt="table-column-insert.png"><br>ColumnName：字段名称<br>ColumnType：字段的数据类型<br>EsDataType：es的数据类型<br>Analyzer：分析器（参考es官方doc：<span class="exturl" data-url="aHR0cHM6Ly93d3cuZWxhc3RpYy5jby9ndWlkZS9lbi9lbGFzdGljc2VhcmNoL3JlZmVyZW5jZS9jdXJyZW50L3NlYXJjaC1hbmFseXplci5odG1sJUVGJUJDJTg5">https://www.elastic.co/guide/en/elasticsearch/reference/current/search-analyzer.html）<i class="fa fa-external-link-alt"></i></span><br>CopyTo：参考官方doc：<span class="exturl" data-url="aHR0cHM6Ly93d3cuZWxhc3RpYy5jby9ndWlkZS9lbi9lbGFzdGljc2VhcmNoL3JlZmVyZW5jZS9jdXJyZW50L2NvcHktdG8uaHRtbA==">https://www.elastic.co/guide/en/elasticsearch/reference/current/copy-to.html<i class="fa fa-external-link-alt"></i></span><br>ExtendName：扩展对象名称，通过【AddRelation】按钮添加扩展对象的时候此名称可以被覆盖<br>Keyword：参考官方doc：<span class="exturl" data-url="aHR0cHM6Ly93d3cuZWxhc3RpYy5jby9ndWlkZS9lbi9lbGFzdGljc2VhcmNoL3JlZmVyZW5jZS9jdXJyZW50L2tleXdvcmQuaHRtbA==">https://www.elastic.co/guide/en/elasticsearch/reference/current/keyword.html<i class="fa fa-external-link-alt"></i></span><br>IsKey：标识当前字段是主键<br>ExtendIsNest：扩展对象是否是嵌套的，可以被字段关系覆盖，参考官方doc：<span class="exturl" data-url="aHR0cHM6Ly93d3cuZWxhc3RpYy5jby9ndWlkZS9lbi9lbGFzdGljc2VhcmNoL3JlZmVyZW5jZS9jdXJyZW50L3F1ZXJ5LWRzbC1uZXN0ZWQtcXVlcnkuaHRtbA==">https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-nested-query.html<i class="fa fa-external-link-alt"></i></span></p>
+</li>
+<li><p>字段关联(支持多级嵌套)<br><img src="table-column-relation.png" alt="table-column-relation.png"><br>SearchColumnName：当前要关联的字段名称。<br>ExtendName：关联的对象在当前表里边的扩展名称，此处可以覆盖字段上的  ExtendName<br>RelationTableName：关联的表<br>RelationTableColumns：关联的表要加载它的那些字段<br>RelationTableColumn：当前SearchColumnName和RelationTableName的RelationTableColumn发生关联，一般是id之类的。<br>ExtendIsNest：是否是嵌套的，此处可以覆盖字段的ExtendIsNest<br>freeSql: 关联子表附带的查询条件，比如 delete=0 and status = 1<br>Distinct: 对sql的查询结果进行mysql的distinct关键字去重<br>refreshParent: 当子表数据发生变化，而且子表在索引里边是nest的内嵌的方式，那么子表的数据变化会触发所在文档的更新<br>AreaUpdate:当子表数据发生变化，而且子表在索引里边是nest的内嵌的方式，那么子表的数据变化会触发所在文档的更新，更新方式采用区域更新的方式，和refreshParent的差别是少了很多无关的数据的查询，区域更新采用es的脚本更新文档的方式进行的</p>
+</li>
+<li><p>表的状态和操作<br><img src="table-list-operation.png" alt="table-list-operation.png"><br>另外表的状态在history和avaiable状态的时候会有deleteAll操作权限，deleteAll会把抽象和es当中的索引全部删除，危险操作；<br>表的抽象创建完毕之后状态是unavailable状态，表在创建新的索引之后，首先是changing状态，标识正在创建新的索引版本，版本会自动加一，上一个版本的索引会置为history，新的索引的状态是available状态，标识正在同步mysql。<br>Reset：状态置为可用、版本号清空、索引任务删除、当前版本索引删除，如果当前索引正在创建将会被强制终止，主要作用是用于创建异常的人工恢复。<br>AddDelayEffect: 当前表的变化不会立刻刷新到索引文档里边去，而是由调度任务去完成，一般元数据的表，并且这种元数据经常发生改变。</p>
+</li>
+<li><p>分布式治理<br><img src="distribute.png" alt="distribute.png"><br>refresh: 刷新列表<br>Rebalance: 重新执行负载均衡</p>
+</li>
+<li><p>延时刷新</p>
+<ul>
+<li>打标了延迟处理的表：<br><img src="delay-list.png" alt="delay-list.png"></li>
+<li>元数据影响的顶层表的关系维护<br><img src="delay-top-view.png" alt="delay-top-view.png"></li>
+<li>添加的顶层表top黏连关系<br><img src="delay-top-view.png" alt="delay-top-view.png"></li>
+<li>查询和管理快照列表<br><img src="snapshot_list.png" alt="snapshot_list.png"></li>
+</ul>
+</li>
+<li><p>动态词库<br>  <img src="dynamic_words.png" alt="dynamic_words.png"><br>  词库状态分为初始化和发布完毕2种，只有发布完毕的才会进入es的动态词库。<br>  词库分为扩展词库和停用词词库。<br>  一个单词没有发布之前可以修改，发布完毕之后不可以修改，只能删除。<br>  初始化和发布完成的都可以删除。<br>  es对Ik的动态词库配置参考：<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL21lZGNsL2VsYXN0aWNzZWFyY2gtYW5hbHlzaXMtaWs=">https://github.com/medcl/elasticsearch-analysis-ik<i class="fa fa-external-link-alt"></i></span></p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="架构设计"><a href="#架构设计" class="headerlink" title="架构设计"></a>架构设计</h3><h4 id="整体架构图"><a href="#整体架构图" class="headerlink" title="整体架构图"></a>整体架构图</h4><p>  <img src="new_structure.png" alt="new_structure.png"><br>  每个节点都有一个searchContext，首先解释下searchContext，searchContext是这个上下文，里边存储了当前可以同步的主题，数据库，表，以及正在changing的tableId，还有同步线程的引用等等，ListenTopicTask会每隔三分钟刷新一次上下文；<br>  整个轮子有2条主线，以searchContext为中心，searchContext下面是索引创建流程，上面是消息监听流程（索引已经创建完毕，mysql数据变化监听，然后将变化推送到es集群）；<br>  索引创建流程将索引创建完毕之后，会更新上下文，然后消息监听流程会使用更新之后的上下文。</p>
+<h4 id="索引创建流程"><a href="#索引创建流程" class="headerlink" title="索引创建流程"></a>索引创建流程</h4><p>  索引创建流程就是在页面发起【createIndex】操作，后端会进行5个步骤的操作：</p>
+<ul>
+<li><p>创建索引请求的发起，这个过程会做一些表和字段的校验，以及一些判重操作，比如当前表已经同步过，或者正在同步，又或者在同步任务比价多，同步任务被放到任务队列里边也是会被发现的，这些数据是不允许往下执行的。</p>
+</li>
+<li><p>一个创建索引的请求就是对一张表的数据到es的全量同步，table_id是当前要同步表的id，这张表首先会通过create_time分为多个桶，total_bucket_number是集群当中部署的app数量，mod_number是某个节点的顺序号(mod_number &lt;= total_bucket_number),data_cursor是同步的游标，一般是表的id字段的值，job_type是任务的类型，创建索引是index类型，delay任务调度是job类型，params是任务的参数，比如在job类型，只同步某个业务id，可以放在这个参数里边，syn_cursor已经废弃，不再描述。集群当中存活的机器数n就是一张表生成的tnp_search_job的记录数。</p>
+</li>
+<li><p>分桶之后每台机器执行的sql会根据mod_number进行分区拉取数据:select * from table where  UNIX_TIMESTAMP(A.create_time) mod total_bucket_number  = mod_number order by A.modify_time;A指的是业务表名称。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE `tnp_search_job` (</span><br><span class="line">  `id` varchar(64) COLLATE utf8_bin NOT NULL,</span><br><span class="line">  `table_id` varchar(64) COLLATE utf8_bin DEFAULT NULL COMMENT &#x27;table的id&#x27;,</span><br><span class="line">  `status` varchar(45) COLLATE utf8_bin DEFAULT NULL COMMENT &#x27;同步状态&#x27;,</span><br><span class="line">  `syn_cursor` timestamp(6) NULL DEFAULT NULL COMMENT &#x27;按照时间同步时间游标&#x27;,</span><br><span class="line">  `total_bucket_number` int(11) DEFAULT NULL COMMENT &#x27;桶总数&#x27;,</span><br><span class="line">  `mod_number` int(11) DEFAULT NULL COMMENT &#x27;桶编号&#x27;,</span><br><span class="line">  `data_cursor` varchar(64) COLLATE utf8_bin DEFAULT NULL COMMENT &#x27;业务数据同步游标&#x27;,</span><br><span class="line">  `job_type` varchar(45) COLLATE utf8_bin DEFAULT NULL COMMENT &#x27;任务类型：index:索引创建任务/task:调度任务&#x27;,</span><br><span class="line">  `params` varchar(4096) COLLATE utf8_bin DEFAULT NULL COMMENT &#x27;任务参数&#x27;,</span><br><span class="line">  `create_time` datetime DEFAULT NULL,</span><br><span class="line">  `modify_time` datetime DEFAULT NULL,</span><br><span class="line">  PRIMARY KEY (`id`)</span><br><span class="line">) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT=&#x27;记录表的同步状态和同步游标&#x27;;</span><br></pre></td></tr></table></figure></li>
+<li><p>负载均衡过程：<br>发起负载均衡的节点执行负载均衡逻辑，每个节点都会把节点的抽象写到zookeeper里边，抽象对象如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br></pre></td><td class="code"><pre><span class="line">@Data</span><br><span class="line">public class NodeJobEntity &#123;</span><br><span class="line"></span><br><span class="line">    public NodeJobEntity()&#123;&#125;</span><br><span class="line"></span><br><span class="line">    public NodeJobEntity(CloudStatusENUM cloudStatusENUM, NodeStatusENUM nodeStatusENUM, NodeJobTypeENUM nodeJobTypeENUM,</span><br><span class="line">                         List&lt;SearchJobBO&gt; indexJobs, String rebalanceSessionId) &#123;</span><br><span class="line">        this.cloudStatusENUM = cloudStatusENUM;</span><br><span class="line">        this.nodeStatusENUM = nodeStatusENUM;</span><br><span class="line">        this.nodeJobTypeENUM = nodeJobTypeENUM;</span><br><span class="line">        this.indexJobs = indexJobs;</span><br><span class="line">        this.rebalanceSessionId = rebalanceSessionId;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public NodeJobEntity(CloudStatusENUM cloudStatusENUM, NodeStatusENUM nodeStatusENUM, NodeJobTypeENUM nodeJobTypeENUM,</span><br><span class="line">                         List&lt;SearchJobBO&gt; indexJobs,  JobParam params, String rebalanceSessionId) &#123;</span><br><span class="line">        this.cloudStatusENUM = cloudStatusENUM;</span><br><span class="line">        this.nodeStatusENUM = nodeStatusENUM;</span><br><span class="line">        this.nodeJobTypeENUM = nodeJobTypeENUM;</span><br><span class="line">        this.indexJobs = indexJobs;</span><br><span class="line">        this.params = params;</span><br><span class="line">        this.rebalanceSessionId = rebalanceSessionId;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 集群状态</span><br><span class="line">     REBALANCING(&quot;rebalancing&quot;),</span><br><span class="line">     NORMAL(&quot;normal&quot;);</span><br><span class="line">     */</span><br><span class="line">    private CloudStatusENUM cloudStatusENUM;</span><br><span class="line">    /**</span><br><span class="line">     * 节点状态</span><br><span class="line">      CLEAN(&quot;clean&quot;),</span><br><span class="line">      CLEAN_OK(&quot;clean_ok&quot;),</span><br><span class="line">      INIT(&quot;init&quot;),</span><br><span class="line">      FINISH(&quot;finish&quot;);</span><br><span class="line">     */</span><br><span class="line">    private NodeStatusENUM nodeStatusENUM;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 任务节点类型</span><br><span class="line">     INDEX(&quot;index&quot;),</span><br><span class="line">     JOB(&quot;job&quot;);</span><br><span class="line">     */</span><br><span class="line">    private NodeJobTypeENUM nodeJobTypeENUM;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 节点任务</span><br><span class="line">     */</span><br><span class="line">    private List&lt;SearchJobBO&gt; indexJobs;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 任务参数</span><br><span class="line">     */</span><br><span class="line">    private JobParam params;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 工作线程池存活的线程数和未完成的任务数=</span><br><span class="line">     * ThreadPoolManager.getHighFrequencyTaskPool().getQueue().size()  + ThreadPoolManager.getHighFrequencyTaskPool().getActiveCount()</span><br><span class="line">     */</span><br><span class="line">    private Integer aliveThreadMount = -1;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * rebalanceId 每次rebalance都会生成一个rebalanceSessionId，可以用来区分是否发生了新的rebalance。</span><br><span class="line">     */</span><br><span class="line">    private String rebalanceSessionId;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">SearchJobBO:</span><br><span class="line">@Data</span><br><span class="line">public class SearchJobBO &#123;</span><br><span class="line">    private String id;</span><br><span class="line"></span><br><span class="line">    private String tableId;</span><br><span class="line">    /**</span><br><span class="line">     * @see SearchJobStatusEnum</span><br><span class="line">      INIT(&quot;init&quot;,&quot;初始化&quot;),</span><br><span class="line">      RUNNING(&quot;running&quot;,&quot;运行中&quot;),</span><br><span class="line">      ERROR(&quot;error&quot;,&quot;同步异常&quot;),</span><br><span class="line">      DONE(&quot;done&quot;,&quot;完毕&quot;);</span><br><span class="line">     */</span><br><span class="line">    private String status;</span><br><span class="line"></span><br><span class="line">    private Timestamp synCursor;</span><br><span class="line"></span><br><span class="line">    private Integer totalBucketNumber;</span><br><span class="line"></span><br><span class="line">    private Integer modNumber;</span><br><span class="line"></span><br><span class="line">    private String dataCursor;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * @see NodeJobTypeENUM</span><br><span class="line">     INDEX(&quot;index&quot;),</span><br><span class="line">     JOB(&quot;job&quot;);</span><br><span class="line">     */</span><br><span class="line">    private String jobType;</span><br><span class="line"></span><br><span class="line">    private String params;</span><br><span class="line"></span><br><span class="line">    private Date createTime;</span><br><span class="line"></span><br><span class="line">    private Date modifyTime;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 是否被负载均衡中断</span><br><span class="line">     */</span><br><span class="line">    private volatile Boolean breakByRebalance;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>负载均衡的过程[创建索引任务和延迟刷新任务同样的流程]：</p>
+<ul>
+<li>首先会加分布式锁;</li>
+<li>清除所有存活节点的任务数据，节点集群状态是REBALANCING，节点状态是CLEAN状态;<ul>
+<li>对NodeJobEntity的indexJobs数组清空，nodeStatusENUM置为clean，将这个信息写到zk节点里边，节点通过zk数据变化事件得到变化的数据，检查本地线程池是否有存活的任务，如果有就等待，等待线程池执行完毕(同步阻塞等待)，如果线程池没有任务，那么将nodeStatusENUM置为cleanok，写到zk</li>
+<li>负载均衡发起的节点阻塞检查所有节点是否清除完毕，如果完毕，继续下面的步骤；</li>
+</ul>
+</li>
+<li>清空所有节点任务完毕，进入任务分配阶段;<ul>
+<li>根据任务数量和节点数量平均分配任务，任务会写到NodeJobEntity的indexJobs数组，nodeStatusENUM为init，cloudStatusENUM为rebalancing，然后写入到zk。</li>
+</ul>
+</li>
+<li>任务下发到各个节点完毕;<ul>
+<li>节点接到下发的任务后本地执行异步同步任务。</li>
+</ul>
+</li>
+<li>解锁</li>
+</ul>
+</li>
+<li><p>节点异步执行同步任务[创建索引任务和延迟刷新任务同样的流程]<br>SynchronizeJobTask右侧的代码是SynchronizeJobTask的核心逻辑，在死循环当中，使用了CompletableFuture，而且是完全异步的，同步过程是异步，同步完毕（成功后者失败）之后也是异步的，一张表由于使用了CompletableFuture，就会对应使用2个线程分别去同步和处理同步结果。在supplyAsync当中做的工作有：</p>
+<ul>
+<li>将当前表的同步任务状态从init置为running状态</li>
+<li>表的状态置为changing状态</li>
+<li>记录开始日志<br>supplyAsync占用一个线程去处理任务。<br>thenAcceptAsync是对同步完毕之后的后置处理:</li>
+<li>最后一个任务完成，并且不存在异常同步的任务，并且没有被负载均衡中断，并且是同步成功<ul>
+<li>记录日志</li>
+<li>表的同步任务状态置为完毕</li>
+<li>将当前同步表的状态置为可用</li>
+<li>将上一个版本的索引状态置为history</li>
+<li>将索引别名指向新的索引版本</li>
+<li>删除mysql中当前表的任务抽象: delete from tnp_search_job where table_id = XXX and job_type=’index’;</li>
+<li>将在同步期间修改或者新增的数据（类似于jvm垃圾收集里边的浮动垃圾）刷新到新的索引里边，和这个步骤在图片中没有画出。</li>
+</ul>
+</li>
+<li>最后一个任务完成，并且不存在异常同步的分桶，并且没有被负载均衡中断，并且是同步失败<ul>
+<li>记录日志</li>
+<li>删除mysql中当前表的任务抽象: delete from tnp_search_job where table_id = XXX and job_type=’index’;</li>
+<li>将当前同步表的状态置为不可用</li>
+<li>删除刚刚创建的索引版本映射</li>
+<li>记录失败日志</li>
+</ul>
+</li>
+<li>最后一个任务完毕，但是被负载均衡中断<ul>
+<li>不做任何操作</li>
+</ul>
+</li>
+<li>最后一个任务完毕，而且是异常中断退出任务，一般是同步出现了问题, 比如long转换为integer超界<ul>
+<li>删除刚刚创建的索引版本</li>
+<li>当前table状态回滚为不可用状态</li>
+<li>如果同步失败直接删除表的同步任务数据，用户重新添加同步：delete from tnp_search_job where table_id = XXX and job_type=’index’;</li>
+<li>记录失败日志</li>
+</ul>
+</li>
+<li>非最后一个任务，并且不是重新负载中断而且同步成功<ul>
+<li>更新job状态为done：update tnp_search_job set status = ‘done’ where id=XXX</li>
+<li>记录成功日志</li>
+</ul>
+</li>
+<li>非最后一个任务，并且不是重新负载中断而且同步失败<ul>
+<li>更新job状态为done：update tnp_search_job set status = ‘error’ where id=XXX</li>
+<li>记录失败日志</li>
+</ul>
+</li>
+<li>非最后一个任务，被负载均衡中断<ul>
+<li>不需要处理</li>
+</ul>
+</li>
+<li>非最后一个任务，异常中断退出任务，一般是同步出现了问题, 比如long转换为integer超界<ul>
+<li>更新job状态为done：update tnp_search_job set status = ‘error’ where id=XXX</li>
+<li>记录失败日志</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>刷新数据到es集群<br>  当同步任务被执行的时候，内部就会将数据从mysql的一张表按照步长同步到es集群当中，主要是由SynchronizeFactory来做的，SynchronizeFactory是一个同步工厂的抽象，他的实现类是EsSynchronizeFactoryImpl，同步过程如下：</p>
+<ul>
+<li>获取jdbc驱动，jdbc驱动使用的c3p0数据库连接池，并且设置了不会让链接空闲失效，在SynchronizeFactory层面是模板模式。</li>
+<li>组装存储到es的JSON对象，这个对象是按照建立的mapping格式组装的，我们设置的父子关系，嵌套等设置，这个JSON对象都要遵守。</li>
+<li>检查索引和索引type，如果没有的话就会创建。</li>
+<li>父子关系的检查，es当中规定parent type和child type必须在同一个es分片，否则就会产生查询混乱，当我们修改了一个child的pid的时候，这个时候pid对应的parent可能不和child在同一个分片，这个时候我们要将child删除，重新插入child，确保child和parent在同一个分片，<span class="exturl" data-url="aHR0cHM6Ly93d3cuZWxhc3RpYy5jby9ndWlkZS9jbi9lbGFzdGljc2VhcmNoL2d1aWRlL2N1cnJlbnQvaW5kZXhpbmctcGFyZW50LWNoaWxkLmh0bWw=">parent-child扩展阅读<i class="fa fa-external-link-alt"></i></span></li>
+<li>调用es的java api刷新数据到es集群。</li>
+</ul>
+</li>
+</ul>
+<h4 id="消息监听流程"><a href="#消息监听流程" class="headerlink" title="消息监听流程"></a>消息监听流程</h4><p>  当一个索引创建成功处于available状态的时候，就会被消息监听流程使用，当mysql产生binlog，会被canal收到，然后canal将binlog推送到mq里边，然后我们的应用就是mq的消费者，我们的消费者是可以在界面上配置的，配置完毕之后就会在程序里边创建一个消费者实例，进入到监听，监听到消息之后消费的流程如下：</p>
+<ul>
+<li>拿到应用的上下文</li>
+<li>解析消息</li>
+<li>数据库和消息匹配检查</li>
+<li>table和消息匹配检查</li>
+<li>过滤不感兴趣的操作，只对插入，修改，删除感兴趣</li>
+<li>获取jdbc驱动，jdbc驱动使用的c3p0数据库连接池，并且设置了不会让链接空闲失效，在SynchronizeFactory层面是模板模式。</li>
+<li>组装存储到es的JSON对象，这个对象是按照建立的mapping格式组装的，我们设置的父子关系，嵌套等设置，这个JSON对象都要遵守。</li>
+<li>检查索引和索引type，如果没有的话就会创建。</li>
+<li>父子关系的检查，es当中规定parent type和child type必须在同一个es分片，否则就会产生查询混乱，当我们修改了一个child的pid的时候，这个时候pid对应的parent可能不和child在同一个分片，这个时候我们要将child删除，重新插入child，确保child和parent在同一个分片，<span class="exturl" data-url="aHR0cHM6Ly93d3cuZWxhc3RpYy5jby9ndWlkZS9jbi9lbGFzdGljc2VhcmNoL2d1aWRlL2N1cnJlbnQvaW5kZXhpbmctcGFyZW50LWNoaWxkLmh0bWw=">parent-child扩展阅读<i class="fa fa-external-link-alt"></i></span></li>
+<li>调用es的java api刷新数据到es集群(支持批量刷入)。</li>
+</ul>
+<h4 id="Delay延迟刷新"><a href="#Delay延迟刷新" class="headerlink" title="Delay延迟刷新"></a>Delay延迟刷新</h4><h5 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h5><p>  在构建索引的时候，有些表属于元数据，或者一张表的变动涉及到大量表的同步，导致同步阻塞，这种问题导致了binlog消息的阻塞，影响后续业务的进行。</p>
+<h5 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h5><p>  设置某些表的修改在索引生效可以是延迟的，即，当天做了修改，第二天才会生效。<br>  在表tnp_search_table里边增加字段：is_delay_effect,意思是是否延迟生效;</p>
+<p>  如果某个表被设置了延迟生效，那么当这个表的数据发生变化的时候，不会执行回溯过程，比如标签表是一个被商品表引用的元数据表，如果一个标签被成千上万个商品打标，那么如果标签的元数据发生变化，那么这些成天上万的商品数据的索引中的标签信息需要被更新，而更新是比较缓慢的，是一个大数据量的更新，耗时比较长，因此，如果在标签表上设置了is_delay_effect=yes，那么这个回溯会在当天晚上被调度任务执行，第二天生效。</p>
+<h5 id="记录案发现场"><a href="#记录案发现场" class="headerlink" title="记录案发现场"></a>记录案发现场</h5><p>  如果某个表设置了is_delay_effect=yes那么需要立刻记录案发现场到数据库。</p>
+<p>  案发现场格式(tnp_change_snapshot)：<br>  id,      dataBase_id,table_id,table_name,operation_type,   changeDatas, status<br>  唯一序列，数据库id   ，表id    ,表名      ,操作类型(修改/删除),当前变化的数据,状态</p>
+<p>  修改和新增<br>  修改和新增都会有幂等，后边的更新覆盖前边的更新，减少无谓的消耗;<br>  只记录【id,dataBase_id,table_id,table_name,operation_type,status】<br>  删除<br>  记录【id,dataBase_id,table_id,table_name,operation_type,changeDatas,status】</p>
+<h5 id="zk树形结构"><a href="#zk树形结构" class="headerlink" title="zk树形结构"></a>zk树形结构</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">/search-center/[PERSISTENT]</span><br><span class="line">- nodes[PERSISTENT]</span><br><span class="line"> - node1[EPHEMERAL]</span><br><span class="line"> - node2[EPHEMERAL]</span><br><span class="line"> - node3[EPHEMERAL]</span><br><span class="line">   &#123;NodeId:&quot;&quot;,CloudStatus:&quot;REBALANCING/NORMAL&quot;,NodeStatus:&quot;CLEAN/CLEAN_OK/INIT/FINISH&quot;,SessionId:&quot;&quot;, jobType:&quot;index/job&quot;,</span><br><span class="line">     jobs:[&#123;id:&quot;&quot;,tableId:&quot;&quot;,status:&quot;&quot;,synCursor:&quot;&quot;,totalBucketNumber:&quot;&quot;,modNumber:&quot;&quot;,dataCursor:&quot;&quot;&#125;]</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="分片策略"><a href="#分片策略" class="headerlink" title="分片策略"></a>分片策略</h5><p> <img src="delay.png" alt="delay.png"></p>
+<h6 id="方案一【基于抽象】"><a href="#方案一【基于抽象】" class="headerlink" title="方案一【基于抽象】"></a>方案一【基于抽象】</h6><p>  首先根据我们保存的表关系的抽象模型，找到标签表关联了那张业务表，比如标签通过标签关系表关联了product表，那么我们的调度任务就要把整个product表所有数据刷新一遍，造成没有受到标签影响的product也刷新了，资源浪费，但是对已有程序复用性高。</p>
+<h6 id="方案二【基于数据】"><a href="#方案二【基于数据】" class="headerlink" title="方案二【基于数据】"></a>方案二【基于数据】</h6><p>  从元数据的表开始往上回溯，一直到product表，中间要经过中间表的层层递归往上找到 product，优点是只更新元数据相关联的product，缺点是如果一个标签影响了10万product的数据，那个这个十万数据的刷新数据集不能拆分为桶，因为这个是一个单机多层递归而且是分页的过程，做分布式分桶很复杂，即，不能使用分布式的方式拆分压力。对已有程序复用性高。</p>
+<h6 id="方案三【混合】"><a href="#方案三【混合】" class="headerlink" title="方案三【混合】"></a>方案三【混合】</h6><p>  新建表：<br>  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE `tnp_search_change_snapshot` (</span><br><span class="line">  `id` varchar(64) COLLATE utf8_bin NOT NULL,</span><br><span class="line">  `database_id` varchar(64) COLLATE utf8_bin DEFAULT NULL COMMENT &#x27;数据库id&#x27;,</span><br><span class="line">  `table_id` varchar(64) COLLATE utf8_bin DEFAULT NULL COMMENT &#x27;表id&#x27;,</span><br><span class="line">  `c_table_name` varchar(45) COLLATE utf8_bin DEFAULT NULL COMMENT &#x27;表名称&#x27;,</span><br><span class="line">  `operation_type` varchar(45) COLLATE utf8_bin DEFAULT NULL COMMENT &#x27;操作类型(update/delete)&#x27;,</span><br><span class="line">  `business_id` varchar(64) COLLATE utf8_bin DEFAULT NULL COMMENT &#x27;业务id&#x27;,</span><br><span class="line">  `change_datas` varchar(4096) COLLATE utf8_bin DEFAULT NULL COMMENT &#x27;发生变化的数据，用于删除额情况&#x27;,</span><br><span class="line">  `c_status` varchar(45) COLLATE utf8_bin DEFAULT NULL COMMENT &#x27;状态：init,running,error,done&#x27;,</span><br><span class="line">  `attach_date` date DEFAULT NULL COMMENT &#x27;数据进入搜索系统的时间&#x27;,</span><br><span class="line">  `create_time` datetime DEFAULT NULL,</span><br><span class="line">  `modify_time` datetime DEFAULT NULL,</span><br><span class="line">  PRIMARY KEY (`id`),</span><br><span class="line">  UNIQUE KEY `unit_index` (`database_id`,`table_id`,`operation_type`,`business_id`,`c_status`,`attach_date`)</span><br><span class="line">) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT=&#x27;案发现场快照表&#x27;</span><br><span class="line"></span><br><span class="line">CREATE TABLE `tnp_search_relation_top` (</span><br><span class="line">`id` varchar(64) COLLATE utf8_bin NOT NULL,</span><br><span class="line">`table_id` varchar(64) COLLATE utf8_bin DEFAULT NULL COMMENT &#x27; 当前表id&#x27;,</span><br><span class="line">`relation_data_base_id` varchar(64) COLLATE utf8_bin DEFAULT NULL COMMENT &#x27;关联数据库id&#x27;,</span><br><span class="line">`relation_table_id` varchar(64) COLLATE utf8_bin DEFAULT NULL COMMENT &#x27;关联表id&#x27;,</span><br><span class="line">`relation_table_column_id` varchar(45) COLLATE utf8_bin DEFAULT NULL COMMENT &#x27;关联表的字段id&#x27;,</span><br><span class="line">`level_sql` varchar(2048) COLLATE utf8_bin DEFAULT NULL COMMENT &#x27;当前层级的sql&#x27;,</span><br><span class="line">`level_sql_output_business_column` varchar(64) COLLATE utf8_bin DEFAULT NULL COMMENT &#x27;level_sql输出的业务id&#x27;,</span><br><span class="line">`level_sql_output_target_column` varchar(64) COLLATE utf8_bin DEFAULT NULL,</span><br><span class="line">`create_time` datetime DEFAULT NULL,</span><br><span class="line">`modify_time` datetime DEFAULT NULL,</span><br><span class="line">PRIMARY KEY (`id`),</span><br><span class="line">UNIQUE KEY `rt_unit_index` (`table_id`,`relation_table_id`)</span><br><span class="line">) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT=&#x27;表关联的顶层表的关系&#x27;</span><br></pre></td></tr></table></figure><br>  A-(DB1-从快照表收集数据)-程序固定写死-调度任务发起的节点执行:<br>  select database_id,table_id,business_id from tnp_search_change_snapshot where status=”init”<br>  B-(DB2-中间数据-分桶-分页)-tnp_search_relation_top.level_sql字段-桶节点执行:<br>  select lr.target_id,lr.target_type,label.label_name from tnp_label label right join tnp_label_relation lr on label.id=lr.label_id<br>  where lr.label_id in (A.business_id) and UNIX_TIMESTAMP(lr.create_time) mod 6 = 1 limit 1,20<br>  C-(DB3-业务数据刷新)-桶节点执行:<br>  select * from tnp_product【tnp_search_relation_top.relation_table_id】 where id in (B.target_id) limit 1,20<br>  程序复用性低，编写新的逻辑。</p>
+<p>  风险：<br>  1、只能支持跨2个业务数据库（支持同一个数据库水平拆分）。</p>
+<h4 id="调度"><a href="#调度" class="headerlink" title="调度"></a>调度</h4><ul>
+<li>调度任务扫描tnp_change_snapshot，得到调度列表。将每一个调度抽象为线程可运行的实体;</li>
+<li>获取当前集群可用机器数量（zk临时节点数量）;</li>
+<li>调度和rebalance是互斥的2个任务;<ul>
+<li>如果当前集群正在REBALANCING，job类型是index，那么snapshopJobs无法执行，线程等待重试，重试次数是有限制的;</li>
+<li>如果当前集群正在REBALANCING，job类型是调度(job)，那么index重负载无法执行，线程等待重试，重试次数是有限制的;</li>
+</ul>
+</li>
+<li>开始执行调度任务，设置当前任务的db状态是running，如果任务中断（断电），那么重启之后会重新拉起running的任务;</li>
+<li>当一个任务执行完毕之后，线程会删除这个任务的DB和zk里边的数据;</li>
+<li>到目前为止系统有2种调度：<ul>
+<li>复盘调度：当天发生变化的数据，晚上重新覆盖一次;</li>
+<li>数据延迟生效调度：针对于引起蝴蝶效应的数据进行生效;</li>
+</ul>
+</li>
+</ul>
+<h4 id="类图"><a href="#类图" class="headerlink" title="类图"></a>类图</h4><p>  <img src="SearchCenterCLassDiagram.jpg" alt="SearchCenterCLassDiagram.jpg"></p>
+<h4 id="启动流程图"><a href="#启动流程图" class="headerlink" title="启动流程图"></a>启动流程图</h4><p>  <img src="boot-sequence.png" alt="boot-sequence.png"></p>
+<h4 id="索引创建流程图"><a href="#索引创建流程图" class="headerlink" title="索引创建流程图"></a>索引创建流程图</h4><p>  <img src="SerarchCenterJobSequenceDiagram.jpg" alt="SerarchCenterJobSequenceDiagram.jpg"></p>
+<h4 id="消息消费流程图"><a href="#消息消费流程图" class="headerlink" title="消息消费流程图"></a>消息消费流程图</h4><p>  <img src="SerarchCenterConsumerSequenceDiagram.jpg" alt="SerarchCenterConsumerSequenceDiagram.jpg"></p>
+<h4 id="DDL-SQL"><a href="#DDL-SQL" class="headerlink" title="DDL-SQL"></a>DDL-SQL</h4><p>  <a href="sql/tnp_search_tnp_kafka_offset.sql">tnp_search_tnp_kafka_offset.sql</a><br>  <a href="sql/tnp_search_tnp_search_change_snapshot.sql">tnp_search_tnp_search_change_snapshot.sql</a><br>  <a href="sql/tnp_search_tnp_search_column.sql">tnp_search_tnp_search_column.sql</a><br>  <a href="sql/tnp_search_tnp_search_column_table.sql">tnp_search_tnp_search_column_table.sql</a><br>  <a href="sql/tnp_search_tnp_search_database.sql">tnp_search_tnp_search_database.sql</a><br>  <a href="sql/tnp_search_tnp_search_dynamic_word.sql">tnp_search_tnp_search_dynamic_word.sql</a><br>  <a href="sql/tnp_search_tnp_search_job.sql">tnp_search_tnp_search_job.sql</a><br>  <a href="sql/tnp_search_tnp_search_relation_top.sql">tnp_search_tnp_search_relation_top.sql</a><br>  <a href="sql/tnp_search_tnp_search_table.sql">tnp_search_tnp_search_table.sql</a><br>  <a href="sql/tnp_search_tnp_search_table_syns_log.sql">tnp_search_tnp_search_table_syns_log.sql</a><br>  <a href="sql/tnp_search_tnp_search_topic.sql">tnp_search_tnp_search_topic.sql</a></p>
+<h3 id="结束"><a href="#结束" class="headerlink" title="结束"></a>结束</h3><p>  代码正在脱敏。。。。稍后即来。。。。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>CeaserWang
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://ceaser.wang/2019/07/16/elasticsearch/elasticsearch_center/" title="elasticsearch_center">https://ceaser.wang/2019/07/16/elasticsearch/elasticsearch_center/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/elasticsearch/" rel="tag"><i class="fa fa-tag"></i> elasticsearch</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/06/30/spring_boot_and_cloud/spring_boot_cloud(5)SpringApplication%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E4%B8%8E%E4%BD%9C%E7%94%A8%E8%AF%A6%E8%A7%A3/" rel="prev" title="spring_boot_cloud(5)SpringApplication源码分析与作用详解">
+                  <i class="fa fa-chevron-left"></i> spring_boot_cloud(5)SpringApplication源码分析与作用详解
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/07/25/tidb/tidb-install-pit/" rel="next" title="tidb-install-pit">
+                  tidb-install-pit <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CeaserWang</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":"forest","js":{"url":"https://cdn.jsdelivr.net/npm/mermaid@8.11.0/dist/mermaid.min.js","integrity":"sha256-sVAx+v/Q7v0Q2xm5vN7h5ccSna6gaLREhG9sF8pKT6I="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+  <script class="next-config" data-name="nprogress" type="application/json">{"enable":true,"spinner":true}</script>
+  <script src="/js/third-party/nprogress.js"></script>
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"ryAR9bttS7fex1FPEPAylmmJ-gzGzoHsz","app_key":"dYqygoN4Y01Bl38OdRoCHUYn","server_url":null,"security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+
+</body>
+</html>

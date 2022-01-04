@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.css" integrity="sha256-no0c5ccDODBwp+9hSmV5VvPpKwHCpbVzXHexIkupM6U=" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.js" integrity="sha256-a5YRB27CcBwBFcT5EF/f3E4vzIqyHrSR878nseNYw64=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ceaser.wang","root":"/","images":"/images","scheme":"Muse","version":"8.6.1","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+<meta name="description" content="线程类上下文加载器的一般使用模式(获取-使用-还原)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="jvm原理（22）线程上下文类加载器本质剖析与实做&amp;ServiceLoader在SPI中的重要作用分析">
+<meta property="og:url" content="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8822%EF%BC%89%E7%BA%BF%E7%A8%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E6%9C%AC%E8%B4%A8%E5%89%96%E6%9E%90%E4%B8%8E%E5%AE%9E%E5%81%9A-ServiceLoader%E5%9C%A8SPI%E4%B8%AD%E7%9A%84%E9%87%8D%E8%A6%81%E4%BD%9C%E7%94%A8%E5%88%86%E6%9E%90/index.html">
+<meta property="og:site_name" content="南贺神社">
+<meta property="og:description" content="线程类上下文加载器的一般使用模式(获取-使用-还原)">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8822%EF%BC%89%E7%BA%BF%E7%A8%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E6%9C%AC%E8%B4%A8%E5%89%96%E6%9E%90%E4%B8%8E%E5%AE%9E%E5%81%9A-ServiceLoader%E5%9C%A8SPI%E4%B8%AD%E7%9A%84%E9%87%8D%E8%A6%81%E4%BD%9C%E7%94%A8%E5%88%86%E6%9E%90/20180423223716178.png">
+<meta property="article:published_time" content="2018-10-04T16:25:29.000Z">
+<meta property="article:modified_time" content="2022-01-04T02:21:30.768Z">
+<meta property="article:author" content="CeaserWang">
+<meta property="article:tag" content="线程上下文加载器剖析">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8822%EF%BC%89%E7%BA%BF%E7%A8%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E6%9C%AC%E8%B4%A8%E5%89%96%E6%9E%90%E4%B8%8E%E5%AE%9E%E5%81%9A-ServiceLoader%E5%9C%A8SPI%E4%B8%AD%E7%9A%84%E9%87%8D%E8%A6%81%E4%BD%9C%E7%94%A8%E5%88%86%E6%9E%90/20180423223716178.png">
+
+
+<link rel="canonical" href="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8822%EF%BC%89%E7%BA%BF%E7%A8%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E6%9C%AC%E8%B4%A8%E5%89%96%E6%9E%90%E4%B8%8E%E5%AE%9E%E5%81%9A-ServiceLoader%E5%9C%A8SPI%E4%B8%AD%E7%9A%84%E9%87%8D%E8%A6%81%E4%BD%9C%E7%94%A8%E5%88%86%E6%9E%90/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8822%EF%BC%89%E7%BA%BF%E7%A8%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E6%9C%AC%E8%B4%A8%E5%89%96%E6%9E%90%E4%B8%8E%E5%AE%9E%E5%81%9A-ServiceLoader%E5%9C%A8SPI%E4%B8%AD%E7%9A%84%E9%87%8D%E8%A6%81%E4%BD%9C%E7%94%A8%E5%88%86%E6%9E%90/","path":"2018/10/04/jvm原理（22）线程上下文类加载器本质剖析与实做-ServiceLoader在SPI中的重要作用分析/","title":"jvm原理（22）线程上下文类加载器本质剖析与实做&ServiceLoader在SPI中的重要作用分析"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>jvm原理（22）线程上下文类加载器本质剖析与实做&ServiceLoader在SPI中的重要作用分析 | 南贺神社</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">南贺神社</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">你写程序有写诗一样的感觉吗?</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">205</span></a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">24</span></a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">212</span></a></li>
+        <li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-overview">
+            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="CeaserWang"
+      src="/../0xcc/index/Uchiha.jpg">
+  <p class="site-author-name" itemprop="name">CeaserWang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">212</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">205</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tLzExNTY3MjE4NzQ=" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;1156721874"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmNlYXNlcndhbmdAb3V0bG9vay5jb20=" title="E-Mail → mailto:ceaserwang@outlook.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+  </div>
+  <div class="cc-license site-overview-item animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><img src="https://cdn.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-user-friends fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly90d29kcmFnb25sYWtlLmNvbQ==" title="https:&#x2F;&#x2F;twodragonlake.com">TwoDragonLake</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9yb290Y2x1c3Rlci5naXRodWIuaW8=" title="https:&#x2F;&#x2F;rootcluster.github.io">RootCluster</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9tdXNlZmxvdy5pbw==" title="https:&#x2F;&#x2F;museflow.io">MuseFlow</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9pbmNvZGVyLm9yZw==" title="https:&#x2F;&#x2F;incoder.org">BladeCode</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9rYWlmYS5kZXY=" title="https:&#x2F;&#x2F;kaifa.dev">Alyenc</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmRhemhpZGF5b25nLmNu" title="https:&#x2F;&#x2F;blog.dazhidayong.cn">Killua</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9qb2NlbHluc2hhbmcuY24v" title="https:&#x2F;&#x2F;jocelynshang.cn&#x2F;">Jocelyn</span>
+        </li>
+    </ul>
+  </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8822%EF%BC%89%E7%BA%BF%E7%A8%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E6%9C%AC%E8%B4%A8%E5%89%96%E6%9E%90%E4%B8%8E%E5%AE%9E%E5%81%9A-ServiceLoader%E5%9C%A8SPI%E4%B8%AD%E7%9A%84%E9%87%8D%E8%A6%81%E4%BD%9C%E7%94%A8%E5%88%86%E6%9E%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
+      <meta itemprop="name" content="CeaserWang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="南贺神社">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          jvm原理（22）线程上下文类加载器本质剖析与实做&ServiceLoader在SPI中的重要作用分析
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-10-04 16:25:29" itemprop="dateCreated datePublished" datetime="2018-10-04T16:25:29+00:00">2018-10-04</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2022-01-04 02:21:30" itemprop="dateModified" datetime="2022-01-04T02:21:30+00:00">2022-01-04</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/jvm/" itemprop="url" rel="index"><span itemprop="name">jvm</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8822%EF%BC%89%E7%BA%BF%E7%A8%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E6%9C%AC%E8%B4%A8%E5%89%96%E6%9E%90%E4%B8%8E%E5%AE%9E%E5%81%9A-ServiceLoader%E5%9C%A8SPI%E4%B8%AD%E7%9A%84%E9%87%8D%E8%A6%81%E4%BD%9C%E7%94%A8%E5%88%86%E6%9E%90/" class="post-meta-item leancloud_visitors" data-flag-title="jvm原理（22）线程上下文类加载器本质剖析与实做&ServiceLoader在SPI中的重要作用分析" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>   <strong>线程类上下文加载器的一般使用模式(获取-使用-还原)</strong></p>
+<span id="more"></span>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ClassLoader classLoader = Thread.currentThread().getContextClassLoader();</span><br><span class="line">try&#123;</span><br><span class="line">    Thread.currnetThread().setContextClassLoader(targetTccl);</span><br><span class="line">    myMethod();</span><br><span class="line">&#125;finally&#123;</span><br><span class="line">    Thread.currentThread().setContextClassLoader(classLoader);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>   myMethod里面则调用了Thread.currentThread().getContextClassLoader(),获取当前线程的上下文加载器做某些事情。<br>    如果一个类由类加载器A加载，那么这个类的依赖类也是由相同的类加载器加载的（如果该依赖类之前没有被加载过的话）<br>    ContextClassLoader的作用就是为了破坏java的类加载委托机制。</p>
+<p>   当高层提供统一的接口让底层去实现，同时又要在高层加载（或实例化）底层的类时，就必须要通过线程上下文类加载器<br>    来帮助高层的ClassLoader找到并加载该类。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">public class MyTest26 &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        ServiceLoader&lt;Driver&gt; serviceLoader = ServiceLoader.load(Driver.class);</span><br><span class="line">        Iterator&lt;Driver&gt; iterator = serviceLoader.iterator();</span><br><span class="line"></span><br><span class="line">        while(iterator.hasNext())&#123;</span><br><span class="line">            Driver driver =  iterator.next();</span><br><span class="line">            System.out.println(&quot;driver: &quot;+driver.getClass() + &quot;loader: &quot;+ driver.getClass().getClassLoader() );</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        System.out.println(&quot;当前线程上下文类加载器: &quot; + Thread.currentThread().getContextClassLoader());</span><br><span class="line"></span><br><span class="line">        System.out.println(&quot;ServiceLoader的类加载器: &quot;+ServiceLoader.class.getClassLoader());</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>运行结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">driver: class com.mysql.jdbc.Driverloader: sun.misc.Launcher$AppClassLoader@18b4aac2</span><br><span class="line">driver: class com.mysql.fabric.jdbc.FabricMySQLDriverloader: sun.misc.Launcher$AppClassLoader@18b4aac2</span><br><span class="line">当前线程上下文类加载器: sun.misc.Launcher$AppClassLoader@18b4aac2</span><br><span class="line">ServiceLoader的类加载器: null</span><br></pre></td></tr></table></figure>
+<p>我们可以看到ServiceLoader找到了mysql的两个驱动，这两个驱动都是由系统类加载器加载的，当前线程的上下文加载器默认也是系统类加载器，ServiceLoader是由启动类加载器加载，但是程序是怎样找到mysql的两个驱动的呢？我们没有在程序里边设置任何的属性或者路径之类的东西让程序能找到mysql的驱动，那么我们只能研究一下ServiceLoader的源码和doc看一下他们的原理：</p>
+<font color="#FF0000">
+public final class ServiceLoader  extends Object implements Iterable
+A simple service-provider loading facility.
+</font>
+这是一个简单服务提供者的设施
+
+<font color="#FF0000">
+A service is a well-known set of interfaces and (usually abstract) classes. A service provider is a specific implementation of a service. The classes in a provider typically implement the interfaces and subclass the classes defined in the service itself. Service providers can be installed in an implementation of the Java platform in the form of extensions, that is, jar files placed into any of the usual extension directories. Providers can also be made available by adding them to the application's class path or by some other platform-specific means.
+</font>
+
+<p>服务是一个已知的接口和类（通常是抽象类）的集合，服务提供者就是服务的的一种具体实现，服务提供者通常去实现服务的接口和服务自身定义的类的子类。服务提供者可以以一种扩展的形式被安装到java平台的实现，有jar包的形式，文件形式等放到任何的扩展目录下边，服务提供者可以通过加在应用的classpath路径下边或者其他特定平台的手段让其变的可用。</p>
+<font color="#FF0000">
+For the purpose of loading, a service is represented by a single type, that is, a single interface or abstract class. (A concrete class can be used, but this is not recommended.) A provider of a given service contains one or more concrete classes that extend this service type with data and code specific to the provider. The provider class is typically not the entire provider itself but rather a proxy which contains enough information to decide whether the provider is able to satisfy a particular request together with code that can create the actual provider on demand. The details of provider classes tend to be highly service-specific; no single class or interface could possibly unify them, so no such type is defined here. The only requirement enforced by this facility is that provider classes must have a zero-argument constructor so that they can be instantiated during loading.
+</font>
+
+<p>出于加载的目的，服务表现为单个的类型，也就是说一个单个的接口或者抽象类（抽象类的实现类可以是被使用的，但是不是推荐的），给定服务的提供者包含一个或多个具体的实现类用来扩展服务类型，通过特定于提供者的数据或者代码。提供者通常不是提供者本身，而是以一种代理的形式，包含了足够的信息来确定提供者满足了特定的需求，并且加上了一些代码根据需要创建实际的提供者，服务提供者的细节和服务是挂钩的，没有单个的接口或者类将他们统一起来，因此这种类型并没有定义在这里面，对于这个基础设施来说他说施加的唯一需求就是提供者的类需要有一个无参构造器，这样就可以在加载的时候实例化他们。</p>
+<font color="#FF0000">
+A service provider is identified by placing a provider-configuration file in the resource directory META-INF/services. The file's name is the fully-qualified binary name of the service's type. The file contains a list of fully-qualified binary names of concrete provider classes, one per line. Space and tab characters surrounding each name, as well as blank lines, are ignored. The comment character is '#' ('\u0023', NUMBER SIGN); on each line all characters following the first comment character are ignored. The file must be encoded in UTF-8.
+</font>
+
+<p>服务提供者是通过将服务提供者的配置文件放在资源目录的【META-INF/services】下边去标识的，这个文件的名字是服务类型的全限定名，文件的内容是一个具体的实现者的全限定名的列表，每一行一个实现者，围绕的空格和tab都会被忽略掉，同样空行也会被忽略掉，注解字符是【#】，在每一行#后边的都会被忽略掉，这个文件必须是UTF-8编码的。</p>
+<font color="#FF0000">
+If a particular concrete provider class is named in more than one configuration file, or is named in the same configuration file more than once, then the duplicates are ignored. The configuration file naming a particular provider need not be in the same jar file or other distribution unit as the provider itself. The provider must be accessible from the same class loader that was initially queried to locate the configuration file; note that this is not necessarily the class loader from which the file was actually loaded.
+</font>
+
+<p>如果一个具体的实现类在多个文件出现或者同一个文件出现多次，那么重复的部分会被忽略掉，配置文件指定的提供者不需要在同一个jar或者其他的分发单元里边，提供者的类必须可以让定位配置文件的那个加载器去加载，</p>
+<font color="#FF0000">
+Providers are located and instantiated lazily, that is, on demand. A service loader maintains a cache of the providers that have been loaded so far. Each invocation of the iterator method returns an iterator that first yields all of the elements of the cache, in instantiation order, and then lazily locates and instantiates any remaining providers, adding each one to the cache in turn. The cache can be cleared via the reload method.
+Service loaders always execute in the security context of the caller. Trusted system code should typically invoke the methods in this class, and the methods of the iterators which they return, from within a privileged security context.
+</font>
+
+<p>提供者是延迟定位和实例化的，而是按需要进行，一个服务提供者维持了一份最近加载过的提供者的缓存，而每次对于iterator方法的调用都会返回一个迭代器，迭代的是之前缓存的所有的元素，并且是以实例化的顺序返回，并且是延迟的定位和加载其他剩余的提供者，按照顺序添加到缓存里边，缓存可以通过reload方法清空。<br>【缓存其实就是ServiceLoader的成员变量private LinkedHashMap&lt;String,S&gt; providers = new LinkedHashMap&lt;&gt;();】<br>服务的加载总是在调用的时候在安全的上下文进行，信任的系统可以调用类中的代码，迭代器可以从安全的上下文返回。<br><font color="#FF0000"><br>Instances of this class are not safe for use by multiple concurrent threads.<br></font><br>当前类并不是线程安全的一个类<br><font color="#FF0000"><br>Unless otherwise specified, passing a null argument to any method in this class will cause a NullPointerException to be thrown.<br></font><br>除非指定了，否则向这个类的任何一个方法传递null的参数都会导致空指针异常。<br><font color="#FF0000"><br>Example Suppose we have a service type com.example.CodecSet which is intended to represent sets of encoder/decoder pairs for some protocol. In this case it is an abstract class with two abstract methods:<br></font><br>举例如果一个服务的类型是 com.example.CodecSet 用来表示某个协议的编解码器的集合，在这种情况下，这个抽象类包含2个方法：<br>   public abstract Encoder getEncoder(String encodingName);<br>   public abstract Decoder getDecoder(String encodingName);</p>
+   <font color="#FF0000">
+Each method returns an appropriate object or null if the provider does not support the given encoding. Typical providers support more than one encoding.
+If com.example.impl.StandardCodecs is an implementation of the CodecSet service then its jar file also contains a file named
+   META-INF/services/com.example.CodecSet
+   </font>
+   每个方法返回合适的对象或者在不支持的情况下返回null，典型的提供者支持多个编码器，如果 com.example.impl.StandardCodecs是CodecSet 的一个具体实现者，那么jar文件就会包含这样的目录 形式：
+This file contains the single line:
+文件内容包含这样的一行，相当于mysql的驱动：
+   com.example.impl.StandardCodecs    # Standard codecs
+The CodecSet class creates and saves a single service instance at initialization:
+CodecSet 在初始化的时候创建和保存了一个单个的服务实体。
+<font color="#FF0000">
+   private static ServiceLoader<CodecSet> codecSetLoader = ServiceLoader.load(CodecSet.class);
+To locate an encoder for a given encoding name it defines a static factory method which iterates through the known and available providers, returning only when it has located a suitable encoder or has run out of providers.
+</font>
+通过工厂的方式，接受一个特定编码器的名字，返回对应的编码器，或者遍历完毕之后返回。
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">public static Encoder getEncoder(String encodingName) &#123;</span><br><span class="line">    for (CodecSet cp : codecSetLoader) &#123;</span><br><span class="line">        Encoder enc = cp.getEncoder(encodingName);</span><br><span class="line">        if (enc != null)</span><br><span class="line">            return enc;</span><br><span class="line">    &#125;</span><br><span class="line">    return null;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<font color="#FF0000">
+A getDecoder method is defined similarly.
+</font>
+getDecoder 方法也是按照类似的方式进行。
+<font color="#FF0000">
+Usage Note If the class path of a class loader that is used for provider loading includes remote network URLs then those URLs will be dereferenced in the process of searching for provider-configuration files.
+</font>
+使用说明：如果类加载器的class path用来加载包含网络url，那么这个urls会被解引用，在处理搜索配置文件的时候。
+<font color="#FF0000">
+This activity is normal, although it may cause puzzling entries to be created in web-server logs. If a web server is not configured correctly, however, then this activity may cause the provider-loading algorithm to fail spuriously.
+</font>
+这种活动是很常见的，在用于网络加载的时候。
+<font color="#FF0000">
+A web server should return an HTTP 404 (Not Found) response when a requested resource does not exist. Sometimes, however, web servers are erroneously configured to return an HTTP 200 (OK) response along with a helpful HTML error page in such cases. This will cause a ServiceConfigurationError to be thrown when this class attempts to parse the HTML page as a provider-configuration file. The best solution to this problem is to fix the misconfigured web server to return the correct response code (HTTP 404) along with the HTML error page.
+Type parameters:
+`<S>` - The type of the service to be loaded by this loader
+</font>
+泛型S的类型就是服务的类型。
+好，上述的doc重点是介绍了第三方的驱动是放在jar包下的META-INF/services下边，并且在java的ServiceLoader里边是写死了：
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public final class ServiceLoader&lt;S&gt; implements Iterable&lt;S&gt;</span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">    private static final String PREFIX = &quot;META-INF/services/&quot;;</span><br><span class="line">    ......</span><br></pre></td></tr></table></figure>
+
+<p>其下的文件名字就是服务的名字，比如数据库驱动的服务是java.sql.Drive，我们在mysql的jar包下可以看到这个文件，文件里边的内容是具体的实现类的全限定名：<br><img src="20180423223716178.png" alt="这里写图片描述"><br>所以我们上面的程序的打印结果是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">driver: class com.mysql.jdbc.Driverloader: sun.misc.Launcher$AppClassLoader@18b4aac2</span><br><span class="line">driver: class com.mysql.fabric.jdbc.FabricMySQLDriverloader: sun.misc.Launcher$AppClassLoader@18b4aac2</span><br></pre></td></tr></table></figure>
+<p>ServiceLoader是由启动类加载器加载的，为什么mysql的驱动是由系统类加载器加载呢？。。。。下一章介绍这个知识点。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>CeaserWang
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8822%EF%BC%89%E7%BA%BF%E7%A8%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E6%9C%AC%E8%B4%A8%E5%89%96%E6%9E%90%E4%B8%8E%E5%AE%9E%E5%81%9A-ServiceLoader%E5%9C%A8SPI%E4%B8%AD%E7%9A%84%E9%87%8D%E8%A6%81%E4%BD%9C%E7%94%A8%E5%88%86%E6%9E%90/" title="jvm原理（22）线程上下文类加载器本质剖析与实做&amp;ServiceLoader在SPI中的重要作用分析">https://ceaser.wang/2018/10/04/jvm原理（22）线程上下文类加载器本质剖析与实做-ServiceLoader在SPI中的重要作用分析/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E7%BA%BF%E7%A8%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%89%96%E6%9E%90/" rel="tag"><i class="fa fa-tag"></i> 线程上下文加载器剖析</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8821%EF%BC%89%E7%BA%BF%E7%A8%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%88%86%E6%9E%90%E4%B8%8E%E5%AE%9E%E7%8E%B0/" rel="prev" title="jvm原理（21）线程上下文类加载器分析与实现">
+                  <i class="fa fa-chevron-left"></i> jvm原理（21）线程上下文类加载器分析与实现
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8823%EF%BC%89%E7%BA%BF%E7%A8%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%AE%9E%E6%88%98%E5%88%86%E6%9E%90%E4%B8%8E%E9%9A%BE%E7%82%B9%E5%89%96%E6%9E%90/" rel="next" title="jvm原理（23）线程上下文类加载器实战分析与难点剖析">
+                  jvm原理（23）线程上下文类加载器实战分析与难点剖析 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CeaserWang</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":"forest","js":{"url":"https://cdn.jsdelivr.net/npm/mermaid@8.11.0/dist/mermaid.min.js","integrity":"sha256-sVAx+v/Q7v0Q2xm5vN7h5ccSna6gaLREhG9sF8pKT6I="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+  <script class="next-config" data-name="nprogress" type="application/json">{"enable":true,"spinner":true}</script>
+  <script src="/js/third-party/nprogress.js"></script>
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"ryAR9bttS7fex1FPEPAylmmJ-gzGzoHsz","app_key":"dYqygoN4Y01Bl38OdRoCHUYn","server_url":null,"security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+
+</body>
+</html>

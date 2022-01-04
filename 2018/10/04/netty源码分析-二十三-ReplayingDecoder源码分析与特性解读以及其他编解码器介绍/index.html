@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.css" integrity="sha256-no0c5ccDODBwp+9hSmV5VvPpKwHCpbVzXHexIkupM6U=" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.js" integrity="sha256-a5YRB27CcBwBFcT5EF/f3E4vzIqyHrSR878nseNYw64=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ceaser.wang","root":"/","images":"/images","scheme":"Muse","version":"8.6.1","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+<meta name="description" content="在介绍ReplayingDecoder之前 想看一下它的用法，构建一个服务端和客户端的模型：服务端：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="netty源码分析(二十三)ReplayingDecoder源码分析与特性解读以及其他编解码器介绍">
+<meta property="og:url" content="https://ceaser.wang/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E4%BA%8C%E5%8D%81%E4%B8%89-ReplayingDecoder%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E4%B8%8E%E7%89%B9%E6%80%A7%E8%A7%A3%E8%AF%BB%E4%BB%A5%E5%8F%8A%E5%85%B6%E4%BB%96%E7%BC%96%E8%A7%A3%E7%A0%81%E5%99%A8%E4%BB%8B%E7%BB%8D/index.html">
+<meta property="og:site_name" content="南贺神社">
+<meta property="og:description" content="在介绍ReplayingDecoder之前 想看一下它的用法，构建一个服务端和客户端的模型：服务端：">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E4%BA%8C%E5%8D%81%E4%B8%89-ReplayingDecoder%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E4%B8%8E%E7%89%B9%E6%80%A7%E8%A7%A3%E8%AF%BB%E4%BB%A5%E5%8F%8A%E5%85%B6%E4%BB%96%E7%BC%96%E8%A7%A3%E7%A0%81%E5%99%A8%E4%BB%8B%E7%BB%8D/20171217140403291.png">
+<meta property="article:published_time" content="2018-10-04T15:16:36.000Z">
+<meta property="article:modified_time" content="2022-01-04T02:21:30.888Z">
+<meta property="article:author" content="CeaserWang">
+<meta property="article:tag" content="ReplayingDecoder">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ceaser.wang/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E4%BA%8C%E5%8D%81%E4%B8%89-ReplayingDecoder%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E4%B8%8E%E7%89%B9%E6%80%A7%E8%A7%A3%E8%AF%BB%E4%BB%A5%E5%8F%8A%E5%85%B6%E4%BB%96%E7%BC%96%E8%A7%A3%E7%A0%81%E5%99%A8%E4%BB%8B%E7%BB%8D/20171217140403291.png">
+
+
+<link rel="canonical" href="https://ceaser.wang/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E4%BA%8C%E5%8D%81%E4%B8%89-ReplayingDecoder%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E4%B8%8E%E7%89%B9%E6%80%A7%E8%A7%A3%E8%AF%BB%E4%BB%A5%E5%8F%8A%E5%85%B6%E4%BB%96%E7%BC%96%E8%A7%A3%E7%A0%81%E5%99%A8%E4%BB%8B%E7%BB%8D/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://ceaser.wang/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E4%BA%8C%E5%8D%81%E4%B8%89-ReplayingDecoder%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E4%B8%8E%E7%89%B9%E6%80%A7%E8%A7%A3%E8%AF%BB%E4%BB%A5%E5%8F%8A%E5%85%B6%E4%BB%96%E7%BC%96%E8%A7%A3%E7%A0%81%E5%99%A8%E4%BB%8B%E7%BB%8D/","path":"2018/10/04/netty源码分析-二十三-ReplayingDecoder源码分析与特性解读以及其他编解码器介绍/","title":"netty源码分析(二十三)ReplayingDecoder源码分析与特性解读以及其他编解码器介绍"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>netty源码分析(二十三)ReplayingDecoder源码分析与特性解读以及其他编解码器介绍 | 南贺神社</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">南贺神社</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">你写程序有写诗一样的感觉吗?</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">205</span></a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">24</span></a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">212</span></a></li>
+        <li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-overview">
+            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="CeaserWang"
+      src="/../0xcc/index/Uchiha.jpg">
+  <p class="site-author-name" itemprop="name">CeaserWang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">212</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">205</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tLzExNTY3MjE4NzQ=" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;1156721874"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmNlYXNlcndhbmdAb3V0bG9vay5jb20=" title="E-Mail → mailto:ceaserwang@outlook.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+  </div>
+  <div class="cc-license site-overview-item animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><img src="https://cdn.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-user-friends fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly90d29kcmFnb25sYWtlLmNvbQ==" title="https:&#x2F;&#x2F;twodragonlake.com">TwoDragonLake</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9yb290Y2x1c3Rlci5naXRodWIuaW8=" title="https:&#x2F;&#x2F;rootcluster.github.io">RootCluster</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9tdXNlZmxvdy5pbw==" title="https:&#x2F;&#x2F;museflow.io">MuseFlow</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9pbmNvZGVyLm9yZw==" title="https:&#x2F;&#x2F;incoder.org">BladeCode</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9rYWlmYS5kZXY=" title="https:&#x2F;&#x2F;kaifa.dev">Alyenc</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmRhemhpZGF5b25nLmNu" title="https:&#x2F;&#x2F;blog.dazhidayong.cn">Killua</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9qb2NlbHluc2hhbmcuY24v" title="https:&#x2F;&#x2F;jocelynshang.cn&#x2F;">Jocelyn</span>
+        </li>
+    </ul>
+  </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E4%BA%8C%E5%8D%81%E4%B8%89-ReplayingDecoder%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E4%B8%8E%E7%89%B9%E6%80%A7%E8%A7%A3%E8%AF%BB%E4%BB%A5%E5%8F%8A%E5%85%B6%E4%BB%96%E7%BC%96%E8%A7%A3%E7%A0%81%E5%99%A8%E4%BB%8B%E7%BB%8D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
+      <meta itemprop="name" content="CeaserWang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="南贺神社">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          netty源码分析(二十三)ReplayingDecoder源码分析与特性解读以及其他编解码器介绍
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-10-04 15:16:36" itemprop="dateCreated datePublished" datetime="2018-10-04T15:16:36+00:00">2018-10-04</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2022-01-04 02:21:30" itemprop="dateModified" datetime="2022-01-04T02:21:30+00:00">2022-01-04</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/netty/" itemprop="url" rel="index"><span itemprop="name">netty</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E4%BA%8C%E5%8D%81%E4%B8%89-ReplayingDecoder%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E4%B8%8E%E7%89%B9%E6%80%A7%E8%A7%A3%E8%AF%BB%E4%BB%A5%E5%8F%8A%E5%85%B6%E4%BB%96%E7%BC%96%E8%A7%A3%E7%A0%81%E5%99%A8%E4%BB%8B%E7%BB%8D/" class="post-meta-item leancloud_visitors" data-flag-title="netty源码分析(二十三)ReplayingDecoder源码分析与特性解读以及其他编解码器介绍" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>在介绍ReplayingDecoder之前 想看一下它的用法，构建一个服务端和客户端的模型：<br>服务端：</p>
+<span id="more"></span>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">public class MyServer &#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) throws InterruptedException &#123;</span><br><span class="line">        EventLoopGroup bossGroup = new NioEventLoopGroup(1);</span><br><span class="line">        EventLoopGroup workerGroup = new NioEventLoopGroup();</span><br><span class="line">        try&#123;</span><br><span class="line">            ServerBootstrap serverBootstrap = new ServerBootstrap();</span><br><span class="line">            serverBootstrap.group(bossGroup,workerGroup).channel(NioServerSocketChannel.class)</span><br><span class="line">                    .childHandler(new MyServerInitializer());</span><br><span class="line">            ChannelFuture channelFuture = serverBootstrap.bind(8899).sync();</span><br><span class="line">            channelFuture.channel().closeFuture().sync();</span><br><span class="line">        &#125;finally&#123;</span><br><span class="line">            bossGroup.shutdownGracefully();</span><br><span class="line">            workerGroup.shutdownGracefully();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>服务端initializer：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public class MyServerInitializer extends ChannelInitializer&lt;SocketChannel&gt; &#123;</span><br><span class="line">    @Override</span><br><span class="line">    protected void initChannel(SocketChannel ch) throws Exception &#123;</span><br><span class="line">        ChannelPipeline pipline = ch.pipeline();</span><br><span class="line">        pipline.addLast(new MyReplayingDecoder());//使用ReplayingDecoder</span><br><span class="line">        pipline.addLast(new MyLongToByteEncoder());</span><br><span class="line">        pipline.addLast(new MyServerHandler());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>ServerHandler:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public class MyServerHandler extends SimpleChannelInboundHandler&lt;Long&gt; &#123;</span><br><span class="line">    @Override</span><br><span class="line">    protected void channelRead0(ChannelHandlerContext ctx, Long msg) throws Exception &#123;</span><br><span class="line">        System.out.println(ctx.channel().remoteAddress()+&quot; --&gt; &quot;+msg);</span><br><span class="line">        ctx.writeAndFlush(654321L);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception &#123;</span><br><span class="line">        cause.printStackTrace();</span><br><span class="line">        ctx.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>MyReplayingDecoder:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">public class MyReplayingDecoder extends ReplayingDecoder&lt;Void&gt; &#123;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    protected void decode(ChannelHandlerContext ctx, ByteBuf in, List&lt;Object&gt; out) throws Exception &#123;</span><br><span class="line">        System.out.println(&quot;MyReplayingDecoder decode invoked!&quot;);</span><br><span class="line">        out.add(in.readLong());//注意没有判断字节数！！！！</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>MyLongToByteEncoder:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">public class MyLongToByteEncoder extends MessageToByteEncoder&lt;Long&gt; &#123;</span><br><span class="line">    @Override</span><br><span class="line">    protected void encode(ChannelHandlerContext ctx, Long msg, ByteBuf out) throws Exception &#123;</span><br><span class="line">        System.out.println(&quot;encode invoked&quot;);</span><br><span class="line">        System.out.println(msg);</span><br><span class="line">        out.writeLong(msg);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>客户端：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">public class Myclient &#123;</span><br><span class="line">    public static void main(String[] args) throws InterruptedException &#123;</span><br><span class="line">        EventLoopGroup eventLoopGroup = new NioEventLoopGroup();</span><br><span class="line">        try &#123;</span><br><span class="line">            Bootstrap bootstrap = new Bootstrap();</span><br><span class="line">            bootstrap.group(eventLoopGroup).channel(NioSocketChannel.class).handler(new MyClientIniatializer());</span><br><span class="line">            ChannelFuture channelFuture = bootstrap.connect(&quot;localhost&quot;, 8899).sync();</span><br><span class="line">            channelFuture.channel().writeAndFlush(&quot;hello&quot;);</span><br><span class="line">            channelFuture.channel().closeFuture().sync();</span><br><span class="line">        &#125; finally &#123;</span><br><span class="line">            eventLoopGroup.shutdownGracefully();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>客户端Iniatializer：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">public class MyClientIniatializer extends ChannelInitializer&lt;SocketChannel&gt; &#123;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    protected void initChannel(SocketChannel ch) throws Exception &#123;</span><br><span class="line">        ChannelPipeline pipline = ch.pipeline();</span><br><span class="line"></span><br><span class="line">        pipline.addLast(new MyReplayingDecoder());</span><br><span class="line">        pipline.addLast(new MyLongToByteEncoder());</span><br><span class="line">        pipline.addLast(new MyClientHandler());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>客户端Handler：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">public class MyClientHandler extends SimpleChannelInboundHandler&lt;Long&gt; &#123;</span><br><span class="line">    @Override</span><br><span class="line">    protected void channelRead0(ChannelHandlerContext ctx, Long msg) throws Exception &#123;</span><br><span class="line">        System.out.println(ctx.channel().remoteAddress());</span><br><span class="line">        System.out.println(&quot;client output &quot;+msg);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void channelActive(ChannelHandlerContext ctx) throws Exception &#123;</span><br><span class="line">        ctx.writeAndFlush(123456L);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception &#123;</span><br><span class="line">        super.exceptionCaught(ctx, cause);</span><br><span class="line">        ctx.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行服务端，之后运行客户端：<br>服务端输出结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">MyReplayingDecoder decode invoked!</span><br><span class="line">/127.0.0.1:4448 --&gt; 123456</span><br><span class="line">encode invoked</span><br><span class="line">654321</span><br></pre></td></tr></table></figure>
+<p>客户端输出结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">encode invoked</span><br><span class="line">123456</span><br><span class="line">MyReplayingDecoder decode invoked!</span><br><span class="line">localhost/127.0.0.1:8899</span><br><span class="line">client output 654321</span><br></pre></td></tr></table></figure>
+<p>至于为什么是这样的输出结果，这里就不去做详细走读了，现在看一下ReplayingDecoder的javadoc：</p>
+<font color="#FF0000">
+A specialized variation of ByteToMessageDecoder which enables implementation of a non-blocking decoder in the blocking I/O paradigm.
+The biggest difference between ReplayingDecoder and ByteToMessageDecoder is that ReplayingDecoder allows you to implement the decode() and decodeLast() methods just like all required bytes were received already, rather than checking the availability of the required bytes. For example, the following ByteToMessageDecoder implementation:
+</font>
+一个特殊的ByteToMessageDecoder ，可以在阻塞的i/o模式下实现非阻塞的解码。
+ReplayingDecoder 和ByteToMessageDecoder 最大的不同就是ReplayingDecoder 允许你实现decode()和decodeLast()就像所有的字节已经接收到一样，不需要判断可用的字节，举例，下面的ByteToMessageDecoder 实现：
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">public class IntegerHeaderFrameDecoder extends ByteToMessageDecoder &#123;</span><br><span class="line"></span><br><span class="line">   @Override</span><br><span class="line">  protected void decode(ChannelHandlerContext ctx,</span><br><span class="line">                          ByteBuf buf, List&lt;Object&gt; out) throws Exception &#123;</span><br><span class="line"></span><br><span class="line">    if (buf.readableBytes() &lt; 4) &#123;</span><br><span class="line">       return;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    buf.markReaderIndex();</span><br><span class="line">    int length = buf.readInt();</span><br><span class="line"></span><br><span class="line">    if (buf.readableBytes() &lt; length) &#123;</span><br><span class="line">       buf.resetReaderIndex();</span><br><span class="line">       return;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    out.add(buf.readBytes(length));</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这段代码表达的意思是先读取前边4隔壁字节（即，一个int类型），然后再去读取后边个字节，如果前边四个字节无法读取，直接返回，如果可以读取前四个字节，那么紧接着读取同样长度个字节，这种方式是一种消息头，消息体的协议模型，先读取消息头，之后再去读取消息体：<br><img src="20171217140403291.png" alt="这里写图片描述"><br>好了先说到这里，协议以后再讨论，那现在我们使用ReplayingDecoder可以简化为：</p>
+<p>is simplified like the following with ReplayingDecoder:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public class IntegerHeaderFrameDecoder</span><br><span class="line">     extends ReplayingDecoder&lt;Void&gt; &#123;</span><br><span class="line"></span><br><span class="line">  protected void decode(ChannelHandlerContext ctx,</span><br><span class="line">                          ByteBuf buf) throws Exception &#123;</span><br><span class="line"></span><br><span class="line">    out.add(buf.readBytes(buf.readInt()));</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<font color="#FF0000">
+How does this work?
+ReplayingDecoder passes a specialized ByteBuf implementation which throws an Error of certain type when there's not enough data in the buffer. In the IntegerHeaderFrameDecoder above, you just assumed that there will be 4 or more bytes in the buffer when you call buf.readInt(). If there's really 4 bytes in the buffer, it will return the integer header as you expected. Otherwise, the Error will be raised and the control will be returned to ReplayingDecoder. If ReplayingDecoder catches the Error, then it will rewind the readerIndex of the buffer back to the 'initial' position (i.e. the beginning of the buffer) and call the decode(..) method again when more data is received into the buffer.
+Please note that ReplayingDecoder always throws the same cached Error instance to avoid the overhead of creating a new Error and filling its stack trace for every throw.
+</font>
+
+<p>这是怎样完成的？<br>当ReplayingDecoder 接收的buffer的数据不足时，会抛出一个异常，ReplayingDecoder 通过一个ByteBuf 的具体实现来完成。在上边的IntegerHeaderFrameDecoder ，当你调用buf.readInt().你就假设在buffer里边有4个字节，如果里边确实有4个字节，它将会返回一个整型的头，就像你期望的一样，否则，将会抛出一个Error并且控制会返回到ReplayingDecoder，如果ReplayingDecoder扑捉到这个错误，然后他就会将读的索引重置到刚开始的位置（buffer的开始位置），之后再次调用decode方法当数据继续进入buffer的时候。</p>
+<p>请注意ReplayingDecoder 总是返回一个缓冲的Error 的实例，，来避免创建新的Error对象和每次填充堆栈的负担。</p>
+<font color="#FF0000">
+Limitations
+At the cost of the simplicity, ReplayingDecoder enforces you a few limitations:
+Some buffer operations are prohibited.
+Performance can be worse if the network is slow and the message format is complicated unlike the example above. In this case, your decoder might have to decode the same part of the message over and over again.
+You must keep in mind that decode(..) method can be called many times to decode a single message. For example, the following code will not work:
+</font>
+限制
+简化使用带来的成本，ReplayingDecoder 强制带来了2个限制：
+
+<ul>
+<li>一些buffer 的操作是被禁止的</li>
+<li>如果网络过慢并且消息的格式复杂不像上边提到的那种简单的例子，会导致性能下降。在这种情况下，你的解码器就会一遍又一遍解码一个消息的同一个部分。</li>
+<li>你必须要记住decode方法为了解码一个消息可能别调用多次，下面的情况是不能工作的。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">public class MyDecoder extends ReplayingDecoder&lt;Void&gt; &#123;</span><br><span class="line"></span><br><span class="line">  private final Queue&lt;Integer&gt; values = new LinkedList&lt;Integer&gt;();</span><br><span class="line"></span><br><span class="line">   @Override</span><br><span class="line">  public void decode(.., ByteBuf buf, List&lt;Object&gt; out) throws Exception &#123;</span><br><span class="line"></span><br><span class="line">    // A message contains 2 integers.</span><br><span class="line">    values.offer(buf.readInt());</span><br><span class="line">    values.offer(buf.readInt());</span><br><span class="line"></span><br><span class="line">    // This assertion will fail intermittently since values.offer()</span><br><span class="line">    // can be called more than two times!</span><br><span class="line">    assert values.size() == 2;</span><br><span class="line">    out.add(values.poll() + values.poll());</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上边的方式当中，假如走到第二个values.offer(buf.readInt());时候抛出了异常，下边的逻辑就不会走，但是values 里边已经有一个消息了，当下次再调用decode方法的时候（加入过来了2条数据），那么assert values.size() == 2;永远都不会通过，因为加上之前的一条现在values里边是三条数据。</p>
+<p>The correct implementation looks like the following, and you can also utilize the ‘checkpoint’ feature which is explained in detail in the next section.<br>正确的实现应该是下边这样的方式</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">public class MyDecoder extends ReplayingDecoder&lt;Void&gt; &#123;</span><br><span class="line"></span><br><span class="line">  private final Queue&lt;Integer&gt; values = new LinkedList&lt;Integer&gt;();</span><br><span class="line"></span><br><span class="line">   @Override</span><br><span class="line">  public void decode(.., ByteBuf buf, List&lt;Object&gt; out) throws Exception &#123;</span><br><span class="line"></span><br><span class="line">    // Revert the state of the variable that might have been changed</span><br><span class="line">    // since the last partial decode.</span><br><span class="line">    values.clear();//首先要清理掉里边的消息</span><br><span class="line"></span><br><span class="line">    // A message contains 2 integers.</span><br><span class="line">    values.offer(buf.readInt());</span><br><span class="line">    values.offer(buf.readInt());</span><br><span class="line"></span><br><span class="line">    // Now we know this assertion will never fail.</span><br><span class="line">    assert values.size() == 2;</span><br><span class="line">    out.add(values.poll() + values.poll());</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<font color="#FF0000">
+Improving the performance
+</font>
+性能提升
+<font color="#FF0000">
+Fortunately, the performance of a complex decoder implementation can be improved significantly with the checkpoint() method. The checkpoint() method updates the 'initial' position of the buffer so that ReplayingDecoder rewinds the readerIndex of the buffer to the last position where you called the checkpoint() method.
+</font>
+幸好，复杂解码器性能的提升可以通过checkpoint()方法实现，checkpoint()方法可以更新buffer的初始化的位置，这样ReplayingDecoder 就可以在调用checkpoint()方法的时候重新回到上一次读索引的位置。
+<font color="#FF0000">
+Calling checkpoint(T) with an Enum
+Although you can just use checkpoint() method and manage the state of the decoder by yourself, the easiest way to manage the state of the decoder is to create an Enum type which represents the current state of the decoder and to call checkpoint(T) method whenever the state changes. You can have as many states as you want depending on the complexity of the message you want to decode:
+</font>
+通过枚举调用索引，尽管你可以自己使用checkpoint()方法来管理decoder的状态，最易用的方式就是使用枚举来管理decoder的状态，这个枚举代表了当前decoder的状态，当状态改变时可以调用checkpoint()方法，你可以有很多状态取决于你想解码的消息的复杂度。
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">public enum MyDecoderState &#123;</span><br><span class="line">//假设消息有2种状态，读取长度状态和读取内容的状态。</span><br><span class="line">  READ_LENGTH,</span><br><span class="line">  READ_CONTENT;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class IntegerHeaderFrameDecoder</span><br><span class="line">     extends ReplayingDecoder&lt;MyDecoderState&gt; &#123;</span><br><span class="line"></span><br><span class="line">  private int length;</span><br><span class="line"></span><br><span class="line">  public IntegerHeaderFrameDecoder() &#123;</span><br><span class="line">    // Set the initial state.</span><br><span class="line">    super(MyDecoderState.READ_LENGTH);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">   @Override</span><br><span class="line">  protected void decode(ChannelHandlerContext ctx,</span><br><span class="line">                          ByteBuf buf, List&lt;Object&gt; out) throws Exception &#123;</span><br><span class="line">    switch (state()) &#123;</span><br><span class="line">    case READ_LENGTH:</span><br><span class="line">      length = buf.readInt();</span><br><span class="line">      checkpoint(MyDecoderState.READ_CONTENT);</span><br><span class="line">      //注意这里没有break，也就是说接下来就是进入READ_CONTENT的代码块，执行读取内容的逻辑</span><br><span class="line">    case READ_CONTENT:</span><br><span class="line">      ByteBuf frame = buf.readBytes(length);</span><br><span class="line">      checkpoint(MyDecoderState.READ_LENGTH);</span><br><span class="line">      out.add(frame);</span><br><span class="line">      break;</span><br><span class="line">    default:</span><br><span class="line">      throw new Error(&quot;Shouldn&#x27;t reach here.&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Calling checkpoint() with no parameter<br>An alternative way to manage the decoder state is to manage it by yourself.<br>没有参数调用checkpoint()方法：</p>
+<p>另外一种管理decoder的方式是自己管理decoder状态：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">public class IntegerHeaderFrameDecoder</span><br><span class="line">     extends ReplayingDecoder&lt;Void&gt; &#123;</span><br><span class="line"></span><br><span class="line">  private boolean readLength;</span><br><span class="line">  private int length;</span><br><span class="line"></span><br><span class="line">   @Override</span><br><span class="line">  protected void decode(ChannelHandlerContext ctx,</span><br><span class="line">                          ByteBuf buf, List&lt;Object&gt; out) throws Exception &#123;</span><br><span class="line">    if (!readLength) &#123;</span><br><span class="line">      length = buf.readInt();</span><br><span class="line">      readLength = true;</span><br><span class="line">      checkpoint();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    if (readLength) &#123;</span><br><span class="line">      ByteBuf frame = buf.readBytes(length);</span><br><span class="line">      readLength = false;</span><br><span class="line">      checkpoint();</span><br><span class="line">      out.add(frame);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Replacing a decoder with another decoder in a pipeline<br>在管道中用另外一个decoder替换一个decoder<br><font color="#FF0000"><br>If you are going to write a protocol multiplexer, you will probably want to replace a ReplayingDecoder (protocol detector) with another ReplayingDecoder, ByteToMessageDecoder or MessageToMessageDecoder (actual protocol decoder). It is not possible to achieve this simply by calling ChannelPipeline.replace(ChannelHandler, String, ChannelHandler), but some additional steps are required:<br></font><br>如果你想写一个协议组件，你可能替换一个ReplayingDecoder （协议探测者）用另外的ReplayingDecoder、ByteToMessageDecoder 或者MessageToMessageDecoder （实际的解码器），<br>你不可能简单的通过调用ChannelPipeline.replace(ChannelHandler, String, ChannelHandler)来实现，但是一些额外的步骤是需要的：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">public class FirstDecoder extends ReplayingDecoder&lt;Void&gt; &#123;</span><br><span class="line"></span><br><span class="line">     @Override</span><br><span class="line">    protected void decode(ChannelHandlerContext ctx,</span><br><span class="line">                            ByteBuf buf, List&lt;Object&gt; out) &#123;</span><br><span class="line">        ...</span><br><span class="line">        // Decode the first message</span><br><span class="line">        Object firstMessage = ...;</span><br><span class="line"></span><br><span class="line">        // Add the second decoder</span><br><span class="line">        ctx.pipeline().addLast(&quot;second&quot;, new SecondDecoder());</span><br><span class="line"></span><br><span class="line">        if (buf.isReadable()) &#123;</span><br><span class="line">            // Hand off the remaining data to the second decoder</span><br><span class="line">            out.add(firstMessage);</span><br><span class="line">            out.add(buf.readBytes(super.actualReadableBytes()));</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            // Nothing to hand off</span><br><span class="line">            out.add(firstMessage);</span><br><span class="line">        &#125;</span><br><span class="line">        // Remove the first decoder (me)</span><br><span class="line">        ctx.pipeline().remove(this);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>不需要状态管理的时候不需要Void泛型。</p>
+<p>另外上文提到的<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tLzExNTY3MjE4NzQvbmV0dHlfbGVjdHVyZS9ibG9iL21hc3Rlci9zcmMvbWFpbi9qYXZhL2NvbS9jZWFzZXIvbmV0dHkvbWVzc2FnZVRvTWVzc2FnZURlY29kZXI=">MessageToMessageDecoder<i class="fa fa-external-link-alt"></i></span>解码器在这里不做详细介绍，主要是实现消息到消息的解码，可以去git看具体使用方式。</p>
+<p>除了编码器很解码器之外还有既是解码器又是编码器的：MessageToMessageCodec（继承的方式）、CombinedChannelDuplexHandler（组合方式）,那么我们在实际开发的时候怎么选择呢，根据单一职责设计原则，尽量是要分开。<br>几种常见的编解码器:</p>
+<p><strong>LineBasedFrameDecoder</strong><br><font color="#FF0000"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * A decoder that splits the received &#123;@link ByteBuf&#125;s on line endings.</span><br><span class="line"> * &lt;p&gt;</span><br><span class="line"> * Both &#123;@code &quot;\n&quot;&#125; and &#123;@code &quot;\r\n&quot;&#125; are handled.</span><br><span class="line"> * For a more general delimiter-based decoder, see &#123;@link DelimiterBasedFrameDecoder&#125;.</span><br><span class="line"> * 基于行的解码器，遇到 &quot;\n&quot;、&quot;\r\n&quot;会被作为行分隔符</span><br><span class="line"> */</span><br><span class="line">public class LineBasedFrameDecoder extends ByteToMessageDecoder</span><br></pre></td></tr></table></figure>
+</font>
+
+<p><strong>FixedLengthFrameDecoder</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line">A decoder that splits the received ByteBufs by the fixed number of bytes. For example, if you received the following four fragmented packets:</span><br><span class="line"> +---+----+------+----+</span><br><span class="line"> | A | BC | DEFG | HI |</span><br><span class="line"> +---+----+------+----+</span><br><span class="line"></span><br><span class="line">A FixedLengthFrameDecoder(3) will decode them into the following three packets with the fixed length:</span><br><span class="line"> +-----+-----+-----+</span><br><span class="line"> | ABC | DEF | GHI |</span><br><span class="line"> +-----+-----+-----+</span><br><span class="line"> 按照固定长度包的解码器</span><br><span class="line">*/</span><br><span class="line">public class FixedLengthFrameDecoder extends ByteToMessageDecoder</span><br></pre></td></tr></table></figure>
+
+<p><strong>DelimiterBasedFrameDecoder</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">A decoder that splits the received ByteBufs by one or more delimiters. It is particularly useful for decoding the frames which ends with a delimiter such as NUL or newline characters.</span><br><span class="line">Predefined delimiters</span><br><span class="line">Delimiters defines frequently used delimiters for convenience&#x27; sake.</span><br><span class="line"></span><br><span class="line">Specifying more than one delimiter</span><br><span class="line">DelimiterBasedFrameDecoder allows you to specify more than one delimiter. If more than one delimiter is found in the buffer, it chooses the delimiter which produces the shortest frame. For example, if you have the following data in the buffer:</span><br><span class="line"></span><br><span class="line"> +--------------+</span><br><span class="line"> | ABC\nDEF\r\n |</span><br><span class="line"> +--------------+</span><br><span class="line"></span><br><span class="line">a DelimiterBasedFrameDecoder(Delimiters.lineDelimiter()) will choose &#x27;\n&#x27; as the first delimiter and produce two frames:</span><br><span class="line"> +-----+-----+</span><br><span class="line"> | ABC | DEF |</span><br><span class="line"> +-----+-----+</span><br><span class="line"></span><br><span class="line">rather than incorrectly choosing &#x27;\r\n&#x27; as the first delimiter:</span><br><span class="line"> +----------+</span><br><span class="line"> | ABC\nDEF |</span><br><span class="line"> +----------+</span><br><span class="line"> 基于分隔符的振解码器,注意使用&#x27;\n&#x27;分割会产生2个振，使用&#x27;\r\n&#x27;会产生1个振，</span><br><span class="line"> DelimiterBasedFrameDecoder原则使用产生最小振的分隔符，即&#x27;\n&#x27;</span><br><span class="line"> public class DelimiterBasedFrameDecoder extends ByteToMessageDecoder</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><strong>LengthFieldBasedFrameDecoder</strong></p>
+<p>public class LengthFieldBasedFrameDecoder extends ByteToMessageDecoder</p>
+<font color="#FF0000">
+A decoder that splits the received ByteBufs dynamically by the value of the length field in the message. It is particularly useful when you decode a binary message which has an integer header field that represents the length of the message body or the whole message.
+LengthFieldBasedFrameDecoder has many configuration parameters so that it can decode any message with a length field, which is often seen in proprietary client-server protocols. Here are some example that will give you the basic idea on which option does what.
+</font>
+
+<p>可以通过接收的消息中的length的值得来动态分割接收的ByteBufs ，当我们解码一个二进制消息，其中有一个整型的字段在header里边，这个字段代表消息体的长度或者整个消息的长度，这种情况LengthFieldBasedFrameDecoder是非常有用的。<br>LengthFieldBasedFrameDecoder 拥有许多配置参数，因此他可以通过长度length filed解码任意的消息，通常在一些私有的协议是经常出现的，下面的实例让你对每一个的含义都有一个了解。</p>
+<p>2 bytes length field at offset 0, do not strip header<br>偏移量是0不会去除header<br><font color="#FF0000"><br>The value of the length field in this example is 12 (0x0C) which represents the length of “HELLO, WORLD”. By default, the decoder assumes that the length field represents the number of the bytes that follows the length field. Therefore, it can be decoded with the simplistic parameter combination.<br></font><br>长度字段的值是1代表“HELLO, WORLD”的字符串的长度，默认情况下，解码器假设长度字段的值代表的是length field后边跟随字节的长度，<br>因此它可以通过简单的参数组合的方式来解码。<br> lengthFieldOffset   = 0<br> lengthFieldLength   = 2<br> lengthAdjustment    = 0<br> initialBytesToStrip = 0 (= do not strip header)</p>
+<p> BEFORE DECODE (14 bytes)         AFTER DECODE (14 bytes)<br> +——–+—————-+      +——–+—————-+<br> | Length | Actual Content |—–&gt;| Length | Actual Content |<br> | 0x000C | “HELLO, WORLD” |      | 0x000C | “HELLO, WORLD” |<br> +——–+—————-+      +——–+—————-+<br> 【Length 的值是12，后边跟随的content的长度是12个字节。】<br> <font color="#FF0000"><br>2 bytes length field at offset 0, strip header<br></font><br>偏移量是0跳过头<br><font color="#FF0000"><br>Because we can get the length of the content by calling ByteBuf.readableBytes(), you might want to strip the length field by specifying initialBytesToStrip. In this example, we specified 2, that is same with the length of the length field, to strip the first two bytes.<br></font><br>因为我们可以通过调用 ByteBuf.readableBytes()老得到内容的长度，你可以通过指定initialBytesToStrip的值跳过length field，在这例子中，我们指定的是2，他和length field的值是一致的，为了跳过开始的2个字节。<br> lengthFieldOffset   = 0<br> lengthFieldLength   = 2<br> lengthAdjustment    = 0<br> initialBytesToStrip = 2 (= the length of the Length field)</p>
+<p> BEFORE DECODE (14 bytes)         AFTER DECODE (12 bytes)<br> +——–+—————-+      +—————-+<br> | Length | Actual Content |—–&gt;| Actual Content |<br> | 0x000C | “HELLO, WORLD” |      | “HELLO, WORLD” |<br> +——–+—————-+      +—————-+</p>
+<font color="#FF0000">
+2 bytes length field at offset 0, do not strip header, the length field represents the length of the whole message
+</font>
+偏移量是0，不跳过头，length field代表是整个消息的长度
+<font color="#FF0000">
+In most cases, the length field represents the length of the message body only, as shown in the previous examples. However, in some protocols, the length field represents the length of the whole message, including the message header. In such a case, we specify a non-zero lengthAdjustment. Because the length value in this example message is always greater than the body length by 2, we specify -2 as lengthAdjustment for compensation.
+</font>
+在大多数情况下，length field 代表的是消息体的长度，就像在之前的例子，当然，在某些协议，length field 代表这个消息的长度，在这种情况，我们指定一个非0的lengthAdjustment，因为在这个例子中length value总是大于消息体2，我们指定-2位lengthAdjustment 的值为了补偿。
+ lengthFieldOffset   =  0
+ lengthFieldLength   =  2
+ lengthAdjustment    = -2 (= the length of the Length field)
+ initialBytesToStrip =  0
+
+<p> BEFORE DECODE (14 bytes)         AFTER DECODE (14 bytes)<br> +——–+—————-+      +——–+—————-+<br> | Length | Actual Content |—–&gt;| Length | Actual Content |<br> | 0x000E | “HELLO, WORLD” |      | 0x000E | “HELLO, WORLD” |<br> +——–+—————-+      +——–+—————-+</p>
+<font color="#FF0000">
+3 bytes length field at the end of 5 bytes header, do not strip header
+The following message is a simple variation of the first example. An extra header value is prepended to the message. lengthAdjustment is zero again because the decoder always takes the length of the prepended data into account during frame length calculation.
+</font>
+ lengthFieldOffset   = 2 (= the length of Header 1)
+ lengthFieldLength   = 3
+ lengthAdjustment    = 0
+ initialBytesToStrip = 0
+
+<p> BEFORE DECODE (17 bytes)                      AFTER DECODE (17 bytes)<br> +———-+———-+—————-+      +———-+———-+—————-+<br> | Header 1 |  Length  | Actual Content |—–&gt;| Header 1 |  Length  | Actual Content |<br> |  0xCAFE  | 0x00000C | “HELLO, WORLD” |      |  0xCAFE  | 0x00000C | “HELLO, WORLD” |<br> +———-+———-+—————-+      +———-+———-+—————-+</p>
+<font color="#FF0000">
+3 bytes length field at the beginning of 5 bytes header, do not strip header
+This is an advanced example that shows the case where there is an extra header between the length field and the message body. You have to specify a positive lengthAdjustment so that the decoder counts the extra header into the frame length calculation.
+</font>
+ lengthFieldOffset   = 0
+ lengthFieldLength   = 3
+ lengthAdjustment    = 2 (= the length of Header 1)
+ initialBytesToStrip = 0
+
+<p> BEFORE DECODE (17 bytes)                      AFTER DECODE (17 bytes)<br> +———-+———-+—————-+      +———-+———-+—————-+<br> |  Length  | Header 1 | Actual Content |—–&gt;|  Length  | Header 1 | Actual Content |<br> | 0x00000C |  0xCAFE  | “HELLO, WORLD” |      | 0x00000C |  0xCAFE  | “HELLO, WORLD” |<br> +———-+———-+—————-+      +———-+———-+—————-+</p>
+<font color="#FF0000">
+2 bytes length field at offset 1 in the middle of 4 bytes header, strip the first header field and the length field
+This is a combination of all the examples above. There are the prepended header before the length field and the extra header after the length field. The prepended header affects the lengthFieldOffset and the extra header affects the lengthAdjustment. We also specified a non-zero initialBytesToStrip to strip the length field and the prepended header from the frame. If you don't want to strip the prepended header, you could specify 0 for initialBytesToSkip.
+</font>
+ lengthFieldOffset   = 1 (= the length of HDR1)
+ lengthFieldLength   = 2
+ lengthAdjustment    = 1 (= the length of HDR2)
+ initialBytesToStrip = 3 (= the length of HDR1 + LEN)
+
+<p> BEFORE DECODE (16 bytes)                       AFTER DECODE (13 bytes)<br> +——+——–+——+—————-+      +——+—————-+<br> | HDR1 | Length | HDR2 | Actual Content |—–&gt;| HDR2 | Actual Content |<br> | 0xCA | 0x000C | 0xFE | “HELLO, WORLD” |      | 0xFE | “HELLO, WORLD” |<br> +——+——–+——+—————-+      +——+—————-+</p>
+<font color="#FF0000">
+2 bytes length field at offset 1 in the middle of 4 bytes header, strip the first header field and the length field, the length field represents the length of the whole message
+Let's give another twist to the previous example. The only difference from the previous example is that the length field represents the length of the whole message instead of the message body, just like the third example. We have to count the length of HDR1 and Length into lengthAdjustment. Please note that we don't need to take the length of HDR2 into account because the length field already includes the whole header length.
+</font>
+ lengthFieldOffset   =  1
+ lengthFieldLength   =  2
+ lengthAdjustment    = -3 (= the length of HDR1 + LEN, negative)
+ initialBytesToStrip =  3
+
+<p> BEFORE DECODE (16 bytes)                       AFTER DECODE (13 bytes)<br> +——+——–+——+—————-+      +——+—————-+<br> | HDR1 | Length | HDR2 | Actual Content |—–&gt;| HDR2 | Actual Content |<br> | 0xCA | 0x0010 | 0xFE | “HELLO, WORLD” |      | 0xFE | “HELLO, WORLD” |<br> +——+——–+——+—————-+      +——+—————-+</p>
+<p>相应中文介绍和举例：<span class="exturl" data-url="aHR0cDovL3d3dy5qaWFuc2h1LmNvbS9wL2EwYTUxZmQ3OWY2Mg==">http://www.jianshu.com/p/a0a51fd79f62<i class="fa fa-external-link-alt"></i></span></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>CeaserWang
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://ceaser.wang/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E4%BA%8C%E5%8D%81%E4%B8%89-ReplayingDecoder%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E4%B8%8E%E7%89%B9%E6%80%A7%E8%A7%A3%E8%AF%BB%E4%BB%A5%E5%8F%8A%E5%85%B6%E4%BB%96%E7%BC%96%E8%A7%A3%E7%A0%81%E5%99%A8%E4%BB%8B%E7%BB%8D/" title="netty源码分析(二十三)ReplayingDecoder源码分析与特性解读以及其他编解码器介绍">https://ceaser.wang/2018/10/04/netty源码分析-二十三-ReplayingDecoder源码分析与特性解读以及其他编解码器介绍/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/ReplayingDecoder/" rel="tag"><i class="fa fa-tag"></i> ReplayingDecoder</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E4%BA%8C%E5%8D%81%E4%BA%8C-Netty%E7%BC%96%E8%A7%A3%E7%A0%81%E5%99%A8%E5%89%96%E6%9E%90%E4%B8%8E%E5%85%A5%E7%AB%99%E5%87%BA%E7%AB%99%E5%A4%84%E7%90%86%E5%99%A8%E8%AF%A6%E8%A7%A3/" rel="prev" title="netty源码分析(二十二)Netty编解码器剖析与入站出站处理器详解">
+                  <i class="fa fa-chevron-left"></i> netty源码分析(二十二)Netty编解码器剖析与入站出站处理器详解
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E4%BA%8C%E5%8D%81%E5%9B%9B-TCP%E7%B2%98%E5%8C%85%E4%B8%8E%E6%8B%86%E5%8C%85%E5%AE%9E%E4%BE%8B%E6%BC%94%E7%A4%BA%E5%8F%8A%E5%88%86%E6%9E%90/" rel="next" title="netty源码分析(二十四)TCP粘包与拆包实例演示及分析">
+                  netty源码分析(二十四)TCP粘包与拆包实例演示及分析 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CeaserWang</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":"forest","js":{"url":"https://cdn.jsdelivr.net/npm/mermaid@8.11.0/dist/mermaid.min.js","integrity":"sha256-sVAx+v/Q7v0Q2xm5vN7h5ccSna6gaLREhG9sF8pKT6I="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+  <script class="next-config" data-name="nprogress" type="application/json">{"enable":true,"spinner":true}</script>
+  <script src="/js/third-party/nprogress.js"></script>
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"ryAR9bttS7fex1FPEPAylmmJ-gzGzoHsz","app_key":"dYqygoN4Y01Bl38OdRoCHUYn","server_url":null,"security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+
+</body>
+</html>

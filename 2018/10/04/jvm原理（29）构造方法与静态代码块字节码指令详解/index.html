@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.css" integrity="sha256-no0c5ccDODBwp+9hSmV5VvPpKwHCpbVzXHexIkupM6U=" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.js" integrity="sha256-a5YRB27CcBwBFcT5EF/f3E4vzIqyHrSR878nseNYw64=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ceaser.wang","root":"/","images":"/images","scheme":"Muse","version":"8.6.1","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+<meta name="description" content="上一节解析完了常量池，接下来是访问标记，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="jvm原理（29）构造方法与静态代码块字节码指令详解">
+<meta property="og:url" content="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8829%EF%BC%89%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95%E4%B8%8E%E9%9D%99%E6%80%81%E4%BB%A3%E7%A0%81%E5%9D%97%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E8%AF%A6%E8%A7%A3/index.html">
+<meta property="og:site_name" content="南贺神社">
+<meta property="og:description" content="上一节解析完了常量池，接下来是访问标记，">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8829%EF%BC%89%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95%E4%B8%8E%E9%9D%99%E6%80%81%E4%BB%A3%E7%A0%81%E5%9D%97%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E8%AF%A6%E8%A7%A3/20180804134250848.png">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8829%EF%BC%89%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95%E4%B8%8E%E9%9D%99%E6%80%81%E4%BB%A3%E7%A0%81%E5%9D%97%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E8%AF%A6%E8%A7%A3/2018082613275196.png">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8829%EF%BC%89%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95%E4%B8%8E%E9%9D%99%E6%80%81%E4%BB%A3%E7%A0%81%E5%9D%97%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E8%AF%A6%E8%A7%A3/20180826132829940.png">
+<meta property="article:published_time" content="2018-10-04T17:08:33.000Z">
+<meta property="article:modified_time" content="2022-01-04T02:21:30.792Z">
+<meta property="article:author" content="CeaserWang">
+<meta property="article:tag" content="静态方法">
+<meta property="article:tag" content="构造方法">
+<meta property="article:tag" content="字节码指令">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8829%EF%BC%89%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95%E4%B8%8E%E9%9D%99%E6%80%81%E4%BB%A3%E7%A0%81%E5%9D%97%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E8%AF%A6%E8%A7%A3/20180804134250848.png">
+
+
+<link rel="canonical" href="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8829%EF%BC%89%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95%E4%B8%8E%E9%9D%99%E6%80%81%E4%BB%A3%E7%A0%81%E5%9D%97%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E8%AF%A6%E8%A7%A3/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8829%EF%BC%89%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95%E4%B8%8E%E9%9D%99%E6%80%81%E4%BB%A3%E7%A0%81%E5%9D%97%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E8%AF%A6%E8%A7%A3/","path":"2018/10/04/jvm原理（29）构造方法与静态代码块字节码指令详解/","title":"jvm原理（29）构造方法与静态代码块字节码指令详解"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>jvm原理（29）构造方法与静态代码块字节码指令详解 | 南贺神社</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">南贺神社</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">你写程序有写诗一样的感觉吗?</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">205</span></a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">24</span></a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">212</span></a></li>
+        <li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-overview">
+            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="CeaserWang"
+      src="/../0xcc/index/Uchiha.jpg">
+  <p class="site-author-name" itemprop="name">CeaserWang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">212</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">205</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tLzExNTY3MjE4NzQ=" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;1156721874"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmNlYXNlcndhbmdAb3V0bG9vay5jb20=" title="E-Mail → mailto:ceaserwang@outlook.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+  </div>
+  <div class="cc-license site-overview-item animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><img src="https://cdn.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-user-friends fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly90d29kcmFnb25sYWtlLmNvbQ==" title="https:&#x2F;&#x2F;twodragonlake.com">TwoDragonLake</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9yb290Y2x1c3Rlci5naXRodWIuaW8=" title="https:&#x2F;&#x2F;rootcluster.github.io">RootCluster</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9tdXNlZmxvdy5pbw==" title="https:&#x2F;&#x2F;museflow.io">MuseFlow</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9pbmNvZGVyLm9yZw==" title="https:&#x2F;&#x2F;incoder.org">BladeCode</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9rYWlmYS5kZXY=" title="https:&#x2F;&#x2F;kaifa.dev">Alyenc</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmRhemhpZGF5b25nLmNu" title="https:&#x2F;&#x2F;blog.dazhidayong.cn">Killua</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9qb2NlbHluc2hhbmcuY24v" title="https:&#x2F;&#x2F;jocelynshang.cn&#x2F;">Jocelyn</span>
+        </li>
+    </ul>
+  </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8829%EF%BC%89%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95%E4%B8%8E%E9%9D%99%E6%80%81%E4%BB%A3%E7%A0%81%E5%9D%97%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E8%AF%A6%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
+      <meta itemprop="name" content="CeaserWang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="南贺神社">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          jvm原理（29）构造方法与静态代码块字节码指令详解
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-10-04 17:08:33" itemprop="dateCreated datePublished" datetime="2018-10-04T17:08:33+00:00">2018-10-04</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">Edited on</span>
+        <time title="Modified: 2022-01-04 02:21:30" itemprop="dateModified" datetime="2022-01-04T02:21:30+00:00">2022-01-04</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/jvm/" itemprop="url" rel="index"><span itemprop="name">jvm</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8829%EF%BC%89%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95%E4%B8%8E%E9%9D%99%E6%80%81%E4%BB%A3%E7%A0%81%E5%9D%97%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E8%AF%A6%E8%A7%A3/" class="post-meta-item leancloud_visitors" data-flag-title="jvm原理（29）构造方法与静态代码块字节码指令详解" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>上一节解析完了常量池，接下来是<strong>访问标记</strong>，<br><img src="20180804134250848.png" alt="这里写图片描述"></p>
+<span id="more"></span>
+<p>00 21 ： ACC_SUPPER + ACC_PUBLIC<br>紧接着是<strong>类的名字</strong>，2个字节：00 05 是5号常量 【#5 = Class              #49            // com/twodragonlake/jvm/bytecode/MyTest2】<br><strong>父类的名字</strong>，占2个字节：00 0D 是13号常量：【#13 = Class              #59            // java/lang/Object】<br><strong>接口的信息</strong>：00 00 没有接口。<br><strong>成员变量信息</strong>：00 03 有三个成员变量。<br>第一个字段：<br>访问标记：00 00 为默认访问标记。<br>名字索引：00 0E 是14号常量：【#14 = Utf8               str】<br> 描述符索引：00 0F 是15号常量：【#15 = Utf8               Ljava/lang/String;】<br> 字段属性数量：00 00 没有属性<br> 第二个字段：<br> 访问标记：00 02 私有的，private<br> 名字索引：00 10 是16号常量：【#16 = Utf8               x】<br> 描述符索引：00 11 是17号常量：【 #17 = Utf8               I】<br> 字段属性数量：00 00 没有字段属性<br> 第三个字段：<br>  访问标记：00 09 是public + static<br>  名字索引：00 12是18号常量：【#18 = Utf8               in】<br>  描述符索引：00 13 是19号常量：【#19 = Utf8               Ljava/lang/Integer;】<br>  字段属性数量：00 00 没有<br>然后是方法：<br>方法的数量：00 06 是6个方法：<br>init 、 main、setX、test、test2、clinit（静态代码块）<br>第一方法：<br>访问标记：00 01 是public<br>名字索引：00 14 是20号常量：【#20 = Utf8               <code>&lt;init&gt;</code>】<br>描述符索引：00 15 是21号常量：【#21 = Utf8               ()V】<br>方法属性数量：00 01 包含一个属性<br>第一个属性：<br>属性名字索引：00 16是22号索引：【#22 = Utf8               Code】<br>属性长度：00 00  0 42 为66个长度，默认构造方法完成了成员变量的赋值，注意只是对非静态的赋值：</p>
+<p>PS：对于字节码文件来说，在方法区的字节码这里可以不包含任何含有初始化构造方法的字节码，很多人认为java代码如果没有默认的构造器，那么java编译器<br>会生成一个没有参数的构造方法，但是这是错误的，字节码规范里边没有要求，方法区必须要有默认的构造方法，java语言规范和jvm规范是不一样的。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"> 0 aload_0</span><br><span class="line"> 1 invokespecial #1 &lt;java/lang/Object.&lt;init&gt;&gt; 调用父类构造器</span><br><span class="line"> 4 aload_0</span><br><span class="line"> 5 ldc #2 &lt;Welcome&gt;  加载字符串Welcome</span><br><span class="line"> 7 putfield #3 &lt;com/twodragonlake/jvm/bytecode/MyTest2.str&gt;  把字符窜Welcome赋值给str变量</span><br><span class="line">10 aload_0</span><br><span class="line">11 iconst_5  加载整数5</span><br><span class="line">12 putfield #4 &lt;com/twodragonlake/jvm/bytecode/MyTest2.x&gt; 把整数5赋值给x变量</span><br><span class="line">15 return  方法返回</span><br></pre></td></tr></table></figure>
+<p>如果我们自己声明一个构造方法，是不是也会存在对成员变量的赋值？我们加入一个有参数的构造方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public MyTest2()&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public MyTest2(int i)&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="2018082613275196.png" alt="这里写图片描述"><br><img src="20180826132829940.png" alt="这里写图片描述"></p>
+<p>可以看到默认的无参构造器和有参数的构造器字节码是一样的，都会对成员变量进行赋值。<br>其他的方法的字节码解析和之前的程序大致相同，不再熬述。<br>着重说一下test方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"> 0 aload_1</span><br><span class="line"> 1 dup</span><br><span class="line"> 2 astore_2</span><br><span class="line"> 3 monitorenter  </span><br><span class="line"> 4 getstatic #10 &lt;java/lang/System.out&gt;</span><br><span class="line"> 7 ldc #11 &lt;hello world&gt;</span><br><span class="line"> 9 invokevirtual #12 &lt;java/io/PrintStream.println&gt;</span><br><span class="line">12 aload_2</span><br><span class="line">13 monitorexit</span><br><span class="line">14 goto 22 (+8)</span><br><span class="line">17 astore_3</span><br><span class="line">18 aload_2</span><br><span class="line">19 monitorexit</span><br><span class="line">20 aload_3</span><br><span class="line">21 athrow</span><br><span class="line">22 return</span><br></pre></td></tr></table></figure>
+<p><span class="exturl" data-url="aHR0cHM6Ly9kb2NzLm9yYWNsZS5jb20vamF2YXNlL3NwZWNzL2p2bXMvc2U4L2h0bWwvanZtcy02Lmh0bWwjanZtcy02LjUubW9uaXRvcmVudGVy">monitorenter<i class="fa fa-external-link-alt"></i></span>  是synchronized的监视器加锁的地方，oracle的官方doc：<br><strong>monitorenter</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">Operation</span><br><span class="line">Enter monitor for object</span><br><span class="line">进入对象的监视器</span><br><span class="line">Format</span><br><span class="line"></span><br><span class="line">monitorenter</span><br><span class="line">Forms</span><br><span class="line">monitorenter = 194 (0xc2)</span><br><span class="line"></span><br><span class="line">Operand Stack</span><br><span class="line">..., objectref →</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">Description</span><br><span class="line">The objectref must be of type reference.</span><br><span class="line">监视的对象必须是引用类型</span><br><span class="line">Each object is associated with a monitor. A monitor is locked if and only if it has an owner.</span><br><span class="line">The thread that executes monitorenter attempts to gain ownership of the monitor associated with objectref,</span><br><span class="line"> as follows:</span><br><span class="line">每一个对象都有一个监视器，如果一个monitor 是拥有者那么它就获得了锁，线程获得monitorenter 的使用权遵循下边的过程：</span><br><span class="line">If the entry count of the monitor associated with objectref is zero,</span><br><span class="line">the thread enters the monitor and sets its entry count to one. The thread is then the owner of the monitor.</span><br><span class="line">如果monitor关联对象的进入次数是0，当前线程进入monitor并且设置进入次数是1，那么接下来这个线程就是这个monitor的拥有者。</span><br><span class="line">If the thread already owns the monitor associated with objectref,</span><br><span class="line"> it reenters the monitor, incrementing its entry count.</span><br><span class="line">如果一个线程已经是关联对象的monitor的拥有者，那么线程再次进入monitor，会使得进入次数加1</span><br><span class="line">If another thread already owns the monitor associated with objectref,</span><br><span class="line"> the thread blocks until the monitor&#x27;s entry count is zero, then tries again to gain ownership.</span><br><span class="line">如果另外一个线程已经是关联对象的monitor 的拥有者，那么当前线程会一直阻塞到进入次数为0，才能再次尝试获取monitor 的使用权。</span><br></pre></td></tr></table></figure>
+
+<p><strong>monitorexit</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">monitorexit</span><br><span class="line">Operation</span><br><span class="line">Exit monitor for object</span><br><span class="line">为了退出对象的monitor</span><br><span class="line">Format</span><br><span class="line"></span><br><span class="line">monitorexit</span><br><span class="line">Forms</span><br><span class="line">monitorexit = 195 (0xc3)</span><br><span class="line"></span><br><span class="line">Operand Stack</span><br><span class="line">..., objectref →</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">Description</span><br><span class="line">The objectref must be of type reference.</span><br><span class="line">关联的对象必须是引用类型的。</span><br><span class="line">The thread that executes monitorexit must be the owner of the monitor associated with</span><br><span class="line">the instance referenced by objectref.</span><br><span class="line">当前执行monitorexit 的线程必须是关联对象实例对象的引用上的monitor 的拥有者。</span><br><span class="line">The thread decrements the entry count of the monitor associated with objectref.</span><br><span class="line">If as a result the value of the entry count is zero, the thread exits the monitor and is no longer its owner.</span><br><span class="line">Other threads that are blocking to enter the monitor are allowed to attempt to do so.</span><br><span class="line">当前线程减1个进入次数，正对与关联对象上的monitor 的进入此时，如果减一之后变成0，那么当前线程退出monitor ，</span><br><span class="line">不再是拥有者，其他阻塞的线程此时可以被允许尝试获取拥有权。</span><br></pre></td></tr></table></figure>
+
+<p>回到我们的字节码，看一下clinit 对静态代码块的操作：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">0 bipush 10</span><br><span class="line">2 invokestatic #8 &lt;java/lang/Integer.valueOf&gt;</span><br><span class="line">5 putstatic #9 &lt;com/twodragonlake/jvm/bytecode/MyTest2.in&gt; 对静态变量in进行赋值</span><br><span class="line">8 return</span><br></pre></td></tr></table></figure>
+
+<p>如果我们加入一个static代码块，那么clinit 会有什么变化？</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">static &#123;</span><br><span class="line">    System.out.println(&quot;test&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>clinit代码块：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"> 0 bipush 10</span><br><span class="line"> 2 invokestatic #8 &lt;java/lang/Integer.valueOf&gt;</span><br><span class="line"> 5 putstatic #9 &lt;com/twodragonlake/jvm/bytecode/MyTest2.in&gt;</span><br><span class="line"> 8 getstatic #10 &lt;java/lang/System.out&gt;</span><br><span class="line">11 ldc #13 &lt;test&gt;</span><br><span class="line">13 invokevirtual #12 &lt;java/io/PrintStream.println&gt;</span><br><span class="line">16 return</span><br></pre></td></tr></table></figure>
+<p>可以看到静态的代码块的内容被加到了 clinit里边去了，不管有多少个静态代码块 都会合并到clinit里边去。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>CeaserWang
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8829%EF%BC%89%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95%E4%B8%8E%E9%9D%99%E6%80%81%E4%BB%A3%E7%A0%81%E5%9D%97%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E8%AF%A6%E8%A7%A3/" title="jvm原理（29）构造方法与静态代码块字节码指令详解">https://ceaser.wang/2018/10/04/jvm原理（29）构造方法与静态代码块字节码指令详解/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E9%9D%99%E6%80%81%E6%96%B9%E6%B3%95/" rel="tag"><i class="fa fa-tag"></i> 静态方法</a>
+              <a href="/tags/%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95/" rel="tag"><i class="fa fa-tag"></i> 构造方法</a>
+              <a href="/tags/%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4/" rel="tag"><i class="fa fa-tag"></i> 字节码指令</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8828%EF%BC%89synchronized%E5%85%B3%E9%94%AE%E5%AD%97%E6%89%80%E7%94%9F%E6%88%90%E7%9A%84%E5%AD%97%E8%8A%82%E7%A0%81%E8%AF%A6%E7%BB%86%E5%88%86%E6%9E%90-%E5%A4%8D%E6%9D%82%E5%AD%97%E8%8A%82%E7%A0%81%E6%96%87%E4%BB%B6%E7%9A%84%E5%88%86%E6%9E%90%E8%BF%87%E7%A8%8B/" rel="prev" title="jvm原理（28）synchronized关键字所生成的字节码详细分析&&复杂字节码文件的分析过程">
+                  <i class="fa fa-chevron-left"></i> jvm原理（28）synchronized关键字所生成的字节码详细分析&&复杂字节码文件的分析过程
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8830%EF%BC%89%E9%80%9A%E8%BF%87%E5%AD%97%E8%8A%82%E7%A0%81%E5%88%86%E6%9E%90this%E5%85%B3%E9%94%AE%E5%AD%97%E4%BB%A5%E5%8F%8A%E5%BC%82%E5%B8%B8%E8%A1%A8%E7%9A%84%E9%87%8D%E8%A6%81%E4%BD%9C%E7%94%A8-%E9%80%9A%E8%BF%87%E5%AD%97%E8%8A%82%E7%A0%81%E5%88%86%E6%9E%90Java%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E6%9C%BA%E5%88%B6/" rel="next" title="jvm原理（30）通过字节码分析this关键字以及异常表的重要作用&通过字节码分析Java异常处理机制">
+                  jvm原理（30）通过字节码分析this关键字以及异常表的重要作用&通过字节码分析Java异常处理机制 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CeaserWang</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":"forest","js":{"url":"https://cdn.jsdelivr.net/npm/mermaid@8.11.0/dist/mermaid.min.js","integrity":"sha256-sVAx+v/Q7v0Q2xm5vN7h5ccSna6gaLREhG9sF8pKT6I="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+  <script class="next-config" data-name="nprogress" type="application/json">{"enable":true,"spinner":true}</script>
+  <script src="/js/third-party/nprogress.js"></script>
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"ryAR9bttS7fex1FPEPAylmmJ-gzGzoHsz","app_key":"dYqygoN4Y01Bl38OdRoCHUYn","server_url":null,"security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+
+</body>
+</html>

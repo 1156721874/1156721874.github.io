@@ -5,6 +5,7 @@ tags: [architecture]
 categories: architecture
 ---
 
+![fcb226b79e150279769d6becdf281c7.jpg](https://s2.loli.net/2022/02/05/eUDdT19AyOtoVPL.jpg)
 ### 什么是架构
 #### 架构的定义
 ##### 定义
@@ -14,6 +15,7 @@ categories: architecture
 - 企业架构的构成TOGAF/PEAF
 - 我们常说的软件架构更多是信息系统架构与技术架构
 - 而我们常常关注的反而是业务架构（或者说信息系统中的应用架构）
+<!-- more -->
 ###### 软件架构分类
 - 我们常说的信息系统架构是会分为应用架构、数据架构、基础架构
 - 常见的架构结构：分布式
@@ -271,3 +273,6 @@ Basic Available / Soft state / Eventually consisten
 - 面向模式的软件体系结构(卷3)
 - 企业集成模式：设计、构建及部署消息传递解决方案
 - 企业应用架构模式中文版
+
+
+![3c973a36379404eba87bc15f64815f5.jpg](https://s2.loli.net/2022/02/05/C5HPYJmIit2qnGX.jpg)

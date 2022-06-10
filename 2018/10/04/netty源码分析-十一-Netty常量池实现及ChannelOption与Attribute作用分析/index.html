@@ -3,10 +3,9 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
-<meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 6.0.0">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
 
-<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -16,28 +15,29 @@
 
 
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.css" integrity="sha256-no0c5ccDODBwp+9hSmV5VvPpKwHCpbVzXHexIkupM6U=" crossorigin="anonymous">
-  <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.js" integrity="sha256-a5YRB27CcBwBFcT5EF/f3E4vzIqyHrSR878nseNYw64=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"ceaser.wang","root":"/","images":"/images","scheme":"Muse","version":"8.6.1","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
-<meta name="description" content="ServerBootstrap的init方法是服务初始的关键逻辑：">
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ceaser.wang","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.12.1","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="ServerBootstrap的init方法是服务初始的关键逻辑：">
 <meta property="og:type" content="article">
 <meta property="og:title" content="netty源码分析(十一)Netty常量池实现及ChannelOption与Attribute作用分析">
 <meta property="og:url" content="https://ceaser.wang/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%8D%81%E4%B8%80-Netty%E5%B8%B8%E9%87%8F%E6%B1%A0%E5%AE%9E%E7%8E%B0%E5%8F%8AChannelOption%E4%B8%8EAttribute%E4%BD%9C%E7%94%A8%E5%88%86%E6%9E%90/index.html">
 <meta property="og:site_name" content="南贺神社">
 <meta property="og:description" content="ServerBootstrap的init方法是服务初始的关键逻辑：">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://ceaser.wang/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%8D%81%E4%B8%80-Netty%E5%B8%B8%E9%87%8F%E6%B1%A0%E5%AE%9E%E7%8E%B0%E5%8F%8AChannelOption%E4%B8%8EAttribute%E4%BD%9C%E7%94%A8%E5%88%86%E6%9E%90/20171028105501784.png">
-<meta property="og:image" content="https://ceaser.wang/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%8D%81%E4%B8%80-Netty%E5%B8%B8%E9%87%8F%E6%B1%A0%E5%AE%9E%E7%8E%B0%E5%8F%8AChannelOption%E4%B8%8EAttribute%E4%BD%9C%E7%94%A8%E5%88%86%E6%9E%90/20171028115151418.png">
+<meta property="og:image" content="https://ceaser.wang/20171028105501784.png">
+<meta property="og:image" content="https://ceaser.wang/20171028115151418.png">
 <meta property="article:published_time" content="2018-10-04T14:36:33.000Z">
-<meta property="article:modified_time" content="2022-02-05T08:57:16.180Z">
+<meta property="article:modified_time" content="2022-06-10T14:12:45.376Z">
 <meta property="article:author" content="CeaserWang">
 <meta property="article:tag" content="netty常量池 ChannelOption Attribute">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://ceaser.wang/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%8D%81%E4%B8%80-Netty%E5%B8%B8%E9%87%8F%E6%B1%A0%E5%AE%9E%E7%8E%B0%E5%8F%8AChannelOption%E4%B8%8EAttribute%E4%BD%9C%E7%94%A8%E5%88%86%E6%9E%90/20171028105501784.png">
+<meta name="twitter:image" content="https://ceaser.wang/20171028105501784.png">
 
 
 <link rel="canonical" href="https://ceaser.wang/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%8D%81%E4%B8%80-Netty%E5%B8%B8%E9%87%8F%E6%B1%A0%E5%AE%9E%E7%8E%B0%E5%8F%8AChannelOption%E4%B8%8EAttribute%E4%BD%9C%E7%94%A8%E5%88%86%E6%9E%90/">
@@ -49,6 +49,7 @@
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>netty源码分析(十一)Netty常量池实现及ChannelOption与Attribute作用分析 | 南贺神社</title>
   
+
 
 
 
@@ -76,7 +77,7 @@
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <h1 class="site-title">南贺神社</h1>
+      <p class="site-title">南贺神社</p>
       <i class="logo-line"></i>
     </a>
       <p class="site-subtitle" itemprop="description">你写程序有写诗一样的感觉吗?</p>
@@ -92,13 +93,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu">
-        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
-        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
-        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">206</span></a></li>
-        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">25</span></a></li>
-        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">213</span></a></li>
-        <li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">206</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">25</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">213</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
         </a>
@@ -159,8 +154,7 @@
         <!--/noindex-->
 
         <div class="site-overview-wrap sidebar-panel">
-          <div class="site-overview">
-            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <img class="site-author-image" itemprop="image" alt="CeaserWang"
       src="/../0xcc/index/Uchiha.jpg">
   <p class="site-author-name" itemprop="name">CeaserWang</p>
@@ -169,21 +163,18 @@
 <div class="site-state-wrap site-overview-item animated">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
-          <a href="/archives/">
-        
+        <a href="/archives/">
           <span class="site-state-item-count">213</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-            <a href="/categories/">
-          
+          <a href="/categories/">
         <span class="site-state-item-count">25</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-            <a href="/tags/">
-          
+          <a href="/tags/">
         <span class="site-state-item-count">206</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
@@ -198,7 +189,7 @@
       </span>
   </div>
   <div class="cc-license site-overview-item animated" itemprop="license">
-    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><img src="https://cdn.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></span>
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></span>
   </div>
 
 
@@ -231,7 +222,6 @@
     </ul>
   </div>
 
-          </div>
         </div>
       </div>
     </div>
@@ -269,11 +259,16 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
       <meta itemprop="name" content="CeaserWang">
-      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="netty源码分析(十一)Netty常量池实现及ChannelOption与Attribute作用分析 | 南贺神社">
+      <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
@@ -290,13 +285,13 @@
 
       <time title="Created: 2018-10-04 14:36:33" itemprop="dateCreated datePublished" datetime="2018-10-04T14:36:33+00:00">2018-10-04</time>
     </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2022-02-05 08:57:16" itemprop="dateModified" datetime="2022-02-05T08:57:16+00:00">2022-02-05</time>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
       </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-06-10 14:12:45" itemprop="dateModified" datetime="2022-06-10T14:12:45+00:00">2022-06-10</time>
+    </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -327,7 +322,7 @@
         <p>ServerBootstrap的init方法是服务初始的关键逻辑：</p>
 <span id="more"></span>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">void init(Channel channel) throws Exception &#123;</span><br><span class="line">    final Map&lt;ChannelOption&lt;?&gt;, Object&gt; options = options0();//是一个linkedHashMap</span><br><span class="line">    synchronized (options) &#123;</span><br><span class="line">        setChannelOptions(channel, options, logger);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    final Map&lt;AttributeKey&lt;?&gt;, Object&gt; attrs = attrs0();</span><br><span class="line">    synchronized (attrs) &#123;</span><br><span class="line">        for (Entry&lt;AttributeKey&lt;?&gt;, Object&gt; e: attrs.entrySet()) &#123;</span><br><span class="line">            @SuppressWarnings(&quot;unchecked&quot;)</span><br><span class="line">            AttributeKey&lt;Object&gt; key = (AttributeKey&lt;Object&gt;) e.getKey();</span><br><span class="line">            channel.attr(key).set(e.getValue());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ChannelPipeline p = channel.pipeline();</span><br><span class="line"></span><br><span class="line">    final EventLoopGroup currentChildGroup = childGroup;</span><br><span class="line">    final ChannelHandler currentChildHandler = childHandler;</span><br><span class="line">    final Entry&lt;ChannelOption&lt;?&gt;, Object&gt;[] currentChildOptions;</span><br><span class="line">    final Entry&lt;AttributeKey&lt;?&gt;, Object&gt;[] currentChildAttrs;</span><br><span class="line">    synchronized (childOptions) &#123;</span><br><span class="line">        currentChildOptions = childOptions.entrySet().toArray(newOptionArray(childOptions.size()));</span><br><span class="line">    &#125;</span><br><span class="line">    synchronized (childAttrs) &#123;</span><br><span class="line">        currentChildAttrs = childAttrs.entrySet().toArray(newAttrArray(childAttrs.size()));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    p.addLast(new ChannelInitializer&lt;Channel&gt;() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void initChannel(final Channel ch) throws Exception &#123;</span><br><span class="line">            final ChannelPipeline pipeline = ch.pipeline();</span><br><span class="line">            ChannelHandler handler = config.handler();</span><br><span class="line">            if (handler != null) &#123;</span><br><span class="line">                pipeline.addLast(handler);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            ch.eventLoop().execute(new Runnable() &#123;</span><br><span class="line">                @Override</span><br><span class="line">                public void run() &#123;</span><br><span class="line">                    pipeline.addLast(new ServerBootstrapAcceptor(</span><br><span class="line">                            ch, currentChildGroup, currentChildHandler, currentChildOptions, currentChildAttrs));</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这里边有2个重要的类：ChannelOption和AttributeKey。<br>ChannelOption：<br><img src="20171028105501784.png" alt="这里写图片描述"></p>
+<p>这里边有2个重要的类：ChannelOption和AttributeKey。<br>ChannelOption：<br><img src="/20171028105501784.png" alt="这里写图片描述"></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">ChannelOption的doc说明</span><br><span class="line">/**</span><br><span class="line"> * A &#123;@link ChannelOption&#125; allows to configure a &#123;@link ChannelConfig&#125; in a type-safe</span><br><span class="line"> * way. Which &#123;@link ChannelOption&#125; is supported depends on the actual implementation</span><br><span class="line"> * of &#123;@link ChannelConfig&#125; and may depend on the nature of the transport it belongs</span><br><span class="line"> * to.</span><br><span class="line"> *</span><br><span class="line"> * @param &lt;T&gt;   the type of the value which is valid for the &#123;@link ChannelOption&#125;</span><br><span class="line"> */</span><br><span class="line"> ChannelOption是一种以一种安全的方式配置ChannelConfig，ChannelOption支持的类型个依赖于ChannelConfig的实际类型</span><br><span class="line"> 和他所属的传输层的本质。</span><br><span class="line"> T 类型是ChannelOption的值得类型</span><br><span class="line">public class ChannelOption&lt;T&gt; extends AbstractConstant&lt;ChannelOption&lt;T&gt;&gt; &#123;</span><br><span class="line">    private static final ConstantPool&lt;ChannelOption&lt;Object&gt;&gt; pool = new ConstantPool&lt;ChannelOption&lt;Object&gt;&gt;() &#123;</span><br><span class="line">        protected ChannelOption&lt;Object&gt; newConstant(int id, String name) &#123;</span><br><span class="line">            return new ChannelOption&lt;Object&gt;(id, name);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    ...略</span><br></pre></td></tr></table></figure>
 <p>ChannelOption的主要作用是用来存在TCP之类的传输层的一些协议的参数，比如：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">public static final ChannelOption&lt;Boolean&gt; SO_BROADCAST = valueOf(&quot;SO_BROADCAST&quot;);</span><br><span class="line"> public static final ChannelOption&lt;Boolean&gt; SO_KEEPALIVE = valueOf(&quot;SO_KEEPALIVE&quot;);</span><br><span class="line"> public static final ChannelOption&lt;Integer&gt; SO_SNDBUF = valueOf(&quot;SO_SNDBUF&quot;);</span><br><span class="line"> public static final ChannelOption&lt;Integer&gt; SO_RCVBUF = valueOf(&quot;SO_RCVBUF&quot;);</span><br><span class="line"> public static final ChannelOption&lt;Boolean&gt; SO_REUSEADDR = valueOf(&quot;SO_REUSEADDR&quot;);</span><br><span class="line"> public static final ChannelOption&lt;Integer&gt; SO_LINGER = valueOf(&quot;SO_LINGER&quot;);</span><br><span class="line"> public static final ChannelOption&lt;Integer&gt; SO_BACKLOG = valueOf(&quot;SO_BACKLOG&quot;);</span><br><span class="line"> public static final ChannelOption&lt;Integer&gt; SO_TIMEOUT = valueOf(&quot;SO_TIMEOUT&quot;);</span><br></pre></td></tr></table></figure>
@@ -355,7 +350,7 @@
 <p>ChannelOption是用来配置ChannelConfig的，那么看一下ChannelConfig：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * A set of configuration properties of a &#123;@link Channel&#125;.</span><br><span class="line"> * 一个Channel配置属性的集合</span><br><span class="line"> * &lt;p&gt;</span><br><span class="line"> * Please down-cast to more specific configuration type such as</span><br><span class="line"> * &#123;@link SocketChannelConfig&#125; or use &#123;@link #setOptions(Map)&#125; to set the</span><br><span class="line"> * transport-specific properties:</span><br><span class="line"> * 通过向下类型转换比如SocketChannelConfig或者使用setOptions(Map)设置特殊传输属性</span><br><span class="line"> * &lt;pre&gt;</span><br><span class="line"> * &#123;@link Channel&#125; ch = ...;</span><br><span class="line"> * &#123;@link SocketChannelConfig&#125; cfg = &lt;strong&gt;(&#123;@link SocketChannelConfig&#125;) ch.getConfig();&lt;/strong&gt;</span><br><span class="line"> * cfg.setTcpNoDelay(false);</span><br><span class="line"> * &lt;/pre&gt;</span><br><span class="line"> *</span><br><span class="line"> * &lt;h3&gt;Option map&lt;/h3&gt;</span><br><span class="line"> *</span><br><span class="line"> * An option map property is a dynamic write-only property which allows</span><br><span class="line"> * the configuration of a &#123;@link Channel&#125; without down-casting its associated</span><br><span class="line"> * &#123;@link ChannelConfig&#125;.  To update an option map, please call &#123;@link #setOptions(Map)&#125;.</span><br><span class="line"> * 使用map将所有的属性进行设置，它们的key可以是如下的一些参数，value是向下类型装换的类。</span><br><span class="line"> * &lt;p&gt;</span><br><span class="line"> * All &#123;@link ChannelConfig&#125; has the following options:</span><br><span class="line"> *</span><br><span class="line"> * &lt;table border=&quot;1&quot; cellspacing=&quot;0&quot; cellpadding=&quot;6&quot;&gt;</span><br><span class="line"> * &lt;tr&gt;</span><br><span class="line"> * &lt;th&gt;Name&lt;/th&gt;&lt;th&gt;Associated setter method&lt;/th&gt;</span><br><span class="line"> * &lt;/tr&gt;&lt;tr&gt;</span><br><span class="line"> * &lt;td&gt;&#123;@link ChannelOption#CONNECT_TIMEOUT_MILLIS&#125;&lt;/td&gt;&lt;td&gt;&#123;@link #setConnectTimeoutMillis(int)&#125;&lt;/td&gt;</span><br><span class="line"> * &lt;/tr&gt;&lt;tr&gt;</span><br><span class="line"> * &lt;td&gt;&#123;@link ChannelOption#WRITE_SPIN_COUNT&#125;&lt;/td&gt;&lt;td&gt;&#123;@link #setWriteSpinCount(int)&#125;&lt;/td&gt;</span><br><span class="line"> * &lt;/tr&gt;&lt;tr&gt;</span><br><span class="line"> * &lt;td&gt;&#123;@link ChannelOption#WRITE_BUFFER_WATER_MARK&#125;&lt;/td&gt;&lt;td&gt;&#123;@link #setWriteBufferWaterMark(WriteBufferWaterMark)&#125;&lt;/td&gt;</span><br><span class="line"> * &lt;/tr&gt;&lt;tr&gt;</span><br><span class="line"> * &lt;td&gt;&#123;@link ChannelOption#ALLOCATOR&#125;&lt;/td&gt;&lt;td&gt;&#123;@link #setAllocator(ByteBufAllocator)&#125;&lt;/td&gt;</span><br><span class="line"> * &lt;/tr&gt;&lt;tr&gt;</span><br><span class="line"> * &lt;td&gt;&#123;@link ChannelOption#AUTO_READ&#125;&lt;/td&gt;&lt;td&gt;&#123;@link #setAutoRead(boolean)&#125;&lt;/td&gt;</span><br><span class="line"> * &lt;/tr&gt;</span><br><span class="line"> * &lt;/table&gt;</span><br><span class="line"> * &lt;p&gt;</span><br><span class="line"> * More options are available in the sub-types of &#123;@link ChannelConfig&#125;.  For</span><br><span class="line"> * example, you can configure the parameters which are specific to a TCP/IP</span><br><span class="line"> * socket as explained in &#123;@link SocketChannelConfig&#125;.</span><br><span class="line"> * 更多的参数设置可以在ChannelConfig子类类型里边设置，比如你可以在SocketChannelConfig里边指定TCP/IP的一些设置</span><br><span class="line"> */</span><br></pre></td></tr></table></figure>
 <p>对于ChannelConfig来说他是对Channel一个整个配置的信息。</p>
-<p>再来看一下AttributeKey：<br><img src="20171028115151418.png" alt="这里写图片描述"><br>可以看到它和ChannelOption的上层结构是一样的。</p>
+<p>再来看一下AttributeKey：<br><img src="/20171028115151418.png" alt="这里写图片描述"><br>可以看到它和ChannelOption的上层结构是一样的。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Key which can be used to access &#123;@link Attribute&#125; out of the &#123;@link AttributeMap&#125;. Be aware that it is not be</span><br><span class="line"> * possible to have multiple keys with the same name.</span><br><span class="line"> * 一个在AttributeMap外部访问Attribute的key，不会出现2个相同的key</span><br><span class="line"> * @param &lt;T&gt;   the type of the &#123;@link Attribute&#125; which can be accessed via this &#123;@link AttributeKey&#125;.</span><br><span class="line"> * T类型是一个Attribute类型，可以通过AttributeKey访问</span><br><span class="line"> */</span><br><span class="line">@SuppressWarnings(&quot;UnusedDeclaration&quot;) // &#x27;T&#x27; is used only at compile time</span><br><span class="line">public final class AttributeKey&lt;T&gt; extends AbstractConstant&lt;AttributeKey&lt;T&gt;&gt; &#123;</span><br><span class="line"></span><br><span class="line">    private static final ConstantPool&lt;AttributeKey&lt;Object&gt;&gt; pool = new ConstantPool&lt;AttributeKey&lt;Object&gt;&gt;() &#123;</span><br><span class="line">        @Override</span><br><span class="line">        protected AttributeKey&lt;Object&gt; newConstant(int id, String name) &#123;</span><br><span class="line">            return new AttributeKey&lt;Object&gt;(id, name);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br></pre></td></tr></table></figure>
 <p>可以看到AttributeKey类的结构和ChannelOption是一样的，都有一个ConstantPool。<br> 和AttributeKey相关的一个组件Attribute，Attribute是什么呢？</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * An attribute which allows to store a value reference. It may be updated atomically and so is thread-safe.</span><br><span class="line"> *用来存放值得引用，可以进行原子操作，并且是线程安全的。</span><br><span class="line"> * @param &lt;T&gt;   the type of the value it holds.</span><br><span class="line"> * T是Attribute持有的值得类型</span><br><span class="line"> */</span><br><span class="line">public interface Attribute&lt;T&gt; &#123;</span><br></pre></td></tr></table></figure>
@@ -436,21 +431,23 @@
   </footer>
 
   
-  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.0.6/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
 <script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
 
   
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
 <script src="/js/third-party/search/local-search.js"></script>
 
 
-  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":"forest","js":{"url":"https://cdn.jsdelivr.net/npm/mermaid@8.11.0/dist/mermaid.min.js","integrity":"sha256-sVAx+v/Q7v0Q2xm5vN7h5ccSna6gaLREhG9sF8pKT6I="}}</script>
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.1.1/mermaid.min.js","integrity":"sha256-8L3O8tirFUa8Va4NSTAyIbHJeLd6OnlcxgupV9F77e0="}}</script>
   <script src="/js/third-party/tags/mermaid.js"></script>
 
-  <script class="next-config" data-name="nprogress" type="application/json">{"enable":true,"spinner":true}</script>
-  <script src="/js/third-party/nprogress.js"></script>
+  <script src="/js/third-party/fancybox.js"></script>
+
+  <script src="/js/third-party/pace.js"></script>
 
   
 

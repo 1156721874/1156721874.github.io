@@ -3,10 +3,9 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
-<meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 6.0.0">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
 
-<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -16,44 +15,45 @@
 
 
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.css" integrity="sha256-no0c5ccDODBwp+9hSmV5VvPpKwHCpbVzXHexIkupM6U=" crossorigin="anonymous">
-  <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.js" integrity="sha256-a5YRB27CcBwBFcT5EF/f3E4vzIqyHrSR878nseNYw64=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"ceaser.wang","root":"/","images":"/images","scheme":"Muse","version":"8.6.1","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
-<meta property="og:type" content="article">
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ceaser.wang","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.12.1","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+
+    <meta property="og:type" content="article">
 <meta property="og:title" content="hive原理与源码分析-算子Operators及查询优化器Optimizers（四）">
 <meta property="og:url" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%AE%97%E5%AD%90Operators%E5%8F%8A%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96%E5%99%A8Optimizers%EF%BC%88%E5%9B%9B%EF%BC%89/index.html">
 <meta property="og:site_name" content="南贺神社">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%AE%97%E5%AD%90Operators%E5%8F%8A%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96%E5%99%A8Optimizers%EF%BC%88%E5%9B%9B%EF%BC%89/20170509211147684.png">
-<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%AE%97%E5%AD%90Operators%E5%8F%8A%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96%E5%99%A8Optimizers%EF%BC%88%E5%9B%9B%EF%BC%89/20170509213828136.png">
-<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%AE%97%E5%AD%90Operators%E5%8F%8A%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96%E5%99%A8Optimizers%EF%BC%88%E5%9B%9B%EF%BC%89/20170509215359704.png">
-<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%AE%97%E5%AD%90Operators%E5%8F%8A%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96%E5%99%A8Optimizers%EF%BC%88%E5%9B%9B%EF%BC%89/20170509215502001.png">
-<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%AE%97%E5%AD%90Operators%E5%8F%8A%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96%E5%99%A8Optimizers%EF%BC%88%E5%9B%9B%EF%BC%89/20170513102443029.png">
-<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%AE%97%E5%AD%90Operators%E5%8F%8A%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96%E5%99%A8Optimizers%EF%BC%88%E5%9B%9B%EF%BC%89/20170513103611159.png">
-<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%AE%97%E5%AD%90Operators%E5%8F%8A%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96%E5%99%A8Optimizers%EF%BC%88%E5%9B%9B%EF%BC%89/20170513110021266.png">
-<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%AE%97%E5%AD%90Operators%E5%8F%8A%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96%E5%99%A8Optimizers%EF%BC%88%E5%9B%9B%EF%BC%89/20170513110611864.png">
-<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%AE%97%E5%AD%90Operators%E5%8F%8A%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96%E5%99%A8Optimizers%EF%BC%88%E5%9B%9B%EF%BC%89/20170513112913270.png">
-<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%AE%97%E5%AD%90Operators%E5%8F%8A%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96%E5%99%A8Optimizers%EF%BC%88%E5%9B%9B%EF%BC%89/20170513113327235.png">
-<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%AE%97%E5%AD%90Operators%E5%8F%8A%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96%E5%99%A8Optimizers%EF%BC%88%E5%9B%9B%EF%BC%89/20170513125436340.png">
-<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%AE%97%E5%AD%90Operators%E5%8F%8A%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96%E5%99%A8Optimizers%EF%BC%88%E5%9B%9B%EF%BC%89/20170513130349171.png">
-<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%AE%97%E5%AD%90Operators%E5%8F%8A%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96%E5%99%A8Optimizers%EF%BC%88%E5%9B%9B%EF%BC%89/20170513131323724.png">
-<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%AE%97%E5%AD%90Operators%E5%8F%8A%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96%E5%99%A8Optimizers%EF%BC%88%E5%9B%9B%EF%BC%89/20170513131358807.png">
-<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%AE%97%E5%AD%90Operators%E5%8F%8A%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96%E5%99%A8Optimizers%EF%BC%88%E5%9B%9B%EF%BC%89/20170513132619074.png">
-<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%AE%97%E5%AD%90Operators%E5%8F%8A%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96%E5%99%A8Optimizers%EF%BC%88%E5%9B%9B%EF%BC%89/20170513134449192.png">
-<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%AE%97%E5%AD%90Operators%E5%8F%8A%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96%E5%99%A8Optimizers%EF%BC%88%E5%9B%9B%EF%BC%89/20170513134553834.png">
-<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%AE%97%E5%AD%90Operators%E5%8F%8A%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96%E5%99%A8Optimizers%EF%BC%88%E5%9B%9B%EF%BC%89/20170513110611864.png">
-<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%AE%97%E5%AD%90Operators%E5%8F%8A%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96%E5%99%A8Optimizers%EF%BC%88%E5%9B%9B%EF%BC%89/20170513141135746.png">
-<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%AE%97%E5%AD%90Operators%E5%8F%8A%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96%E5%99%A8Optimizers%EF%BC%88%E5%9B%9B%EF%BC%89/20170513141311082.png">
+<meta property="og:image" content="https://ceaser.wang/20170509211147684.png">
+<meta property="og:image" content="https://ceaser.wang/20170509213828136.png">
+<meta property="og:image" content="https://ceaser.wang/20170509215359704.png">
+<meta property="og:image" content="https://ceaser.wang/20170509215502001.png">
+<meta property="og:image" content="https://ceaser.wang/20170513102443029.png">
+<meta property="og:image" content="https://ceaser.wang/20170513103611159.png">
+<meta property="og:image" content="https://ceaser.wang/20170513110021266.png">
+<meta property="og:image" content="https://ceaser.wang/20170513110611864.png">
+<meta property="og:image" content="https://ceaser.wang/20170513112913270.png">
+<meta property="og:image" content="https://ceaser.wang/20170513113327235.png">
+<meta property="og:image" content="https://ceaser.wang/20170513125436340.png">
+<meta property="og:image" content="https://ceaser.wang/20170513130349171.png">
+<meta property="og:image" content="https://ceaser.wang/20170513131323724.png">
+<meta property="og:image" content="https://ceaser.wang/20170513131358807.png">
+<meta property="og:image" content="https://ceaser.wang/20170513132619074.png">
+<meta property="og:image" content="https://ceaser.wang/20170513134449192.png">
+<meta property="og:image" content="https://ceaser.wang/20170513134553834.png">
+<meta property="og:image" content="https://ceaser.wang/20170513110611864.png">
+<meta property="og:image" content="https://ceaser.wang/20170513141135746.png">
+<meta property="og:image" content="https://ceaser.wang/20170513141311082.png">
 <meta property="article:published_time" content="2018-10-04T10:56:27.000Z">
-<meta property="article:modified_time" content="2022-02-05T08:57:16.036Z">
+<meta property="article:modified_time" content="2022-06-10T14:12:45.236Z">
 <meta property="article:author" content="CeaserWang">
 <meta property="article:tag" content="hive">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%AE%97%E5%AD%90Operators%E5%8F%8A%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96%E5%99%A8Optimizers%EF%BC%88%E5%9B%9B%EF%BC%89/20170509211147684.png">
+<meta name="twitter:image" content="https://ceaser.wang/20170509211147684.png">
 
 
 <link rel="canonical" href="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%AE%97%E5%AD%90Operators%E5%8F%8A%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96%E5%99%A8Optimizers%EF%BC%88%E5%9B%9B%EF%BC%89/">
@@ -65,6 +65,7 @@
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>hive原理与源码分析-算子Operators及查询优化器Optimizers（四） | 南贺神社</title>
   
+
 
 
 
@@ -92,7 +93,7 @@
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <h1 class="site-title">南贺神社</h1>
+      <p class="site-title">南贺神社</p>
       <i class="logo-line"></i>
     </a>
       <p class="site-subtitle" itemprop="description">你写程序有写诗一样的感觉吗?</p>
@@ -108,13 +109,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu">
-        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
-        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
-        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">206</span></a></li>
-        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">25</span></a></li>
-        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">213</span></a></li>
-        <li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">206</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">25</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">213</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
         </a>
@@ -175,8 +170,7 @@
         <!--/noindex-->
 
         <div class="site-overview-wrap sidebar-panel">
-          <div class="site-overview">
-            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <img class="site-author-image" itemprop="image" alt="CeaserWang"
       src="/../0xcc/index/Uchiha.jpg">
   <p class="site-author-name" itemprop="name">CeaserWang</p>
@@ -185,21 +179,18 @@
 <div class="site-state-wrap site-overview-item animated">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
-          <a href="/archives/">
-        
+        <a href="/archives/">
           <span class="site-state-item-count">213</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-            <a href="/categories/">
-          
+          <a href="/categories/">
         <span class="site-state-item-count">25</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-            <a href="/tags/">
-          
+          <a href="/tags/">
         <span class="site-state-item-count">206</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
@@ -214,7 +205,7 @@
       </span>
   </div>
   <div class="cc-license site-overview-item animated" itemprop="license">
-    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><img src="https://cdn.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></span>
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></span>
   </div>
 
 
@@ -247,7 +238,6 @@
     </ul>
   </div>
 
-          </div>
         </div>
       </div>
     </div>
@@ -285,11 +275,16 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
       <meta itemprop="name" content="CeaserWang">
-      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="hive原理与源码分析-算子Operators及查询优化器Optimizers（四） | 南贺神社">
+      <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
@@ -306,13 +301,13 @@
 
       <time title="Created: 2018-10-04 10:56:27" itemprop="dateCreated datePublished" datetime="2018-10-04T10:56:27+00:00">2018-10-04</time>
     </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2022-02-05 08:57:16" itemprop="dateModified" datetime="2022-02-05T08:57:16+00:00">2022-02-05</time>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
       </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-06-10 14:12:45" itemprop="dateModified" datetime="2022-06-10T14:12:45+00:00">2022-06-10</time>
+    </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -340,40 +335,40 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <p><img src="20170509211147684.png" alt="这里写图片描述"></p>
+        <p><img src="/20170509211147684.png" alt="这里写图片描述"></p>
 <span id="more"></span>
 <p><strong>Operator接口</strong><br><span class="exturl" data-url="aHR0cHM6Ly9pbnNpZ2h0LmlvL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvYmxvYi9tYXN0ZXIvcWwvc3JjL2phdmEvb3JnL2FwYWNoZS9oYWRvb3AvaGl2ZS9xbC9leGVjL09wZXJhdG9yLmphdmE/bGluZT02Ng==">https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/hadoop/hive/ql/exec/Operator.java?line=66<i class="fa fa-external-link-alt"></i></span><br>这个接口最重要的一个方法：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Process the row.</span><br><span class="line"> * @param row The object representing the row.</span><br><span class="line"> * @param tag</span><br><span class="line"> *          The tag of the row usually means which parent this row comes from.</span><br><span class="line"> *          Rows with the same tag should have exactly the same rowInspector</span><br><span class="line"> *          all the time.</span><br><span class="line"> */</span><br><span class="line">public abstract void process(Object row, int tag) throws HiveException;</span><br></pre></td></tr></table></figure>
-<p>row是一行数据，tag代表是那张表。用一个整数代表是那张表。<br>hadoop在执行任务的时候会在每个节点创建一个进程。<br>每个进程一个实例<br>每个实例开始执行一次initialize()方法<br>每个实例执行多次process()方法，每行执行一次，这个进程有几行就执行几次<br>每个实例最后执行一次close()方法<br>对于Operator比较正要的有group by Operator和join Operator<br>前文章节SemanticAnalyzer生成一个QB，之后递归genplan(),然后是genBodyPlan()，genBodyPlan会对group by进行处理：<br><img src="20170509213828136.png" alt="这里写图片描述"><br>HiveConf.ConfVars.HIVEMAPSIDEAGGREGATE：在map阶段进行预聚合减少数据量<br> HiveConf.ConfVars.HIVEGROUPBYSKEW：将一个group by拆成2个group by减少数据量<br> <strong>Hive Group By</strong><br> HiveConf.ConfVars.HIVEMAPSIDEAGGREGATE：hive.map.aggr，使用Map端预聚合<br>HiveConf.ConfVars.HIVEGROUPBYSKEW：hive.groupby.skewindata，是否优化倾斜的查询为两道作业<br><span class="exturl" data-url="aHR0cHM6Ly9pbnNpZ2h0LmlvL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvYmxvYi9tYXN0ZXIvcWwvc3JjL2phdmEvb3JnL2FwYWNoZS9oYWRvb3AvaGl2ZS9xbC9wYXJzZS9TZW1hbnRpY0FuYWx5emVyLmphdmE/bGluZT05NzEz">https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/hadoop/hive/ql/parse/SemanticAnalyzer.java?line=9713<i class="fa fa-external-link-alt"></i></span><br>一共四中情况<br><img src="20170509215359704.png" alt="这里写图片描述"></p>
-<p><strong>Hive GroupBy hive.groupby.skewindata</strong><br><img src="20170509215502001.png" alt="这里写图片描述"><br>Hive GroupBy hive.groupby.skewindata关闭的时候只有一道mr作业，当参数打开的时候，会进行预聚合，整个过程是2道mr作业。</p>
-<p><strong>hive.groupby.skewindata源码</strong><br><span class="exturl" data-url="aHR0cHM6Ly9pbnNpZ2h0LmlvL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvYmxvYi9tYXN0ZXIvcWwvc3JjL2phdmEvb3JnL2FwYWNoZS9oYWRvb3AvaGl2ZS9xbC9wYXJzZS9TZW1hbnRpY0FuYWx5emVyLmphdmE/bGluZT02MTE0">https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/hadoop/hive/ql/parse/SemanticAnalyzer.java?line=6114<i class="fa fa-external-link-alt"></i></span><br><img src="20170513102443029.png" alt="这里写图片描述"></p>
+<p>row是一行数据，tag代表是那张表。用一个整数代表是那张表。<br>hadoop在执行任务的时候会在每个节点创建一个进程。<br>每个进程一个实例<br>每个实例开始执行一次initialize()方法<br>每个实例执行多次process()方法，每行执行一次，这个进程有几行就执行几次<br>每个实例最后执行一次close()方法<br>对于Operator比较正要的有group by Operator和join Operator<br>前文章节SemanticAnalyzer生成一个QB，之后递归genplan(),然后是genBodyPlan()，genBodyPlan会对group by进行处理：<br><img src="/20170509213828136.png" alt="这里写图片描述"><br>HiveConf.ConfVars.HIVEMAPSIDEAGGREGATE：在map阶段进行预聚合减少数据量<br> HiveConf.ConfVars.HIVEGROUPBYSKEW：将一个group by拆成2个group by减少数据量<br> <strong>Hive Group By</strong><br> HiveConf.ConfVars.HIVEMAPSIDEAGGREGATE：hive.map.aggr，使用Map端预聚合<br>HiveConf.ConfVars.HIVEGROUPBYSKEW：hive.groupby.skewindata，是否优化倾斜的查询为两道作业<br><span class="exturl" data-url="aHR0cHM6Ly9pbnNpZ2h0LmlvL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvYmxvYi9tYXN0ZXIvcWwvc3JjL2phdmEvb3JnL2FwYWNoZS9oYWRvb3AvaGl2ZS9xbC9wYXJzZS9TZW1hbnRpY0FuYWx5emVyLmphdmE/bGluZT05NzEz">https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/hadoop/hive/ql/parse/SemanticAnalyzer.java?line=9713<i class="fa fa-external-link-alt"></i></span><br>一共四中情况<br><img src="/20170509215359704.png" alt="这里写图片描述"></p>
+<p><strong>Hive GroupBy hive.groupby.skewindata</strong><br><img src="/20170509215502001.png" alt="这里写图片描述"><br>Hive GroupBy hive.groupby.skewindata关闭的时候只有一道mr作业，当参数打开的时候，会进行预聚合，整个过程是2道mr作业。</p>
+<p><strong>hive.groupby.skewindata源码</strong><br><span class="exturl" data-url="aHR0cHM6Ly9pbnNpZ2h0LmlvL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvYmxvYi9tYXN0ZXIvcWwvc3JjL2phdmEvb3JnL2FwYWNoZS9oYWRvb3AvaGl2ZS9xbC9wYXJzZS9TZW1hbnRpY0FuYWx5emVyLmphdmE/bGluZT02MTE0">https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/hadoop/hive/ql/parse/SemanticAnalyzer.java?line=6114<i class="fa fa-external-link-alt"></i></span><br><img src="/20170513102443029.png" alt="这里写图片描述"></p>
 <p>这样我们就能完美了吗，我们的group by就不会倾斜了吗？大部分的group by是不会倾斜的，但是有一种是特殊的。</p>
 <p><strong>代数型聚合与非代数聚合</strong><br>代数型聚合：可以通过部分结果计算出最终结果的聚合方法，如count、sum<br>非代数型聚合：无法通过部分结果计算出最终结果的聚合方法，如percentile，median<br>Group By优化只适用于代数型聚合，代数型UDAF，思考为什么？</p>
-<p>group by聚合：<br><span class="exturl" data-url="aHR0cHM6Ly9pbnNpZ2h0LmlvL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvYmxvYi9tYXN0ZXIvcWwvc3JjL2phdmEvb3JnL2FwYWNoZS9oYWRvb3AvaGl2ZS9xbC9leGVjL0dyb3VwQnlPcGVyYXRvci5qYXZhP2xpbmU9NzM1">https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/hadoop/hive/ql/exec/GroupByOperator.java?line=735<i class="fa fa-external-link-alt"></i></span><br>group by的聚合逻辑就是这个process方法， process方法会调用 processHashAggr和 processAggr方法，即hash聚合和普通 聚合的方法。<br><img src="20170513103611159.png" alt="这里写图片描述"></p>
+<p>group by聚合：<br><span class="exturl" data-url="aHR0cHM6Ly9pbnNpZ2h0LmlvL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvYmxvYi9tYXN0ZXIvcWwvc3JjL2phdmEvb3JnL2FwYWNoZS9oYWRvb3AvaGl2ZS9xbC9leGVjL0dyb3VwQnlPcGVyYXRvci5qYXZhP2xpbmU9NzM1">https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/hadoop/hive/ql/exec/GroupByOperator.java?line=735<i class="fa fa-external-link-alt"></i></span><br>group by的聚合逻辑就是这个process方法， process方法会调用 processHashAggr和 processAggr方法，即hash聚合和普通 聚合的方法。<br><img src="/20170513103611159.png" alt="这里写图片描述"></p>
 <p><strong>Join关联</strong><br>Join是Hive是最难的部分，也是最需要优化的部分<br>常用Join方法<br>普通（Reduce端）Join， Common (Reduce-Side) Join<br>广播（Map端）Join，Broadcast（Map-Side）Join<br>Bucket Map Join<br>Sort Merge Bucket Map Join<br>倾斜Join，Skew Join</p>
 <p>先从最简单的Common Join开始，此join是所有join的基础。<br><strong>Common Join</strong><br>也叫做Reduce端Join<br>背景知识：Hive只支持等值Join，不支持非等值Join<br>        扫描N张表<br>        Join Key相同的放在一起（相同Reduce） -&gt; 结果<br>流程:<br>        Mapper: 扫描，并处理N张表，生成发给Reduce的<code>&lt;Key, Value&gt; Key = &#123;JoinKey, TableAlias&#125;, Value = &#123;row&#125;</code><br>        Shuffle阶段<br>        JoinKey相同的Reduce放到相同的<br>        TableAlias 是排序的标识，就是表的编号，相同表的数据在一起是排序的。<br>        Reducer: 处理Join Key并输出结果<br>最坏的情况<br>        所有的数据都被发送到相同的结点，同一个Reduce</p>
-<p>JoinOperator：<br><span class="exturl" data-url="aHR0cHM6Ly9pbnNpZ2h0LmlvL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvYmxvYi9tYXN0ZXIvcWwvc3JjL2phdmEvb3JnL2FwYWNoZS9oYWRvb3AvaGl2ZS9xbC9leGVjL0pvaW5PcGVyYXRvci5qYXZhP2xpbmU9Nzg=">https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/hadoop/hive/ql/exec/JoinOperator.java?line=78<i class="fa fa-external-link-alt"></i></span><br><img src="20170513110021266.png" alt="这里写图片描述"><br>从这个过程中我们可以看到，可以看到左边的表放到内存（放不下才会放到磁盘），因此我们join的时候要把小标放到左边，提供性能。</p>
+<p>JoinOperator：<br><span class="exturl" data-url="aHR0cHM6Ly9pbnNpZ2h0LmlvL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvYmxvYi9tYXN0ZXIvcWwvc3JjL2phdmEvb3JnL2FwYWNoZS9oYWRvb3AvaGl2ZS9xbC9leGVjL0pvaW5PcGVyYXRvci5qYXZhP2xpbmU9Nzg=">https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/hadoop/hive/ql/exec/JoinOperator.java?line=78<i class="fa fa-external-link-alt"></i></span><br><img src="/20170513110021266.png" alt="这里写图片描述"><br>从这个过程中我们可以看到，可以看到左边的表放到内存（放不下才会放到磁盘），因此我们join的时候要把小标放到左边，提供性能。</p>
 <p>commonJoinOperation下边还有一些特化的Operator：</p>
-<p><img src="20170513110611864.png" alt="这里写图片描述"></p>
+<p><img src="/20170513110611864.png" alt="这里写图片描述"></p>
 <p>先说最简单的commonJoinOperator<br><span class="exturl" data-url="aHR0cHM6Ly9pbnNpZ2h0LmlvL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvYmxvYi9tYXN0ZXIvcWwvc3JjL2phdmEvb3JnL2FwYWNoZS9oYWRvb3AvaGl2ZS9xbC9leGVjL0NvbW1vbkpvaW5PcGVyYXRvci5qYXZhP2xpbmU9NTY5">https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/hadoop/hive/ql/exec/CommonJoinOperator.java?line=569<i class="fa fa-external-link-alt"></i></span></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">// creates objects in recursive manner</span><br><span class="line">  private void genObject(int aliasNum, boolean allLeftFirst, boolean allLeftNull)</span><br><span class="line">      throws HiveException &#123;</span><br><span class="line">    JoinCondDesc joinCond = condn[aliasNum - 1];</span><br><span class="line">    int type = joinCond.getType();</span><br><span class="line">    int left = joinCond.getLeft();</span><br><span class="line">    int right = joinCond.getRight();</span><br><span class="line"></span><br><span class="line">    if (needsPostEvaluation &amp;&amp; aliasNum == numAliases - 2) &#123;</span><br><span class="line">      int nextType = condn[aliasNum].getType();</span><br><span class="line">      if (nextType == JoinDesc.RIGHT_OUTER_JOIN || nextType == JoinDesc.FULL_OUTER_JOIN) &#123;</span><br><span class="line">        // Initialize container to use for storing tuples before emitting them</span><br><span class="line">        rowContainerPostFilteredOuterJoin = new HashMap&lt;&gt;();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    boolean[] skip = skipVectors[aliasNum];</span><br><span class="line">    boolean[] prevSkip = skipVectors[aliasNum - 1];</span><br><span class="line"></span><br><span class="line">    // search for match in the rhs table</span><br><span class="line">    //内存里边的小表</span><br><span class="line">    AbstractRowContainer&lt;List&lt;Object&gt;&gt; aliasRes = storage[order[aliasNum]];</span><br><span class="line">    。。。。。。略。。。。</span><br><span class="line">    根据判断，执行inner join或者left join</span><br><span class="line">      if (type == JoinDesc.INNER_JOIN) &#123;</span><br><span class="line">        innerJoin(skip, left, right);</span><br><span class="line">      &#125; else if (type == JoinDesc.LEFT_SEMI_JOIN) &#123;</span><br><span class="line">        if (innerJoin(skip, left, right)) &#123;</span><br><span class="line">          // if left-semi-join found a match, skipping the rest of the rows in the</span><br><span class="line">          // rhs table of the semijoin</span><br><span class="line">          done = true;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125; else if (type == JoinDesc.LEFT_OUTER_JOIN ||</span><br><span class="line">          (type == JoinDesc.FULL_OUTER_JOIN &amp;&amp; rightNull)) &#123;</span><br><span class="line">        int result = leftOuterJoin(skip, left, right);</span><br><span class="line">        if (result &lt; 0) &#123;</span><br><span class="line">          continue;</span><br><span class="line">        &#125;</span><br><span class="line">        done = result &gt; 0;</span><br><span class="line">      &#125; else if (type == JoinDesc.RIGHT_OUTER_JOIN ||</span><br><span class="line">          (type == JoinDesc.FULL_OUTER_JOIN &amp;&amp; allLeftNull)) &#123;</span><br><span class="line">        if (allLeftFirst &amp;&amp; !rightOuterJoin(skip, left, right) ||</span><br><span class="line">          !allLeftFirst &amp;&amp; !innerJoin(skip, left, right)) &#123;</span><br><span class="line">          continue;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125; else if (type == JoinDesc.FULL_OUTER_JOIN) &#123;</span><br><span class="line">        if (tryLOForFO &amp;&amp; leftOuterJoin(skip, left, right) &gt; 0) &#123;</span><br><span class="line">          loopAgain = allLeftFirst;</span><br><span class="line">          done = !loopAgain;</span><br><span class="line">          tryLOForFO = false;</span><br><span class="line">        &#125; else if (allLeftFirst &amp;&amp; !rightOuterJoin(skip, left, right) ||</span><br><span class="line">          !allLeftFirst &amp;&amp; !innerJoin(skip, left, right)) &#123;</span><br><span class="line">          continue;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br></pre></td></tr></table></figure>
 <p>每来一条数据就会读取一下小表的内容，如果小表比较小，过程会比较快</p>
-<p><strong>MapJoin</strong><br>也叫广播Join，Broadcast Join<br>从 (n-1)张小表创建Hashtable，Hashtable的键是 Joinkey, 把这张Hashtable广播到每一个结点的map上，只处理大表.<br>每一个大表的mapper在小表的hashtable中查找join key -&gt; Join Result<br>Ex: Join by “CityId”<br><img src="20170513112913270.png" alt="这里写图片描述"><br>MapJoin适合小表足够小的情况，否则就走 ReduceSinkOperator<br><img src="20170513113327235.png" alt="这里写图片描述"></p>
-<p><strong>如何决定MapJoin</strong><br>内存要求: N-1 张小表必须能够完全读入内存<br>Hive决定MapJoin的两种方式（手动／自动）<br>    手动，通过Query Hints（不再推荐）:<br>        SELECT /*+ MAPJOIN(cities) <em>/ * FROM cities JOIN sales on cities.cityId=sales.cityId;<br>        /</em>+ MAPJOIN(cities) */ *会决定把cities读入内存，放在hashTable里边，分发到每一个节点。<br>自动，打开(“hive.auto.convert.join”)<br>        如果N-1张小表小于: “hive.mapjoin.smalltable.filesize”这个值</p>
-<p><strong>MapJoin Optimizers</strong><br>构造查询计划Query Plan时，决定MapJoin优化<br>    “逻辑优化器Logical (Compile-time) optimizers” ：修改逻辑执行计划，把JoinOperator修改成MapJoinOperator<br>    “物理优化器Physical (Runtime) optimizers” 修改物理执行计划(MapRedWork, TezWork, SparkWork), 引入条件判断等机制<br>    <img src="20170513125436340.png" alt="这里写图片描述"></p>
-<p>逻辑优化之后ReduceSinkOperator.和普通的join operator被摘掉，换成mapjoin。<br>物理执行计划会被关联到具体的执行引擎，逻辑执行计划的小表部分会在本地执行，即左边小表在本地执行，逻辑执行计划的大表部分会被在远端执行。<br><img src="20170513130349171.png" alt="这里写图片描述"></p>
-<p><strong>MapJoin Optimizers (MR)</strong><br>Query Hint: 编译时知道哪个表是小表的情况.（手动模式，加一个/*+ MAPJOIN(cities) */ *注释）<br>        Logical Optimizer逻辑优化器: MapJoinProcessor<br>Auto-conversion: 编译时不知道哪个表是小表的情况（自动模式）<br>    Physical Optimizer物理优化器: CommonJoinResolver, MapJoinResolver.<br>        创建Conditional Tasks 把每个表是小表的情况考虑进去<br>        Noconditional mode: 如果没有子查询的话，表的大小是在编译时可以知道的，否则是不知道的(join of intermediate results..)<br>        自动模式模式分了三种情况，其中一个属于小表，这是前两种情况，第三种是都不是小表。<br><img src="20170513131323724.png" alt="这里写图片描述"><br><img src="20170513131358807.png" alt="这里写图片描述"><br>这个过程在CommonJoinResolver中，<br><span class="exturl" data-url="aHR0cHM6Ly9pbnNpZ2h0LmlvL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvYmxvYi9tYXN0ZXIvcWwvc3JjL2phdmEvb3JnL2FwYWNoZS9oYWRvb3AvaGl2ZS9xbC9vcHRpbWl6ZXIvcGh5c2ljYWwvQ29tbW9uSm9pblJlc29sdmVyLmphdmE/bGluZT03MQ==">https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/hadoop/hive/ql/optimizer/physical/CommonJoinResolver.java?line=71<i class="fa fa-external-link-alt"></i></span><br>实现细节是：<br><span class="exturl" data-url="aHR0cHM6Ly9pbnNpZ2h0LmlvL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvYmxvYi9tYXN0ZXIvcWwvc3JjL2phdmEvb3JnL2FwYWNoZS9oYWRvb3AvaGl2ZS9xbC9vcHRpbWl6ZXIvcGh5c2ljYWwvQ29tbW9uSm9pblRhc2tEaXNwYXRjaGVyLmphdmE/bGluZT0xOTE=">https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/hadoop/hive/ql/optimizer/physical/CommonJoinTaskDispatcher.java?line=191<i class="fa fa-external-link-alt"></i></span></p>
-<p><strong>BucketMapJoin</strong><br>Bucketed 表: 根据不同的值分成不同的桶<br>CREATE TABLE cities (cityid int, value string) CLUSTERED BY (cityId) INTO 2 BUCKETS;即建表的时候指定桶。<br>如果把分桶键（Bucket Key）作为关联键（Join Key）: For each bucket of table, rows with matching joinKey values will be in corresponding bucket of other table<br>像Mapjoin, but big-table mappers load to memory only relevant small-table bucket‟s hashmap<br>Ex: Bucketed by “CityId”, Join by “CityId”<br><img src="20170513132619074.png" alt="这里写图片描述"><br>1和3在一个桶（奇数），2和4一个桶（偶数）。</p>
+<p><strong>MapJoin</strong><br>也叫广播Join，Broadcast Join<br>从 (n-1)张小表创建Hashtable，Hashtable的键是 Joinkey, 把这张Hashtable广播到每一个结点的map上，只处理大表.<br>每一个大表的mapper在小表的hashtable中查找join key -&gt; Join Result<br>Ex: Join by “CityId”<br><img src="/20170513112913270.png" alt="这里写图片描述"><br>MapJoin适合小表足够小的情况，否则就走 ReduceSinkOperator<br><img src="/20170513113327235.png" alt="这里写图片描述"></p>
+<p><strong>如何决定MapJoin</strong><br>内存要求: N-1 张小表必须能够完全读入内存<br>Hive决定MapJoin的两种方式（手动／自动）<br>    手动，通过Query Hints（不再推荐）:<br>        SELECT &#x2F;*+ MAPJOIN(cities) <em>&#x2F; * FROM cities JOIN sales on cities.cityId&#x3D;sales.cityId;<br>        &#x2F;</em>+ MAPJOIN(cities) *&#x2F; *会决定把cities读入内存，放在hashTable里边，分发到每一个节点。<br>自动，打开(“hive.auto.convert.join”)<br>        如果N-1张小表小于: “hive.mapjoin.smalltable.filesize”这个值</p>
+<p><strong>MapJoin Optimizers</strong><br>构造查询计划Query Plan时，决定MapJoin优化<br>    “逻辑优化器Logical (Compile-time) optimizers” ：修改逻辑执行计划，把JoinOperator修改成MapJoinOperator<br>    “物理优化器Physical (Runtime) optimizers” 修改物理执行计划(MapRedWork, TezWork, SparkWork), 引入条件判断等机制<br>    <img src="/20170513125436340.png" alt="这里写图片描述"></p>
+<p>逻辑优化之后ReduceSinkOperator.和普通的join operator被摘掉，换成mapjoin。<br>物理执行计划会被关联到具体的执行引擎，逻辑执行计划的小表部分会在本地执行，即左边小表在本地执行，逻辑执行计划的大表部分会被在远端执行。<br><img src="/20170513130349171.png" alt="这里写图片描述"></p>
+<p><strong>MapJoin Optimizers (MR)</strong><br>Query Hint: 编译时知道哪个表是小表的情况.（手动模式，加一个&#x2F;*+ MAPJOIN(cities) *&#x2F; *注释）<br>        Logical Optimizer逻辑优化器: MapJoinProcessor<br>Auto-conversion: 编译时不知道哪个表是小表的情况（自动模式）<br>    Physical Optimizer物理优化器: CommonJoinResolver, MapJoinResolver.<br>        创建Conditional Tasks 把每个表是小表的情况考虑进去<br>        Noconditional mode: 如果没有子查询的话，表的大小是在编译时可以知道的，否则是不知道的(join of intermediate results..)<br>        自动模式模式分了三种情况，其中一个属于小表，这是前两种情况，第三种是都不是小表。<br><img src="/20170513131323724.png" alt="这里写图片描述"><br><img src="/20170513131358807.png" alt="这里写图片描述"><br>这个过程在CommonJoinResolver中，<br><span class="exturl" data-url="aHR0cHM6Ly9pbnNpZ2h0LmlvL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvYmxvYi9tYXN0ZXIvcWwvc3JjL2phdmEvb3JnL2FwYWNoZS9oYWRvb3AvaGl2ZS9xbC9vcHRpbWl6ZXIvcGh5c2ljYWwvQ29tbW9uSm9pblJlc29sdmVyLmphdmE/bGluZT03MQ==">https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/hadoop/hive/ql/optimizer/physical/CommonJoinResolver.java?line=71<i class="fa fa-external-link-alt"></i></span><br>实现细节是：<br><span class="exturl" data-url="aHR0cHM6Ly9pbnNpZ2h0LmlvL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvYmxvYi9tYXN0ZXIvcWwvc3JjL2phdmEvb3JnL2FwYWNoZS9oYWRvb3AvaGl2ZS9xbC9vcHRpbWl6ZXIvcGh5c2ljYWwvQ29tbW9uSm9pblRhc2tEaXNwYXRjaGVyLmphdmE/bGluZT0xOTE=">https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/hadoop/hive/ql/optimizer/physical/CommonJoinTaskDispatcher.java?line=191<i class="fa fa-external-link-alt"></i></span></p>
+<p><strong>BucketMapJoin</strong><br>Bucketed 表: 根据不同的值分成不同的桶<br>CREATE TABLE cities (cityid int, value string) CLUSTERED BY (cityId) INTO 2 BUCKETS;即建表的时候指定桶。<br>如果把分桶键（Bucket Key）作为关联键（Join Key）: For each bucket of table, rows with matching joinKey values will be in corresponding bucket of other table<br>像Mapjoin, but big-table mappers load to memory only relevant small-table bucket‟s hashmap<br>Ex: Bucketed by “CityId”, Join by “CityId”<br><img src="/20170513132619074.png" alt="这里写图片描述"><br>1和3在一个桶（奇数），2和4一个桶（偶数）。</p>
 <p><strong>Bucket MapJoin 执行过程</strong><br>与MapJoin非常类似<br>    HashTableSink (小表) 写Hashtable是每个桶写一个Hashtable，而不是每张表写一个<br>    HashTableLoader (大表Mapper mapper) 也是每个桶读取一次HashTable</p>
 <p><strong>SMB Join</strong><br>CREATE TABLE cities (cityid int, cityName string) CLUSTERED BY (cityId) SORTED BY (cityId) INTO 2 BUCKETS;<br>Join tables are bucketed and sorted (per bucket)<br>This allows sort-merge join per bucket.<br>    Advance table until find a match</p>
 <p>建表的时候对桶内的指定字段进行排序，这样的安排可以直接使用common join operator,不需要使用map join operator，直接把表读出来交给common join operator</p>
-<p><strong>SMB Join</strong><br>MR和Spark执行方式相同<br>用mapper处理大表，处理过程中直接读取对应的小表<br>Map直接读取小表中相应的文件，相应的部分，避免了广播的开销<br>小表没有大小的限制<br>前提是，要知道经常使用哪个键做Join<br><img src="20170513134449192.png" alt="这里写图片描述"></p>
-<p><strong>SMB Join Optimizers: MR</strong><br>SMB 需要识别„大表‟，以便在大表上运行mapper，执行过程中读取„小表‟. 通常来说，在编译时决定<br>手动方法，用户可以手动提供hints<br>    Triggered by “hive.optimize.bucketmapjoin.sortedmerge”<br>    Logical Optimizer逻辑优化器: SortedMergeBucketMapJoinProc<br>自动触发: “hive.auto.convert.sortmerge.join.bigtable.selection.policy” 一个处理类<br>    Triggered by “hive.auto.convert.sortmerge.join”<br>    Logical Optimizer: SortedBucketMapJoinProc<br><img src="20170513134553834.png" alt="这里写图片描述"><br>逻辑优化器SortedMergeBucketMapjoinProc的处理过程：<br><span class="exturl" data-url="aHR0cHM6Ly9pbnNpZ2h0LmlvL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvYmxvYi9tYXN0ZXIvcWwvc3JjL2phdmEvb3JnL2FwYWNoZS9oYWRvb3AvaGl2ZS9xbC9vcHRpbWl6ZXIvU29ydGVkTWVyZ2VCdWNrZXRNYXBqb2luUHJvYy5qYXZhP2xpbmU9NDI=">https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/hadoop/hive/ql/optimizer/SortedMergeBucketMapjoinProc.java?line=42<i class="fa fa-external-link-alt"></i></span></p>
+<p><strong>SMB Join</strong><br>MR和Spark执行方式相同<br>用mapper处理大表，处理过程中直接读取对应的小表<br>Map直接读取小表中相应的文件，相应的部分，避免了广播的开销<br>小表没有大小的限制<br>前提是，要知道经常使用哪个键做Join<br><img src="/20170513134449192.png" alt="这里写图片描述"></p>
+<p><strong>SMB Join Optimizers: MR</strong><br>SMB 需要识别„大表‟，以便在大表上运行mapper，执行过程中读取„小表‟. 通常来说，在编译时决定<br>手动方法，用户可以手动提供hints<br>    Triggered by “hive.optimize.bucketmapjoin.sortedmerge”<br>    Logical Optimizer逻辑优化器: SortedMergeBucketMapJoinProc<br>自动触发: “hive.auto.convert.sortmerge.join.bigtable.selection.policy” 一个处理类<br>    Triggered by “hive.auto.convert.sortmerge.join”<br>    Logical Optimizer: SortedBucketMapJoinProc<br><img src="/20170513134553834.png" alt="这里写图片描述"><br>逻辑优化器SortedMergeBucketMapjoinProc的处理过程：<br><span class="exturl" data-url="aHR0cHM6Ly9pbnNpZ2h0LmlvL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvYmxvYi9tYXN0ZXIvcWwvc3JjL2phdmEvb3JnL2FwYWNoZS9oYWRvb3AvaGl2ZS9xbC9vcHRpbWl6ZXIvU29ydGVkTWVyZ2VCdWNrZXRNYXBqb2luUHJvYy5qYXZhP2xpbmU9NDI=">https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/hadoop/hive/ql/optimizer/SortedMergeBucketMapjoinProc.java?line=42<i class="fa fa-external-link-alt"></i></span></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">public Object process(Node nd, Stack&lt;Node&gt; stack, NodeProcessorCtx procCtx,</span><br><span class="line">    Object... nodeOutputs) throws SemanticException &#123;</span><br><span class="line">  if (nd instanceof SMBMapJoinOperator) &#123;</span><br><span class="line">    return null;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  MapJoinOperator mapJoinOp = (MapJoinOperator) nd;</span><br><span class="line">  SortBucketJoinProcCtx smbJoinContext = (SortBucketJoinProcCtx) procCtx;</span><br><span class="line"></span><br><span class="line">  boolean convert =</span><br><span class="line">      canConvertBucketMapJoinToSMBJoin(mapJoinOp, stack, smbJoinContext, nodeOutputs);</span><br><span class="line"></span><br><span class="line">  // Throw an error if the user asked for sort merge bucketed mapjoin to be enforced</span><br><span class="line">  // and sort merge bucketed mapjoin cannot be performed</span><br><span class="line">  if (!convert &amp;&amp;</span><br><span class="line">      pGraphContext.getConf().getBoolVar(</span><br><span class="line">          HiveConf.ConfVars.HIVEENFORCESORTMERGEBUCKETMAPJOIN)) &#123;</span><br><span class="line">    throw new SemanticException(ErrorMsg.SORTMERGE_MAPJOIN_FAILED.getMsg());</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  if (convert) &#123;</span><br><span class="line">    convertBucketMapJoinToSMBJoin(mapJoinOp, smbJoinContext);</span><br><span class="line">  &#125;</span><br><span class="line">  return null;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>回到原来的那个汇总：<br><img src="20170513110611864.png" alt="这里写图片描述"><br>join operator是最基本的，其他的mapjoin，SMB都是属于优化。</p>
-<p><strong>倾斜关联Skew Join</strong><br>倾斜键Skew keys = 高频出现的键, 非常多的键，多到一个reduce处理不了<br>使用Common Join处理非倾斜键，使用Map Join处理倾斜键.<br>A join B on A.id=B.id, 如果A 表中id=1倾斜, 那么查询会变成<br>A join B on A.id=B.id and A.id!=1 union<br>A join B on A.id=B.id and A.id=1<br>判断是否是倾斜的，主要是判断建是不是倾斜的，那么怎么判断一个建是不是倾斜的呢？</p>
-<p><strong>Skew Join Optimizers (Compile Time, MR)</strong><br>建表时指定倾斜键: create table … skewed by (key) on (key_value);<br>开关“hive.optimize.skewjoin.compiletime”<br>Logical Optimizer逻辑优化器: SkewJoinOptimizer查看元数据<br>直接指定倾斜建，是最好的一种，他会直接给出union的方式处理倾斜：<br><img src="20170513141135746.png" alt="这里写图片描述"><br>但是实际环境是苛刻的很多情况并不知道那个建会倾斜，往下看。</p>
-<p><strong>Skew Join Optimizers (Runtime, MR)</strong><br>开关“hive.optimize.skewjoin”<br>Physical Optimizer: SkewJoinResolver<br>JoinOperator处理时候计数，如果某个可以被某个节点处理次数超过 “hive.skewjoin.key” 域值<br>倾斜键Skew key被跳过并且把值拷到单独的目录<br>ConditionalTask会单独针对倾斜的键作处理，并将结果作Union<br><img src="20170513141311082.png" alt="这里写图片描述"><br>即最终结果是倾斜的建处理之后的结果加上未倾斜的common join的结果。不可否认这是一种笨重的方法，最好的方法是直接指定那个键会倾斜，单独处理倾斜。当出现处理慢的时候我们排查是join慢还是group by慢，如果是join慢能不能用map join处理，如果是group by慢，能不能进行预聚合。</p>
+<p>回到原来的那个汇总：<br><img src="/20170513110611864.png" alt="这里写图片描述"><br>join operator是最基本的，其他的mapjoin，SMB都是属于优化。</p>
+<p><strong>倾斜关联Skew Join</strong><br>倾斜键Skew keys &#x3D; 高频出现的键, 非常多的键，多到一个reduce处理不了<br>使用Common Join处理非倾斜键，使用Map Join处理倾斜键.<br>A join B on A.id&#x3D;B.id, 如果A 表中id&#x3D;1倾斜, 那么查询会变成<br>A join B on A.id&#x3D;B.id and A.id!&#x3D;1 union<br>A join B on A.id&#x3D;B.id and A.id&#x3D;1<br>判断是否是倾斜的，主要是判断建是不是倾斜的，那么怎么判断一个建是不是倾斜的呢？</p>
+<p><strong>Skew Join Optimizers (Compile Time, MR)</strong><br>建表时指定倾斜键: create table … skewed by (key) on (key_value);<br>开关“hive.optimize.skewjoin.compiletime”<br>Logical Optimizer逻辑优化器: SkewJoinOptimizer查看元数据<br>直接指定倾斜建，是最好的一种，他会直接给出union的方式处理倾斜：<br><img src="/20170513141135746.png" alt="这里写图片描述"><br>但是实际环境是苛刻的很多情况并不知道那个建会倾斜，往下看。</p>
+<p><strong>Skew Join Optimizers (Runtime, MR)</strong><br>开关“hive.optimize.skewjoin”<br>Physical Optimizer: SkewJoinResolver<br>JoinOperator处理时候计数，如果某个可以被某个节点处理次数超过 “hive.skewjoin.key” 域值<br>倾斜键Skew key被跳过并且把值拷到单独的目录<br>ConditionalTask会单独针对倾斜的键作处理，并将结果作Union<br><img src="/20170513141311082.png" alt="这里写图片描述"><br>即最终结果是倾斜的建处理之后的结果加上未倾斜的common join的结果。不可否认这是一种笨重的方法，最好的方法是直接指定那个键会倾斜，单独处理倾斜。当出现处理慢的时候我们排查是join慢还是group by慢，如果是join慢能不能用map join处理，如果是group by慢，能不能进行预聚合。</p>
 
     </div>
 
@@ -448,21 +443,23 @@
   </footer>
 
   
-  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.0.6/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
 <script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
 
   
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
 <script src="/js/third-party/search/local-search.js"></script>
 
 
-  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":"forest","js":{"url":"https://cdn.jsdelivr.net/npm/mermaid@8.11.0/dist/mermaid.min.js","integrity":"sha256-sVAx+v/Q7v0Q2xm5vN7h5ccSna6gaLREhG9sF8pKT6I="}}</script>
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.1.1/mermaid.min.js","integrity":"sha256-8L3O8tirFUa8Va4NSTAyIbHJeLd6OnlcxgupV9F77e0="}}</script>
   <script src="/js/third-party/tags/mermaid.js"></script>
 
-  <script class="next-config" data-name="nprogress" type="application/json">{"enable":true,"spinner":true}</script>
-  <script src="/js/third-party/nprogress.js"></script>
+  <script src="/js/third-party/fancybox.js"></script>
+
+  <script src="/js/third-party/pace.js"></script>
 
   
 

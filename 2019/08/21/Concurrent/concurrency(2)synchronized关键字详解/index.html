@@ -3,10 +3,9 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
-<meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 6.0.0">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
 
-<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -16,29 +15,30 @@
 
 
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.css" integrity="sha256-no0c5ccDODBwp+9hSmV5VvPpKwHCpbVzXHexIkupM6U=" crossorigin="anonymous">
-  <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.js" integrity="sha256-a5YRB27CcBwBFcT5EF/f3E4vzIqyHrSR878nseNYw64=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"ceaser.wang","root":"/","images":"/images","scheme":"Muse","version":"8.6.1","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
-<meta name="description" content="变量在多线程之间的影响编写程序：">
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ceaser.wang","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.12.1","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="变量在多线程之间的影响编写程序：">
 <meta property="og:type" content="article">
 <meta property="og:title" content="concurrency(2)synchronized关键字详解">
 <meta property="og:url" content="https://ceaser.wang/2019/08/21/Concurrent/concurrency(2)synchronized%E5%85%B3%E9%94%AE%E5%AD%97%E8%AF%A6%E8%A7%A3/index.html">
 <meta property="og:site_name" content="南贺神社">
 <meta property="og:description" content="变量在多线程之间的影响编写程序：">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://ceaser.wang/2019/08/21/Concurrent/concurrency(2)synchronized%E5%85%B3%E9%94%AE%E5%AD%97%E8%AF%A6%E8%A7%A3/monitor.png">
-<meta property="og:image" content="https://ceaser.wang/2019/08/21/Concurrent/concurrency(2)synchronized%E5%85%B3%E9%94%AE%E5%AD%97%E8%AF%A6%E8%A7%A3/wait.png">
-<meta property="og:image" content="https://ceaser.wang/2019/08/21/Concurrent/concurrency(2)synchronized%E5%85%B3%E9%94%AE%E5%AD%97%E8%AF%A6%E8%A7%A3/notify1.png">
+<meta property="og:image" content="https://ceaser.wang/monitor.png">
+<meta property="og:image" content="https://ceaser.wang/wait.png">
+<meta property="og:image" content="https://ceaser.wang/notify1.png">
 <meta property="article:published_time" content="2019-08-21T14:05:45.000Z">
-<meta property="article:modified_time" content="2022-02-05T08:57:15.892Z">
+<meta property="article:modified_time" content="2022-06-10T14:12:45.100Z">
 <meta property="article:author" content="CeaserWang">
 <meta property="article:tag" content="synchronized 并发">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://ceaser.wang/2019/08/21/Concurrent/concurrency(2)synchronized%E5%85%B3%E9%94%AE%E5%AD%97%E8%AF%A6%E8%A7%A3/monitor.png">
+<meta name="twitter:image" content="https://ceaser.wang/monitor.png">
 
 
 <link rel="canonical" href="https://ceaser.wang/2019/08/21/Concurrent/concurrency(2)synchronized%E5%85%B3%E9%94%AE%E5%AD%97%E8%AF%A6%E8%A7%A3/">
@@ -50,6 +50,7 @@
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>concurrency(2)synchronized关键字详解 | 南贺神社</title>
   
+
 
 
 
@@ -77,7 +78,7 @@
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <h1 class="site-title">南贺神社</h1>
+      <p class="site-title">南贺神社</p>
       <i class="logo-line"></i>
     </a>
       <p class="site-subtitle" itemprop="description">你写程序有写诗一样的感觉吗?</p>
@@ -93,13 +94,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu">
-        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
-        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
-        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">206</span></a></li>
-        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">25</span></a></li>
-        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">213</span></a></li>
-        <li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">206</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">25</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">213</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
         </a>
@@ -161,8 +156,7 @@
         <!--/noindex-->
 
         <div class="site-overview-wrap sidebar-panel">
-          <div class="site-overview">
-            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <img class="site-author-image" itemprop="image" alt="CeaserWang"
       src="/../0xcc/index/Uchiha.jpg">
   <p class="site-author-name" itemprop="name">CeaserWang</p>
@@ -171,21 +165,18 @@
 <div class="site-state-wrap site-overview-item animated">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
-          <a href="/archives/">
-        
+        <a href="/archives/">
           <span class="site-state-item-count">213</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-            <a href="/categories/">
-          
+          <a href="/categories/">
         <span class="site-state-item-count">25</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-            <a href="/tags/">
-          
+          <a href="/tags/">
         <span class="site-state-item-count">206</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
@@ -200,7 +191,7 @@
       </span>
   </div>
   <div class="cc-license site-overview-item animated" itemprop="license">
-    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><img src="https://cdn.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></span>
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></span>
   </div>
 
 
@@ -233,7 +224,6 @@
     </ul>
   </div>
 
-          </div>
         </div>
       </div>
     </div>
@@ -271,11 +261,16 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
       <meta itemprop="name" content="CeaserWang">
-      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="concurrency(2)synchronized关键字详解 | 南贺神社">
+      <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
@@ -292,13 +287,13 @@
 
       <time title="Created: 2019-08-21 14:05:45" itemprop="dateCreated datePublished" datetime="2019-08-21T14:05:45+00:00">2019-08-21</time>
     </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2022-02-05 08:57:15" itemprop="dateModified" datetime="2022-02-05T08:57:15+00:00">2022-02-05</time>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
       </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-06-10 14:12:45" itemprop="dateModified" datetime="2022-06-10T14:12:45+00:00">2022-06-10</time>
+    </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -367,7 +362,7 @@
 <p>访问标记：ACC_PUBLIC, ACC_STATIC, ACC_SYNCHRONIZED 相比非静态方法多了一个标志 ACC_STATIC。<br>即，方法 的字节码标志存在ACC_STATIC和ACC_SYNCHRONIZED的时候就是一个静态同步方法。</p>
 <p>JVM中的同步是基于进入与退出监视器对象（管程对象）来实现的，每个对象实例都会有一个Monitor对象，Monitor对象和Java对象一同创建并销毁，Monitor对象是由C++来实现的。</p>
 <p>当多个线程同时访问同一段同步代码时，这些线程会被放到一个EntryList集合中，处于阻塞状态的线程都会被放到该列表当中，接下来，当前线程获取到对象的Monitor时，Monitor是依赖于底层操作系统的mutex lock来实现互斥的，线程获取mutex成功，则会持有该mutex，这时其他线程无法再获取到该mutex。</p>
-<p>如果线程调用了wait方法，那么该线程就会释放掉所持有的的mutex，并且该线程会进入到wait集合（等待集合）中，，等待下一次被其他线程调用notify/notifyall唤醒，如果当前线程顺利执行完毕方法，那么它也会释放掉所有持有mutex。</p>
+<p>如果线程调用了wait方法，那么该线程就会释放掉所持有的的mutex，并且该线程会进入到wait集合（等待集合）中，，等待下一次被其他线程调用notify&#x2F;notifyall唤醒，如果当前线程顺利执行完毕方法，那么它也会释放掉所有持有mutex。</p>
 <p>总结一下：同步锁在这种实现方式当中，因为Monitor是依赖于底层的操作系统实现，这样就存在用户态与内核态之间的切换，，所以会增加性能开销。<br>通过对象互斥锁的概念保证共享数据操作的完整性，每个对象都对应于一个可称为【互斥锁】的标记，这个标记用于保证在任何时刻，只能有一个线程访问该对象。</p>
 <p>那些处于EntryList与waitSet中的线程均处于阻塞状态，阻塞操作是由操作系统来完成的，在inux下是通过pthread_mutex_local函数实现的。<br>线程被阻塞后便会进入到内核调度状态，这会导致系统用户态与内核态之间来回切换，严重影响锁的性能。</p>
 <p>解决上述问题的办法便是自旋。其原理：当发生对Monitor的挣用时，若Owner能够在很短的时间内释放掉锁，则那些正在挣用的线程就可以稍微等待下，【即所谓的自旋】，在Owner线程释放锁之后，挣用线程可能会立刻获取到锁，从而避免了系统阻塞。不过，当Owner运行时间超过了临界值后，挣用线程自旋一段时间后依然无法获取到锁，这时挣用线程则会停止自旋从而到阻塞状态，所以总体的思想是：先自旋，不成功再进行阻塞，尽量降低阻塞的可能性，这对那些执行时间很短的代码块来说就有极大性能提升，显然，自旋在多处理器（多核心）上才有意义。<br>阻塞要进入到内核态，如果线程唤醒又会从内核态转到用户态，所以要尽量避免阻塞。</p>
@@ -382,11 +377,11 @@
 <p>看一下初始化方法：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">// initialize the monitor, exception the semaphore, all other fields</span><br><span class="line">// are simple integers or pointers</span><br><span class="line">ObjectMonitor() &#123;</span><br><span class="line">  _header       = NULL;</span><br><span class="line">  _count        = 0;</span><br><span class="line">  _waiters      = 0,</span><br><span class="line">  _recursions   = 0;     记录可重入锁重入的次数</span><br><span class="line">  _object       = NULL;  </span><br><span class="line">  _owner        = NULL;  当前锁的拥有者线程</span><br><span class="line">  _WaitSet      = NULL;  线程调用了wait方法，就会进入这个队列</span><br><span class="line">  _WaitSetLock  = 0 ;    简单的一个自旋锁【先自旋，自旋拿不到锁再进行内核态转换】</span><br><span class="line">  _Responsible  = NULL ;</span><br><span class="line">  _succ         = NULL ;</span><br><span class="line">  _cxq          = NULL ; 最近的一个等待线程，也是一个ObjectMonitor的线程代理</span><br><span class="line">  FreeNext      = NULL ;</span><br><span class="line">  _EntryList    = NULL ; 等待进入monitor的线程都在_EntryList集合里边</span><br><span class="line">  _SpinFreq     = 0 ;</span><br><span class="line">  _SpinClock    = 0 ;</span><br><span class="line">  OwnerIsThread = 0 ;</span><br><span class="line">  _previous_owner_tid = 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>看一下它的处理架构：<br><img src="monitor.png" alt="monitor.png"><br>waitSet采用链表的结构存储等待的线程的好处是，只要拿到一个线程就能访问其他的线程，在有些情况下可能针对于优先级唤醒有非常好的帮助。</p>
-<h3 id="wait方法的实现"><a href="#wait方法的实现" class="headerlink" title="wait方法的实现"></a>wait方法的实现</h3><p>java的Object的wait方法，在objectMonitor.cpp里边，源码位置：<br><span class="exturl" data-url="aHR0cDovL2hnLm9wZW5qZGsuamF2YS5uZXQvamRrOHUvamRrOHUvaG90c3BvdC9maWxlL2JmYWMxNmYxOGQ5Mi9zcmMvc2hhcmUvdm0vcnVudGltZS9vYmplY3RNb25pdG9yLmNwcA==">http://hg.openjdk.java.net/jdk8u/jdk8u/hotspot/file/bfac16f18d92/src/share/vm/runtime/objectMonitor.cpp<i class="fa fa-external-link-alt"></i></span><br>wait方法的开始是从1463—1690，定位到1508行：<br><img src="wait.png" alt="wait.png"><br>ObjectWaiter node(Self);构建了一个ObjectWaiter的节点，然后调用 AddWaiter (&amp;node) ;将其加入到waitset里边。<br>AddWaiter:</p>
+<p>看一下它的处理架构：<br><img src="/monitor.png" alt="monitor.png"><br>waitSet采用链表的结构存储等待的线程的好处是，只要拿到一个线程就能访问其他的线程，在有些情况下可能针对于优先级唤醒有非常好的帮助。</p>
+<h3 id="wait方法的实现"><a href="#wait方法的实现" class="headerlink" title="wait方法的实现"></a>wait方法的实现</h3><p>java的Object的wait方法，在objectMonitor.cpp里边，源码位置：<br><span class="exturl" data-url="aHR0cDovL2hnLm9wZW5qZGsuamF2YS5uZXQvamRrOHUvamRrOHUvaG90c3BvdC9maWxlL2JmYWMxNmYxOGQ5Mi9zcmMvc2hhcmUvdm0vcnVudGltZS9vYmplY3RNb25pdG9yLmNwcA==">http://hg.openjdk.java.net/jdk8u/jdk8u/hotspot/file/bfac16f18d92/src/share/vm/runtime/objectMonitor.cpp<i class="fa fa-external-link-alt"></i></span><br>wait方法的开始是从1463—1690，定位到1508行：<br><img src="/wait.png" alt="wait.png"><br>ObjectWaiter node(Self);构建了一个ObjectWaiter的节点，然后调用 AddWaiter (&amp;node) ;将其加入到waitset里边。<br>AddWaiter:</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">waitSet里边是一个双向链表，这里边都是在修改指针，将当前节点加入到链表。</span><br><span class="line">inline void ObjectMonitor::AddWaiter(ObjectWaiter* node) &#123;</span><br><span class="line">  assert(node != NULL, &quot;should not dequeue NULL node&quot;);</span><br><span class="line">  assert(node-&gt;_prev == NULL, &quot;node already in list&quot;);</span><br><span class="line">  assert(node-&gt;_next == NULL, &quot;node already in list&quot;);</span><br><span class="line">  // put node at end of queue (circular doubly linked list)</span><br><span class="line">  if (_WaitSet == NULL) &#123;</span><br><span class="line">    _WaitSet = node;</span><br><span class="line">    node-&gt;_prev = node;</span><br><span class="line">    node-&gt;_next = node;</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    ObjectWaiter* head = _WaitSet ;</span><br><span class="line">    ObjectWaiter* tail = head-&gt;_prev;</span><br><span class="line">    assert(tail-&gt;_next == head, &quot;invariant check&quot;);</span><br><span class="line">    tail-&gt;_next = node;</span><br><span class="line">    head-&gt;_prev = node;</span><br><span class="line">    node-&gt;_next = head;</span><br><span class="line">    node-&gt;_prev = tail;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>wait方法里边的 exit (true, Self); 指的是线程进入waitSet之后就退出了monitor，释放对象的锁。</p>
-<h3 id="notify方法"><a href="#notify方法" class="headerlink" title="notify方法"></a>notify方法</h3><p>notify在从1698行开始。<br><img src="notify1.png" alt="notify1.png"><br>看一下DequeueWaiter方法：</p>
+<h3 id="notify方法"><a href="#notify方法" class="headerlink" title="notify方法"></a>notify方法</h3><p>notify在从1698行开始。<br><img src="/notify1.png" alt="notify1.png"><br>看一下DequeueWaiter方法：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">唤醒waitSet里边的第一个线程</span><br><span class="line">inline ObjectWaiter* ObjectMonitor::DequeueWaiter() &#123;</span><br><span class="line">  // dequeue the very first waiter</span><br><span class="line">  ObjectWaiter* waiter = _WaitSet;</span><br><span class="line">  if (waiter) &#123;</span><br><span class="line">    DequeueSpecificWaiter(waiter);</span><br><span class="line">  &#125;</span><br><span class="line">  return waiter;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>在notify调用完DequeueWaiter拿到第一个线程之后，下边有一系列逻辑：</p>
@@ -513,21 +508,23 @@
   </footer>
 
   
-  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.0.6/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
 <script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
 
   
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
 <script src="/js/third-party/search/local-search.js"></script>
 
 
-  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":"forest","js":{"url":"https://cdn.jsdelivr.net/npm/mermaid@8.11.0/dist/mermaid.min.js","integrity":"sha256-sVAx+v/Q7v0Q2xm5vN7h5ccSna6gaLREhG9sF8pKT6I="}}</script>
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.1.1/mermaid.min.js","integrity":"sha256-8L3O8tirFUa8Va4NSTAyIbHJeLd6OnlcxgupV9F77e0="}}</script>
   <script src="/js/third-party/tags/mermaid.js"></script>
 
-  <script class="next-config" data-name="nprogress" type="application/json">{"enable":true,"spinner":true}</script>
-  <script src="/js/third-party/nprogress.js"></script>
+  <script src="/js/third-party/fancybox.js"></script>
+
+  <script src="/js/third-party/pace.js"></script>
 
   
 

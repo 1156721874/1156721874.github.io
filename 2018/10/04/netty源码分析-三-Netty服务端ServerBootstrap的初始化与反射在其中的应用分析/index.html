@@ -3,10 +3,9 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
-<meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 6.0.0">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
 
-<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -16,28 +15,29 @@
 
 
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.css" integrity="sha256-no0c5ccDODBwp+9hSmV5VvPpKwHCpbVzXHexIkupM6U=" crossorigin="anonymous">
-  <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.js" integrity="sha256-a5YRB27CcBwBFcT5EF/f3E4vzIqyHrSR878nseNYw64=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"ceaser.wang","root":"/","images":"/images","scheme":"Muse","version":"8.6.1","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
-<meta name="description" content="上一节说到EventLoopGroup只是对bossGroup和workerGroup的一些初始化，包括线程数量，执行器（命令模式），我们的服务端接下来使用ServerBootstrap对bossGroup和workerGroup进行了包装，整个过程是一个方法链的调用过程，每个方法返回调用者本身：">
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ceaser.wang","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.12.1","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="上一节说到EventLoopGroup只是对bossGroup和workerGroup的一些初始化，包括线程数量，执行器（命令模式），我们的服务端接下来使用ServerBootstrap对bossGroup和workerGroup进行了包装，整个过程是一个方法链的调用过程，每个方法返回调用者本身：">
 <meta property="og:type" content="article">
 <meta property="og:title" content="netty源码分析(三)Netty服务端ServerBootstrap的初始化与反射在其中的应用分析">
 <meta property="og:url" content="https://ceaser.wang/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E4%B8%89-Netty%E6%9C%8D%E5%8A%A1%E7%AB%AFServerBootstrap%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96%E4%B8%8E%E5%8F%8D%E5%B0%84%E5%9C%A8%E5%85%B6%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8%E5%88%86%E6%9E%90/index.html">
 <meta property="og:site_name" content="南贺神社">
 <meta property="og:description" content="上一节说到EventLoopGroup只是对bossGroup和workerGroup的一些初始化，包括线程数量，执行器（命令模式），我们的服务端接下来使用ServerBootstrap对bossGroup和workerGroup进行了包装，整个过程是一个方法链的调用过程，每个方法返回调用者本身：">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://ceaser.wang/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E4%B8%89-Netty%E6%9C%8D%E5%8A%A1%E7%AB%AFServerBootstrap%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96%E4%B8%8E%E5%8F%8D%E5%B0%84%E5%9C%A8%E5%85%B6%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8%E5%88%86%E6%9E%90/20170916120817979.png">
-<meta property="og:image" content="https://ceaser.wang/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E4%B8%89-Netty%E6%9C%8D%E5%8A%A1%E7%AB%AFServerBootstrap%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96%E4%B8%8E%E5%8F%8D%E5%B0%84%E5%9C%A8%E5%85%B6%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8%E5%88%86%E6%9E%90/20170916110106930.png">
+<meta property="og:image" content="https://ceaser.wang/20170916120817979.png">
+<meta property="og:image" content="https://ceaser.wang/20170916110106930.png">
 <meta property="article:published_time" content="2018-10-04T14:17:46.000Z">
-<meta property="article:modified_time" content="2022-02-05T08:57:16.160Z">
+<meta property="article:modified_time" content="2022-06-10T14:12:45.356Z">
 <meta property="article:author" content="CeaserWang">
 <meta property="article:tag" content="ServerBootstrap reflect机制">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://ceaser.wang/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E4%B8%89-Netty%E6%9C%8D%E5%8A%A1%E7%AB%AFServerBootstrap%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96%E4%B8%8E%E5%8F%8D%E5%B0%84%E5%9C%A8%E5%85%B6%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8%E5%88%86%E6%9E%90/20170916120817979.png">
+<meta name="twitter:image" content="https://ceaser.wang/20170916120817979.png">
 
 
 <link rel="canonical" href="https://ceaser.wang/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E4%B8%89-Netty%E6%9C%8D%E5%8A%A1%E7%AB%AFServerBootstrap%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96%E4%B8%8E%E5%8F%8D%E5%B0%84%E5%9C%A8%E5%85%B6%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8%E5%88%86%E6%9E%90/">
@@ -49,6 +49,7 @@
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>netty源码分析(三)Netty服务端ServerBootstrap的初始化与反射在其中的应用分析 | 南贺神社</title>
   
+
 
 
 
@@ -76,7 +77,7 @@
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <h1 class="site-title">南贺神社</h1>
+      <p class="site-title">南贺神社</p>
       <i class="logo-line"></i>
     </a>
       <p class="site-subtitle" itemprop="description">你写程序有写诗一样的感觉吗?</p>
@@ -92,13 +93,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu">
-        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
-        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
-        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">206</span></a></li>
-        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">25</span></a></li>
-        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">213</span></a></li>
-        <li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">206</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">25</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">213</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
         </a>
@@ -159,8 +154,7 @@
         <!--/noindex-->
 
         <div class="site-overview-wrap sidebar-panel">
-          <div class="site-overview">
-            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <img class="site-author-image" itemprop="image" alt="CeaserWang"
       src="/../0xcc/index/Uchiha.jpg">
   <p class="site-author-name" itemprop="name">CeaserWang</p>
@@ -169,21 +163,18 @@
 <div class="site-state-wrap site-overview-item animated">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
-          <a href="/archives/">
-        
+        <a href="/archives/">
           <span class="site-state-item-count">213</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-            <a href="/categories/">
-          
+          <a href="/categories/">
         <span class="site-state-item-count">25</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-            <a href="/tags/">
-          
+          <a href="/tags/">
         <span class="site-state-item-count">206</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
@@ -198,7 +189,7 @@
       </span>
   </div>
   <div class="cc-license site-overview-item animated" itemprop="license">
-    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><img src="https://cdn.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></span>
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></span>
   </div>
 
 
@@ -231,7 +222,6 @@
     </ul>
   </div>
 
-          </div>
         </div>
       </div>
     </div>
@@ -269,11 +259,16 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
       <meta itemprop="name" content="CeaserWang">
-      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="netty源码分析(三)Netty服务端ServerBootstrap的初始化与反射在其中的应用分析 | 南贺神社">
+      <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
@@ -290,13 +285,13 @@
 
       <time title="Created: 2018-10-04 14:17:46" itemprop="dateCreated datePublished" datetime="2018-10-04T14:17:46+00:00">2018-10-04</time>
     </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2022-02-05 08:57:16" itemprop="dateModified" datetime="2022-02-05T08:57:16+00:00">2022-02-05</time>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
       </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-06-10 14:12:45" itemprop="dateModified" datetime="2022-06-10T14:12:45+00:00">2022-06-10</time>
+    </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -324,7 +319,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <p>上一节说到EventLoopGroup只是对bossGroup和workerGroup的一些初始化，包括线程数量，执行器（命令模式），我们的服务端接下来使用ServerBootstrap对bossGroup和workerGroup进行了包装，整个过程是一个方法链的调用过程，每个方法返回调用者本身：<br><img src="20170916120817979.png" alt="这里写图片描述"></p>
+        <p>上一节说到EventLoopGroup只是对bossGroup和workerGroup的一些初始化，包括线程数量，执行器（命令模式），我们的服务端接下来使用ServerBootstrap对bossGroup和workerGroup进行了包装，整个过程是一个方法链的调用过程，每个方法返回调用者本身：<br><img src="/20170916120817979.png" alt="这里写图片描述"></p>
 <span id="more"></span>
 <p>然后进行了启动，先看一下ServerBootstrap的结构：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"> //&#123;@link Bootstrap&#125; sub-class which allows easy bootstrap of &#123;@link ServerChannel&#125;</span><br><span class="line"> //Bootstrap的子类型，用来启动ServerChannel，父类是AbstractBootstrap，父类的泛型是它的子类类型ServerBootstrap和</span><br><span class="line"> //要启动的ServerChannel类型。</span><br><span class="line">public class ServerBootstrap extends AbstractBootstrap&lt;ServerBootstrap, ServerChannel&gt; &#123;</span><br><span class="line">	...略</span><br><span class="line">    private volatile EventLoopGroup childGroup;//即之前创建的workerGroup，实际处理数据的EventLoopGroup。</span><br><span class="line">    ...略</span><br><span class="line">    public ServerBootstrap() &#123; &#125; //构造器非常简化。</span><br><span class="line">	...略</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Set the &#123;@link EventLoopGroup&#125; for the parent (acceptor) and the child (client). These</span><br><span class="line">     * &#123;@link EventLoopGroup&#125;&#x27;s are used to handle all the events and IO for &#123;@link ServerChannel&#125; and</span><br><span class="line">     * &#123;@link Channel&#125;&#x27;s.</span><br><span class="line">     * parentGroup放在父类AbstractBootstrap里边，即acceptor，childGroup放在当前类里边，即client</span><br><span class="line">     * EventLoopGroup的作用就是处理所有的ServerChannel和Channel的io事件。</span><br><span class="line">     */</span><br><span class="line">    public ServerBootstrap group(EventLoopGroup parentGroup, EventLoopGroup childGroup) &#123;</span><br><span class="line">        super.group(parentGroup);//调父类的构造器，将parentGroup放在父类</span><br><span class="line">        if (childGroup == null) &#123;</span><br><span class="line">            throw new NullPointerException(&quot;childGroup&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">        if (this.childGroup != null) &#123;</span><br><span class="line">            throw new IllegalStateException(&quot;childGroup set already&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">        this.childGroup = childGroup;//childGroup放在子类里边</span><br><span class="line">        return this;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
@@ -332,7 +327,7 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">//泛型B是AbstractBootstrap的子类类型，当前是ServerBootstrap，C是通道类型，当前是NioServerSocketChannel（后续会提到）</span><br><span class="line">public abstract class AbstractBootstrap&lt;B extends AbstractBootstrap&lt;B, C&gt;, C extends Channel&gt; implements Cloneable &#123;</span><br><span class="line">    ...略</span><br><span class="line">        private volatile ChannelFactory&lt;? extends C&gt; channelFactory;//Channel类型的C会被反射成实体，放在ChannelFactory</span><br><span class="line">        //里边，后边会说。</span><br><span class="line"> /**</span><br><span class="line">     * The &#123;@link EventLoopGroup&#125; which is used to handle all the events for the to-be-created</span><br><span class="line">     * &#123;@link Channel&#125;</span><br><span class="line">     */</span><br><span class="line">    @SuppressWarnings(&quot;unchecked&quot;)</span><br><span class="line">    public B group(EventLoopGroup group) &#123;</span><br><span class="line">        if (group == null) &#123;</span><br><span class="line">            throw new NullPointerException(&quot;group&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">        if (this.group != null) &#123;</span><br><span class="line">            throw new IllegalStateException(&quot;group set already&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">        this.group = group;</span><br><span class="line">        return (B) this;//返回子类型ServerBootstrap。</span><br><span class="line">    &#125;</span><br><span class="line">        ...略</span><br></pre></td></tr></table></figure>
 <p>接下来会调用serverBootstrap.group(bossGroup,workerGroup).channel(NioServerSocketChannel.class)，channel方法，channel位于父类AbstractBootstrap里边：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * The &#123;@link Class&#125; which is used to create &#123;@link Channel&#125; instances from.</span><br><span class="line"> * You either use this or &#123;@link #channelFactory(io.netty.channel.ChannelFactory)&#125; if your</span><br><span class="line"> * &#123;@link Channel&#125; implementation has no no-args constructor.</span><br><span class="line"> * channelClass即我们的参数NioServerSocketChannel.class，new ReflectiveChannelFactory&lt;C&gt;(channelClass)使用反射生成了</span><br><span class="line"> * NioServerSocketChannel的实例（无参构造器），</span><br><span class="line"> */</span><br><span class="line">public B channel(Class&lt;? extends C&gt; channelClass) &#123;</span><br><span class="line">    if (channelClass == null) &#123;</span><br><span class="line">        throw new NullPointerException(&quot;channelClass&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    return channelFactory(new ReflectiveChannelFactory&lt;C&gt;(channelClass));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这里用到了ReflectiveChannelFactory，这里牵扯了三个factory和他们之间的关系，如图：<br><img src="20170916110106930.png" alt="这里写图片描述"></p>
+<p>这里用到了ReflectiveChannelFactory，这里牵扯了三个factory和他们之间的关系，如图：<br><img src="/20170916110106930.png" alt="这里写图片描述"></p>
 <p>这个图我们只要了解一下即可，接下来 return channelFactory(new ReflectiveChannelFactory<C>(channelClass));，进入channelFactory方法：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">//入参：channelFactory类型io.netty.channel.ChannelFactory</span><br><span class="line">    public B channelFactory(io.netty.channel.ChannelFactory&lt;? extends C&gt; channelFactory) &#123;</span><br><span class="line">        return channelFactory((ChannelFactory&lt;C&gt;) channelFactory);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 <p>继续走：</p>
@@ -423,21 +418,23 @@
   </footer>
 
   
-  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.0.6/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
 <script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
 
   
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
 <script src="/js/third-party/search/local-search.js"></script>
 
 
-  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":"forest","js":{"url":"https://cdn.jsdelivr.net/npm/mermaid@8.11.0/dist/mermaid.min.js","integrity":"sha256-sVAx+v/Q7v0Q2xm5vN7h5ccSna6gaLREhG9sF8pKT6I="}}</script>
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.1.1/mermaid.min.js","integrity":"sha256-8L3O8tirFUa8Va4NSTAyIbHJeLd6OnlcxgupV9F77e0="}}</script>
   <script src="/js/third-party/tags/mermaid.js"></script>
 
-  <script class="next-config" data-name="nprogress" type="application/json">{"enable":true,"spinner":true}</script>
-  <script src="/js/third-party/nprogress.js"></script>
+  <script src="/js/third-party/fancybox.js"></script>
+
+  <script src="/js/third-party/pace.js"></script>
 
   
 

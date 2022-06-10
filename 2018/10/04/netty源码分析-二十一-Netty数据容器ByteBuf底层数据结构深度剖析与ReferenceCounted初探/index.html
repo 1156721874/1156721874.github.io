@@ -3,10 +3,9 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
-<meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 6.0.0">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
 
-<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -16,14 +15,15 @@
 
 
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.css" integrity="sha256-no0c5ccDODBwp+9hSmV5VvPpKwHCpbVzXHexIkupM6U=" crossorigin="anonymous">
-  <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.js" integrity="sha256-a5YRB27CcBwBFcT5EF/f3E4vzIqyHrSR878nseNYw64=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"ceaser.wang","root":"/","images":"/images","scheme":"Muse","version":"8.6.1","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
-<meta name="description" content="ByteBufByteBuf是Netty提供的代替jdk的ByteBuffer的一个容器，首先看一下他的具体用法：">
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ceaser.wang","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.12.1","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="ByteBufByteBuf是Netty提供的代替jdk的ByteBuffer的一个容器，首先看一下他的具体用法：">
 <meta property="og:type" content="article">
 <meta property="og:title" content="netty源码分析(二十一)Netty数据容器ByteBuf底层数据结构深度剖析与ReferenceCounted初探">
 <meta property="og:url" content="https://ceaser.wang/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E4%BA%8C%E5%8D%81%E4%B8%80-Netty%E6%95%B0%E6%8D%AE%E5%AE%B9%E5%99%A8ByteBuf%E5%BA%95%E5%B1%82%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%B7%B1%E5%BA%A6%E5%89%96%E6%9E%90%E4%B8%8EReferenceCounted%E5%88%9D%E6%8E%A2/index.html">
@@ -31,7 +31,7 @@
 <meta property="og:description" content="ByteBufByteBuf是Netty提供的代替jdk的ByteBuffer的一个容器，首先看一下他的具体用法：">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2018-10-04T15:09:42.000Z">
-<meta property="article:modified_time" content="2022-02-05T08:57:16.168Z">
+<meta property="article:modified_time" content="2022-06-10T14:12:45.364Z">
 <meta property="article:author" content="CeaserWang">
 <meta property="article:tag" content="ByteBuf ReferenceCounted">
 <meta name="twitter:card" content="summary">
@@ -46,6 +46,7 @@
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>netty源码分析(二十一)Netty数据容器ByteBuf底层数据结构深度剖析与ReferenceCounted初探 | 南贺神社</title>
   
+
 
 
 
@@ -73,7 +74,7 @@
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <h1 class="site-title">南贺神社</h1>
+      <p class="site-title">南贺神社</p>
       <i class="logo-line"></i>
     </a>
       <p class="site-subtitle" itemprop="description">你写程序有写诗一样的感觉吗?</p>
@@ -89,13 +90,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu">
-        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
-        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
-        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">206</span></a></li>
-        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">25</span></a></li>
-        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">213</span></a></li>
-        <li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">206</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">25</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">213</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
         </a>
@@ -156,8 +151,7 @@
         <!--/noindex-->
 
         <div class="site-overview-wrap sidebar-panel">
-          <div class="site-overview">
-            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <img class="site-author-image" itemprop="image" alt="CeaserWang"
       src="/../0xcc/index/Uchiha.jpg">
   <p class="site-author-name" itemprop="name">CeaserWang</p>
@@ -166,21 +160,18 @@
 <div class="site-state-wrap site-overview-item animated">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
-          <a href="/archives/">
-        
+        <a href="/archives/">
           <span class="site-state-item-count">213</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-            <a href="/categories/">
-          
+          <a href="/categories/">
         <span class="site-state-item-count">25</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-            <a href="/tags/">
-          
+          <a href="/tags/">
         <span class="site-state-item-count">206</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
@@ -195,7 +186,7 @@
       </span>
   </div>
   <div class="cc-license site-overview-item animated" itemprop="license">
-    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><img src="https://cdn.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></span>
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></span>
   </div>
 
 
@@ -228,7 +219,6 @@
     </ul>
   </div>
 
-          </div>
         </div>
       </div>
     </div>
@@ -266,11 +256,16 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
       <meta itemprop="name" content="CeaserWang">
-      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="netty源码分析(二十一)Netty数据容器ByteBuf底层数据结构深度剖析与ReferenceCounted初探 | 南贺神社">
+      <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
@@ -287,13 +282,13 @@
 
       <time title="Created: 2018-10-04 15:09:42" itemprop="dateCreated datePublished" datetime="2018-10-04T15:09:42+00:00">2018-10-04</time>
     </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2022-02-05 08:57:16" itemprop="dateModified" datetime="2022-02-05T08:57:16+00:00">2022-02-05</time>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
       </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-06-10 14:12:45" itemprop="dateModified" datetime="2022-06-10T14:12:45+00:00">2022-06-10</time>
+    </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -336,7 +331,7 @@
 <p>Direct Buffer（直接缓冲区）</p>
 <p>在堆之外直接分配内存空间，直接缓冲区并不会占用堆的容量空间，因为它是由操作系统在本地内存进行的数据分配。</p>
 <p>优点：在使用Socket进行数据传递时，性能非常好，因为数据直接位于操作系统的本地内存中，所以不需要从JVM将数据复制到直接缓冲区，性能很好。<br>缺点：因为Direct Buffer是直接在操作系统内存中的，所以内存的分配与释放要比堆空间更加复杂，而且速度要慢一些。</p>
-<p>Netty通过提供内存池来解决这个问题，直接缓冲区并不支持通过字节数组的方式来访问数据。<br>重点：对于后端的业务消息的编解码来说，推荐使用HeapByteBuf；对于I/O通信线程在读写缓冲区时，推荐使用DirectByteBuf。</p>
+<p>Netty通过提供内存池来解决这个问题，直接缓冲区并不支持通过字节数组的方式来访问数据。<br>重点：对于后端的业务消息的编解码来说，推荐使用HeapByteBuf；对于I&#x2F;O通信线程在读写缓冲区时，推荐使用DirectByteBuf。</p>
 <p>CompositeByteBuf：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">public class ByteBufTest2 &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        CompositeByteBuf compositeByteBuf = Unpooled.compositeBuffer();</span><br><span class="line">        ByteBuf heapBuf = Unpooled.buffer(10);</span><br><span class="line">        ByteBuf directBuf = Unpooled.directBuffer(8);</span><br><span class="line">        compositeByteBuf.addComponents(heapBuf,directBuf);</span><br><span class="line">       // compositeByteBuf.removeComponent(0);</span><br><span class="line">        Iterator iterator = compositeByteBuf.iterator();</span><br><span class="line">        while(iterator.hasNext())&#123;</span><br><span class="line">            System.out.println(iterator.next());</span><br><span class="line">        &#125;</span><br><span class="line">        compositeByteBuf.forEach(System.out::println);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>Composite Buffer(符合缓冲区)</p>
@@ -350,12 +345,12 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * A reference-counted object that requires explicit deallocation.</span><br><span class="line"> * 引用计数回收对象</span><br><span class="line"> * &lt;p&gt;</span><br><span class="line"> * When a new &#123;@link ReferenceCounted&#125; is instantiated, it starts with the reference count of &#123;@code 1&#125;.</span><br><span class="line"> * &#123;@link #retain()&#125; increases the reference count, and &#123;@link #release()&#125; decreases the reference count.</span><br><span class="line"> * If the reference count is decreased to &#123;@code 0&#125;, the object will be deallocated explicitly, and accessing</span><br><span class="line"> * the deallocated object will usually result in an access violation.</span><br><span class="line"> * &lt;/p&gt;</span><br><span class="line"> * 当一个ReferenceCounted创建的时候他的初始引用数量是1，retain方法增加一个引用数量，release方法减少一个引用数量，如果引用数量是</span><br><span class="line"> * 变成0，那么对象就会被死亡回收，加入引用一个已经被定义为死亡的对象的结果通常是会出现问题的。</span><br><span class="line"> * &lt;p&gt;</span><br><span class="line"> * If an object that implements &#123;@link ReferenceCounted&#125; is a container of other objects that implement</span><br><span class="line"> * &#123;@link ReferenceCounted&#125;, the contained objects will also be released via &#123;@link #release()&#125; when the container&#x27;s</span><br><span class="line"> * reference count becomes 0.</span><br><span class="line"> * &lt;/p&gt;</span><br><span class="line"> * 如果一个实现了ReferenceCounted接口的这个对象作为一个容器，他的内部的对象也是实现了ReferenceCounted接口，那么当外边的容器的</span><br><span class="line"> * count引用数量变为0的时候，容器内部的对象也会别回收。</span><br><span class="line"> */</span><br></pre></td></tr></table></figure>
 <p>引用加1的逻辑：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">public ByteBuf retain(int increment) &#123;</span><br><span class="line">    return retain0(checkPositive(increment, &quot;increment&quot;));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">private ByteBuf retain0(int increment) &#123;</span><br><span class="line">    for (;;) &#123;//回旋锁</span><br><span class="line">        int refCnt = this.refCnt;</span><br><span class="line">        final int nextCnt = refCnt + increment;</span><br><span class="line"></span><br><span class="line">        // Ensure we not resurrect (which means the refCnt was 0) and also that we encountered an overflow.</span><br><span class="line">        //如果refCnt 是0那么就会出现nextCnt = increment的情况，但是这样违背了netty的回收计数器的原则，程序就可以往下走，这是</span><br><span class="line">        //不合法的，当为0的时候正常的情况是要被回收的。</span><br><span class="line">        if (nextCnt &lt;= increment) &#123;</span><br><span class="line">            throw new IllegalReferenceCountException(refCnt, increment);</span><br><span class="line">        &#125;</span><br><span class="line">        //    private static final AtomicIntegerFieldUpdater&lt;AbstractReferenceCountedByteBuf&gt; refCntUpdater =</span><br><span class="line">       //     AtomicIntegerFieldUpdater.newUpdater(AbstractReferenceCountedByteBuf.class, &quot;refCnt&quot;);</span><br><span class="line">       //首先使用的是AtomicIntegerFieldUpdater进行的cas操作（基于硬件的更新实现），其次refCnt是</span><br><span class="line">       //    private volatile int refCnt = 1;即是volatile 类型的，在多线程的情况下保证相互之间的可见性。</span><br><span class="line">        if (refCntUpdater.compareAndSet(this, refCnt, nextCnt)) &#123;//cas操作增加引用计数</span><br><span class="line">            break;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return this;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>此处用了回旋锁+cas保证操作的原子性。<br>AtomicIntegerFieldUpdater使用反射 更新某个类的内部的一个int类型的并且是volatitle的变量。<br>这里提一下AtomicIntegerFieldUpdater：<br>1、更新器更新的必须int类型的变量    ，不能是其包装类型。<br>2、更新器更新的必须是volatitle类型变量，确保线程之间共享变量时的立即可见性。<br>AtomicIntegerFieldUpdater.newUpdater()方法的实现是AtomicIntegerFieldUpdaterImpl:<br>AtomicIntegerFieldUpdaterImpl的构造器会对类型进行验证：</p>
+<p>此处用了回旋锁+cas保证操作的原子性。<br>AtomicIntegerFieldUpdater使用反射 更新某个类的内部的一个int类型的并且是volatitle的变量。<br>这里提一下AtomicIntegerFieldUpdater：<br>1、更新器更新的必须int类型的变量	，不能是其包装类型。<br>2、更新器更新的必须是volatitle类型变量，确保线程之间共享变量时的立即可见性。<br>AtomicIntegerFieldUpdater.newUpdater()方法的实现是AtomicIntegerFieldUpdaterImpl:<br>AtomicIntegerFieldUpdaterImpl的构造器会对类型进行验证：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">if (field.getType() != int.class)</span><br><span class="line">    throw new IllegalArgumentException(&quot;Must be integer type&quot;);</span><br><span class="line"></span><br><span class="line">if (!Modifier.isVolatile(modifiers))</span><br><span class="line">    throw new IllegalArgumentException(&quot;Must be volatile type&quot;);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <p>由此验证我们说的第一和第二条原则。<br>3、变量不能是static的，必须是实例变量，因为Unsafe.objectFieldOffset()方法不支持静态变量(cas操作本质上是通过对象实例的偏移量来直接进行赋值)<br>4、更新器只能修改可见范围内的变量，因为更新器是通过反射来得到这个变量，如果变量不可见就会报错。<br>实际验证：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">	public class AtomicUpdatorTest &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        Person person = new Person();</span><br><span class="line"> /*       for(int i=0;i&lt;10;++i)&#123;</span><br><span class="line">            Thread thread = new Thread(() -&gt; &#123;</span><br><span class="line">                try &#123;</span><br><span class="line">                    Thread.sleep(20);</span><br><span class="line">                &#125; catch (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">                System.out.println( person.age++);</span><br><span class="line">            &#125;);</span><br><span class="line">            thread.start();</span><br><span class="line">            //会有严重的问题，会出现多次打印1之类的问题。。这个时候是AtommicIntegerUpdator登场的时候了</span><br><span class="line">        &#125;*/</span><br><span class="line"></span><br><span class="line">//原子方式更新</span><br><span class="line">        AtomicIntegerFieldUpdater&lt;Person&gt; atomicIntegerFieldUpdater = AtomicIntegerFieldUpdater.newUpdater(Person.class,&quot;age&quot;);</span><br><span class="line">        for(int i=0;i&lt;10;++i)&#123;</span><br><span class="line">            Thread thread = new Thread(() -&gt; &#123;</span><br><span class="line">                try &#123;</span><br><span class="line">                    Thread.sleep(20);</span><br><span class="line">                &#125; catch (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">                System.out.println( atomicIntegerFieldUpdater.getAndIncrement(person));</span><br><span class="line">            &#125;);</span><br><span class="line">            thread.start();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class Person&#123;</span><br><span class="line">   volatile int age = 1;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-<p>volatile变量自身具有下列特性。<br>·可见性。对一个volatile变量的读，总是能看到（任意线程）对这个volatile变量最后的写<br>入。<br>·原子性：对任意单个volatile变量的读/写具有原子性，但类似于volatile++这种复合操作不<br>具有原子性。</p>
+<p>volatile变量自身具有下列特性。<br>·可见性。对一个volatile变量的读，总是能看到（任意线程）对这个volatile变量最后的写<br>入。<br>·原子性：对任意单个volatile变量的读&#x2F;写具有原子性，但类似于volatile++这种复合操作不<br>具有原子性。</p>
 <p>对volatile写和volatile读的内存语义：<br>·线程A写一个volatile变量，实质上是线程A向接下来将要读这个volatile变量的某个线程<br>发出了（其对共享变量所做修改的）消息。<br>·线程B读一个volatile变量，实质上是线程B接收了之前某个线程发出的（在写这个volatile<br>变量之前对共享变量所做修改的）消息。<br>·线程A写一个volatile变量，随后线程B读这个volatile变量，这个过程实质上是线程A通过<br>主内存向线程B发送消息。</p>
 <p>关于<span class="exturl" data-url="aHR0cDovL25ldHR5LmlvL3dpa2kvcmVmZXJlbmNlLWNvdW50ZWQtb2JqZWN0cy5odG1s">引用计数器可以参考netty的官方文档<i class="fa fa-external-link-alt"></i></span>的介绍。</p>
 
@@ -432,21 +427,23 @@
   </footer>
 
   
-  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.0.6/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
 <script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
 
   
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
 <script src="/js/third-party/search/local-search.js"></script>
 
 
-  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":"forest","js":{"url":"https://cdn.jsdelivr.net/npm/mermaid@8.11.0/dist/mermaid.min.js","integrity":"sha256-sVAx+v/Q7v0Q2xm5vN7h5ccSna6gaLREhG9sF8pKT6I="}}</script>
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.1.1/mermaid.min.js","integrity":"sha256-8L3O8tirFUa8Va4NSTAyIbHJeLd6OnlcxgupV9F77e0="}}</script>
   <script src="/js/third-party/tags/mermaid.js"></script>
 
-  <script class="next-config" data-name="nprogress" type="application/json">{"enable":true,"spinner":true}</script>
-  <script src="/js/third-party/nprogress.js"></script>
+  <script src="/js/third-party/fancybox.js"></script>
+
+  <script src="/js/third-party/pace.js"></script>
 
   
 

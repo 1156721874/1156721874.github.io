@@ -3,10 +3,9 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
-<meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 6.0.0">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
 
-<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -16,30 +15,31 @@
 
 
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.css" integrity="sha256-no0c5ccDODBwp+9hSmV5VvPpKwHCpbVzXHexIkupM6U=" crossorigin="anonymous">
-  <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.js" integrity="sha256-a5YRB27CcBwBFcT5EF/f3E4vzIqyHrSR878nseNYw64=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"ceaser.wang","root":"/","images":"/images","scheme":"Muse","version":"8.6.1","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
-<meta name="description" content="ReentrantReadWriteLock实例: 123456789101112131415161718192021public class MyTest2 &amp;#123;    private ReadWriteLock lock &#x3D; new ReentrantReadWriteLock();    public void method()&amp;#123;        try&amp;#123;">
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ceaser.wang","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.12.1","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="ReentrantReadWriteLock实例: 123456789101112131415161718192021public class MyTest2 &amp;#123;    private ReadWriteLock lock &#x3D; new ReentrantReadWriteLock();    public void method()&amp;#123;        try&amp;#123;">
 <meta property="og:type" content="article">
 <meta property="og:title" content="concurrency(12)可重入读写锁对于AQS的实现分析">
 <meta property="og:url" content="https://ceaser.wang/2020/05/10/Concurrent/concurrency(12)%E5%8F%AF%E9%87%8D%E5%85%A5%E8%AF%BB%E5%86%99%E9%94%81%E5%AF%B9%E4%BA%8EAQS%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%88%86%E6%9E%90/index.html">
 <meta property="og:site_name" content="南贺神社">
 <meta property="og:description" content="ReentrantReadWriteLock实例: 123456789101112131415161718192021public class MyTest2 &amp;#123;    private ReadWriteLock lock &#x3D; new ReentrantReadWriteLock();    public void method()&amp;#123;        try&amp;#123;">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://ceaser.wang/2020/05/10/Concurrent/concurrency(12)%E5%8F%AF%E9%87%8D%E5%85%A5%E8%AF%BB%E5%86%99%E9%94%81%E5%AF%B9%E4%BA%8EAQS%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%88%86%E6%9E%90/aqs1.png">
-<meta property="og:image" content="https://ceaser.wang/2020/05/10/Concurrent/concurrency(12)%E5%8F%AF%E9%87%8D%E5%85%A5%E8%AF%BB%E5%86%99%E9%94%81%E5%AF%B9%E4%BA%8EAQS%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%88%86%E6%9E%90/condition.png">
-<meta property="og:image" content="https://ceaser.wang/2020/05/10/Concurrent/concurrency(12)%E5%8F%AF%E9%87%8D%E5%85%A5%E8%AF%BB%E5%86%99%E9%94%81%E5%AF%B9%E4%BA%8EAQS%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%88%86%E6%9E%90/condition1.png">
-<meta property="og:image" content="https://ceaser.wang/2020/05/10/Concurrent/concurrency(12)%E5%8F%AF%E9%87%8D%E5%85%A5%E8%AF%BB%E5%86%99%E9%94%81%E5%AF%B9%E4%BA%8EAQS%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%88%86%E6%9E%90/condition2.png">
+<meta property="og:image" content="https://ceaser.wang/aqs1.png">
+<meta property="og:image" content="https://ceaser.wang/condition.png">
+<meta property="og:image" content="https://ceaser.wang/condition1.png">
+<meta property="og:image" content="https://ceaser.wang/condition2.png">
 <meta property="article:published_time" content="2020-05-10T17:37:00.000Z">
-<meta property="article:modified_time" content="2022-02-05T08:57:15.892Z">
+<meta property="article:modified_time" content="2022-06-10T14:12:45.096Z">
 <meta property="article:author" content="CeaserWang">
 <meta property="article:tag" content="AQS 可重入读写锁 ReentrantReadWriteLock">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://ceaser.wang/2020/05/10/Concurrent/concurrency(12)%E5%8F%AF%E9%87%8D%E5%85%A5%E8%AF%BB%E5%86%99%E9%94%81%E5%AF%B9%E4%BA%8EAQS%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%88%86%E6%9E%90/aqs1.png">
+<meta name="twitter:image" content="https://ceaser.wang/aqs1.png">
 
 
 <link rel="canonical" href="https://ceaser.wang/2020/05/10/Concurrent/concurrency(12)%E5%8F%AF%E9%87%8D%E5%85%A5%E8%AF%BB%E5%86%99%E9%94%81%E5%AF%B9%E4%BA%8EAQS%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%88%86%E6%9E%90/">
@@ -51,6 +51,7 @@
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>concurrency(12)可重入读写锁对于AQS的实现分析 | 南贺神社</title>
   
+
 
 
 
@@ -78,7 +79,7 @@
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <h1 class="site-title">南贺神社</h1>
+      <p class="site-title">南贺神社</p>
       <i class="logo-line"></i>
     </a>
       <p class="site-subtitle" itemprop="description">你写程序有写诗一样的感觉吗?</p>
@@ -94,13 +95,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu">
-        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
-        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
-        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">206</span></a></li>
-        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">25</span></a></li>
-        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">213</span></a></li>
-        <li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">206</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">25</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">213</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
         </a>
@@ -162,8 +157,7 @@
         <!--/noindex-->
 
         <div class="site-overview-wrap sidebar-panel">
-          <div class="site-overview">
-            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <img class="site-author-image" itemprop="image" alt="CeaserWang"
       src="/../0xcc/index/Uchiha.jpg">
   <p class="site-author-name" itemprop="name">CeaserWang</p>
@@ -172,21 +166,18 @@
 <div class="site-state-wrap site-overview-item animated">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
-          <a href="/archives/">
-        
+        <a href="/archives/">
           <span class="site-state-item-count">213</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-            <a href="/categories/">
-          
+          <a href="/categories/">
         <span class="site-state-item-count">25</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-            <a href="/tags/">
-          
+          <a href="/tags/">
         <span class="site-state-item-count">206</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
@@ -201,7 +192,7 @@
       </span>
   </div>
   <div class="cc-license site-overview-item animated" itemprop="license">
-    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><img src="https://cdn.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></span>
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></span>
   </div>
 
 
@@ -234,7 +225,6 @@
     </ul>
   </div>
 
-          </div>
         </div>
       </div>
     </div>
@@ -272,11 +262,16 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
       <meta itemprop="name" content="CeaserWang">
-      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="concurrency(12)可重入读写锁对于AQS的实现分析 | 南贺神社">
+      <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
@@ -293,13 +288,13 @@
 
       <time title="Created: 2020-05-10 17:37:00" itemprop="dateCreated datePublished" datetime="2020-05-10T17:37:00+00:00">2020-05-10</time>
     </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2022-02-05 08:57:15" itemprop="dateModified" datetime="2022-02-05T08:57:15+00:00">2022-02-05</time>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
       </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-06-10 14:12:45" itemprop="dateModified" datetime="2022-06-10T14:12:45+00:00">2022-06-10</time>
+    </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -376,13 +371,13 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">//Releases in exclusive mode.</span><br><span class="line">// 在排他模式下释放锁</span><br><span class="line">public final boolean release(int arg) &#123;</span><br><span class="line">    if (tryRelease(arg)) &#123;//释放锁成功</span><br><span class="line">        Node h = head;</span><br><span class="line">        if (h != null &amp;&amp; h.waitStatus != 0)</span><br><span class="line">            unparkSuccessor(h);//唤醒后继节点</span><br><span class="line">        return true;</span><br><span class="line">    &#125;</span><br><span class="line">    return false;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>tryRelease的实现在ReentrantReadWriteLock里边:</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">protected final boolean tryRelease(int releases) &#123;</span><br><span class="line">  //当前排它锁持有者的线程是不是当前线程，不是直接异常</span><br><span class="line">    if (!isHeldExclusively())</span><br><span class="line">        throw new IllegalMonitorStateException();</span><br><span class="line">    int nextc = getState() - releases;//释放锁，状态减一</span><br><span class="line">    boolean free = exclusiveCount(nextc) == 0;//exclusiveCount得到排它锁的数量，如果等于，意味着没有任何线程持有排它锁</span><br><span class="line">    if (free)</span><br><span class="line">        setExclusiveOwnerThread(null);//将持有排他锁的线程清空</span><br><span class="line">    setState(nextc);//保存状态</span><br><span class="line">    return free;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">protected final boolean isHeldExclusively() &#123;</span><br><span class="line">    // While we must in general read state before owner,</span><br><span class="line">    // we don&#x27;t need to do so to check if current thread is owner</span><br><span class="line">    return getExclusiveOwnerThread() == Thread.currentThread();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="AQS的锁获取直观图"><a href="#AQS的锁获取直观图" class="headerlink" title="AQS的锁获取直观图"></a>AQS的锁获取直观图</h3><p><img src="aqs1.png" alt="aqs1.png"><br>上面的知识点介绍的是阻塞队列的部分，接下来是条件队列的介绍。</p>
-<h4 id="条件队列"><a href="#条件队列" class="headerlink" title="条件队列"></a>条件队列</h4><p>ReentrantReadWriteLock里边的读锁和写锁的条件队列都是使用的Condition来实现的。<br><img src="condition.png" alt="condition.png"></p>
+<h3 id="AQS的锁获取直观图"><a href="#AQS的锁获取直观图" class="headerlink" title="AQS的锁获取直观图"></a>AQS的锁获取直观图</h3><p><img src="/aqs1.png" alt="aqs1.png"><br>上面的知识点介绍的是阻塞队列的部分，接下来是条件队列的介绍。</p>
+<h4 id="条件队列"><a href="#条件队列" class="headerlink" title="条件队列"></a>条件队列</h4><p>ReentrantReadWriteLock里边的读锁和写锁的条件队列都是使用的Condition来实现的。<br><img src="/condition.png" alt="condition.png"></p>
 <h3 id="AQS设计哲学解析及synchronized思想变迁"><a href="#AQS设计哲学解析及synchronized思想变迁" class="headerlink" title="AQS设计哲学解析及synchronized思想变迁"></a>AQS设计哲学解析及synchronized思想变迁</h3><h4 id="Conditiond-await-实现："><a href="#Conditiond-await-实现：" class="headerlink" title="Conditiond.await()实现："></a>Conditiond.await()实现：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Implements interruptible condition wait.</span><br><span class="line"> * &lt;ol&gt;</span><br><span class="line"> * &lt;li&gt; If current thread is interrupted, throw InterruptedException.</span><br><span class="line"> * &lt;li&gt; Save lock state returned by &#123;@link #getState&#125;.</span><br><span class="line"> * &lt;li&gt; Invoke &#123;@link #release&#125; with saved state as argument,</span><br><span class="line"> *      throwing IllegalMonitorStateException if it fails.</span><br><span class="line"> * &lt;li&gt; Block until signalled or interrupted.</span><br><span class="line"> * &lt;li&gt; Reacquire by invoking specialized version of</span><br><span class="line"> *      &#123;@link #acquire&#125; with saved state as argument.</span><br><span class="line"> * &lt;li&gt; If interrupted while blocked in step 4, throw InterruptedException.</span><br><span class="line"> * &lt;/ol&gt;</span><br><span class="line"> */</span><br><span class="line">public final void await() throws InterruptedException &#123;</span><br><span class="line">    if (Thread.interrupted())</span><br><span class="line">        throw new InterruptedException();</span><br><span class="line">    Node node = addConditionWaiter();</span><br><span class="line">    int savedState = fullyRelease(node);</span><br><span class="line">    int interruptMode = 0;</span><br><span class="line">    //中断的一些判断</span><br><span class="line">    while (!isOnSyncQueue(node)) &#123;</span><br><span class="line">        LockSupport.park(this);</span><br><span class="line">        if ((interruptMode = checkInterruptWhileWaiting(node)) != 0)</span><br><span class="line">            break;</span><br><span class="line">    &#125;</span><br><span class="line">    if (acquireQueued(node, savedState) &amp;&amp; interruptMode != THROW_IE)</span><br><span class="line">        interruptMode = REINTERRUPT;</span><br><span class="line">    if (node.nextWaiter != null) // clean up if cancelled</span><br><span class="line">        unlinkCancelledWaiters();</span><br><span class="line">    if (interruptMode != 0)</span><br><span class="line">        reportInterruptAfterWait(interruptMode);</span><br><span class="line">&#125;</span><br><span class="line">//构造一个等待节点加入到等待队列</span><br><span class="line">private Node addConditionWaiter() &#123;</span><br><span class="line">    Node t = lastWaiter;</span><br><span class="line">    // If lastWaiter is cancelled, clean out.</span><br><span class="line">    if (t != null &amp;&amp; t.waitStatus != Node.CONDITION) &#123;</span><br><span class="line">        unlinkCancelledWaiters();</span><br><span class="line">        t = lastWaiter;</span><br><span class="line">    &#125;</span><br><span class="line">    //包装了一个线程</span><br><span class="line">    Node node = new Node(Thread.currentThread(), Node.CONDITION);</span><br><span class="line">    if (t == null)</span><br><span class="line">        firstWaiter = node;</span><br><span class="line">    else</span><br><span class="line">        t.nextWaiter = node;</span><br><span class="line">    lastWaiter = node;</span><br><span class="line">    return node;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><img src="condition1.png" alt="condition1.png"><br>当我们newCondition()的时候就会在AQS上创建一个等待队列，当一个线程调用condation.await()的时候就会在等待队列里边创建一个Node节点。</p>
+<p><img src="/condition1.png" alt="condition1.png"><br>当我们newCondition()的时候就会在AQS上创建一个等待队列，当一个线程调用condation.await()的时候就会在等待队列里边创建一个Node节点。</p>
 <h4 id="signal方法的实现"><a href="#signal方法的实现" class="headerlink" title="signal方法的实现"></a>signal方法的实现</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Moves the longest-waiting thread, if one exists, from the</span><br><span class="line"> * wait queue for this condition to the wait queue for the</span><br><span class="line"> * owning lock.</span><br><span class="line"> *</span><br><span class="line"> * @throws IllegalMonitorStateException if &#123;@link #isHeldExclusively&#125;</span><br><span class="line"> *         returns &#123;@code false&#125;</span><br><span class="line"> */</span><br><span class="line"> 将等待时间最长的线程移出去，放到阻塞队列</span><br><span class="line">public final void signal() &#123;</span><br><span class="line">  //是不是排它锁</span><br><span class="line">    if (!isHeldExclusively())</span><br><span class="line">        throw new IllegalMonitorStateException();</span><br><span class="line">    Node first = firstWaiter;</span><br><span class="line">    //获取到阻塞队列的第一个等待者，如果不是空的，证明这个阻塞队列头部有一个node</span><br><span class="line">    if (first != null)</span><br><span class="line">        doSignal(first);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * Removes and transfers nodes until hit non-cancelled one or</span><br><span class="line"> * null. Split out from signal in part to encourage compilers</span><br><span class="line"> * to inline the case of no waiters.</span><br><span class="line"> * @param first (non-null) the first node on condition queue</span><br><span class="line"> */</span><br><span class="line">private void doSignal(Node first) &#123;</span><br><span class="line">  //</span><br><span class="line">    do &#123;</span><br><span class="line">        if ( (firstWaiter = first.nextWaiter) == null)</span><br><span class="line">            lastWaiter = null;</span><br><span class="line">        first.nextWaiter = null;</span><br><span class="line">    &#125; while (!transferForSignal(first) &amp;&amp;</span><br><span class="line">             (first = firstWaiter) != null);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * Transfers a node from a condition queue onto sync queue.</span><br><span class="line"> * Returns true if successful.</span><br><span class="line"> * @param node the node</span><br><span class="line"> * @return true if successfully transferred (else the node was</span><br><span class="line"> * cancelled before signal)</span><br><span class="line"> */</span><br><span class="line"> 将一个node从等待队列当中移动到阻塞队列当中</span><br><span class="line">final boolean transferForSignal(Node node) &#123;</span><br><span class="line">    /*</span><br><span class="line">     * If cannot change waitStatus, the node has been cancelled.</span><br><span class="line">     */</span><br><span class="line">    if (!compareAndSetWaitStatus(node, Node.CONDITION, 0))</span><br><span class="line">        return false;</span><br><span class="line"></span><br><span class="line">    /*</span><br><span class="line">     * Splice onto queue and try to set waitStatus of predecessor to</span><br><span class="line">     * indicate that thread is (probably) waiting. If cancelled or</span><br><span class="line">     * attempt to set waitStatus fails, wake up to resync (in which</span><br><span class="line">     * case the waitStatus can be transiently and harmlessly wrong).</span><br><span class="line">     */</span><br><span class="line">    Node p = enq(node);</span><br><span class="line">    int ws = p.waitStatus;</span><br><span class="line">    if (ws &gt; 0 || !compareAndSetWaitStatus(p, ws, Node.SIGNAL))</span><br><span class="line">        LockSupport.unpark(node.thread);</span><br><span class="line">    return true;</span><br><span class="line">&#125;</span><br><span class="line">// 具体的节点的处理</span><br><span class="line">/**</span><br><span class="line"> * Inserts node into queue, initializing if necessary. See picture above.</span><br><span class="line"> * @param node the node to insert</span><br><span class="line"> * @return node&#x27;s predecessor</span><br><span class="line"> */</span><br><span class="line">private Node enq(final Node node) &#123;</span><br><span class="line">    for (;;) &#123;</span><br><span class="line">        Node t = tail;</span><br><span class="line">        if (t == null) &#123; // Must initialize</span><br><span class="line">            if (compareAndSetHead(new Node()))</span><br><span class="line">                tail = head;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            node.prev = t;</span><br><span class="line">            if (compareAndSetTail(t, node)) &#123;</span><br><span class="line">                t.next = node;</span><br><span class="line">                return t;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>await就是在等待队列中创建一个节点，signal就是将等待队列里边的节点移动到阻塞队列。<br><img src="condition2.png" alt="condition2.png"></p>
+<p>await就是在等待队列中创建一个节点，signal就是将等待队列里边的节点移动到阻塞队列。<br><img src="/condition2.png" alt="condition2.png"></p>
 <h4 id="AQS和synchronized关键字之间的关系"><a href="#AQS和synchronized关键字之间的关系" class="headerlink" title="AQS和synchronized关键字之间的关系"></a>AQS和synchronized关键字之间的关系</h4><p>synchronized：</p>
 <ol>
 <li>synchronized关键字在底层的c++实现中，存在2个重要的数据结构(集合)，WaitSet、EntryList。</li>
@@ -475,21 +470,23 @@
   </footer>
 
   
-  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.0.6/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
 <script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
 
   
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
 <script src="/js/third-party/search/local-search.js"></script>
 
 
-  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":"forest","js":{"url":"https://cdn.jsdelivr.net/npm/mermaid@8.11.0/dist/mermaid.min.js","integrity":"sha256-sVAx+v/Q7v0Q2xm5vN7h5ccSna6gaLREhG9sF8pKT6I="}}</script>
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.1.1/mermaid.min.js","integrity":"sha256-8L3O8tirFUa8Va4NSTAyIbHJeLd6OnlcxgupV9F77e0="}}</script>
   <script src="/js/third-party/tags/mermaid.js"></script>
 
-  <script class="next-config" data-name="nprogress" type="application/json">{"enable":true,"spinner":true}</script>
-  <script src="/js/third-party/nprogress.js"></script>
+  <script src="/js/third-party/fancybox.js"></script>
+
+  <script src="/js/third-party/pace.js"></script>
 
   
 

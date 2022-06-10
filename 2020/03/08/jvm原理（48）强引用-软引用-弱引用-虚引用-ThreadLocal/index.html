@@ -3,10 +3,9 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
-<meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 6.0.0">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
 
-<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -16,28 +15,29 @@
 
 
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.css" integrity="sha256-no0c5ccDODBwp+9hSmV5VvPpKwHCpbVzXHexIkupM6U=" crossorigin="anonymous">
-  <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.js" integrity="sha256-a5YRB27CcBwBFcT5EF/f3E4vzIqyHrSR878nseNYw64=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"ceaser.wang","root":"/","images":"/images","scheme":"Muse","version":"8.6.1","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
-<meta name="description" content="强引用 我们日常开发中所遇到的绝大多数引用均是强引用  如果对象拥有强引用，就表示它是可达的，那么垃圾收集器就不会将其回收。">
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ceaser.wang","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.12.1","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="强引用 我们日常开发中所遇到的绝大多数引用均是强引用  如果对象拥有强引用，就表示它是可达的，那么垃圾收集器就不会将其回收。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="jvm原理（48）强引用-软引用-弱引用-虚引用-ThreadLocal">
 <meta property="og:url" content="https://ceaser.wang/2020/03/08/jvm%E5%8E%9F%E7%90%86%EF%BC%8848%EF%BC%89%E5%BC%BA%E5%BC%95%E7%94%A8-%E8%BD%AF%E5%BC%95%E7%94%A8-%E5%BC%B1%E5%BC%95%E7%94%A8-%E8%99%9A%E5%BC%95%E7%94%A8-ThreadLocal/index.html">
 <meta property="og:site_name" content="南贺神社">
 <meta property="og:description" content="强引用 我们日常开发中所遇到的绝大多数引用均是强引用  如果对象拥有强引用，就表示它是可达的，那么垃圾收集器就不会将其回收。">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://ceaser.wang/2020/03/08/jvm%E5%8E%9F%E7%90%86%EF%BC%8848%EF%BC%89%E5%BC%BA%E5%BC%95%E7%94%A8-%E8%BD%AF%E5%BC%95%E7%94%A8-%E5%BC%B1%E5%BC%95%E7%94%A8-%E8%99%9A%E5%BC%95%E7%94%A8-ThreadLocal/ThreadLocal.png">
-<meta property="og:image" content="https://ceaser.wang/2020/03/08/jvm%E5%8E%9F%E7%90%86%EF%BC%8848%EF%BC%89%E5%BC%BA%E5%BC%95%E7%94%A8-%E8%BD%AF%E5%BC%95%E7%94%A8-%E5%BC%B1%E5%BC%95%E7%94%A8-%E8%99%9A%E5%BC%95%E7%94%A8-ThreadLocal/ThreadLocal2.png">
+<meta property="og:image" content="https://ceaser.wang/ThreadLocal.png">
+<meta property="og:image" content="https://ceaser.wang/ThreadLocal2.png">
 <meta property="article:published_time" content="2020-03-08T20:14:13.000Z">
-<meta property="article:modified_time" content="2022-02-05T08:57:16.132Z">
+<meta property="article:modified_time" content="2022-06-10T14:12:45.328Z">
 <meta property="article:author" content="CeaserWang">
 <meta property="article:tag" content="强引用、软引用、弱引用、虚引用">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://ceaser.wang/2020/03/08/jvm%E5%8E%9F%E7%90%86%EF%BC%8848%EF%BC%89%E5%BC%BA%E5%BC%95%E7%94%A8-%E8%BD%AF%E5%BC%95%E7%94%A8-%E5%BC%B1%E5%BC%95%E7%94%A8-%E8%99%9A%E5%BC%95%E7%94%A8-ThreadLocal/ThreadLocal.png">
+<meta name="twitter:image" content="https://ceaser.wang/ThreadLocal.png">
 
 
 <link rel="canonical" href="https://ceaser.wang/2020/03/08/jvm%E5%8E%9F%E7%90%86%EF%BC%8848%EF%BC%89%E5%BC%BA%E5%BC%95%E7%94%A8-%E8%BD%AF%E5%BC%95%E7%94%A8-%E5%BC%B1%E5%BC%95%E7%94%A8-%E8%99%9A%E5%BC%95%E7%94%A8-ThreadLocal/">
@@ -49,6 +49,7 @@
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>jvm原理（48）强引用-软引用-弱引用-虚引用-ThreadLocal | 南贺神社</title>
   
+
 
 
 
@@ -76,7 +77,7 @@
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <h1 class="site-title">南贺神社</h1>
+      <p class="site-title">南贺神社</p>
       <i class="logo-line"></i>
     </a>
       <p class="site-subtitle" itemprop="description">你写程序有写诗一样的感觉吗?</p>
@@ -92,13 +93,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu">
-        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
-        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
-        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">206</span></a></li>
-        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">25</span></a></li>
-        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">213</span></a></li>
-        <li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">206</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">25</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">213</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
         </a>
@@ -160,8 +155,7 @@
         <!--/noindex-->
 
         <div class="site-overview-wrap sidebar-panel">
-          <div class="site-overview">
-            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <img class="site-author-image" itemprop="image" alt="CeaserWang"
       src="/../0xcc/index/Uchiha.jpg">
   <p class="site-author-name" itemprop="name">CeaserWang</p>
@@ -170,21 +164,18 @@
 <div class="site-state-wrap site-overview-item animated">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
-          <a href="/archives/">
-        
+        <a href="/archives/">
           <span class="site-state-item-count">213</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-            <a href="/categories/">
-          
+          <a href="/categories/">
         <span class="site-state-item-count">25</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-            <a href="/tags/">
-          
+          <a href="/tags/">
         <span class="site-state-item-count">206</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
@@ -199,7 +190,7 @@
       </span>
   </div>
   <div class="cc-license site-overview-item animated" itemprop="license">
-    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><img src="https://cdn.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></span>
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></span>
   </div>
 
 
@@ -232,7 +223,6 @@
     </ul>
   </div>
 
-          </div>
         </div>
       </div>
     </div>
@@ -270,11 +260,16 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
       <meta itemprop="name" content="CeaserWang">
-      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="jvm原理（48）强引用-软引用-弱引用-虚引用-ThreadLocal | 南贺神社">
+      <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
@@ -291,13 +286,13 @@
 
       <time title="Created: 2020-03-08 20:14:13" itemprop="dateCreated datePublished" datetime="2020-03-08T20:14:13+00:00">2020-03-08</time>
     </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2022-02-05 08:57:16" itemprop="dateModified" datetime="2022-02-05T08:57:16+00:00">2022-02-05</time>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
       </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-06-10 14:12:45" itemprop="dateModified" datetime="2022-06-10T14:12:45+00:00">2022-06-10</time>
+    </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -355,7 +350,7 @@
 <li>入队状态<br>  当一个实例创建的时候被注册了，那么实例将会作为队列的一个元素，当一个实例从他的引用队列中移除时，它会变成inactive状态，未注册的实例永远不会处于这种状态。</li>
 <li>不活跃状态<br>  没什么对它可做的，一个实例处于inactive，他的状态永远不会发生变化。</li>
 </ul>
-<p> 引用的状态在队列里边会被编码，next 成员变量是如下的逻辑：<br>    Active: quene = ReferenceQueue 他里边的实例是已经注册，或者ReferenceQueue.NULL 它没有被注册到引用队列里边去，next = null<br>    pending：quene = ReferenceQueue，next = this<br>    enquene：quene = ReferenceQueue.ENQUEUED;next = 队列中的下一个元素，或者是this，前提是位于列表的最末端.<br>    inactive:queue = ReferenceQueue.NULL;next = this.</p>
+<p> 引用的状态在队列里边会被编码，next 成员变量是如下的逻辑：<br>    Active: quene &#x3D; ReferenceQueue 他里边的实例是已经注册，或者ReferenceQueue.NULL 它没有被注册到引用队列里边去，next &#x3D; null<br>    pending：quene &#x3D; ReferenceQueue，next &#x3D; this<br>    enquene：quene &#x3D; ReferenceQueue.ENQUEUED;next &#x3D; 队列中的下一个元素，或者是this，前提是位于列表的最末端.<br>    inactive:queue &#x3D; ReferenceQueue.NULL;next &#x3D; this.</p>
 <pre><code>在这种模式下，垃圾收集器就可以通过next成员变量判断引用实例是否需要特殊对待，如果next实例是null，那么实例就是活动状态，如果不是null，那么收集器就以正常的实例对待它。
 
 为了确保并发收集器能够探测到活动的引用对象，而不需要介入线程，应用可以使用enqueue()方法对待这些对象，收集器应该将发现的对象通过discovered变量连接起来，discovered变量也是用于在pending列表当中连接引用对象。
@@ -368,7 +363,7 @@ ReferenceQueue.NULL是ReferenceQueue里边的一个私有子类对象，他的en
 </code></pre>
 <h4 id="SoftReference"><a href="#SoftReference" class="headerlink" title="SoftReference"></a>SoftReference</h4><p>首先编写一个实例：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">public class MyTest1 &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        Date date=  new Date();</span><br><span class="line">        SoftReference&lt;Date&gt; softReference = new SoftReference(date);</span><br><span class="line">        Date date1 = softReference.get();</span><br><span class="line">        //这里一定要判空，因为不一定什么时刻内存不够了，软引用就会被清理掉。</span><br><span class="line">        if(null != date1)&#123;</span><br><span class="line">            System.out.println(&quot;hello&quot;);</span><br><span class="line">        &#125;else&#123;</span><br><span class="line">            System.out.println(&quot;world&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(&quot;=========&quot;);</span><br><span class="line">        softReference.clear();</span><br><span class="line">        Date date2 = softReference.get();</span><br><span class="line">        System.out.println(date2);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>运行结果：<br>hello<br>=========<br>null</p>
+<p>运行结果：<br>hello<br>&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;<br>null</p>
 <p>那么接下来看一下SoftReference的文档：<br>Soft reference objects, which are cleared at the discretion of the garbage collector in response to memory demand. Soft references are most often used to implement memory-sensitive caches.<br>Suppose that the garbage collector determines at a certain point in time that an object is softly reachable. At that time it may choose to clear atomically all soft references to that object and all soft references to any other softly-reachable objects from which that object is reachable through a chain of strong references. At the same time or at some later time it will enqueue those newly-cleared soft references that are registered with reference queues.<br>All soft references to softly-reachable objects are guaranteed to have been cleared before the virtual machine throws an OutOfMemoryError. Otherwise no constraints are placed upon the time at which a soft reference will be cleared or the order in which a set of such references to different objects will be cleared. Virtual machine implementations are, however, encouraged to bias against clearing recently-created or recently-used soft references.<br>Direct instances of this class may be used to implement simple caches; this class or derived subclasses may also be used in larger data structures to implement more sophisticated caches. As long as the referent of a soft reference is strongly reachable, that is, is actually in use, the soft reference will not be cleared. Thus a sophisticated cache can, for example, prevent its most recently used entries from being discarded by keeping strong referents to those entries, leaving the remaining entries to be discarded at the discretion of the garbage collector.<br>软引用对象 当垃圾收集器去响应一些内存需求的时候软引用会被清理掉，软引用经常用于实现内存敏感的缓存。</p>
 <p>假如垃圾收集器检测到在某个时间点软引用是可达的（一个对象只有软引用指向它），他可以选择原子性的清理对象的所有的软引用，以及对于任何其他从这对象开始的，通过软引用链条可达的对象也会别清理，在这个时候或者这之后的某个时间，他会将新创建的被清理掉过的软引用入队列，这个队列是创建的时候注册的。</p>
 <p>所有软引用以及通过软引用链条可达的对象 可以确保在jvm抛出OOM错误之前被清理掉。</p>
@@ -389,7 +384,7 @@ ReferenceQueue.NULL是ReferenceQueue里边的一个私有子类对象，他的en
 <p>但是这个要和内存的使用情况来分析，比如如下的使用，并不一定会被回收：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public class MyTests3 &#123;</span><br><span class="line">    public static void main(String[] args) throws InterruptedException &#123;</span><br><span class="line">        Date date = new Date();</span><br><span class="line">        WeakReference&lt;Date&gt; weakReference = new WeakReference&lt;&gt;(date);</span><br><span class="line">        System.gc();</span><br><span class="line">        Thread.sleep(5000);</span><br><span class="line">        System.out.println(weakReference.get());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>输出：<br>Tue Mar 10 21:28:16 CST 2020</p>
-<p>为什么没有被回收，原因其实是Date date = new Date();这个地方存在一个强引用，如果我们修改下：</p>
+<p>为什么没有被回收，原因其实是Date date &#x3D; new Date();这个地方存在一个强引用，如果我们修改下：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public class MyTests3 &#123;</span><br><span class="line">    public static void main(String[] args) throws InterruptedException &#123;</span><br><span class="line">        Date date = new Date();</span><br><span class="line">        WeakReference&lt;Date&gt; weakReference = new WeakReference&lt;&gt;(date);</span><br><span class="line">        date = null;</span><br><span class="line">        System.gc();</span><br><span class="line">        Thread.sleep(5000);</span><br><span class="line">        System.out.println(weakReference.get());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>输出：<br>null</p>
 <h4 id="PhantomReference"><a href="#PhantomReference" class="headerlink" title="PhantomReference"></a>PhantomReference</h4><p>Phantom reference objects, which are enqueued after the collector determines that their referents may otherwise be reclaimed. Phantom references are most often used for scheduling pre-mortem(在真正的清除之前) cleanup actions in a more flexible way than is possible with the Java finalization mechanism.<br>If the garbage collector determines at a certain point in time that the referent of a phantom reference is phantom reachable, then at that time or at some later time it will enqueue the reference.<br>In order to ensure that a reclaimable object remains so, the referent of a phantom reference may not be retrieved: The get method of a phantom reference always returns null.<br>Unlike soft and weak references, phantom references are not automatically cleared by the garbage collector as they are enqueued. An object that is reachable via phantom references will remain so until all such references are cleared or themselves become unreachable.<br>虚引用引用的对象，当垃圾收集器确定它们的引用可以被回收的情况下，会被入队,虚引用经常用于调度这种清除的动作，这个要比java的finalization的方式更加灵活，即在对象在被真正清理之前执行一些特殊的逻辑。<br>在垃圾收集器再确定的时间点可以确定虚引用包装对象里边的referent是虚引用可达的，在这个时刻或者之后的某个时刻，就会将这个引用执行入队操作。<br>为了确保一个可回收的对象遵守这样的规则，phantom reference 里边的referent就应该不应该被获取到，因此phantom reference 的get方法总是返回null。<br>试想，如果get方法能够被获取到，那么在外部我们可以使用强引用关联上这个referent，那么对象就不可能被回收掉，对象无法回收掉，就无法实现上面描述的规则，无法得到通知。<br>和弱引用软引用不用的是，对象入队的时候，虚引用的对象并不会被垃圾收集器自动清理掉，一个对象如果是虚引用可达的，它会依然保留，直到所有这样的引用都被清理掉或者它们自身都不可达的，才会被清理掉，虚引用的主要作用是虚引用的对象在被垃圾回收的时候，我们会收到一个通知。</p>
@@ -404,7 +399,7 @@ ReferenceQueue.NULL是ReferenceQueue里边的一个私有子类对象，他的en
 </ul>
 <p>当我们将一个对象封装到PhantomReference中时，这就意味着我们永远也无法再访问到这个对象了，因为PhantomReference的get方法永远会返回null；PhantomReference的主要作用并不在于可以让我们获取到其中封装的referent，而是在于当垃圾收集器回收其referent时，这个PhantomReference会被放置到与其关联的队列中，并且得到相应的通知，这就是PhantomReference存在的唯一目的。</p>
 <h3 id="ThreadLocal"><a href="#ThreadLocal" class="headerlink" title="ThreadLocal"></a>ThreadLocal</h3><p>This class provides thread-local variables. These variables differ from their normal counterparts in that each thread that accesses one (via its get or set method) has its own, independently initialized copy of the variable. ThreadLocal instances are typically private static fields in classes that wish to associate state with a thread (e.g., a user ID or Transaction ID).<br>For example, the class below generates unique identifiers local to each thread. A thread’s id is assigned the first time it invokes ThreadId.get() and remains unchanged on subsequent calls.<br>   import java.util.concurrent.atomic.AtomicInteger;</p>
-<p>   public class ThreadId {<br>       // Atomic integer containing the next thread ID to be assigned<br>       private static final AtomicInteger nextId = new AtomicInteger(0);</p>
+<p>   public class ThreadId {<br>       &#x2F;&#x2F; Atomic integer containing the next thread ID to be assigned<br>       private static final AtomicInteger nextId &#x3D; new AtomicInteger(0);</p>
 <pre><code>   // Thread local variable containing each thread&#39;s ID
    private static final ThreadLocal&lt;Integer&gt; threadId =
        new ThreadLocal&lt;Integer&gt;() &#123;
@@ -429,7 +424,7 @@ ReferenceQueue.NULL是ReferenceQueue里边的一个私有子类对象，他的en
 
 <p>得到Thread的threadLocals,进入到Thread类：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">/* ThreadLocal values pertaining to this thread. This map is maintained</span><br><span class="line"> * by the ThreadLocal class. */</span><br><span class="line"> 属于当前线程的ThreadLocal的值，这个map被ThreadLocal维护</span><br><span class="line">ThreadLocal.ThreadLocalMap threadLocals = null;</span><br></pre></td></tr></table></figure>
-<p>ThreadLocalMap是ThreadLocal的一个内部类。<br>回到ThreadLocal的set方法，得到map之后做了一个判断，map!=null,那么紧接着将value设置到map里边去，key是ThreadLocal，value就是set方法的参数value。<br>如果map是空的，那么就是执行  createMap(t, value)方法：</p>
+<p>ThreadLocalMap是ThreadLocal的一个内部类。<br>回到ThreadLocal的set方法，得到map之后做了一个判断，map!&#x3D;null,那么紧接着将value设置到map里边去，key是ThreadLocal，value就是set方法的参数value。<br>如果map是空的，那么就是执行  createMap(t, value)方法：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">void createMap(Thread t, T firstValue) &#123;</span><br><span class="line">    t.threadLocals = new ThreadLocalMap(this, firstValue);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>直接创建一个ThreadLocalMap对象赋值给了Thread的成员变量threadLocals，构造器参数是ThreadLocal和将要设置的value。</p>
 <p>get方法里边也是首先得到当前线程，通过当前线程得到ThreadLocalMap，如果map不是空的，就从ThreadLocalMap里边get一个Entry，<br>getEntry的key是ThreadLocal，那么ThreadLocalMap.Entry是什么？<br>ThreadLocalMap.Entry是ThreadLocalMap内部静态类，看定义：</p>
@@ -437,7 +432,7 @@ ReferenceQueue.NULL是ReferenceQueue里边的一个私有子类对象，他的en
 <p>Entry继承了WeakReference。<br>我们设置的value存储在ThreadLocalMap.Entry里边，得到ThreadLocalMap.Entry之后，得到里边的value。然后get方法返回。</p>
 <h4 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">public class MyTest5 &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        ThreadLocal&lt;String&gt; threadLocal = new ThreadLocal&lt;&gt;();</span><br><span class="line">        threadLocal.set(&quot;hello&quot;);</span><br><span class="line">        threadLocal.set(&quot;world&quot;);</span><br><span class="line">        System.out.println(threadLocal.get());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>输出：<br>world</p>
-<h4 id="详解"><a href="#详解" class="headerlink" title="详解"></a>详解</h4><p><img src="ThreadLocal.png" alt="ThreadLocal.png"><br><img src="ThreadLocal2.png" alt="ThreadLocal2.png"></p>
+<h4 id="详解"><a href="#详解" class="headerlink" title="详解"></a>详解</h4><p><img src="/ThreadLocal.png" alt="ThreadLocal.png"><br><img src="/ThreadLocal2.png" alt="ThreadLocal2.png"></p>
 <p>Entry为什么是WeakReference,是因为当线程执行完run方法之后，就会处于消亡的状态，也不会指向ThreadLocal对象，那么这个时候应该被回收，否则就会出现内存泄露。</p>
 <p>为什么Entry的key是一个弱引用，这样设计的目的是什么呢？<br>我们从2个方向分别论证：</p>
 <ul>
@@ -526,21 +521,23 @@ ReferenceQueue.NULL是ReferenceQueue里边的一个私有子类对象，他的en
   </footer>
 
   
-  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.0.6/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
 <script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
 
   
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
 <script src="/js/third-party/search/local-search.js"></script>
 
 
-  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":"forest","js":{"url":"https://cdn.jsdelivr.net/npm/mermaid@8.11.0/dist/mermaid.min.js","integrity":"sha256-sVAx+v/Q7v0Q2xm5vN7h5ccSna6gaLREhG9sF8pKT6I="}}</script>
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.1.1/mermaid.min.js","integrity":"sha256-8L3O8tirFUa8Va4NSTAyIbHJeLd6OnlcxgupV9F77e0="}}</script>
   <script src="/js/third-party/tags/mermaid.js"></script>
 
-  <script class="next-config" data-name="nprogress" type="application/json">{"enable":true,"spinner":true}</script>
-  <script src="/js/third-party/nprogress.js"></script>
+  <script src="/js/third-party/fancybox.js"></script>
+
+  <script src="/js/third-party/pace.js"></script>
 
   
 

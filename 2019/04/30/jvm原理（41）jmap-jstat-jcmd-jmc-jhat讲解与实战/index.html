@@ -3,10 +3,9 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
-<meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 6.0.0">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
 
-<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -16,29 +15,30 @@
 
 
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.css" integrity="sha256-no0c5ccDODBwp+9hSmV5VvPpKwHCpbVzXHexIkupM6U=" crossorigin="anonymous">
-  <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.js" integrity="sha256-a5YRB27CcBwBFcT5EF/f3E4vzIqyHrSR878nseNYw64=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"ceaser.wang","root":"/","images":"/images","scheme":"Muse","version":"8.6.1","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
-<meta name="description" content="jmap">
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ceaser.wang","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.12.1","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="jmap">
 <meta property="og:type" content="article">
 <meta property="og:title" content="jvm原理（41）jmap_jstat_jcmd_jmc_jhat讲解与实战">
 <meta property="og:url" content="https://ceaser.wang/2019/04/30/jvm%E5%8E%9F%E7%90%86%EF%BC%8841%EF%BC%89jmap-jstat-jcmd-jmc-jhat%E8%AE%B2%E8%A7%A3%E4%B8%8E%E5%AE%9E%E6%88%98/index.html">
 <meta property="og:site_name" content="南贺神社">
 <meta property="og:description" content="jmap">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://ceaser.wang/2019/04/30/jvm%E5%8E%9F%E7%90%86%EF%BC%8841%EF%BC%89jmap-jstat-jcmd-jmc-jhat%E8%AE%B2%E8%A7%A3%E4%B8%8E%E5%AE%9E%E6%88%98/jmc1.png">
-<meta property="og:image" content="https://ceaser.wang/2019/04/30/jvm%E5%8E%9F%E7%90%86%EF%BC%8841%EF%BC%89jmap-jstat-jcmd-jmc-jhat%E8%AE%B2%E8%A7%A3%E4%B8%8E%E5%AE%9E%E6%88%98/jmc2.png">
-<meta property="og:image" content="https://ceaser.wang/2019/04/30/jvm%E5%8E%9F%E7%90%86%EF%BC%8841%EF%BC%89jmap-jstat-jcmd-jmc-jhat%E8%AE%B2%E8%A7%A3%E4%B8%8E%E5%AE%9E%E6%88%98/jmc3.png">
+<meta property="og:image" content="https://ceaser.wang/jmc1.png">
+<meta property="og:image" content="https://ceaser.wang/jmc2.png">
+<meta property="og:image" content="https://ceaser.wang/jmc3.png">
 <meta property="article:published_time" content="2019-04-30T10:57:19.000Z">
-<meta property="article:modified_time" content="2022-02-05T08:57:16.100Z">
+<meta property="article:modified_time" content="2022-06-10T14:12:45.300Z">
 <meta property="article:author" content="CeaserWang">
 <meta property="article:tag" content="jmap jstat jcmd jmc jhat">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://ceaser.wang/2019/04/30/jvm%E5%8E%9F%E7%90%86%EF%BC%8841%EF%BC%89jmap-jstat-jcmd-jmc-jhat%E8%AE%B2%E8%A7%A3%E4%B8%8E%E5%AE%9E%E6%88%98/jmc1.png">
+<meta name="twitter:image" content="https://ceaser.wang/jmc1.png">
 
 
 <link rel="canonical" href="https://ceaser.wang/2019/04/30/jvm%E5%8E%9F%E7%90%86%EF%BC%8841%EF%BC%89jmap-jstat-jcmd-jmc-jhat%E8%AE%B2%E8%A7%A3%E4%B8%8E%E5%AE%9E%E6%88%98/">
@@ -50,6 +50,7 @@
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>jvm原理（41）jmap_jstat_jcmd_jmc_jhat讲解与实战 | 南贺神社</title>
   
+
 
 
 
@@ -77,7 +78,7 @@
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <h1 class="site-title">南贺神社</h1>
+      <p class="site-title">南贺神社</p>
       <i class="logo-line"></i>
     </a>
       <p class="site-subtitle" itemprop="description">你写程序有写诗一样的感觉吗?</p>
@@ -93,13 +94,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu">
-        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
-        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
-        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">206</span></a></li>
-        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">25</span></a></li>
-        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">213</span></a></li>
-        <li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">206</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">25</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">213</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
         </a>
@@ -161,8 +156,7 @@
         <!--/noindex-->
 
         <div class="site-overview-wrap sidebar-panel">
-          <div class="site-overview">
-            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <img class="site-author-image" itemprop="image" alt="CeaserWang"
       src="/../0xcc/index/Uchiha.jpg">
   <p class="site-author-name" itemprop="name">CeaserWang</p>
@@ -171,21 +165,18 @@
 <div class="site-state-wrap site-overview-item animated">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
-          <a href="/archives/">
-        
+        <a href="/archives/">
           <span class="site-state-item-count">213</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-            <a href="/categories/">
-          
+          <a href="/categories/">
         <span class="site-state-item-count">25</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-            <a href="/tags/">
-          
+          <a href="/tags/">
         <span class="site-state-item-count">206</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
@@ -200,7 +191,7 @@
       </span>
   </div>
   <div class="cc-license site-overview-item animated" itemprop="license">
-    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><img src="https://cdn.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></span>
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></span>
   </div>
 
 
@@ -233,7 +224,6 @@
     </ul>
   </div>
 
-          </div>
         </div>
       </div>
     </div>
@@ -271,11 +261,16 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
       <meta itemprop="name" content="CeaserWang">
-      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="jvm原理（41）jmap_jstat_jcmd_jmc_jhat讲解与实战 | 南贺神社">
+      <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
@@ -292,13 +287,13 @@
 
       <time title="Created: 2019-04-30 10:57:19" itemprop="dateCreated datePublished" datetime="2019-04-30T10:57:19+00:00">2019-04-30</time>
     </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2022-02-05 08:57:16" itemprop="dateModified" datetime="2022-02-05T08:57:16+00:00">2022-02-05</time>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
       </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-06-10 14:12:45" itemprop="dateModified" datetime="2022-06-10T14:12:45+00:00">2022-06-10</time>
+    </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -341,7 +336,7 @@
 <h4 id="jmap-heap"><a href="#jmap-heap" class="headerlink" title="jmap -heap"></a>jmap -heap</h4><p>打印当前进程堆的情况：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\Administrator&gt;jmap -heap 6444</span><br><span class="line">Attaching to process ID 6444, please wait...</span><br><span class="line">Debugger attached successfully.</span><br><span class="line">Server compiler detected.</span><br><span class="line">JVM version is 25.111-b14</span><br><span class="line"></span><br><span class="line">using thread-local object allocation.</span><br><span class="line">Parallel GC with 8 thread(s) 【使用的GC收集器，8个线程】</span><br><span class="line"></span><br><span class="line">Heap Configuration:</span><br><span class="line">   MinHeapFreeRatio         = 0</span><br><span class="line">   MaxHeapFreeRatio         = 100</span><br><span class="line">   MaxHeapSize              = 4273995776 (4076.0MB)</span><br><span class="line">   NewSize                  = 89128960 (85.0MB)</span><br><span class="line">   MaxNewSize               = 1424490496 (1358.5MB)</span><br><span class="line">   OldSize                  = 179306496 (171.0MB)</span><br><span class="line">   NewRatio                 = 2</span><br><span class="line">   SurvivorRatio            = 8</span><br><span class="line">   MetaspaceSize            = 21807104 (20.796875MB)</span><br><span class="line">   CompressedClassSpaceSize = 1073741824 (1024.0MB)</span><br><span class="line">   MaxMetaspaceSize         = 17592186044415 MB</span><br><span class="line">   G1HeapRegionSize         = 0 (0.0MB)</span><br><span class="line"></span><br><span class="line">Heap Usage:</span><br><span class="line">PS Young Generation</span><br><span class="line">Eden Space:</span><br><span class="line">   capacity = 31981568 (30.5MB)</span><br><span class="line">   used     = 5756808 (5.490119934082031MB)</span><br><span class="line">   free     = 26224760 (25.00988006591797MB)</span><br><span class="line">   18.000393226498463% used</span><br><span class="line">From Space:</span><br><span class="line">   capacity = 524288 (0.5MB)</span><br><span class="line">   used     = 0 (0.0MB)</span><br><span class="line">   free     = 524288 (0.5MB)</span><br><span class="line">   0.0% used</span><br><span class="line">To Space:</span><br><span class="line">   capacity = 524288 (0.5MB)</span><br><span class="line">   used     = 0 (0.0MB)</span><br><span class="line">   free     = 524288 (0.5MB)</span><br><span class="line">   0.0% used</span><br><span class="line">PS Old Generation</span><br><span class="line">   capacity = 179306496 (171.0MB)</span><br><span class="line">   used     = 798896 (0.7618865966796875MB)</span><br><span class="line">   free     = 178507600 (170.2381134033203MB)</span><br><span class="line">   0.4455477173565424% used</span><br><span class="line"></span><br><span class="line">1782 interned Strings occupying 158912 bytes.</span><br></pre></td></tr></table></figure>
 
-<h4 id="jmap-dump"><a href="#jmap-dump" class="headerlink" title="jmap -dump"></a>jmap -dump</h4><p>输出当前堆的快照到文件：<br>jmap -dump:format=b,file=e:dump.hprof 6444<br>这样会生成当前堆的一个快照，之后用jvisualvm加载快照进行可视化分析。</p>
+<h4 id="jmap-dump"><a href="#jmap-dump" class="headerlink" title="jmap -dump"></a>jmap -dump</h4><p>输出当前堆的快照到文件：<br>jmap -dump:format&#x3D;b,file&#x3D;e:dump.hprof 6444<br>这样会生成当前堆的一个快照，之后用jvisualvm加载快照进行可视化分析。</p>
 <h3 id="jstat"><a href="#jstat" class="headerlink" title="jstat"></a>jstat</h3><p>命令的doc说明：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\Administrator&gt;jstat</span><br><span class="line">invalid argument count</span><br><span class="line">Usage: jstat -help|-options</span><br><span class="line">       jstat -&lt;option&gt; [-t] [-h&lt;lines&gt;] &lt;vmid&gt; [&lt;interval&gt; [&lt;count&gt;]]</span><br><span class="line"></span><br><span class="line">Definitions:</span><br><span class="line">  &lt;option&gt;      An option reported by the -options option</span><br><span class="line">  &lt;vmid&gt;        Virtual Machine Identifier. A vmid takes the following form:</span><br><span class="line">                     &lt;lvmid&gt;[@&lt;hostname&gt;[:&lt;port&gt;]]</span><br><span class="line">                Where &lt;lvmid&gt; is the local vm identifier for the target</span><br><span class="line">                Java virtual machine, typically a process id; &lt;hostname&gt; is</span><br><span class="line">                the name of the host running the target Java virtual machine;</span><br><span class="line">                and &lt;port&gt; is the port number for the rmiregistry on the</span><br><span class="line">                target host. See the jvmstat documentation for a more complete</span><br><span class="line">                description of the Virtual Machine Identifier.</span><br><span class="line">  &lt;lines&gt;       Number of samples between header lines.</span><br><span class="line">  &lt;interval&gt;    Sampling interval. The following forms are allowed:</span><br><span class="line">                    &lt;n&gt;[&quot;ms&quot;|&quot;s&quot;]</span><br><span class="line">                Where &lt;n&gt; is an integer and the suffix specifies the units as</span><br><span class="line">                milliseconds(&quot;ms&quot;) or seconds(&quot;s&quot;). The default units are &quot;ms&quot;.</span><br><span class="line">  &lt;count&gt;       Number of samples to take before terminating.</span><br><span class="line">  -J&lt;flag&gt;      Pass &lt;flag&gt; directly to the runtime system.</span><br></pre></td></tr></table></figure>
 
@@ -350,7 +345,7 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public class MyTest4 &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        for(;;)&#123;</span><br><span class="line">            Enhancer enhancer = new Enhancer();</span><br><span class="line">            enhancer.setSuperclass(MyTest4.class);</span><br><span class="line">            enhancer.setUseCache(false);</span><br><span class="line">            enhancer.setCallback((MethodInterceptor)(obj, method, args1, proxy) -&gt; proxy.invokeSuper(obj,args));</span><br><span class="line">            System.out.println(&quot;hello world&quot;);</span><br><span class="line">            enhancer.create();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>jstat打印一下：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\Administrator&gt;jps</span><br><span class="line">19216</span><br><span class="line">21892 MyTest4</span><br><span class="line">4740 Main</span><br><span class="line">3320 Jps</span><br><span class="line">4184 RemoteMavenServer</span><br><span class="line">4536 Launcher</span><br><span class="line">17916 Launcher</span><br><span class="line">我们的测试类是MyTest4【pid：21892】，然后我们多次打印，得到如下列表：</span><br><span class="line">C:\Users\Administrator&gt;jstat -gc 21892</span><br><span class="line"> S0C    S1C    S0U    S1U      EC       EU        OC         OU       MC     MU    CCSC   CCSU   YGC     YGCT    FGC    FGCT     GCT</span><br><span class="line">7168.0 13312.0 6816.0  0.0   1234944.0 1160712.2  219136.0   29834.2   71576.0 71320.5 5800.0 5705.9     18    0.112   3      0.228    0.340</span><br><span class="line"></span><br><span class="line">C:\Users\Administrator&gt;jstat -gc 21892</span><br><span class="line"> S0C    S1C    S0U    S1U      EC       EU        OC         OU       MC     MU    CCSC   CCSU   YGC     YGCT    FGC    FGCT     GCT</span><br><span class="line">14336.0 15872.0 13344.0  0.0   1359360.0 353416.7  219136.0   29834.2   83864.0 83342.1 6824.0 6643.2     20    0.130   3      0.228    0.357</span><br><span class="line"></span><br><span class="line">C:\Users\Administrator&gt;jstat -gc 21892</span><br><span class="line"> S0C    S1C    S0U    S1U      EC       EU        OC         OU       MC     MU    CCSC   CCSU   YGC     YGCT    FGC    FGCT     GCT</span><br><span class="line">15872.0 21504.0 15856.0  0.0   1348096.0 647073.4  219136.0   33642.2   95256.0 94760.5 7720.0 7533.6     22    0.154   3      0.228    0.381</span><br><span class="line"></span><br><span class="line">C:\Users\Administrator&gt;jstat -gc 21892</span><br><span class="line"> S0C    S1C    S0U    S1U      EC       EU        OC         OU       MC     MU    CCSC   CCSU   YGC     YGCT    FGC    FGCT     GCT</span><br><span class="line">23040.0 23040.0 2784.0  0.0   1345024.0 106901.6  321024.0   51215.3   103576.0 103289.6 8360.0 8198.3     24    0.167   4      0.397    0.564</span><br><span class="line"></span><br><span class="line">C:\Users\Administrator&gt;jstat -gc 21892</span><br><span class="line"> S0C    S1C    S0U    S1U      EC       EU        OC         OU       MC     MU    CCSC   CCSU   YGC     YGCT    FGC    FGCT     GCT</span><br><span class="line">22528.0 5632.0  0.0   5472.0 1345024.0 1232187.7  321024.0   51215.3   108312.0 108021.3 8744.0 8567.5     25    0.172   4      0.397    0.568</span><br><span class="line">C:\Users\Administrator&gt;jstat -gc 21892</span><br><span class="line"> S0C    S1C    S0U    S1U      EC       EU        OC         OU       MC     MU    CCSC   CCSU   YGC     YGCT    FGC    FGCT     GCT</span><br><span class="line">32256.0 33280.0 21856.0  0.0   1324544.0 715254.8  418304.0   86847.4   203544.0 203157.8 16168.0 15985.9     56    0.509   5      0.730    1.239</span><br><span class="line"></span><br><span class="line">C:\Users\Administrator&gt;jstat -gc 21892</span><br><span class="line"> S0C    S1C    S0U    S1U      EC       EU        OC         OU       MC     MU    CCSC   CCSU   YGC     YGCT    FGC    FGCT     GCT</span><br><span class="line">35328.0 35328.0  0.0    64.0  1320448.0   0.0     910848.0   40670.6   204800.0 204569.1 16168.0 16093.9     61    0.532  10      1.586    2.119</span><br><span class="line"></span><br><span class="line">C:\Users\Administrator&gt;jstat -gc 21892</span><br><span class="line">21892 not found 【到达200m程序退出】</span><br></pre></td></tr></table></figure>
-<p>可以很明显的看到MC和MU在一直增加。<br>由于MyTest4设置-XX:MaxMetaspaceSize=200m  等程序的MC和MU到达200m的时候程序就会出现溢出而终止。</p>
+<p>可以很明显的看到MC和MU在一直增加。<br>由于MyTest4设置-XX:MaxMetaspaceSize&#x3D;200m  等程序的MC和MU到达200m的时候程序就会出现溢出而终止。</p>
 <h3 id="jps"><a href="#jps" class="headerlink" title="jps"></a>jps</h3><p>jps的doc:</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\Administrator&gt;jps -help</span><br><span class="line">usage: jps [-help]</span><br><span class="line">       jps [-q] [-mlvV] [&lt;hostid&gt;]</span><br><span class="line"></span><br><span class="line">Definitions:</span><br><span class="line">    &lt;hostid&gt;:      &lt;hostname&gt;[:&lt;port&gt;]</span><br></pre></td></tr></table></figure>
 <p>jsp -mlvV个ps -ef | grep java 效果是差不多的，打印了大部分的数据，jps -l是经常用的，以为jps -l会打印类的包名和线程id。</p>
@@ -392,10 +387,10 @@
 <h3 id="jstack-专门用来查看或者导出java线程堆栈的信息"><a href="#jstack-专门用来查看或者导出java线程堆栈的信息" class="headerlink" title="jstack 专门用来查看或者导出java线程堆栈的信息"></a>jstack 专门用来查看或者导出java线程堆栈的信息</h3><h4 id="用jstack检测死锁"><a href="#用jstack检测死锁" class="headerlink" title="用jstack检测死锁"></a>用jstack检测死锁</h4><p>运行程序com.twodragonlake.jvm.memory.DeadLock</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\Administrator&gt;jps</span><br><span class="line">1280 Jps</span><br><span class="line">19216</span><br><span class="line">10900 DeadLock</span><br><span class="line">4740 Main</span><br><span class="line">16840 Launcher</span><br><span class="line">4536 Launcher</span><br><span class="line"></span><br><span class="line">C:\Users\Administrator&gt;jstack 10900</span><br><span class="line">2019-04-30 17:26:40</span><br><span class="line">Full thread dump Java HotSpot(TM) 64-Bit Server VM (25.111-b14 mixed mode):</span><br><span class="line"></span><br><span class="line">.... 略 ....</span><br><span class="line">【检测到死锁】</span><br><span class="line">Found one Java-level deadlock:</span><br><span class="line">=============================</span><br><span class="line">&quot;thread2&quot;:</span><br><span class="line">  waiting to lock monitor 0x000000001ef45148 (object 0x000000076b345af0, a java.lang.Object),</span><br><span class="line">  which is held by &quot;thread1&quot;</span><br><span class="line">&quot;thread1&quot;:</span><br><span class="line">  waiting to lock monitor 0x000000001cdb34b8 (object 0x000000076b345b00, a java.lang.Object),</span><br><span class="line">  which is held by &quot;thread2&quot;</span><br><span class="line"></span><br><span class="line">Java stack information for the threads listed above:</span><br><span class="line">===================================================</span><br><span class="line">&quot;thread2&quot;:</span><br><span class="line">        at com.twodragonlake.jvm.memory.DeadLock$2.run(DeadLock.java:48)</span><br><span class="line">        - waiting to lock &lt;0x000000076b345af0&gt; (a java.lang.Object)</span><br><span class="line">        - locked &lt;0x000000076b345b00&gt; (a java.lang.Object)</span><br><span class="line">        at java.lang.Thread.run(Thread.java:745)</span><br><span class="line">&quot;thread1&quot;:</span><br><span class="line">        at com.twodragonlake.jvm.memory.DeadLock$1.run(DeadLock.java:37)</span><br><span class="line">        - waiting to lock &lt;0x000000076b345b00&gt; (a java.lang.Object)</span><br><span class="line">        - locked &lt;0x000000076b345af0&gt; (a java.lang.Object)</span><br><span class="line">        at java.lang.Thread.run(Thread.java:745)</span><br><span class="line"></span><br><span class="line">Found 1 deadlock.</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-<h3 id="jmc-Java-Mission-control-图形化展示"><a href="#jmc-Java-Mission-control-图形化展示" class="headerlink" title="jmc(Java Mission control)图形化展示"></a>jmc(Java Mission control)图形化展示</h3><p>执行jmc，左侧选择MyTest5的MBean服务器。右侧展示：<br><img src="jmc1.png" alt="jmc1"><br>左侧选择飞行记录器，右侧展示：<br><img src="jmc2.png" alt="jmc2"><br>jmc相比局isualvm和jconsole具有展示更多的系统信息，更加丰富。</p>
-<p>我们运行MyTest4的程序(不断创建class的程序)，然后使用jmc观察meatspace的变化：<br><img src="jmc3.png" alt="jmc3"><br>meatspace是一直在攀升的，当到达-XX:MaxMetaspaceSize=200m设置的200m时，变化也就会停止。</p>
+<h3 id="jmc-Java-Mission-control-图形化展示"><a href="#jmc-Java-Mission-control-图形化展示" class="headerlink" title="jmc(Java Mission control)图形化展示"></a>jmc(Java Mission control)图形化展示</h3><p>执行jmc，左侧选择MyTest5的MBean服务器。右侧展示：<br><img src="/jmc1.png" alt="jmc1"><br>左侧选择飞行记录器，右侧展示：<br><img src="/jmc2.png" alt="jmc2"><br>jmc相比局isualvm和jconsole具有展示更多的系统信息，更加丰富。</p>
+<p>我们运行MyTest4的程序(不断创建class的程序)，然后使用jmc观察meatspace的变化：<br><img src="/jmc3.png" alt="jmc3"><br>meatspace是一直在攀升的，当到达-XX:MaxMetaspaceSize&#x3D;200m设置的200m时，变化也就会停止。</p>
 <h3 id="jhat-对转储文件进行展示分析"><a href="#jhat-对转储文件进行展示分析" class="headerlink" title="jhat 对转储文件进行展示分析"></a>jhat 对转储文件进行展示分析</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">C:\Users\Administrator&gt;jhat e:dump.hprof</span><br><span class="line">Reading from e:dump.hprof...</span><br><span class="line">Dump file created Tue Apr 30 11:41:21 CST 2019</span><br><span class="line">Snapshot read, resolving...</span><br><span class="line">Resolving 257676 objects...</span><br><span class="line">Chasing references, expect 51 dots...................................................</span><br><span class="line">Eliminating duplicate references...................................................</span><br><span class="line">Snapshot resolved.</span><br><span class="line">Started HTTP server on port 7000</span><br><span class="line">Server is ready.</span><br></pre></td></tr></table></figure>
-<p>jhat启动了一个server，端口是7000，因此我们打开浏览器就能对齐进行访问看到我们要的结果。<br>打开<span class="exturl" data-url="aHR0cDovLzEyNy4wLjAuMTo3MDAwLw==">http://127.0.0.1:7000/<i class="fa fa-external-link-alt"></i></span> ，单击【class com.twodragonlake.jvm.memory.MyTest5下边的信息 】就可以打开MyTest5下边的信息<br>【Execute Object Query Language (OQL) query】可以使用OQL查询各种类或者对象的信息，比如【 select s from java.lang.String s where s.value.length &gt;= 100】</p>
+<p>jhat启动了一个server，端口是7000，因此我们打开浏览器就能对齐进行访问看到我们要的结果。<br>打开<span class="exturl" data-url="aHR0cDovLzEyNy4wLjAuMTo3MDAwLw==">http://127.0.0.1:7000/<i class="fa fa-external-link-alt"></i></span> ，单击【class com.twodragonlake.jvm.memory.MyTest5下边的信息 】就可以打开MyTest5下边的信息<br>【Execute Object Query Language (OQL) query】可以使用OQL查询各种类或者对象的信息，比如【 select s from java.lang.String s where s.value.length &gt;&#x3D; 100】</p>
 
     </div>
 
@@ -470,21 +465,23 @@
   </footer>
 
   
-  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.0.6/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
 <script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
 
   
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
 <script src="/js/third-party/search/local-search.js"></script>
 
 
-  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":"forest","js":{"url":"https://cdn.jsdelivr.net/npm/mermaid@8.11.0/dist/mermaid.min.js","integrity":"sha256-sVAx+v/Q7v0Q2xm5vN7h5ccSna6gaLREhG9sF8pKT6I="}}</script>
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.1.1/mermaid.min.js","integrity":"sha256-8L3O8tirFUa8Va4NSTAyIbHJeLd6OnlcxgupV9F77e0="}}</script>
   <script src="/js/third-party/tags/mermaid.js"></script>
 
-  <script class="next-config" data-name="nprogress" type="application/json">{"enable":true,"spinner":true}</script>
-  <script src="/js/third-party/nprogress.js"></script>
+  <script src="/js/third-party/fancybox.js"></script>
+
+  <script src="/js/third-party/pace.js"></script>
 
   
 

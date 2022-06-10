@@ -3,10 +3,9 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
-<meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 6.0.0">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
 
-<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -16,14 +15,15 @@
 
 
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.css" integrity="sha256-no0c5ccDODBwp+9hSmV5VvPpKwHCpbVzXHexIkupM6U=" crossorigin="anonymous">
-  <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.js" integrity="sha256-a5YRB27CcBwBFcT5EF/f3E4vzIqyHrSR878nseNYw64=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"ceaser.wang","root":"/","images":"/images","scheme":"Muse","version":"8.6.1","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
-<meta name="description" content="基于栈的指令集与基于寄存器的指令集详细比对">
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ceaser.wang","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.12.1","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="基于栈的指令集与基于寄存器的指令集详细比对">
 <meta property="og:type" content="article">
 <meta property="og:title" content="jvm原理（35）基于栈的指令集与基于寄存器的指令集详细比对&amp;执行栈指令集实例剖析">
 <meta property="og:url" content="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8835%EF%BC%89%E5%9F%BA%E4%BA%8E%E6%A0%88%E7%9A%84%E6%8C%87%E4%BB%A4%E9%9B%86%E4%B8%8E%E5%9F%BA%E4%BA%8E%E5%AF%84%E5%AD%98%E5%99%A8%E7%9A%84%E6%8C%87%E4%BB%A4%E9%9B%86%E8%AF%A6%E7%BB%86%E6%AF%94%E5%AF%B9&%E6%89%A7%E8%A1%8C%E6%A0%88%E6%8C%87%E4%BB%A4%E9%9B%86%E5%AE%9E%E4%BE%8B%E5%89%96%E6%9E%90/index.html">
@@ -31,7 +31,7 @@
 <meta property="og:description" content="基于栈的指令集与基于寄存器的指令集详细比对">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2018-10-04T19:02:34.000Z">
-<meta property="article:modified_time" content="2022-02-05T08:57:16.092Z">
+<meta property="article:modified_time" content="2022-06-10T14:12:45.292Z">
 <meta property="article:author" content="CeaserWang">
 <meta property="article:tag" content="指令集">
 <meta property="article:tag" content="栈">
@@ -48,6 +48,7 @@
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>jvm原理（35）基于栈的指令集与基于寄存器的指令集详细比对&执行栈指令集实例剖析 | 南贺神社</title>
   
+
 
 
 
@@ -75,7 +76,7 @@
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <h1 class="site-title">南贺神社</h1>
+      <p class="site-title">南贺神社</p>
       <i class="logo-line"></i>
     </a>
       <p class="site-subtitle" itemprop="description">你写程序有写诗一样的感觉吗?</p>
@@ -91,13 +92,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu">
-        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
-        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
-        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">206</span></a></li>
-        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">25</span></a></li>
-        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">213</span></a></li>
-        <li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">206</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">25</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">213</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
         </a>
@@ -159,8 +154,7 @@
         <!--/noindex-->
 
         <div class="site-overview-wrap sidebar-panel">
-          <div class="site-overview">
-            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <img class="site-author-image" itemprop="image" alt="CeaserWang"
       src="/../0xcc/index/Uchiha.jpg">
   <p class="site-author-name" itemprop="name">CeaserWang</p>
@@ -169,21 +163,18 @@
 <div class="site-state-wrap site-overview-item animated">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
-          <a href="/archives/">
-        
+        <a href="/archives/">
           <span class="site-state-item-count">213</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-            <a href="/categories/">
-          
+          <a href="/categories/">
         <span class="site-state-item-count">25</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-            <a href="/tags/">
-          
+          <a href="/tags/">
         <span class="site-state-item-count">206</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
@@ -198,7 +189,7 @@
       </span>
   </div>
   <div class="cc-license site-overview-item animated" itemprop="license">
-    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><img src="https://cdn.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></span>
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></span>
   </div>
 
 
@@ -231,7 +222,6 @@
     </ul>
   </div>
 
-          </div>
         </div>
       </div>
     </div>
@@ -269,11 +259,16 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
       <meta itemprop="name" content="CeaserWang">
-      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="jvm原理（35）基于栈的指令集与基于寄存器的指令集详细比对&执行栈指令集实例剖析 | 南贺神社">
+      <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
@@ -290,13 +285,13 @@
 
       <time title="Created: 2018-10-04 19:02:34" itemprop="dateCreated datePublished" datetime="2018-10-04T19:02:34+00:00">2018-10-04</time>
     </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2022-02-05 08:57:16" itemprop="dateModified" datetime="2022-02-05T08:57:16+00:00">2022-02-05</time>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
       </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-06-10 14:12:45" itemprop="dateModified" datetime="2022-06-10T14:12:45+00:00">2022-06-10</time>
+    </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -331,34 +326,34 @@
 <p> 执行的方式有基于栈的和基于寄存器的执行方式：<br> 基于栈: 移植性好，java是基于栈的指令集，为了可移植性。由于栈是在内存里边出栈入栈，相比cpu寄存器，速度比较慢。<br> 完成相同的操作，基于栈的指令集要比基于寄存器的指令集所需要的指令数量要多。<br> 基于寄存器: 寄存器和硬件架构绑定在一块，因此移植性不ok，但是执行速度快。基于寄存器的指令集是在寄存器里边执行的，速度很快。<br> 虽然虚拟机可以采取一些优化手段，但总体来说，基于栈的指令集的执行速度要慢一些。</p>
 <p> 比如我们要运算2-1，就会有如下的入栈出栈操作：</p>
 <ol>
-<li>iconst_1 //1入栈</li>
-<li>iconst_2 //2入栈</li>
-<li>isub     //(1)将栈顶元素出栈，栈顶元素下边的元素出栈;(2)栈顶元素减去栈顶下边的元素;(3)将结果放入栈顶; isub完成了是3个操作。</li>
-<li>istore_0 //将结果放在slot0处,slot0处可能是一个变量，方法返回的时候，可以把这个变量返回。</li>
+<li>iconst_1 &#x2F;&#x2F;1入栈</li>
+<li>iconst_2 &#x2F;&#x2F;2入栈</li>
+<li>isub     &#x2F;&#x2F;(1)将栈顶元素出栈，栈顶元素下边的元素出栈;(2)栈顶元素减去栈顶下边的元素;(3)将结果放入栈顶; isub完成了是3个操作。</li>
+<li>istore_0 &#x2F;&#x2F;将结果放在slot0处,slot0处可能是一个变量，方法返回的时候，可以把这个变量返回。</li>
 </ol>
 <p>如果是基于寄存器去运算这个减法，第一步就是把2放到一个寄存器上，然后cpu执行减一，然后把结果直接放在原来的寄存器上。过程很简单。</p>
 <h1 id="执行栈指令集实例剖析"><a href="#执行栈指令集实例剖析" class="headerlink" title="执行栈指令集实例剖析"></a>执行栈指令集实例剖析</h1><p>编写一个很简单的程序：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">package com.twodragonlake.jvm.bytecode;</span><br><span class="line">public class MyTest8 &#123;</span><br><span class="line">    public int myCalulate()&#123;</span><br><span class="line">        int a =1;</span><br><span class="line">        int b =2;</span><br><span class="line">        int c =3;</span><br><span class="line">        int d =4;</span><br><span class="line"></span><br><span class="line">        int result = (a + b - c) * d;</span><br><span class="line">        return result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>javap反编译：<br>javap -verbose -p com/twodragonlake/jvm/bytecode.MyTest8</p>
+<p>javap反编译：<br>javap -verbose -p com&#x2F;twodragonlake&#x2F;jvm&#x2F;bytecode.MyTest8</p>
 <p>找到myCalulate的字节码：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br></pre></td><td class="code"><pre><span class="line">Code:</span><br><span class="line">  stack=2, locals=6, args_size=1 //栈最大深度是2；栈最大的局部变量是6个；myCalulate方法的参数个数是1个(this)</span><br><span class="line">     0: iconst_1 //将1入栈</span><br><span class="line">     1: istore_1 //将1出栈，然后将1放在slot索引为1的位置的slot上(slot索引为0是this)</span><br><span class="line">     2: iconst_2 //将2入栈</span><br><span class="line">     3: istore_2 //将2出栈，然后将2放到slot索引为2的slot位置上</span><br><span class="line">     4: iconst_3 //将3入栈</span><br><span class="line">     5: istore_3 //将3出栈，然后放在索引为3的slot上</span><br><span class="line">     6: iconst_4 //将4入栈</span><br><span class="line">     7: istore        4  //将4出栈，然后放到索引为4的slot上，注意不是istore_4 因为istore_X最多到istore_3</span><br><span class="line">     目前的状态如下：</span><br><span class="line">         栈                 方法的局部变量表   </span><br><span class="line">     ===========            ==============</span><br><span class="line">     |         |            |     this    |</span><br><span class="line">     -----------            ---------------</span><br><span class="line">     |         |            |      1      |</span><br><span class="line">     -----------            ---------------</span><br><span class="line">                            |      2      |</span><br><span class="line">                            ---------------</span><br><span class="line">                            |      3      |</span><br><span class="line">                            ---------------</span><br><span class="line">                            |      4      |</span><br><span class="line">                            ---------------   </span><br><span class="line">                            |             |</span><br><span class="line">                            ---------------                             </span><br><span class="line"></span><br><span class="line">     9: iload_1 //将局部变量表索引为1的元素的值，推到栈顶</span><br><span class="line">    10: iload_2 //将局部变量表索引为2的元素的值，推到栈顶</span><br><span class="line">     目前的状态如下：</span><br><span class="line">    栈                 方法的局部变量表   </span><br><span class="line">===========            ==============</span><br><span class="line">|    2    |            |     this    |</span><br><span class="line">-----------            ---------------</span><br><span class="line">|    1    |            |      1      | 已入栈</span><br><span class="line">-----------            ---------------</span><br><span class="line">                       |      2      | 已入栈</span><br><span class="line">                       ---------------</span><br><span class="line">                       |      3      |</span><br><span class="line">                       ---------------</span><br><span class="line">                       |      4      |</span><br><span class="line">                       ---------------   </span><br><span class="line">                       |             |</span><br><span class="line">                       ---------------  </span><br><span class="line"></span><br><span class="line">    11: iadd //将2和1弹出栈，然后相加（2+1=3），得到结果3，将三压入栈顶</span><br><span class="line">    栈                 方法的局部变量表   </span><br><span class="line">===========            ==============</span><br><span class="line">|         |            |     this    |</span><br><span class="line">-----------            ---------------</span><br><span class="line">|    3    |            |      1      | 已入栈</span><br><span class="line">-----------            ---------------</span><br><span class="line">                       |      2      | 已入栈</span><br><span class="line">                       ---------------</span><br><span class="line">                       |      3      |</span><br><span class="line">                       ---------------</span><br><span class="line">                       |      4      |</span><br><span class="line">                       ---------------   </span><br><span class="line">                       |             |</span><br><span class="line">                       ---------------  </span><br><span class="line"></span><br><span class="line">    12: iload_3 //将局部变量表索引为3的位置的元素推送到栈顶</span><br><span class="line">    栈                 方法的局部变量表   </span><br><span class="line">===========            ==============</span><br><span class="line">|    3    |            |     this    |</span><br><span class="line">-----------            ---------------</span><br><span class="line">|    3    |            |      1      | 已入栈</span><br><span class="line">-----------            ---------------</span><br><span class="line">                       |      2      | 已入栈</span><br><span class="line">                       ---------------</span><br><span class="line">                       |      3      | 已入栈</span><br><span class="line">                       ---------------</span><br><span class="line">                       |      4      |</span><br><span class="line">                       ---------------   </span><br><span class="line">                       |             |</span><br><span class="line">                       ---------------  </span><br><span class="line">    13: isub    //将栈顶元素弹出，相减（3-3=0），得到结果推送到栈顶</span><br><span class="line">    栈                 方法的局部变量表   </span><br><span class="line">===========            ==============</span><br><span class="line">|    0    |            |     this    |</span><br><span class="line">-----------            ---------------</span><br><span class="line">|         |            |      1      | 已入栈</span><br><span class="line">-----------            ---------------</span><br><span class="line">                       |      2      | 已入栈</span><br><span class="line">                       ---------------</span><br><span class="line">                       |      3      | 已入栈</span><br><span class="line">                       ---------------</span><br><span class="line">                       |      4      |</span><br><span class="line">                       ---------------   </span><br><span class="line">                       |             |</span><br><span class="line">                       ---------------</span><br><span class="line">    14: iload         4 //将局部变量表索引为4的变量的值推送到栈顶</span><br><span class="line">    栈                 方法的局部变量表   </span><br><span class="line">===========            ==============</span><br><span class="line">|    4    |            |     this    |</span><br><span class="line">-----------            ---------------</span><br><span class="line">|    0    |            |      1      | 已入栈</span><br><span class="line">-----------            ---------------</span><br><span class="line">                       |      2      | 已入栈</span><br><span class="line">                       ---------------</span><br><span class="line">                       |      3      | 已入栈</span><br><span class="line">                       ---------------</span><br><span class="line">                       |      4      | 已入栈</span><br><span class="line">                       ---------------   </span><br><span class="line">                       |             |</span><br><span class="line">                       ---------------</span><br><span class="line">    16: imul //栈顶2个元素弹出，执行乘法（0*4=0），得到的结果推送到栈顶</span><br><span class="line">    栈                 方法的局部变量表   </span><br><span class="line">===========            ==============</span><br><span class="line">|    0    |            |     this    |</span><br><span class="line">-----------            ---------------</span><br><span class="line">|         |            |      1      | 已入栈</span><br><span class="line">-----------            ---------------</span><br><span class="line">                       |      2      | 已入栈</span><br><span class="line">                       ---------------</span><br><span class="line">                       |      3      | 已入栈</span><br><span class="line">                       ---------------</span><br><span class="line">                       |      4      | 已入栈</span><br><span class="line">                       ---------------   </span><br><span class="line">                       |             |</span><br><span class="line">                       ---------------</span><br><span class="line">    17: istore        5  //栈顶元素出栈，然后将索引为5的slot的设置的值为栈顶元素。就是局部变量表5的位置赋值为栈顶元素</span><br><span class="line">    栈                 方法的局部变量表   </span><br><span class="line">===========            ==============</span><br><span class="line">|         |            |     this    |</span><br><span class="line">-----------            ---------------</span><br><span class="line">|         |            |      1      | 已入栈</span><br><span class="line">-----------            ---------------</span><br><span class="line">                       |      2      | 已入栈</span><br><span class="line">                       ---------------</span><br><span class="line">                       |      3      | 已入栈</span><br><span class="line">                       ---------------</span><br><span class="line">                       |      4      | 已入栈</span><br><span class="line">                       ---------------   </span><br><span class="line">                       |      0      |</span><br><span class="line">                       ---------------</span><br><span class="line">    19: iload         5  //将局部变量表5的位置推送到栈顶</span><br><span class="line">    栈                 方法的局部变量表   </span><br><span class="line">===========            ==============</span><br><span class="line">|    0    |            |     this    |</span><br><span class="line">-----------            ---------------</span><br><span class="line">|         |            |      1      | 已入栈</span><br><span class="line">-----------            ---------------</span><br><span class="line">                       |      2      | 已入栈</span><br><span class="line">                       ---------------</span><br><span class="line">                       |      3      | 已入栈</span><br><span class="line">                       ---------------</span><br><span class="line">                       |      4      | 已入栈</span><br><span class="line">                       ---------------   </span><br><span class="line">                       |      0      | 已入栈</span><br><span class="line">                       ---------------</span><br><span class="line">    21: ireturn  //方法将栈顶元素返回</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <h2 id="iconst"><a href="#iconst" class="headerlink" title="iconst"></a>iconst</h2><p>第一个指令是iconst_1，我们到oracle的官方网站看一下他的说明：<br><span class="exturl" data-url="aHR0cHM6Ly9kb2NzLm9yYWNsZS5jb20vamF2YXNlL3NwZWNzL2p2bXMvc2U4L2h0bWwvanZtcy02Lmh0bWwjanZtcy02LjUuaWNvbnN0X2k=">https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-6.html#jvms-6.5.iconst_i<i class="fa fa-external-link-alt"></i></span></p>
-<p>iconst_<i><br>Operation<br>Push int constant<br>将一个常量入栈<br>Format<br>iconst_<i><br>Forms<br>iconst_m1 = 2 (0x2) //-1入栈<br>iconst_0 = 3 (0x3)  //0入栈<br>iconst_1 = 4 (0x4)  //….<br>iconst_2 = 5 (0x5)<br>iconst_3 = 6 (0x6)<br>iconst_4 = 7 (0x7)<br>iconst_5 = 8 (0x8)</p>
+<p>iconst_<i><br>Operation<br>Push int constant<br>将一个常量入栈<br>Format<br>iconst_<i><br>Forms<br>iconst_m1 &#x3D; 2 (0x2) &#x2F;&#x2F;-1入栈<br>iconst_0 &#x3D; 3 (0x3)  &#x2F;&#x2F;0入栈<br>iconst_1 &#x3D; 4 (0x4)  &#x2F;&#x2F;….<br>iconst_2 &#x3D; 5 (0x5)<br>iconst_3 &#x3D; 6 (0x6)<br>iconst_4 &#x3D; 7 (0x7)<br>iconst_5 &#x3D; 8 (0x8)</p>
 <p>Operand Stack<br>… →</p>
 <p>…, <i></p>
 <p>Description<br>Push the int constant <i> (-1, 0, 1, 2, 3, 4 or 5) onto the operand stack.<br>将(-1, 0, 1, 2, 3, 4 or 5)压入到栈顶</p>
 <p>Notes<br>Each of this family of instructions is equivalent to bipush <i> for the respective value of <i>, except that the operand <i> is implicit.<br>每个指令等价于bipush <i>， <i>就等于iconst后边的数字，只不过操作数是隐式的。</p>
 <h2 id="istore"><a href="#istore" class="headerlink" title="istore"></a>istore</h2><p>istore指令，<span class="exturl" data-url="aHR0cHM6Ly9kb2NzLm9yYWNsZS5jb20vamF2YXNlL3NwZWNzL2p2bXMvc2U4L2h0bWwvanZtcy02Lmh0bWwjanZtcy02LjUuaXN0b3JlX24=">https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-6.html#jvms-6.5.istore_n<i class="fa fa-external-link-alt"></i></span><br>Operation<br>Store int into local variable<br>将一个整数村存储到一个变量里边</p>
 <p>Format<br>istore_<n></p>
-<p>Forms<br>istore_0 = 59 (0x3b)<br>istore_1 = 60 (0x3c)<br>istore_2 = 61 (0x3d)<br>istore_3 = 62 (0x3e)</p>
+<p>Forms<br>istore_0 &#x3D; 59 (0x3b)<br>istore_1 &#x3D; 60 (0x3c)<br>istore_2 &#x3D; 61 (0x3d)<br>istore_3 &#x3D; 62 (0x3e)</p>
 <p>Operand Stack<br>…, value →</p>
 <p>…</p>
 <p>Description<br>The <n> must be an index into the local variable array of the current frame (§2.6). The value on the top of the operand stack must be of type int. It is popped from the operand stack, and the value of the local variable at <n> is set to value.<br>n 必须是局部变量表里边的一个索引，操作数栈的栈顶元素必须是整数类型，弹出栈顶元素，将这个元素放在局部变量n的位置</p>
 <p>Notes<br>Each of the istore_<n> instructions is the same as istore with an index of <n>, except that the operand <n> is implicit.<br>每个istore_<n>等价于 istore指令 带上一个索引n，只不过n是隐式的。</p>
 <h2 id="Store"><a href="#Store" class="headerlink" title="Store"></a>Store</h2><p><span class="exturl" data-url="aHR0cHM6Ly9kb2NzLm9yYWNsZS5jb20vamF2YXNlL3NwZWNzL2p2bXMvc2U4L2h0bWwvanZtcy02Lmh0bWwjanZtcy02LjUuaXN0b3Jl">https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-6.html#jvms-6.5.istore<i class="fa fa-external-link-alt"></i></span><br>Operation<br>Store int into local variable<br>将一个整型放到局部变量里边<br>Format</p>
 <p>istore<br>index</p>
-<p>Forms<br>istore = 54 (0x36)</p>
+<p>Forms<br>istore &#x3D; 54 (0x36)</p>
 <p>Operand Stack<br>…, value →</p>
 <p>…</p>
 <p>Description<br>The index is an unsigned byte that must be an index into the local variable array of the current frame (§2.6). The value on the top of the operand stack must be of type int. It is popped from the operand stack, and the value of the local variable at index is set to value.</p>
@@ -366,13 +361,13 @@
 <p>Notes<br>The istore opcode can be used in conjunction with the wide instruction (§wide) to access a local variable using a two-byte unsigned index.</p>
 <h2 id="iload"><a href="#iload" class="headerlink" title="iload"></a>iload</h2><p><span class="exturl" data-url="aHR0cHM6Ly9kb2NzLm9yYWNsZS5jb20vamF2YXNlL3NwZWNzL2p2bXMvc2U4L2h0bWwvanZtcy02Lmh0bWwjanZtcy02LjUuaWxvYWRfbg==">https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-6.html#jvms-6.5.iload_n<i class="fa fa-external-link-alt"></i></span></p>
 <p>Operation<br>Load int from local variable<br>从局部变量表加载一个整型数据<br>Format<br>iload_<n></p>
-<p>Forms<br>iload_0 = 26 (0x1a)<br>iload_1 = 27 (0x1b)<br>iload_2 = 28 (0x1c)<br>iload_3 = 29 (0x1d)</p>
+<p>Forms<br>iload_0 &#x3D; 26 (0x1a)<br>iload_1 &#x3D; 27 (0x1b)<br>iload_2 &#x3D; 28 (0x1c)<br>iload_3 &#x3D; 29 (0x1d)</p>
 <p>Operand Stack<br>… →</p>
 <p>…, value</p>
 <p>Description<br>The <n> must be an index into the local variable array of the current frame (§2.6). The local variable at <n> must contain an int. The value of the local variable at <n> is pushed onto the operand stack.<br>n必须是局部变量表的一个索引，值是一个整型类型，将索引n处的值push到栈顶<br>Notes<br>Each of the iload_<n> instructions is the same as iload with an index of <n>, except that the operand <n> is implicit.<br>每个iload_<n>指令等价于 iload 跟上一个参数n，只不过iload_<n>的n是隐式的。</p>
 <h2 id="iadd"><a href="#iadd" class="headerlink" title="iadd"></a>iadd</h2><p><span class="exturl" data-url="aHR0cHM6Ly9kb2NzLm9yYWNsZS5jb20vamF2YXNlL3NwZWNzL2p2bXMvc2U4L2h0bWwvanZtcy02Lmh0bWwjanZtcy02LjUuaWFkZA==">https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-6.html#jvms-6.5.iadd<i class="fa fa-external-link-alt"></i></span></p>
 <p>Operation<br>Add int<br>整数相加<br>Format<br>iadd<br>Forms</p>
-<p>iadd = 96 (0x60)</p>
+<p>iadd &#x3D; 96 (0x60)</p>
 <p>Operand Stack<br>…, value1, value2 →</p>
 <p>…, result</p>
 <p>Description<br>Both value1 and value2 must be of type int. The values are popped from the operand stack. The int result is value1 + value2. The result is pushed onto the operand stack.</p>
@@ -382,7 +377,7 @@
 <p>结果是底位排序的整型类型，如果相加之后溢出，那么得到的结果不是数学意义上的结果，尽管会有溢出的可能，但是即使溢出了，也不会抛出运行时异常</p>
 <h2 id="ireturn"><a href="#ireturn" class="headerlink" title="ireturn"></a>ireturn</h2><p><span class="exturl" data-url="aHR0cHM6Ly9kb2NzLm9yYWNsZS5jb20vamF2YXNlL3NwZWNzL2p2bXMvc2U4L2h0bWwvanZtcy02Lmh0bWwjanZtcy02LjUuaXJldHVybg==">https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-6.html#jvms-6.5.ireturn<i class="fa fa-external-link-alt"></i></span></p>
 <p>Operation<br>Return int from method<br>方法返回<br>Format</p>
-<p>ireturn<br>Forms<br>ireturn = 172 (0xac)</p>
+<p>ireturn<br>Forms<br>ireturn &#x3D; 172 (0xac)</p>
 <p>Operand Stack<br>…, value →</p>
 <p>[empty]</p>
 <p>Description<br>The current method must have return type boolean, byte, short, char, or int. The value must be of type int. If the current method is a synchronized method, the monitor entered or reentered on invocation of the method is updated and possibly exited as if by execution of a monitorexit instruction (§monitorexit) in the current thread. If no exception is thrown, value is popped from the operand stack of the current frame (§2.6) and pushed onto the operand stack of the frame of the invoker. Any other values on the operand stack of the current method are discarded.<br>当前方法必须返回一个Boolean、 byte, short, char, 或者 int的类型的值，如果方法是synchronized修饰的，那么进入monitor或者冲进入monitor，之后会有monitorexit就会方法退出，如果没有异常，返回值就是栈顶弹出的元素，返回的元素在调用者的栈帧里边会被推送到栈顶，当前方法的栈帧里边的其他所有元素都会被丢弃掉。</p>
@@ -465,21 +460,23 @@
   </footer>
 
   
-  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.0.6/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
 <script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
 
   
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
 <script src="/js/third-party/search/local-search.js"></script>
 
 
-  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":"forest","js":{"url":"https://cdn.jsdelivr.net/npm/mermaid@8.11.0/dist/mermaid.min.js","integrity":"sha256-sVAx+v/Q7v0Q2xm5vN7h5ccSna6gaLREhG9sF8pKT6I="}}</script>
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.1.1/mermaid.min.js","integrity":"sha256-8L3O8tirFUa8Va4NSTAyIbHJeLd6OnlcxgupV9F77e0="}}</script>
   <script src="/js/third-party/tags/mermaid.js"></script>
 
-  <script class="next-config" data-name="nprogress" type="application/json">{"enable":true,"spinner":true}</script>
-  <script src="/js/third-party/nprogress.js"></script>
+  <script src="/js/third-party/fancybox.js"></script>
+
+  <script src="/js/third-party/pace.js"></script>
 
   
 

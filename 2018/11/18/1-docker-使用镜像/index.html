@@ -3,10 +3,9 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
-<meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 6.0.0">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
 
-<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -16,29 +15,30 @@
 
 
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.css" integrity="sha256-no0c5ccDODBwp+9hSmV5VvPpKwHCpbVzXHexIkupM6U=" crossorigin="anonymous">
-  <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.js" integrity="sha256-a5YRB27CcBwBFcT5EF/f3E4vzIqyHrSR878nseNYw64=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"ceaser.wang","root":"/","images":"/images","scheme":"Muse","version":"8.6.1","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
-<meta name="description" content="获取docker 镜像docker pull">
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ceaser.wang","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.12.1","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="获取docker 镜像docker pull">
 <meta property="og:type" content="article">
 <meta property="og:title" content="1-docker-使用镜像">
 <meta property="og:url" content="https://ceaser.wang/2018/11/18/1-docker-%E4%BD%BF%E7%94%A8%E9%95%9C%E5%83%8F/index.html">
 <meta property="og:site_name" content="南贺神社">
 <meta property="og:description" content="获取docker 镜像docker pull">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://ceaser.wang/2018/11/18/1-docker-%E4%BD%BF%E7%94%A8%E9%95%9C%E5%83%8F/1-1.png">
-<meta property="og:image" content="https://ceaser.wang/2018/11/18/1-docker-%E4%BD%BF%E7%94%A8%E9%95%9C%E5%83%8F/1-2.png">
+<meta property="og:image" content="https://ceaser.wang/1-1.png">
+<meta property="og:image" content="https://ceaser.wang/1-2.png">
 <meta property="article:published_time" content="2018-11-18T21:19:47.000Z">
-<meta property="article:modified_time" content="2022-02-05T08:57:15.888Z">
+<meta property="article:modified_time" content="2022-06-10T14:12:45.092Z">
 <meta property="article:author" content="CeaserWang">
 <meta property="article:tag" content="docker">
 <meta property="article:tag" content="docer image">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://ceaser.wang/2018/11/18/1-docker-%E4%BD%BF%E7%94%A8%E9%95%9C%E5%83%8F/1-1.png">
+<meta name="twitter:image" content="https://ceaser.wang/1-1.png">
 
 
 <link rel="canonical" href="https://ceaser.wang/2018/11/18/1-docker-%E4%BD%BF%E7%94%A8%E9%95%9C%E5%83%8F/">
@@ -50,6 +50,7 @@
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>1-docker-使用镜像 | 南贺神社</title>
   
+
 
 
 
@@ -77,7 +78,7 @@
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <h1 class="site-title">南贺神社</h1>
+      <p class="site-title">南贺神社</p>
       <i class="logo-line"></i>
     </a>
       <p class="site-subtitle" itemprop="description">你写程序有写诗一样的感觉吗?</p>
@@ -93,13 +94,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu">
-        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
-        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
-        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">206</span></a></li>
-        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">25</span></a></li>
-        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">213</span></a></li>
-        <li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">206</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">25</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">213</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
         </a>
@@ -161,8 +156,7 @@
         <!--/noindex-->
 
         <div class="site-overview-wrap sidebar-panel">
-          <div class="site-overview">
-            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <img class="site-author-image" itemprop="image" alt="CeaserWang"
       src="/../0xcc/index/Uchiha.jpg">
   <p class="site-author-name" itemprop="name">CeaserWang</p>
@@ -171,21 +165,18 @@
 <div class="site-state-wrap site-overview-item animated">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
-          <a href="/archives/">
-        
+        <a href="/archives/">
           <span class="site-state-item-count">213</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-            <a href="/categories/">
-          
+          <a href="/categories/">
         <span class="site-state-item-count">25</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-            <a href="/tags/">
-          
+          <a href="/tags/">
         <span class="site-state-item-count">206</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
@@ -200,7 +191,7 @@
       </span>
   </div>
   <div class="cc-license site-overview-item animated" itemprop="license">
-    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><img src="https://cdn.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></span>
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></span>
   </div>
 
 
@@ -233,7 +224,6 @@
     </ul>
   </div>
 
-          </div>
         </div>
       </div>
     </div>
@@ -271,11 +261,16 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
       <meta itemprop="name" content="CeaserWang">
-      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="1-docker-使用镜像 | 南贺神社">
+      <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
@@ -292,13 +287,13 @@
 
       <time title="Created: 2018-11-18 21:19:47" itemprop="dateCreated datePublished" datetime="2018-11-18T21:19:47+00:00">2018-11-18</time>
     </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2022-02-05 08:57:15" itemprop="dateModified" datetime="2022-02-05T08:57:15+00:00">2022-02-05</time>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
       </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-06-10 14:12:45" itemprop="dateModified" datetime="2022-06-10T14:12:45+00:00">2022-06-10</time>
+    </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -327,11 +322,11 @@
     
     <div class="post-body" itemprop="articleBody">
         <h1 id="获取docker-镜像"><a href="#获取docker-镜像" class="headerlink" title="获取docker 镜像"></a>获取docker 镜像</h1><h2 id="docker-pull"><a href="#docker-pull" class="headerlink" title="docker pull"></a>docker pull</h2><span id="more"></span>
-<p>docker hub：<span class="exturl" data-url="aHR0cHM6Ly9odWIuZG9ja2VyLmNvbS9leHBsb3JlLw==">https://hub.docker.com/explore/<i class="fa fa-external-link-alt"></i></span><br>  从 Docker 镜像仓库获取镜像的命令是 docker pull：<br>  docker pull [选项] [Docker Registry 地址[:端口号]/]仓库名[:标签]<br>  example：<br>  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker pull myregistry.local:5000/testing/test-image</span><br><span class="line">docker pull centos:7</span><br><span class="line">docker pull tdlceaserwang/repository/jdk8DoclerFile:v1</span><br></pre></td></tr></table></figure></p>
+<p>docker hub：<span class="exturl" data-url="aHR0cHM6Ly9odWIuZG9ja2VyLmNvbS9leHBsb3JlLw==">https://hub.docker.com/explore/<i class="fa fa-external-link-alt"></i></span><br>  从 Docker 镜像仓库获取镜像的命令是 docker pull：<br>  docker pull [选项] [Docker Registry 地址[:端口号]&#x2F;]仓库名[:标签]<br>  example：<br>  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker pull myregistry.local:5000/testing/test-image</span><br><span class="line">docker pull centos:7</span><br><span class="line">docker pull tdlceaserwang/repository/jdk8DoclerFile:v1</span><br></pre></td></tr></table></figure></p>
 <h2 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h2><p>  example：<br>  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker run -it --rm \</span><br><span class="line">ubuntu:16.04 \</span><br><span class="line">bash</span><br></pre></td></tr></table></figure><br>  -it ：这是两个参数，一个是 -i ：交互式操作，一个是 -t 终端。我们这里打算进入<br>  bash 执行一些命令并查看返回结果，因此我们需要交互式终端。<br>  –rm ：这个参数是说容器退出后随之将其删除。默认情况下，为了排障需求，退出的容<br>  器并不会立即删除，除非手动 docker rm 。我们这里只是随便执行个命令，看看结果，<br>  不需要排障和保留结果，因此使用 –rm 可以避免浪费空间。<br>  ubuntu:16.04 ：这是指用 ubuntu:16.04 镜像为基础来启动容器。<br>  bash ：放在镜像名后的是命令，这里我们希望有个交互式 Shell，因此用的是 bash</p>
 <h2 id="列出镜像"><a href="#列出镜像" class="headerlink" title="列出镜像"></a>列出镜像</h2>  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker image ls</span><br></pre></td></tr></table></figure>
 
-<p>  <img src="1-1.png" alt="1-1"><br>  查看镜像、容器、数据卷所占用的空间:<br>  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker system df</span><br></pre></td></tr></table></figure><br>  <img src="1-2.png" alt="1-2"></p>
+<p>  <img src="/1-1.png" alt="1-1"><br>  查看镜像、容器、数据卷所占用的空间:<br>  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker system df</span><br></pre></td></tr></table></figure><br>  <img src="/1-2.png" alt="1-2"></p>
 <h2 id="虚悬镜像"><a href="#虚悬镜像" class="headerlink" title="虚悬镜像"></a>虚悬镜像</h2><p>  定义：镜像既没有仓库名，也没有标签，均为 <none><br>  列出虚悬镜像：<br>  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker image ls -f dangling=true</span><br></pre></td></tr></table></figure><br>  删除虚悬镜像(dangling image)：<br>  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker image prune</span><br></pre></td></tr></table></figure></p>
 <h2 id="中间层镜像"><a href="#中间层镜像" class="headerlink" title="中间层镜像"></a>中间层镜像</h2><p>  为了加速镜像构建、重复利用资源，Docker 会利用 中间层镜像。所以在使用一段时间后，可<br>  能会看到一些依赖的中间层镜像。默认的 docker image ls 列表中只会显示顶层镜像，如果<br>  希望显示包括中间层镜像在内的所有镜像的话，需要加 -a 参:<br>  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker image ls -a</span><br></pre></td></tr></table></figure><br>  ps:删除那些依赖它们的镜像后，这些依赖的中间层镜像也会被连带删除.</p>
 <h3 id="过滤器参数"><a href="#过滤器参数" class="headerlink" title="过滤器参数"></a>过滤器参数</h3><p>  example:<br>  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker image ls -f since=mongo:3.2</span><br><span class="line"># 想查看某个位置之前的镜像也可以，只需要把 since 换成 before 即可</span><br></pre></td></tr></table></figure></p>
@@ -339,7 +334,7 @@
 <p>  结果：<br>  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">75835a67d134</span><br><span class="line">cae870735e91</span><br></pre></td></tr></table></figure><br>  –filter 配合 -q 产生出指定范围的 ID 列表，然后送给另一个 docker 命令作为参数</p>
 <h3 id="Go-的模板语法"><a href="#Go-的模板语法" class="headerlink" title="Go 的模板语法"></a>Go 的模板语法</h3>  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker image ls --format &quot;&#123;&#123;.ID&#125;&#125;: &#123;&#123;.Repository&#125;&#125;&quot;</span><br></pre></td></tr></table></figure>
 
-<p>  结果：<br>  75835a67d134: centos<br>  cae870735e91: docker4w/nsenter-dockerd</p>
+<p>  结果：<br>  75835a67d134: centos<br>  cae870735e91: docker4w&#x2F;nsenter-dockerd</p>
 <h2 id="删除本地镜像"><a href="#删除本地镜像" class="headerlink" title="删除本地镜像"></a>删除本地镜像</h2><p>  docker image rm [选项] &lt;镜像1&gt; [&lt;镜像2&gt; …]</p>
 <p>  其中， &lt;镜像&gt; 可以是 镜像短 ID 、 镜像长 ID 、 镜像名 或者 镜像摘要</p>
 <p>  example：<br>  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker image rm 501</span><br><span class="line"># 或者</span><br><span class="line">docker image rm centos</span><br></pre></td></tr></table></figure></p>
@@ -357,7 +352,7 @@
 <p>  因此在 COPY 和 ADD 指令中选择的时候，可以遵循这样的原则，所有的文件复制均使用COPY 指令，仅在需要自动解压缩的场合使用 ADD 。</p>
 <h3 id="CMD-容器启动命令"><a href="#CMD-容器启动命令" class="headerlink" title="CMD 容器启动命令"></a>CMD 容器启动命令</h3><p>  格式:<br>  shell 格式： CMD &lt;命令&gt;<br>  exec 格式： CMD [“可执行文件”, “参数1”, “参数2”…]<br>  参数列表格式： CMD [“参数1”, “参数2”…] 。在指定了 ENTRYPOINT 指令后，用 CMD 指定具体的参数。<br>  在指令格式上，一般推荐使用 exec 格式，这类格式在解析时会被解析为 JSON 数组，因此 一定要使用双引号 “ ，而不要使用单引号。<br>  如果使用 shell 格式的话，实际的命令会被包装为 sh -c 的参数的形式进行执行。比如：<br>  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CMD echo $HOME</span><br></pre></td></tr></table></figure></p>
 <p>  在实际执行中，会将其变更为：<br>  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CMD [ &quot;sh&quot;, &quot;-c&quot;, &quot;echo $HOME&quot; ]</span><br></pre></td></tr></table></figure></p>
-<p>  <strong>sh -c：</strong><br>  c string<br>  If the -c option is present, then commands are read from string. If there are arguments after the string, they are assigned to the positional parameters, starting with $0.<br>  翻译一下就是： 如果-c 选项存在，命令就从字符串中读取。如果字符串后有参数，他们将会被分配到参数的位置上，从$0开始。<br>  /bin/sh -c 命令<br>  可以用shell执行指定的命令<br>  这里<br>  /bin/sh -c ls<br>  会执行ls命令（列出文件）</p>
+<p>  <strong>sh -c：</strong><br>  c string<br>  If the -c option is present, then commands are read from string. If there are arguments after the string, they are assigned to the positional parameters, starting with $0.<br>  翻译一下就是： 如果-c 选项存在，命令就从字符串中读取。如果字符串后有参数，他们将会被分配到参数的位置上，从$0开始。<br>  &#x2F;bin&#x2F;sh -c 命令<br>  可以用shell执行指定的命令<br>  这里<br>  &#x2F;bin&#x2F;sh -c ls<br>  会执行ls命令（列出文件）</p>
 <p>  Docker 不是虚拟机，容器就是进程。既然是进程，那么在启动容器的时候，需要指定所运行的程序及参数。 CMD 指令就是用于指定默认的容器主进程的启动命令的。</p>
 <p>  错误事例：<br>  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CMD service nginx start</span><br></pre></td></tr></table></figure></p>
 <p>  CMD service nginx start 会被理解为 CMD [ “sh”, “-c”, “service nginxstart”] ，因此主进程实际上是 sh 。那么当 service nginx start 命令结束后， sh 也就结束了， sh 作为主进程退出了，自然就会令容器退出。</p>
@@ -385,9 +380,9 @@ ENTRYPOINT command param1 param2（shell中执行）。
 <li>VOLUME [“&lt;路径1&gt;”, “&lt;路径2&gt;”…]</li>
 <li>VOLUME &lt;路径&gt;</li>
 </ul>
-<p>  容器运行时，尽量保持容器存储层不发生写操作，对于数据库这类应用，存在动态数据，数据文件不应该写在容器的存储层，而是应该写在juan里边，<br>  比如VOLUME /data ，容器运行的时候，任何向/data写入的数据都不会存到容器的存储层。<br>  VOLUME可以被覆盖：<br>  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -v mydata:/data xxxx</span><br></pre></td></tr></table></figure><br>  在这行命令中，就使用了 mydata 这个命名卷挂载到了 /data 这个位置，替代了 Dockerfile 中定义的匿名卷的挂载配置。</p>
+<p>  容器运行时，尽量保持容器存储层不发生写操作，对于数据库这类应用，存在动态数据，数据文件不应该写在容器的存储层，而是应该写在juan里边，<br>  比如VOLUME &#x2F;data ，容器运行的时候，任何向&#x2F;data写入的数据都不会存到容器的存储层。<br>  VOLUME可以被覆盖：<br>  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -v mydata:/data xxxx</span><br></pre></td></tr></table></figure><br>  在这行命令中，就使用了 mydata 这个命名卷挂载到了 &#x2F;data 这个位置，替代了 Dockerfile 中定义的匿名卷的挂载配置。</p>
 <h2 id="EXPOSE-声明端口"><a href="#EXPOSE-声明端口" class="headerlink" title="EXPOSE 声明端口"></a>EXPOSE 声明端口</h2><p>  格式为 EXPOSE &lt;端口1&gt; [&lt;端口2&gt;…] 。<br>  EXPOSE 指令是声明运行时容器提供服务端口，这只是一个声明，在运行时并不会因为这个声明应用就会开启这个端口的服务。<br>  docker run -P 时，会自动随机映射 EXPOSE 的端口,要将 EXPOSE 和在运行时使用 -p &lt;宿主端口&gt;:&lt;容器端口&gt; 区分开来。 -p ，是映射宿主端口和<br>  容器端口，换句话说，就是将容器的对应端口服务公开给外界访问，而 EXPOSE 仅仅是声明, 容器打算使用什么端口而已，并不会自动在宿主进行端口映射。</p>
-<h2 id="WORKDIR-指定工作目录"><a href="#WORKDIR-指定工作目录" class="headerlink" title="WORKDIR 指定工作目录"></a>WORKDIR 指定工作目录</h2><p>  格式为 WORKDIR &lt;工作目录路径&gt; 。<br>  WORKDIR用来指定工作目录，或者当前目录，指定之后，以后各层的工作目录  都是这个WORKDIR指定的目录，我们知道每个Dockerfile 里边的命令都是一层，层与层之间的内存执行环境是不可见的，他们的执行环境不一样，错误实例：<br>  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">RUN cd /app</span><br><span class="line">RUN echo &quot;hello&quot; &gt; world.txt</span><br></pre></td></tr></table></figure><br>  第一层  RUN cd /app只是在内存中修改一些，当执行RUN echo “hello” &gt; world.txt时，就会找不到world.txt这个文件。第二层的时候，启动的是一个全新的容器，跟第一层的容器更完全没关<br>  系，自然不可能继承前一层构建过程中的内存变化。<br>  WORKDIR可以指定以后各层都在一个目录下工作。</p>
+<h2 id="WORKDIR-指定工作目录"><a href="#WORKDIR-指定工作目录" class="headerlink" title="WORKDIR 指定工作目录"></a>WORKDIR 指定工作目录</h2><p>  格式为 WORKDIR &lt;工作目录路径&gt; 。<br>  WORKDIR用来指定工作目录，或者当前目录，指定之后，以后各层的工作目录  都是这个WORKDIR指定的目录，我们知道每个Dockerfile 里边的命令都是一层，层与层之间的内存执行环境是不可见的，他们的执行环境不一样，错误实例：<br>  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">RUN cd /app</span><br><span class="line">RUN echo &quot;hello&quot; &gt; world.txt</span><br></pre></td></tr></table></figure><br>  第一层  RUN cd &#x2F;app只是在内存中修改一些，当执行RUN echo “hello” &gt; world.txt时，就会找不到world.txt这个文件。第二层的时候，启动的是一个全新的容器，跟第一层的容器更完全没关<br>  系，自然不可能继承前一层构建过程中的内存变化。<br>  WORKDIR可以指定以后各层都在一个目录下工作。</p>
 <h2 id="USER-指定当前用户"><a href="#USER-指定当前用户" class="headerlink" title="USER 指定当前用户"></a>USER 指定当前用户</h2><p>  格式： USER &lt;用户名&gt;<br>  USER 指令和 WORKDIR 相似，都是改变环境状态并影响以后的层。 WORKDIR 是改变工作目录， USER 则是改变之后层的执行 RUN , CMD 以及 ENTRYPOINT 这类命令的身份。<br>  比如我们希望执行一个命令使用另外一个已经存在的用户去执行，不要使用 su或者sudo，这写需要很麻烦的配置，我们可以使用gosu；<br>  example：<br>  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># 建立 redis 用户，并使用 gosu 换另一个用户执行命令</span><br><span class="line">RUN groupadd -r redis &amp;&amp; useradd -r -g redis redis</span><br><span class="line"># 下载 gosu</span><br><span class="line">RUN wget -O /usr/local/bin/gosu &quot;https://github.com/tianon/gosu/releases/download/1.7/gosu-amd64&quot; \</span><br><span class="line">&amp;&amp; chmod +x /usr/local/bin/gosu \</span><br><span class="line">&amp;&amp; gosu nobody true</span><br><span class="line"># 设置 CMD，并以另外的用户执行</span><br><span class="line">CMD [ &quot;exec&quot;, &quot;gosu&quot;, &quot;redis&quot;, &quot;redis-server&quot; ]</span><br><span class="line">USER 指定当前用户</span><br></pre></td></tr></table></figure></p>
 <h2 id="ONBUILD"><a href="#ONBUILD" class="headerlink" title="ONBUILD"></a>ONBUILD</h2><p>  格式： ONBUILD &lt;其它指令&gt; 。<br>  ONBUILD 是一个特殊的指令，它后面跟的是其它指令，比如 RUN , COPY 等，而这些指令，在当前镜像构建时并不会被执行。只有当以当前镜像为基础镜像，去构建下一级镜像的时候才会被执行。<br>  因此我们可以使用ONBUILD用在基础镜像里边，example：<br>  基础镜像文件A：<br>  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">FROM node:slim</span><br><span class="line">RUN mkdir /app</span><br><span class="line">WORKDIR /app</span><br><span class="line">ONBUILD COPY ./package.json /app</span><br><span class="line">ONBUILD RUN [ &quot;npm&quot;, &quot;install&quot; ]</span><br><span class="line">ONBUILD COPY . /app/</span><br><span class="line">CMD [ &quot;npm&quot;, &quot;start&quot; ]</span><br></pre></td></tr></table></figure><br>  前缀带有ONBUILD的在构建基础镜像A本身的时候，并不会执行，只有在其他 镜像from A的时候，ONBUILD的命令才会执行。<br>  其他镜像可以如些写法：<br>  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">FROM my-node</span><br></pre></td></tr></table></figure><br>  只需要一行指令，就可以将当前的一个前端项目启动起来。</p>
 <h2 id="多阶段构建"><a href="#多阶段构建" class="headerlink" title="多阶段构建"></a>多阶段构建</h2><p>  在 Docker 17.05 版本之前docker支持多阶段构建, 比如我们要在一个容器中使用go语言的一个软件，我们使用源码编译，首先需要在容器里边安装go的编译器，然后将软件拷贝到容器，执行编译，最后拿到编译结果；编译器和最终编译出来的结果都在一个容器里边，其实我们只需要的是最终的编译结果，中间的编译器是不需要在最终保留的，那么这就可是使用docker的最新的特性—多阶段编译，只需要一个dockerfile，里边可以包含多个from指令，多个 FROM 指令并不是为了生成多根的层关系，最后生成的镜像，仍以最后一条 FROM 为准，之前的 FROM 会被抛弃，那么之前的FROM 又有什么意义呢？<br>  每一条 FROM 指令都是一个构建阶段，多条 FROM 就是多阶段构建，虽然最后生成的镜像只能是最后一个阶段的结果，但是，能够将前置阶段中的文件拷贝到后边的阶段中，这就是多阶段构建的最大意义。<br>  最大的使用场景是将编译环境和运行环境分离，比如，我们需要构建一个Go语言程序，那么就需要用到go命令等编译环境，我们的Dockerfile是这样的：</p>
@@ -467,21 +462,23 @@ ENTRYPOINT command param1 param2（shell中执行）。
   </footer>
 
   
-  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.0.6/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
 <script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
 
   
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
 <script src="/js/third-party/search/local-search.js"></script>
 
 
-  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":"forest","js":{"url":"https://cdn.jsdelivr.net/npm/mermaid@8.11.0/dist/mermaid.min.js","integrity":"sha256-sVAx+v/Q7v0Q2xm5vN7h5ccSna6gaLREhG9sF8pKT6I="}}</script>
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.1.1/mermaid.min.js","integrity":"sha256-8L3O8tirFUa8Va4NSTAyIbHJeLd6OnlcxgupV9F77e0="}}</script>
   <script src="/js/third-party/tags/mermaid.js"></script>
 
-  <script class="next-config" data-name="nprogress" type="application/json">{"enable":true,"spinner":true}</script>
-  <script src="/js/third-party/nprogress.js"></script>
+  <script src="/js/third-party/fancybox.js"></script>
+
+  <script src="/js/third-party/pace.js"></script>
 
   
 

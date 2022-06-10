@@ -3,10 +3,9 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
-<meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 6.0.0">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
 
-<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -16,28 +15,29 @@
 
 
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.css" integrity="sha256-no0c5ccDODBwp+9hSmV5VvPpKwHCpbVzXHexIkupM6U=" crossorigin="anonymous">
-  <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.js" integrity="sha256-a5YRB27CcBwBFcT5EF/f3E4vzIqyHrSR878nseNYw64=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"ceaser.wang","root":"/","images":"/images","scheme":"Muse","version":"8.6.1","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
-<meta name="description" content="前边我们解析了一个字节码文件，现在我们做一个比较复杂的字节码文件的解析，程序如下：">
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ceaser.wang","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.12.1","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前边我们解析了一个字节码文件，现在我们做一个比较复杂的字节码文件的解析，程序如下：">
 <meta property="og:type" content="article">
 <meta property="og:title" content="jvm原理（28）synchronized关键字所生成的字节码详细分析&amp;&amp;复杂字节码文件的分析过程">
 <meta property="og:url" content="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8828%EF%BC%89synchronized%E5%85%B3%E9%94%AE%E5%AD%97%E6%89%80%E7%94%9F%E6%88%90%E7%9A%84%E5%AD%97%E8%8A%82%E7%A0%81%E8%AF%A6%E7%BB%86%E5%88%86%E6%9E%90-%E5%A4%8D%E6%9D%82%E5%AD%97%E8%8A%82%E7%A0%81%E6%96%87%E4%BB%B6%E7%9A%84%E5%88%86%E6%9E%90%E8%BF%87%E7%A8%8B/index.html">
 <meta property="og:site_name" content="南贺神社">
 <meta property="og:description" content="前边我们解析了一个字节码文件，现在我们做一个比较复杂的字节码文件的解析，程序如下：">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8828%EF%BC%89synchronized%E5%85%B3%E9%94%AE%E5%AD%97%E6%89%80%E7%94%9F%E6%88%90%E7%9A%84%E5%AD%97%E8%8A%82%E7%A0%81%E8%AF%A6%E7%BB%86%E5%88%86%E6%9E%90-%E5%A4%8D%E6%9D%82%E5%AD%97%E8%8A%82%E7%A0%81%E6%96%87%E4%BB%B6%E7%9A%84%E5%88%86%E6%9E%90%E8%BF%87%E7%A8%8B/20180825222723769.png">
+<meta property="og:image" content="https://ceaser.wang/20180825222723769.png">
 <meta property="article:published_time" content="2018-10-04T17:04:42.000Z">
-<meta property="article:modified_time" content="2022-02-05T08:57:16.088Z">
+<meta property="article:modified_time" content="2022-06-10T14:12:45.288Z">
 <meta property="article:author" content="CeaserWang">
 <meta property="article:tag" content="synchronize">
 <meta property="article:tag" content="字节码解析">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8828%EF%BC%89synchronized%E5%85%B3%E9%94%AE%E5%AD%97%E6%89%80%E7%94%9F%E6%88%90%E7%9A%84%E5%AD%97%E8%8A%82%E7%A0%81%E8%AF%A6%E7%BB%86%E5%88%86%E6%9E%90-%E5%A4%8D%E6%9D%82%E5%AD%97%E8%8A%82%E7%A0%81%E6%96%87%E4%BB%B6%E7%9A%84%E5%88%86%E6%9E%90%E8%BF%87%E7%A8%8B/20180825222723769.png">
+<meta name="twitter:image" content="https://ceaser.wang/20180825222723769.png">
 
 
 <link rel="canonical" href="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8828%EF%BC%89synchronized%E5%85%B3%E9%94%AE%E5%AD%97%E6%89%80%E7%94%9F%E6%88%90%E7%9A%84%E5%AD%97%E8%8A%82%E7%A0%81%E8%AF%A6%E7%BB%86%E5%88%86%E6%9E%90-%E5%A4%8D%E6%9D%82%E5%AD%97%E8%8A%82%E7%A0%81%E6%96%87%E4%BB%B6%E7%9A%84%E5%88%86%E6%9E%90%E8%BF%87%E7%A8%8B/">
@@ -49,6 +49,7 @@
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>jvm原理（28）synchronized关键字所生成的字节码详细分析&&复杂字节码文件的分析过程 | 南贺神社</title>
   
+
 
 
 
@@ -76,7 +77,7 @@
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <h1 class="site-title">南贺神社</h1>
+      <p class="site-title">南贺神社</p>
       <i class="logo-line"></i>
     </a>
       <p class="site-subtitle" itemprop="description">你写程序有写诗一样的感觉吗?</p>
@@ -92,13 +93,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu">
-        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
-        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
-        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">206</span></a></li>
-        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">25</span></a></li>
-        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">213</span></a></li>
-        <li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">206</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">25</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">213</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
         </a>
@@ -159,8 +154,7 @@
         <!--/noindex-->
 
         <div class="site-overview-wrap sidebar-panel">
-          <div class="site-overview">
-            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <img class="site-author-image" itemprop="image" alt="CeaserWang"
       src="/../0xcc/index/Uchiha.jpg">
   <p class="site-author-name" itemprop="name">CeaserWang</p>
@@ -169,21 +163,18 @@
 <div class="site-state-wrap site-overview-item animated">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
-          <a href="/archives/">
-        
+        <a href="/archives/">
           <span class="site-state-item-count">213</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-            <a href="/categories/">
-          
+          <a href="/categories/">
         <span class="site-state-item-count">25</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-            <a href="/tags/">
-          
+          <a href="/tags/">
         <span class="site-state-item-count">206</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
@@ -198,7 +189,7 @@
       </span>
   </div>
   <div class="cc-license site-overview-item animated" itemprop="license">
-    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><img src="https://cdn.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></span>
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></span>
   </div>
 
 
@@ -231,7 +222,6 @@
     </ul>
   </div>
 
-          </div>
         </div>
       </div>
     </div>
@@ -269,11 +259,16 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
       <meta itemprop="name" content="CeaserWang">
-      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="jvm原理（28）synchronized关键字所生成的字节码详细分析&&复杂字节码文件的分析过程 | 南贺神社">
+      <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
@@ -290,13 +285,13 @@
 
       <time title="Created: 2018-10-04 17:04:42" itemprop="dateCreated datePublished" datetime="2018-10-04T17:04:42+00:00">2018-10-04</time>
     </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2022-02-05 08:57:16" itemprop="dateModified" datetime="2022-02-05T08:57:16+00:00">2022-02-05</time>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
       </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-06-10 14:12:45" itemprop="dateModified" datetime="2022-06-10T14:12:45+00:00">2022-06-10</time>
+    </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -342,7 +337,7 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">private static synchronized void tes2();</span><br><span class="line">  descriptor: ()V</span><br><span class="line">  flags: ACC_PRIVATE, ACC_STATIC, ACC_SYNCHRONIZED</span><br><span class="line">  Code:</span><br><span class="line">    stack=0, locals=0, args_size=0</span><br><span class="line">       0: return</span><br><span class="line">    LineNumberTable:</span><br><span class="line">      line 31: 0</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <p>这个时候 只会在方法的标记一下 ACC_SYNCHRONIZED，因为synchronized 属于class上锁。<br>俺么接下来我们就如下的完整的字节码文件进行解析：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">package com.twodragonlake.jvm.bytecode;</span><br><span class="line"></span><br><span class="line">public class MyTest2 &#123;</span><br><span class="line"></span><br><span class="line">    String str = &quot;Welcome&quot;;</span><br><span class="line"></span><br><span class="line">    private int x = 5;</span><br><span class="line"></span><br><span class="line">    public static Integer in = 10;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args)&#123;</span><br><span class="line">        MyTest2 myTest2 = new MyTest2();</span><br><span class="line"></span><br><span class="line">        myTest2.setX(8);</span><br><span class="line"></span><br><span class="line">        in = 20;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private  synchronized void setX(int x)&#123;</span><br><span class="line">        this.x = x;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private  void test(String str)&#123;</span><br><span class="line">        synchronized (str)&#123;</span><br><span class="line">            System.out.println(&quot;hello world&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private synchronized static void tes2()&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>拿到反编译的1进制文件：<br>首先是魔数：CAFEBABE<br>版本号+小版本号：00000034<br>常量池2+n个字节 ： 0046 常量个数：70 （实际69个，其中一个是保留的）<br>第一个常量：0A 是10 代表方法引用，00 0D 是第13号常量，00 2D是第45 号常量，最终汇总出来：#13.#45        // java/lang/Object.”<init>“:()V<br>第二个常量：08 是字符串索引，00 2E是46号常量 字符串：welcome。<br>第三个常量： 09 方法引用，00 05 是5号常量【#5 = Class              #49            // com/twodragonlake/jvm/bytecode/MyTest2】；<br> 00 2f 是47号常量：#47 = NameAndType        #14:#15        // str:Ljava/lang/String;所以3号常量是：<br> // com/twodragonlake/jvm/bytecode/MyTest2.str:Ljava/lang/String;<br> 第四个常量：09 方法引用，00 05 是5号常量【#5 = Class              #49            // com/twodragonlake/jvm/bytecode/MyTest2】; 00 30 是48号常量<br> 【#48 = NameAndType        #16:#17        // x:I】  ，所以四号常量是：【#5.#48         // com/twodragonlake/jvm/bytecode/MyTest2.x:I】<br> 第五个常量： 07 是类的引用，00 31  是49号常量 【#49 = Utf8               com/twodragonlake/jvm/bytecode/MyTest2】；<br> 第六个常量：0A 是方法引用，00 05 是5号常量【#5 = Class              #49            // com/twodragonlake/jvm/bytecode/MyTest2】；<br>  00 2D 是45号常量【#45 = NameAndType        #20:#21        // <code>&lt;init&gt;</code>:()V】  所以6号常量是：<br>  【#6 = Methodref          #5.#45         // com/twodragonlake/jvm/bytecode/MyTest2.<code>&lt;init&gt;</code>:()V】<br>  第七个常量：0A 是 方法引用 ，00 05 ， 00 32 分别是5号和50号常量： 【#7 = Methodref          #5.#50         // com/twodragonlake/jvm/bytecode/MyTest2.setX:(I)V】<br>  第八个常量：0A 是方法引用，00 33 00 34 分别是51和52号常量：【#8 = Methodref          #51.#52        // java/lang/Integer.valueOf:(I)Ljava/lang/Integer;】<br>  第九个常量：09 是字段引用，00 05 00 35 分别是5号和53号常量：【#9 = Fieldref           #5.#53         // com/twodragonlake/jvm/bytecode/MyTest2.in:Ljava/lang/Integer;】<br>  第十个常量：09 是字段引用，00 36  00 37 分别是54和55号常量：【#10 = Fieldref           #54.#55        // java/lang/System.out:Ljava/io/PrintStream;】<br>  第十一个常量：08字符串引用，00 38 是56号常量：【 #56 = Utf8               hello world】<br>  是十二号常量：0A是方法引用，00 39 和 00 3A分别是57号和58号常量：【#12 = Methodref          #57.#58        // java/io/PrintStream.println:(Ljava/lang/String;)V】<br>第十三号常量：07 是类引用，00 3B是59号常量：【#13 = Class              #59            // java/lang/Object】<br>第十四号常量：01 字符串信息，00 03 是三个utf-8字节码长度，73 74 72 是对应的utf编码的 str。<br>第十五号常量：01是字符串引用，00 12 是18个utf-8编码的长度， 4C6A6176612F6C616E672F537472696E673B 是 【Ljava/lang/String;】字符串<br>第十六号常量：01 是字符串 引用，00 01 是一个长度，78 是字符串x。<br>第十七号常量：01 是字符串，00 01一个长度，49是I。<br>第十八号常量：01 是字符串，00 02是2个长度，69 6E in<br>第十九号常量：01是字符串，00 13 是19个长度，4C6A6176612F6C616E672F496E74656765723B 是Ljava/lang/Integer;<br>第二十号常量：01 是字符串，00 06是6个长度，3C696E69743E 是 <code>&lt;init&gt;</code><br>第二十一号常量：01 是字符串， 00 03 是三个长度，28 29 56是()V<br>第二十二号常量：01是字符串， 00 04 是4个长度，436F6465 是 Code<br>第二十三号常量：01 是字符串，00 0F是15个长度，4C696E654E756D6265725461626C65 是LineNumberTable<br>第二十四号常量：01是字符串，00 12 是18个长度，4C6F63616C5661726961626C655461626C65  是LocalVariableTable<br>第二十五号常量：01 是字符串，00 04 是四个长度， 74 68 69 73 是字符串：this<br>第二十六号常量：01 是字符串 00 28 是40个长度，4C636F6D2F74776F647261676F6E6C616B652F6A766D2F62797465636F64652F4D7954657374323B 是字符串：Lcom/twodragonlake/jvm/bytecode/MyTest2;<br>第二十七号常量：01是字符串，00 04 是四个长度，6D 61 69 6E是字符串：main<br> 第二十八号常量：01是字符串 ，0016 是38个长度，285B4C6A6176612F6C616E672F537472696E673B2956 是字符串：([Ljava/lang/String;)V<br> 第二十九号常量：01 是字符串，00 04 是四个长度，61 72 67 73 字符串args<br> 第三十号常量：01是字符串，00 13 是18个长度，5B4C6A6176612F6C616E672F537472696E673B 是字符串[Ljava/lang/String;<br> 第三十一号常量：01是字符串，00 07是7个长度，6D795465737432 是字符串：myTest2<br> 第三十二号常量：01 是字符串，00 04 是4个长度，73 65 74 58是字符串：setX<br> 第三十三号常量：01是字符串 00 04是4个长度，28 49 29 56 是字符串：(I)V<br> 第三十四 号常量：01是字符串，00 04 是四个长度，74 65 73 74 是字符串：test<br> 第三十五个常量：01 是字符串，00 15 是21个长度，284C6A6176612F6C616E672F537472696E673B2956 是字符串：(Ljava/lang/String;)V<br> 第三十六常量：01是字符串， 00 0D，是13个长度，537461636B4D61705461626C65  是字符串：StackMapTable<br> 第三十七个常量：07 是类引用信息，00 31 是49号常量【#49 = Utf8               com/twodragonlake/jvm/bytecode/MyTest2】；<br> 第三十八号常量：07是类信息，00 3C 60号常量 【#38 = Class              #60            // java/lang/String】<br> 第三十九号常量：07是类信息，00 3B是59号常量：【 #39 = Class              #59            // java/lang/Object】<br> 第四十号常量：07是类信息，00 3D是61号常量【#40 = Class              #61            // java/lang/Throwable】<br> 第四十一号常量：01是字符串，00 04 是四个长度，74 65 73 32 是字符串test2<br> 第四十二号常量：01 是字符串，00 08 是8个长度，3C636C696E69743E 是字符串    【<code>&lt;clinit&gt;</code>】<br> 第四十三号常量：01是字符串，00 0A，是10个长度，536F7572636546696C65 是字符串：【SourceFile】<br> 第四十四号常量：01是字符串。00 0C 是12个长度，4D7954657374322E6A617661 是字符串：【MyTest2.java】<br> 第四十五号常量：0C 名称和类型的引用，00 14 是20号常量，00 15 是21号常量：【#20:#21        //<code> &quot;&lt;init&gt;&quot;</code>:()V】<br> 第四十六号常量：01是字符串，00 07 是7个长度，57656C636F6D65 是字符串：【Welcome】<br> 第四十七号常量：0C 名称和类型的引用,00 0E 是14号常量，00 0F是15号常量，所以汇总是：【#47 = NameAndType        #14:#15        // str:Ljava/lang/String;】<br> 第四十八号常量：0C是名称和类型的引用，00 10 00 11 分别是16和17号常量：【#48 = NameAndType        #16:#17        // x:I】<br> 第四十九号常量：01 是字符串，00 26是38个长度，636F6D2F74776F647261676F6E6C616B652F6A766D2F62797465636F64652F4D795465737432 是字符串：<br> 【com/twodragonlake/jvm/bytecode/MyTest2】<br> 第五十号常量：0C是名称和类型的引用，00 20 是32号常量，0021是33号常量，汇总：【#50 = NameAndType        #32:#33        // setX:(I)V】<br> 第五十一号常量：07 类引用信息，00 3E是62号常量：汇总：【#51 = Class              #62            // java/lang/Integer】<br> 第五十二号常量：0C是名称和类型的引用， 00 3F是63号常量，00 40是64号常量，汇总：【#52 = NameAndType        #63:#64        // valueOf:(I)Ljava/lang/Integer;】<br> 第五十三号常量：0C 是名称和类型的引用，00 12是18号常量，00 13是19号常量，汇总【#53 = NameAndType   #18:#19    // in:Ljava/lang/Integer;】<br> 第五十四号常量：07是类引用信息，0041是6号常量：【#54 = Class              #65            // java/lang/System】<br> 第五十五号常量：0C 是 名称和类型的引用， 0042 是66号常量，0042 是67号常量汇总；【#55 = NameAndType        #66:#67        // out:Ljava/io/PrintStream;】<br> 第五十六号常量：01是字符串，00 0B 是11个长度，68656C6C6F20776F726C64是字符串：【hello world】<br> 第五十七号常量：07 是类引用信息，00 44 是68号常量：【#57 = Class              #68            // java/io/PrintStream】<br> 第五十八号常量：0C 是 名称和类型的引用，  00 45 是69号常量，00 23是35号常量，汇总：【#58 = NameAndType        #69:#35        // println:(Ljava/lang/String;)V】<br> 第五十九号常量：01 是字符串，00 10 是16个长度，6A6176612F6C616E672F4F626A656374 字符串是：【java/lang/Object】<br> 第六十号常量：01 是字符串，00 10 是1个长度，6A6176612F6C616E672F537472696E67 是字符串 【java/lang/String】<br> 第六十一号常量：01 是字符串，00 13是35个长度，6A6176612F6C616E672F5468726F7761626C65 是字符串：java/lang/Throwable<br> 第六十二号常量：01是字符串，00 11 是17个长度，6A6176612F6C616E672F496E7465676572 是字符串：java/lang/Integer<br> 第六十三号常量：01 是字符串， 00 07是7个长度，76616C75654F66 是字符串：valueOf<br> 第六十四号常量：01时候字符串，00 16是22个长度，2849294C6A6176612F6C616E672F496E74656765723B 是字符串：(I)Ljava/lang/Integer;<br> 第六十五号常量：01 是字符串，00 10是16个长度，6A6176612F6C616E672F53797374656D是字符串：java/lang/System<br> 第六十六号常量：01 是字符串，00 03 是三个长度，6F  75 74 是字符串：out<br> 第六十七号常量：01 是字符串， 00 15是21个长度，4C6A6176612F696F2F5072696E7453747265616D3B 是字符串：Ljava/io/PrintStream;<br> 第六十八号常量：01是字符串，00 13是19个长度，6A6176612F696F2F5072696E7453747265616D 是字符窜：java/io/PrintStream<br> 第六十九号常量：01是字符串，00 07 是7个长度，7072696E746C6E 是字符串：println<br> 为此常量池到此结束：<br> <img src="20180825222723769.png" alt="这里写图片描述"></p>
+<p>拿到反编译的1进制文件：<br>首先是魔数：CAFEBABE<br>版本号+小版本号：00000034<br>常量池2+n个字节 ： 0046 常量个数：70 （实际69个，其中一个是保留的）<br>第一个常量：0A 是10 代表方法引用，00 0D 是第13号常量，00 2D是第45 号常量，最终汇总出来：#13.#45        &#x2F;&#x2F; java&#x2F;lang&#x2F;Object.”<init>“:()V<br>第二个常量：08 是字符串索引，00 2E是46号常量 字符串：welcome。<br>第三个常量： 09 方法引用，00 05 是5号常量【#5 &#x3D; Class              #49            &#x2F;&#x2F; com&#x2F;twodragonlake&#x2F;jvm&#x2F;bytecode&#x2F;MyTest2】；<br> 00 2f 是47号常量：#47 &#x3D; NameAndType        #14:#15        &#x2F;&#x2F; str:Ljava&#x2F;lang&#x2F;String;所以3号常量是：<br> &#x2F;&#x2F; com&#x2F;twodragonlake&#x2F;jvm&#x2F;bytecode&#x2F;MyTest2.str:Ljava&#x2F;lang&#x2F;String;<br> 第四个常量：09 方法引用，00 05 是5号常量【#5 &#x3D; Class              #49            &#x2F;&#x2F; com&#x2F;twodragonlake&#x2F;jvm&#x2F;bytecode&#x2F;MyTest2】; 00 30 是48号常量<br> 【#48 &#x3D; NameAndType        #16:#17        &#x2F;&#x2F; x:I】  ，所以四号常量是：【#5.#48         &#x2F;&#x2F; com&#x2F;twodragonlake&#x2F;jvm&#x2F;bytecode&#x2F;MyTest2.x:I】<br> 第五个常量： 07 是类的引用，00 31  是49号常量 【#49 &#x3D; Utf8               com&#x2F;twodragonlake&#x2F;jvm&#x2F;bytecode&#x2F;MyTest2】；<br> 第六个常量：0A 是方法引用，00 05 是5号常量【#5 &#x3D; Class              #49            &#x2F;&#x2F; com&#x2F;twodragonlake&#x2F;jvm&#x2F;bytecode&#x2F;MyTest2】；<br>  00 2D 是45号常量【#45 &#x3D; NameAndType        #20:#21        &#x2F;&#x2F; <code>&lt;init&gt;</code>:()V】  所以6号常量是：<br>  【#6 &#x3D; Methodref          #5.#45         &#x2F;&#x2F; com&#x2F;twodragonlake&#x2F;jvm&#x2F;bytecode&#x2F;MyTest2.<code>&lt;init&gt;</code>:()V】<br>  第七个常量：0A 是 方法引用 ，00 05 ， 00 32 分别是5号和50号常量： 【#7 &#x3D; Methodref          #5.#50         &#x2F;&#x2F; com&#x2F;twodragonlake&#x2F;jvm&#x2F;bytecode&#x2F;MyTest2.setX:(I)V】<br>  第八个常量：0A 是方法引用，00 33 00 34 分别是51和52号常量：【#8 &#x3D; Methodref          #51.#52        &#x2F;&#x2F; java&#x2F;lang&#x2F;Integer.valueOf:(I)Ljava&#x2F;lang&#x2F;Integer;】<br>  第九个常量：09 是字段引用，00 05 00 35 分别是5号和53号常量：【#9 &#x3D; Fieldref           #5.#53         &#x2F;&#x2F; com&#x2F;twodragonlake&#x2F;jvm&#x2F;bytecode&#x2F;MyTest2.in:Ljava&#x2F;lang&#x2F;Integer;】<br>  第十个常量：09 是字段引用，00 36  00 37 分别是54和55号常量：【#10 &#x3D; Fieldref           #54.#55        &#x2F;&#x2F; java&#x2F;lang&#x2F;System.out:Ljava&#x2F;io&#x2F;PrintStream;】<br>  第十一个常量：08字符串引用，00 38 是56号常量：【 #56 &#x3D; Utf8               hello world】<br>  是十二号常量：0A是方法引用，00 39 和 00 3A分别是57号和58号常量：【#12 &#x3D; Methodref          #57.#58        &#x2F;&#x2F; java&#x2F;io&#x2F;PrintStream.println:(Ljava&#x2F;lang&#x2F;String;)V】<br>第十三号常量：07 是类引用，00 3B是59号常量：【#13 &#x3D; Class              #59            &#x2F;&#x2F; java&#x2F;lang&#x2F;Object】<br>第十四号常量：01 字符串信息，00 03 是三个utf-8字节码长度，73 74 72 是对应的utf编码的 str。<br>第十五号常量：01是字符串引用，00 12 是18个utf-8编码的长度， 4C6A6176612F6C616E672F537472696E673B 是 【Ljava&#x2F;lang&#x2F;String;】字符串<br>第十六号常量：01 是字符串 引用，00 01 是一个长度，78 是字符串x。<br>第十七号常量：01 是字符串，00 01一个长度，49是I。<br>第十八号常量：01 是字符串，00 02是2个长度，69 6E in<br>第十九号常量：01是字符串，00 13 是19个长度，4C6A6176612F6C616E672F496E74656765723B 是Ljava&#x2F;lang&#x2F;Integer;<br>第二十号常量：01 是字符串，00 06是6个长度，3C696E69743E 是 <code>&lt;init&gt;</code><br>第二十一号常量：01 是字符串， 00 03 是三个长度，28 29 56是()V<br>第二十二号常量：01是字符串， 00 04 是4个长度，436F6465 是 Code<br>第二十三号常量：01 是字符串，00 0F是15个长度，4C696E654E756D6265725461626C65 是LineNumberTable<br>第二十四号常量：01是字符串，00 12 是18个长度，4C6F63616C5661726961626C655461626C65  是LocalVariableTable<br>第二十五号常量：01 是字符串，00 04 是四个长度， 74 68 69 73 是字符串：this<br>第二十六号常量：01 是字符串 00 28 是40个长度，4C636F6D2F74776F647261676F6E6C616B652F6A766D2F62797465636F64652F4D7954657374323B 是字符串：Lcom&#x2F;twodragonlake&#x2F;jvm&#x2F;bytecode&#x2F;MyTest2;<br>第二十七号常量：01是字符串，00 04 是四个长度，6D 61 69 6E是字符串：main<br> 第二十八号常量：01是字符串 ，0016 是38个长度，285B4C6A6176612F6C616E672F537472696E673B2956 是字符串：([Ljava&#x2F;lang&#x2F;String;)V<br> 第二十九号常量：01 是字符串，00 04 是四个长度，61 72 67 73 字符串args<br> 第三十号常量：01是字符串，00 13 是18个长度，5B4C6A6176612F6C616E672F537472696E673B 是字符串[Ljava&#x2F;lang&#x2F;String;<br> 第三十一号常量：01是字符串，00 07是7个长度，6D795465737432 是字符串：myTest2<br> 第三十二号常量：01 是字符串，00 04 是4个长度，73 65 74 58是字符串：setX<br> 第三十三号常量：01是字符串 00 04是4个长度，28 49 29 56 是字符串：(I)V<br> 第三十四 号常量：01是字符串，00 04 是四个长度，74 65 73 74 是字符串：test<br> 第三十五个常量：01 是字符串，00 15 是21个长度，284C6A6176612F6C616E672F537472696E673B2956 是字符串：(Ljava&#x2F;lang&#x2F;String;)V<br> 第三十六常量：01是字符串， 00 0D，是13个长度，537461636B4D61705461626C65  是字符串：StackMapTable<br> 第三十七个常量：07 是类引用信息，00 31 是49号常量【#49 &#x3D; Utf8               com&#x2F;twodragonlake&#x2F;jvm&#x2F;bytecode&#x2F;MyTest2】；<br> 第三十八号常量：07是类信息，00 3C 60号常量 【#38 &#x3D; Class              #60            &#x2F;&#x2F; java&#x2F;lang&#x2F;String】<br> 第三十九号常量：07是类信息，00 3B是59号常量：【 #39 &#x3D; Class              #59            &#x2F;&#x2F; java&#x2F;lang&#x2F;Object】<br> 第四十号常量：07是类信息，00 3D是61号常量【#40 &#x3D; Class              #61            &#x2F;&#x2F; java&#x2F;lang&#x2F;Throwable】<br> 第四十一号常量：01是字符串，00 04 是四个长度，74 65 73 32 是字符串test2<br> 第四十二号常量：01 是字符串，00 08 是8个长度，3C636C696E69743E 是字符串    【<code>&lt;clinit&gt;</code>】<br> 第四十三号常量：01是字符串，00 0A，是10个长度，536F7572636546696C65 是字符串：【SourceFile】<br> 第四十四号常量：01是字符串。00 0C 是12个长度，4D7954657374322E6A617661 是字符串：【MyTest2.java】<br> 第四十五号常量：0C 名称和类型的引用，00 14 是20号常量，00 15 是21号常量：【#20:#21        &#x2F;&#x2F;<code> &quot;&lt;init&gt;&quot;</code>:()V】<br> 第四十六号常量：01是字符串，00 07 是7个长度，57656C636F6D65 是字符串：【Welcome】<br> 第四十七号常量：0C 名称和类型的引用,00 0E 是14号常量，00 0F是15号常量，所以汇总是：【#47 &#x3D; NameAndType        #14:#15        &#x2F;&#x2F; str:Ljava&#x2F;lang&#x2F;String;】<br> 第四十八号常量：0C是名称和类型的引用，00 10 00 11 分别是16和17号常量：【#48 &#x3D; NameAndType        #16:#17        &#x2F;&#x2F; x:I】<br> 第四十九号常量：01 是字符串，00 26是38个长度，636F6D2F74776F647261676F6E6C616B652F6A766D2F62797465636F64652F4D795465737432 是字符串：<br> 【com&#x2F;twodragonlake&#x2F;jvm&#x2F;bytecode&#x2F;MyTest2】<br> 第五十号常量：0C是名称和类型的引用，00 20 是32号常量，0021是33号常量，汇总：【#50 &#x3D; NameAndType        #32:#33        &#x2F;&#x2F; setX:(I)V】<br> 第五十一号常量：07 类引用信息，00 3E是62号常量：汇总：【#51 &#x3D; Class              #62            &#x2F;&#x2F; java&#x2F;lang&#x2F;Integer】<br> 第五十二号常量：0C是名称和类型的引用， 00 3F是63号常量，00 40是64号常量，汇总：【#52 &#x3D; NameAndType        #63:#64        &#x2F;&#x2F; valueOf:(I)Ljava&#x2F;lang&#x2F;Integer;】<br> 第五十三号常量：0C 是名称和类型的引用，00 12是18号常量，00 13是19号常量，汇总【#53 &#x3D; NameAndType   #18:#19    &#x2F;&#x2F; in:Ljava&#x2F;lang&#x2F;Integer;】<br> 第五十四号常量：07是类引用信息，0041是6号常量：【#54 &#x3D; Class              #65            &#x2F;&#x2F; java&#x2F;lang&#x2F;System】<br> 第五十五号常量：0C 是 名称和类型的引用， 0042 是66号常量，0042 是67号常量汇总；【#55 &#x3D; NameAndType        #66:#67        &#x2F;&#x2F; out:Ljava&#x2F;io&#x2F;PrintStream;】<br> 第五十六号常量：01是字符串，00 0B 是11个长度，68656C6C6F20776F726C64是字符串：【hello world】<br> 第五十七号常量：07 是类引用信息，00 44 是68号常量：【#57 &#x3D; Class              #68            &#x2F;&#x2F; java&#x2F;io&#x2F;PrintStream】<br> 第五十八号常量：0C 是 名称和类型的引用，  00 45 是69号常量，00 23是35号常量，汇总：【#58 &#x3D; NameAndType        #69:#35        &#x2F;&#x2F; println:(Ljava&#x2F;lang&#x2F;String;)V】<br> 第五十九号常量：01 是字符串，00 10 是16个长度，6A6176612F6C616E672F4F626A656374 字符串是：【java&#x2F;lang&#x2F;Object】<br> 第六十号常量：01 是字符串，00 10 是1个长度，6A6176612F6C616E672F537472696E67 是字符串 【java&#x2F;lang&#x2F;String】<br> 第六十一号常量：01 是字符串，00 13是35个长度，6A6176612F6C616E672F5468726F7761626C65 是字符串：java&#x2F;lang&#x2F;Throwable<br> 第六十二号常量：01是字符串，00 11 是17个长度，6A6176612F6C616E672F496E7465676572 是字符串：java&#x2F;lang&#x2F;Integer<br> 第六十三号常量：01 是字符串， 00 07是7个长度，76616C75654F66 是字符串：valueOf<br> 第六十四号常量：01时候字符串，00 16是22个长度，2849294C6A6176612F6C616E672F496E74656765723B 是字符串：(I)Ljava&#x2F;lang&#x2F;Integer;<br> 第六十五号常量：01 是字符串，00 10是16个长度，6A6176612F6C616E672F53797374656D是字符串：java&#x2F;lang&#x2F;System<br> 第六十六号常量：01 是字符串，00 03 是三个长度，6F  75 74 是字符串：out<br> 第六十七号常量：01 是字符串， 00 15是21个长度，4C6A6176612F696F2F5072696E7453747265616D3B 是字符串：Ljava&#x2F;io&#x2F;PrintStream;<br> 第六十八号常量：01是字符串，00 13是19个长度，6A6176612F696F2F5072696E7453747265616D 是字符窜：java&#x2F;io&#x2F;PrintStream<br> 第六十九号常量：01是字符串，00 07 是7个长度，7072696E746C6E 是字符串：println<br> 为此常量池到此结束：<br> <img src="/20180825222723769.png" alt="这里写图片描述"></p>
 
     </div>
 
@@ -418,21 +413,23 @@
   </footer>
 
   
-  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.0.6/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
 <script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
 
   
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
 <script src="/js/third-party/search/local-search.js"></script>
 
 
-  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":"forest","js":{"url":"https://cdn.jsdelivr.net/npm/mermaid@8.11.0/dist/mermaid.min.js","integrity":"sha256-sVAx+v/Q7v0Q2xm5vN7h5ccSna6gaLREhG9sF8pKT6I="}}</script>
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.1.1/mermaid.min.js","integrity":"sha256-8L3O8tirFUa8Va4NSTAyIbHJeLd6OnlcxgupV9F77e0="}}</script>
   <script src="/js/third-party/tags/mermaid.js"></script>
 
-  <script class="next-config" data-name="nprogress" type="application/json">{"enable":true,"spinner":true}</script>
-  <script src="/js/third-party/nprogress.js"></script>
+  <script src="/js/third-party/fancybox.js"></script>
+
+  <script src="/js/third-party/pace.js"></script>
 
   
 

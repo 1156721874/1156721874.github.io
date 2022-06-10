@@ -3,10 +3,9 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
-<meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 6.0.0">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
 
-<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -16,43 +15,44 @@
 
 
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.css" integrity="sha256-no0c5ccDODBwp+9hSmV5VvPpKwHCpbVzXHexIkupM6U=" crossorigin="anonymous">
-  <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.js" integrity="sha256-a5YRB27CcBwBFcT5EF/f3E4vzIqyHrSR878nseNYw64=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"ceaser.wang","root":"/","images":"/images","scheme":"Muse","version":"8.6.1","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
-<meta property="og:type" content="article">
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ceaser.wang","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.12.1","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+
+    <meta property="og:type" content="article">
 <meta property="og:title" content="hive原理与源码分析-物理执行计划与执行引擎（六）">
 <meta property="og:url" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%89%A9%E7%90%86%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92%E4%B8%8E%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E%EF%BC%88%E5%85%AD%EF%BC%89/index.html">
 <meta property="og:site_name" content="南贺神社">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%89%A9%E7%90%86%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92%E4%B8%8E%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E%EF%BC%88%E5%85%AD%EF%BC%89/20170516204226246.png">
-<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%89%A9%E7%90%86%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92%E4%B8%8E%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E%EF%BC%88%E5%85%AD%EF%BC%89/20170516204330223.png">
-<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%89%A9%E7%90%86%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92%E4%B8%8E%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E%EF%BC%88%E5%85%AD%EF%BC%89/20170516204932273.png">
-<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%89%A9%E7%90%86%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92%E4%B8%8E%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E%EF%BC%88%E5%85%AD%EF%BC%89/20170516205328150.png">
-<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%89%A9%E7%90%86%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92%E4%B8%8E%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E%EF%BC%88%E5%85%AD%EF%BC%89/20170516210713670.png">
-<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%89%A9%E7%90%86%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92%E4%B8%8E%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E%EF%BC%88%E5%85%AD%EF%BC%89/20170516211729545.png">
-<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%89%A9%E7%90%86%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92%E4%B8%8E%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E%EF%BC%88%E5%85%AD%EF%BC%89/20170516212355116.png">
-<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%89%A9%E7%90%86%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92%E4%B8%8E%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E%EF%BC%88%E5%85%AD%EF%BC%89/20170516213606789.png">
-<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%89%A9%E7%90%86%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92%E4%B8%8E%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E%EF%BC%88%E5%85%AD%EF%BC%89/20170516214307582.png">
-<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%89%A9%E7%90%86%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92%E4%B8%8E%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E%EF%BC%88%E5%85%AD%EF%BC%89/20170516214916963.png">
-<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%89%A9%E7%90%86%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92%E4%B8%8E%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E%EF%BC%88%E5%85%AD%EF%BC%89/20170516215059945.png">
-<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%89%A9%E7%90%86%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92%E4%B8%8E%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E%EF%BC%88%E5%85%AD%EF%BC%89/20170516220031494.png">
-<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%89%A9%E7%90%86%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92%E4%B8%8E%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E%EF%BC%88%E5%85%AD%EF%BC%89/20170516220341279.png">
-<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%89%A9%E7%90%86%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92%E4%B8%8E%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E%EF%BC%88%E5%85%AD%EF%BC%89/20170516220542813.png">
-<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%89%A9%E7%90%86%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92%E4%B8%8E%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E%EF%BC%88%E5%85%AD%EF%BC%89/20170520094123424.png">
-<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%89%A9%E7%90%86%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92%E4%B8%8E%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E%EF%BC%88%E5%85%AD%EF%BC%89/20170520094939458.png">
-<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%89%A9%E7%90%86%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92%E4%B8%8E%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E%EF%BC%88%E5%85%AD%EF%BC%89/20170520095018693.png">
-<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%89%A9%E7%90%86%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92%E4%B8%8E%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E%EF%BC%88%E5%85%AD%EF%BC%89/20170520095057366.png">
-<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%89%A9%E7%90%86%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92%E4%B8%8E%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E%EF%BC%88%E5%85%AD%EF%BC%89/20170520095808761.png">
+<meta property="og:image" content="https://ceaser.wang/20170516204226246.png">
+<meta property="og:image" content="https://ceaser.wang/20170516204330223.png">
+<meta property="og:image" content="https://ceaser.wang/20170516204932273.png">
+<meta property="og:image" content="https://ceaser.wang/20170516205328150.png">
+<meta property="og:image" content="https://ceaser.wang/20170516210713670.png">
+<meta property="og:image" content="https://ceaser.wang/20170516211729545.png">
+<meta property="og:image" content="https://ceaser.wang/20170516212355116.png">
+<meta property="og:image" content="https://ceaser.wang/20170516213606789.png">
+<meta property="og:image" content="https://ceaser.wang/20170516214307582.png">
+<meta property="og:image" content="https://ceaser.wang/20170516214916963.png">
+<meta property="og:image" content="https://ceaser.wang/20170516215059945.png">
+<meta property="og:image" content="https://ceaser.wang/20170516220031494.png">
+<meta property="og:image" content="https://ceaser.wang/20170516220341279.png">
+<meta property="og:image" content="https://ceaser.wang/20170516220542813.png">
+<meta property="og:image" content="https://ceaser.wang/20170520094123424.png">
+<meta property="og:image" content="https://ceaser.wang/20170520094939458.png">
+<meta property="og:image" content="https://ceaser.wang/20170520095018693.png">
+<meta property="og:image" content="https://ceaser.wang/20170520095057366.png">
+<meta property="og:image" content="https://ceaser.wang/20170520095808761.png">
 <meta property="article:published_time" content="2018-10-04T11:21:43.000Z">
-<meta property="article:modified_time" content="2022-02-05T08:57:16.016Z">
+<meta property="article:modified_time" content="2022-06-10T14:12:45.220Z">
 <meta property="article:author" content="CeaserWang">
 <meta property="article:tag" content="hive">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%89%A9%E7%90%86%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92%E4%B8%8E%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E%EF%BC%88%E5%85%AD%EF%BC%89/20170516204226246.png">
+<meta name="twitter:image" content="https://ceaser.wang/20170516204226246.png">
 
 
 <link rel="canonical" href="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%89%A9%E7%90%86%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92%E4%B8%8E%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E%EF%BC%88%E5%85%AD%EF%BC%89/">
@@ -64,6 +64,7 @@
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>hive原理与源码分析-物理执行计划与执行引擎（六） | 南贺神社</title>
   
+
 
 
 
@@ -91,7 +92,7 @@
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <h1 class="site-title">南贺神社</h1>
+      <p class="site-title">南贺神社</p>
       <i class="logo-line"></i>
     </a>
       <p class="site-subtitle" itemprop="description">你写程序有写诗一样的感觉吗?</p>
@@ -107,13 +108,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu">
-        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
-        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li>
-        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">206</span></a></li>
-        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">25</span></a></li>
-        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">213</span></a></li>
-        <li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">206</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">25</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">213</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
         </a>
@@ -174,8 +169,7 @@
         <!--/noindex-->
 
         <div class="site-overview-wrap sidebar-panel">
-          <div class="site-overview">
-            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <img class="site-author-image" itemprop="image" alt="CeaserWang"
       src="/../0xcc/index/Uchiha.jpg">
   <p class="site-author-name" itemprop="name">CeaserWang</p>
@@ -184,21 +178,18 @@
 <div class="site-state-wrap site-overview-item animated">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
-          <a href="/archives/">
-        
+        <a href="/archives/">
           <span class="site-state-item-count">213</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-            <a href="/categories/">
-          
+          <a href="/categories/">
         <span class="site-state-item-count">25</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-            <a href="/tags/">
-          
+          <a href="/tags/">
         <span class="site-state-item-count">206</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
@@ -213,7 +204,7 @@
       </span>
   </div>
   <div class="cc-license site-overview-item animated" itemprop="license">
-    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><img src="https://cdn.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></span>
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></span>
   </div>
 
 
@@ -246,7 +237,6 @@
     </ul>
   </div>
 
-          </div>
         </div>
       </div>
     </div>
@@ -284,11 +274,16 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
       <meta itemprop="name" content="CeaserWang">
-      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="hive原理与源码分析-物理执行计划与执行引擎（六） | 南贺神社">
+      <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
@@ -305,13 +300,13 @@
 
       <time title="Created: 2018-10-04 11:21:43" itemprop="dateCreated datePublished" datetime="2018-10-04T11:21:43+00:00">2018-10-04</time>
     </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">Edited on</span>
-        <time title="Modified: 2022-02-05 08:57:16" itemprop="dateModified" datetime="2022-02-05T08:57:16+00:00">2022-02-05</time>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
       </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2022-06-10 14:12:45" itemprop="dateModified" datetime="2022-06-10T14:12:45+00:00">2022-06-10</time>
+    </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
@@ -339,42 +334,42 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <p><img src="20170516204226246.png" alt="这里写图片描述">  </p>
+        <p><img src="/20170516204226246.png" alt="这里写图片描述">  </p>
 <span id="more"></span>
-<p><strong>Hive执行</strong><br><img src="20170516204330223.png" alt="这里写图片描述"></p>
+<p><strong>Hive执行</strong><br><img src="/20170516204330223.png" alt="这里写图片描述"></p>
 <p><strong>相关配置</strong><br>hive.execution.engine - Hive执行引擎<br>    mr - 在MapReduce上执行<br>    tez - 在Tez上执行<br>    spark - 在Spark上执行<br>hive.execution.mode – Hive执行模式<br>    container - 在Yarn Container内执行Query Fragments<br>    llap – 在LLAP内执行Query Fragments<br><span class="exturl" data-url="aHR0cHM6Ly9pbnNpZ2h0LmlvL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvYmxvYi9tYXN0ZXIvY29tbW9uL3NyYy9qYXZhL29yZy9hcGFjaGUvaGFkb29wL2hpdmUvY29uZi9IaXZlQ29uZi5qYXZhP2xpbmU9MjYzNQ==">https://insight.io/github.com/apache/hive/blob/master/common/src/java/org/apache/hadoop/hive/conf/HiveConf.java?line=2635<i class="fa fa-external-link-alt"></i></span></p>
 <p><strong>物理执行计划和逻辑执行计划的区别</strong><br>逻辑执行计划是一个Operator图<br>物理执行计划是一个Task图<br>物理执行计划是把逻辑执行计划切分成子图<br>物理执行计划图的每个Task结点内是一个Operator结点的子图</p>
-<p><strong>举个例子</strong><br>SELECT * FROM a JOIN b ON a.id=b.id;<br><img src="20170516204932273.png" alt="这里写图片描述"></p>
-<p><strong>物理执行计划的Task类型</strong><br><img src="20170516205328150.png" alt="这里写图片描述">  </p>
+<p><strong>举个例子</strong><br>SELECT * FROM a JOIN b ON a.id&#x3D;b.id;<br><img src="/20170516204932273.png" alt="这里写图片描述"></p>
+<p><strong>物理执行计划的Task类型</strong><br><img src="/20170516205328150.png" alt="这里写图片描述">  </p>
 <p><strong>逻辑层和物理层的分界</strong><br>逻辑优化的最后一步<br>Optimizer的最后一步<br>SimpleFetchOptimzer<br>看代码<br><span class="exturl" data-url="aHR0cHM6Ly9pbnNpZ2h0LmlvL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvYmxvYi9tYXN0ZXIvcWwvc3JjL2phdmEvb3JnL2FwYWNoZS9oYWRvb3AvaGl2ZS9xbC9vcHRpbWl6ZXIvT3B0aW1pemVyLmphdmE/bGluZT0yMjg=">https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/hadoop/hive/ql/optimizer/Optimizer.java?line=228<i class="fa fa-external-link-alt"></i></span></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">if (!HiveConf.getVar(hiveConf, HiveConf.ConfVars.HIVEFETCHTASKCONVERSION).equals(&quot;none&quot;)) &#123;</span><br><span class="line">  transformations.add(new SimpleFetchOptimizer()); // must be called last</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <p><strong>SemanticAnalyzer第七步</strong><br><span class="exturl" data-url="aHR0cHM6Ly9pbnNpZ2h0LmlvL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvYmxvYi9tYXN0ZXIvcWwvc3JjL2phdmEvb3JnL2FwYWNoZS9oYWRvb3AvaGl2ZS9xbC9wYXJzZS9TZW1hbnRpY0FuYWx5emVyLmphdmE/bGluZT0xMTM1Ng==">https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/hadoop/hive/ql/parse/SemanticAnalyzer.java?line=11356<i class="fa fa-external-link-alt"></i></span></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">if (LOG.isDebugEnabled()) &#123;</span><br><span class="line">  LOG.debug(&quot;Before logical optimization\n&quot; + Operator.toString(pCtx.getTopOps().values()));</span><br><span class="line">&#125;</span><br><span class="line">Optimizer optm = new Optimizer();</span><br><span class="line">optm.setPctx(pCtx);</span><br><span class="line">optm.initialize(conf);</span><br><span class="line">pCtx = optm.optimize();//fetchTask在逻辑执行计划最后一步生成</span><br><span class="line">if (pCtx.getColumnAccessInfo() != null) &#123;</span><br><span class="line">  // set ColumnAccessInfo for view column authorization</span><br><span class="line">  setColumnAccessInfo(pCtx.getColumnAccessInfo());</span><br><span class="line">&#125;</span><br><span class="line">FetchTask origFetchTask = pCtx.getFetchTask();//fetchTask是物理执行计划的开始</span><br><span class="line">if (LOG.isDebugEnabled()) &#123;</span><br><span class="line">  LOG.debug(&quot;After logical optimization\n&quot; + Operator.toString(pCtx.getTopOps().values()));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><strong>开始搞物理执行计划</strong><br><img src="20170516210713670.png" alt="这里写图片描述"><br>TaskCompilerFactory是编译器的工厂类<br><span class="exturl" data-url="aHR0cHM6Ly9pbnNpZ2h0LmlvL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvYmxvYi9tYXN0ZXIvcWwvc3JjL2phdmEvb3JnL2FwYWNoZS9oYWRvb3AvaGl2ZS9xbC9wYXJzZS9UYXNrQ29tcGlsZXJGYWN0b3J5LmphdmE/bGluZT0zOA==">https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/hadoop/hive/ql/parse/TaskCompilerFactory.java?line=38<i class="fa fa-external-link-alt"></i></span></p>
+<p><strong>开始搞物理执行计划</strong><br><img src="/20170516210713670.png" alt="这里写图片描述"><br>TaskCompilerFactory是编译器的工厂类<br><span class="exturl" data-url="aHR0cHM6Ly9pbnNpZ2h0LmlvL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvYmxvYi9tYXN0ZXIvcWwvc3JjL2phdmEvb3JnL2FwYWNoZS9oYWRvb3AvaGl2ZS9xbC9wYXJzZS9UYXNrQ29tcGlsZXJGYWN0b3J5LmphdmE/bGluZT0zOA==">https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/hadoop/hive/ql/parse/TaskCompilerFactory.java?line=38<i class="fa fa-external-link-alt"></i></span></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Returns the appropriate compiler to translate the operator tree</span><br><span class="line"> * into executable units.</span><br><span class="line"> */</span><br><span class="line">public static TaskCompiler getCompiler(HiveConf conf, ParseContext parseContext) &#123;</span><br><span class="line">  if (HiveConf.getVar(conf, HiveConf.ConfVars.HIVE_EXECUTION_ENGINE).equals(&quot;tez&quot;)) &#123;</span><br><span class="line">    return new TezCompiler();</span><br><span class="line">  &#125; else if (HiveConf.getVar(conf, HiveConf.ConfVars.HIVE_EXECUTION_ENGINE).equals(&quot;spark&quot;)) &#123;</span><br><span class="line">    return new SparkCompiler();</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    return new MapReduceCompiler();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>支持tez、spark、和mr方式。<br>途中rootTask就是生成的有向无环图的指针。</p>
 <p><strong>TaskCompiler</strong><br><span class="exturl" data-url="aHR0cHM6Ly9pbnNpZ2h0LmlvL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvYmxvYi9tYXN0ZXIvcWwvc3JjL2phdmEvb3JnL2FwYWNoZS9oYWRvb3AvaGl2ZS9xbC9wYXJzZS9UYXNrQ29tcGlsZXIuamF2YT9saW5lPTg3">https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/hadoop/hive/ql/parse/TaskCompiler.java?line=87<i class="fa fa-external-link-alt"></i></span></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">//生成物理执行计划</span><br><span class="line">    generateTaskTree(rootTasks, pCtx, mvTask, inputs, outputs);</span><br><span class="line"></span><br><span class="line">    // For each task, set the key descriptor for the reducer</span><br><span class="line">    for (Task&lt;? extends Serializable&gt; rootTask : rootTasks) &#123;</span><br><span class="line">      GenMapRedUtils.setKeyAndValueDescForTaskTree(rootTask);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // If a task contains an operator which instructs bucketizedhiveinputformat</span><br><span class="line">    // to be used, please do so</span><br><span class="line">    for (Task&lt;? extends Serializable&gt; rootTask : rootTasks) &#123;</span><br><span class="line">      setInputFormat(rootTask);</span><br><span class="line">    &#125;</span><br><span class="line">//物理优化</span><br><span class="line">    optimizeTaskPlan(rootTasks, pCtx, ctx);</span><br></pre></td></tr></table></figure>
 <p>TaskCompiler.generateTaskTree()<br>MapReduceCompler.generateTaskTree()<br>SparkCompler.generateTaskTree()<br>TezCompler.generateTaskTree()</p>
-<p><strong>不同的引擎有不同的物理优化</strong><br><img src="20170516211729545.png" alt="这里写图片描述"></p>
-<p><strong>MapReduceCompiler 生成物理执行计划</strong><br><img src="20170516212355116.png" alt="这里写图片描述"><br>这个过程就是讲逻辑执行计划切分成物理执行计划。</p>
+<p><strong>不同的引擎有不同的物理优化</strong><br><img src="/20170516211729545.png" alt="这里写图片描述"></p>
+<p><strong>MapReduceCompiler 生成物理执行计划</strong><br><img src="/20170516212355116.png" alt="这里写图片描述"><br>这个过程就是讲逻辑执行计划切分成物理执行计划。</p>
 <p><strong>如何切割逻辑执行计划？</strong><br><span class="exturl" data-url="aHR0cHM6Ly9pbnNpZ2h0LmlvL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvYmxvYi9tYXN0ZXIvcWwvc3JjL2phdmEvb3JnL2FwYWNoZS9oYWRvb3AvaGl2ZS9xbC9vcHRpbWl6ZXIvR2VuTWFwUmVkVXRpbHMuamF2YT9saW5lPTQwNQ==">https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/hadoop/hive/ql/optimizer/GenMapRedUtils.java?line=405<i class="fa fa-external-link-alt"></i></span></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line">   * Met cRS in pOP(parentTask with RS)-cRS-cOP(noTask) case</span><br><span class="line">   * Create new child task for cRS-cOP and link two tasks by temporary file : pOP-FS / TS-cRS-cOP</span><br><span class="line">   *</span><br><span class="line">   * @param cRS</span><br><span class="line">   *          the reduce sink operator encountered</span><br><span class="line">   * @param opProcCtx</span><br><span class="line">   *          processing context</span><br><span class="line">   */</span><br><span class="line">  static void splitPlan(ReduceSinkOperator cRS, GenMRProcContext opProcCtx)</span><br><span class="line">      throws SemanticException &#123;</span><br><span class="line">    // Generate a new task</span><br><span class="line">    ParseContext parseCtx = opProcCtx.getParseCtx();</span><br><span class="line">    Task&lt;? extends Serializable&gt; parentTask = opProcCtx.getCurrTask();</span><br><span class="line"></span><br><span class="line">    MapredWork childPlan = getMapRedWork(parseCtx);</span><br><span class="line">    Task&lt;? extends Serializable&gt; childTask = TaskFactory.get(childPlan, parseCtx</span><br><span class="line">        .getConf());</span><br><span class="line">    Operator&lt;? extends OperatorDesc&gt; reducer = cRS.getChildOperators().get(0);</span><br><span class="line"></span><br><span class="line">    // Add the reducer</span><br><span class="line">    ReduceWork rWork = new ReduceWork();</span><br><span class="line">    childPlan.setReduceWork(rWork);</span><br><span class="line">    rWork.setReducer(reducer);</span><br><span class="line">    ReduceSinkDesc desc = cRS.getConf();</span><br><span class="line">    childPlan.getReduceWork().setNumReduceTasks(new Integer(desc.getNumReducers()));</span><br><span class="line"></span><br><span class="line">    opProcCtx.getOpTaskMap().put(reducer, childTask);</span><br><span class="line"></span><br><span class="line">    splitTasks(cRS, parentTask, childTask, opProcCtx);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <p><strong>MR物理优化器</strong><br>spark物理执行计划、tez物理执行计划、mr物理执行计划之后会有物理优化器，下列是一些优化器<br><span class="exturl" data-url="aHR0cHM6Ly9pbnNpZ2h0LmlvL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvYmxvYi9tYXN0ZXIvcWwvc3JjL2phdmEvb3JnL2FwYWNoZS9oYWRvb3AvaGl2ZS9xbC9vcHRpbWl6ZXIvcGh5c2ljYWwvUGh5c2ljYWxPcHRpbWl6ZXIuamF2YT9saW5lPTQ3">https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/hadoop/hive/ql/optimizer/physical/PhysicalOptimizer.java?line=47<i class="fa fa-external-link-alt"></i></span></p>
-<p><img src="20170516213606789.png" alt="这里写图片描述"><br>这些优化器是为mr专用的，而spark和tez是不用这些优化器的。<br>奇怪的是mr物理优化器的名字是PhysicalOptimizer，而逻辑优化器就是Optimizer。</p>
-<p>hive-on-MR vs hive-on-tez<br><img src="20170516214307582.png" alt="这里写图片描述"><br>从图中可以看出，加入mr的方式中间有一些机器死掉了，但是他们计算的中间结果会写到磁盘，下一次会接着执行，数据不会丢失，但是tez的形式中间数据没有落盘，只要死掉数据就会有问题。这就是mr和tez的区别，mr更稳定一些，tez比较快。</p>
-<p><img src="20170516214916963.png" alt="这里写图片描述"><br> shuffle的区别<br> <img src="20170516215059945.png" alt="这里写图片描述">  </p>
-<p><strong>TezCompiler</strong><br><span class="exturl" data-url="aHR0cHM6Ly9pbnNpZ2h0LmlvL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvYmxvYi9tYXN0ZXIvcWwvc3JjL2phdmEvb3JnL2FwYWNoZS9oYWRvb3AvaGl2ZS9xbC9wYXJzZS9UZXpDb21waWxlci5qYXZhP2xpbmU9NDU3">https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/hadoop/hive/ql/parse/TezCompiler.java?line=457<i class="fa fa-external-link-alt"></i></span><br><img src="20170516220031494.png" alt="这里写图片描述">  </p>
-<p><strong>SparkCompiler</strong><br>基本上和TezCompiler一致<br>代码注释上直接写着：<br>Cloned from TezCompiler<br>优化器和逻辑执行计划的切分在一起<br>生成Spark作业<br><span class="exturl" data-url="aHR0cHM6Ly9pc3N1ZXMuYXBhY2hlLm9yZy9qaXJhL3NlY3VyZS9hdHRhY2htZW50LzEyNjUyNTE3L0hpdmUtb24tU3BhcmsucGRm">https://issues.apache.org/jira/secure/attachment/12652517/Hive-on-Spark.pdf<i class="fa fa-external-link-alt"></i></span><br><img src="20170516220341279.png" alt="这里写图片描述"><br><img src="20170516220542813.png" alt="这里写图片描述">  </p>
+<p><img src="/20170516213606789.png" alt="这里写图片描述"><br>这些优化器是为mr专用的，而spark和tez是不用这些优化器的。<br>奇怪的是mr物理优化器的名字是PhysicalOptimizer，而逻辑优化器就是Optimizer。</p>
+<p>hive-on-MR vs hive-on-tez<br><img src="/20170516214307582.png" alt="这里写图片描述"><br>从图中可以看出，加入mr的方式中间有一些机器死掉了，但是他们计算的中间结果会写到磁盘，下一次会接着执行，数据不会丢失，但是tez的形式中间数据没有落盘，只要死掉数据就会有问题。这就是mr和tez的区别，mr更稳定一些，tez比较快。</p>
+<p><img src="/20170516214916963.png" alt="这里写图片描述"><br> shuffle的区别<br> <img src="/20170516215059945.png" alt="这里写图片描述">  </p>
+<p><strong>TezCompiler</strong><br><span class="exturl" data-url="aHR0cHM6Ly9pbnNpZ2h0LmlvL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvYmxvYi9tYXN0ZXIvcWwvc3JjL2phdmEvb3JnL2FwYWNoZS9oYWRvb3AvaGl2ZS9xbC9wYXJzZS9UZXpDb21waWxlci5qYXZhP2xpbmU9NDU3">https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/hadoop/hive/ql/parse/TezCompiler.java?line=457<i class="fa fa-external-link-alt"></i></span><br><img src="/20170516220031494.png" alt="这里写图片描述">  </p>
+<p><strong>SparkCompiler</strong><br>基本上和TezCompiler一致<br>代码注释上直接写着：<br>Cloned from TezCompiler<br>优化器和逻辑执行计划的切分在一起<br>生成Spark作业<br><span class="exturl" data-url="aHR0cHM6Ly9pc3N1ZXMuYXBhY2hlLm9yZy9qaXJhL3NlY3VyZS9hdHRhY2htZW50LzEyNjUyNTE3L0hpdmUtb24tU3BhcmsucGRm">https://issues.apache.org/jira/secure/attachment/12652517/Hive-on-Spark.pdf<i class="fa fa-external-link-alt"></i></span><br><img src="/20170516220341279.png" alt="这里写图片描述"><br><img src="/20170516220542813.png" alt="这里写图片描述">  </p>
 <p><strong>很有意思</strong><br>Spark编译时直接拷贝了Tez代码<br>命名时加上了Spark前缀<br>进一步可见：Spark和Tez在执行机制上非常类似</p>
 <p><strong>基于路径规则优化总结</strong><br>Optimizer会根据规则优化逻辑执行计划，并修改逻辑执行计划为优化后的逻辑执行计划<br>TaskCompiler（无论哪种）会根据规则来切分逻辑执行计划<br>Hive中对Operator图的修改基本上都是基于深度优先路径规则的</p>
-<p><strong>深度优先递规下降遍历</strong><br><img src="20170520094123424.png" alt="这里写图片描述">  </p>
-<p><strong>提交不同引擎的作业MR</strong><br><img src="20170520094939458.png" alt="这里写图片描述">  </p>
-<p><strong>提交不同引擎作业Spark</strong><br><img src="20170520095018693.png" alt="这里写图片描述">  </p>
-<p><strong>提交不同引擎的作业Tez</strong><br><img src="20170520095057366.png" alt="这里写图片描述">  </p>
+<p><strong>深度优先递规下降遍历</strong><br><img src="/20170520094123424.png" alt="这里写图片描述">  </p>
+<p><strong>提交不同引擎的作业MR</strong><br><img src="/20170520094939458.png" alt="这里写图片描述">  </p>
+<p><strong>提交不同引擎作业Spark</strong><br><img src="/20170520095018693.png" alt="这里写图片描述">  </p>
+<p><strong>提交不同引擎的作业Tez</strong><br><img src="/20170520095057366.png" alt="这里写图片描述">  </p>
 <p>Driver的 launchTask方法：<br><span class="exturl" data-url="aHR0cHM6Ly9pbnNpZ2h0LmlvL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvYmxvYi9tYXN0ZXIvcWwvc3JjL2phdmEvb3JnL2FwYWNoZS9oYWRvb3AvaGl2ZS9xbC9Ecml2ZXIuamF2YT9saW5lPTIxMzA=">https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/hadoop/hive/ql/Driver.java?line=2130<i class="fa fa-external-link-alt"></i></span></p>
-<p><strong>广度优先，并发提交</strong><br><span class="exturl" data-url="aHR0cHM6Ly9pbnNpZ2h0LmlvL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvYmxvYi9tYXN0ZXIvcWwvc3JjL2phdmEvb3JnL2FwYWNoZS9oYWRvb3AvaGl2ZS9xbC9Ecml2ZXIuamF2YT9saW5lPTE4MzA=">https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/hadoop/hive/ql/Driver.java?line=1830<i class="fa fa-external-link-alt"></i></span><br><img src="20170520095808761.png" alt="这里写图片描述">  </p>
+<p><strong>广度优先，并发提交</strong><br><span class="exturl" data-url="aHR0cHM6Ly9pbnNpZ2h0LmlvL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvYmxvYi9tYXN0ZXIvcWwvc3JjL2phdmEvb3JnL2FwYWNoZS9oYWRvb3AvaGl2ZS9xbC9Ecml2ZXIuamF2YT9saW5lPTE4MzA=">https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/hadoop/hive/ql/Driver.java?line=1830<i class="fa fa-external-link-alt"></i></span><br><img src="/20170520095808761.png" alt="这里写图片描述">  </p>
 
     </div>
 
@@ -449,21 +444,23 @@
   </footer>
 
   
-  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.0.6/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
 <script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
 
   
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
 <script src="/js/third-party/search/local-search.js"></script>
 
 
-  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":"forest","js":{"url":"https://cdn.jsdelivr.net/npm/mermaid@8.11.0/dist/mermaid.min.js","integrity":"sha256-sVAx+v/Q7v0Q2xm5vN7h5ccSna6gaLREhG9sF8pKT6I="}}</script>
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.1.1/mermaid.min.js","integrity":"sha256-8L3O8tirFUa8Va4NSTAyIbHJeLd6OnlcxgupV9F77e0="}}</script>
   <script src="/js/third-party/tags/mermaid.js"></script>
 
-  <script class="next-config" data-name="nprogress" type="application/json">{"enable":true,"spinner":true}</script>
-  <script src="/js/third-party/nprogress.js"></script>
+  <script src="/js/third-party/fancybox.js"></script>
+
+  <script src="/js/third-party/pace.js"></script>
 
   
 

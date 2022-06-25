@@ -897,7 +897,7 @@ ENTRYPOINT command param1 param2（shell中执行）。
 <ul>
 <li>&#x2F;etc&#x2F;gitconfig （针对于整个OS,不常用）  git config –system</li>
 <li>~&#x2F;.gitconfig(很常用)                      git config –global</li>
-<li>针对于特定项目的 位于当前项目的  .git&#x2F;config文件中。 git config –local<br> 我们针对于第二种和第三种情况进行说明：<br>  <strong>git config –global</strong><br> 首先进入.git目录查看 config文件内容：<br> git config命令一些参数：<br><img src="/20170626210947905.png" alt="这里写图片描述"><br>config文件内容：<br> <img src="/20170626210740993.png" alt="这里写图片描述"><br>紧接着：<br>git config –local user.name ‘CeaserWang’<br>git config –local user.email ‘<span class="exturl" data-url="bWFpbHRvOiYjMTIwOyYjeDc4OyYjMTIwOyYjNjQ7JiMxMjA7JiN4Nzg7JiMxMjA7JiM0NjsmI3g2MzsmI3g2ZjsmI3g2ZDs=">&#120;&#x78;&#120;&#64;&#120;&#x78;&#120;&#46;&#x63;&#x6f;&#x6d;<i class="fa fa-external-link-alt"></i></span>‘<br>进行配置用户和邮箱，此时我们可以展示一下:<br>git config user.name<br>git config user.email<br>同时再次查看config文件会发现user.name和user.email都存在了。<br><img src="/20170626211439173.png" alt="这里写图片描述"><br>或者 git config –list查看所有配置参数<br>git config –local user.name ‘CeaserWang’<br>git config –local user.email ‘<span class="exturl" data-url="bWFpbHRvOiYjeDc4OyYjMTIwOyYjMTIwOyYjNjQ7JiN4Nzg7JiMxMjA7JiN4Nzg7JiM0NjsmI3g2MzsmIzExMTsmIzEwOTs=">&#x78;&#120;&#120;&#64;&#x78;&#120;&#x78;&#46;&#x63;&#111;&#109;<i class="fa fa-external-link-alt"></i></span>‘ 这些命令也可以用来修改，再说一下删除：<br>git config –local  –unset  user.name<br><img src="/20170626212216912.png" alt="这里写图片描述"><br>接下我们回到mygit根目录，修改下test.txt文件，然后git staus 查看状态：<br><img src="/20170626212952735.png" alt="这里写图片描述"><br>这时提示信息又发生一些变化。<br> modified:   test.txt意思是已经修改了。<br> (use “git checkout – <file>…” to discard changes in working directory 意识是 使用git checkout – <file>命令丢弃刚才的修改。<br>  首先我们的文件修改之后加入了一行文字（welcome）然后状态是modified状态，此时我们使用git checkout 命令回退刚才的修改：<br><img src="/20170626213638727.png" alt="这里写图片描述"><br>  会发现刚下的修改会取消了，状态回到愿原来的状态。这个命令要小心一点，因为文件没有放到版本库里边，真的丢弃了就找不回来了。</li>
+<li>针对于特定项目的 位于当前项目的  .git&#x2F;config文件中。 git config –local<br> 我们针对于第二种和第三种情况进行说明：<br>  <strong>git config –global</strong><br> 首先进入.git目录查看 config文件内容：<br> git config命令一些参数：<br><img src="/20170626210947905.png" alt="这里写图片描述"><br>config文件内容：<br> <img src="/20170626210740993.png" alt="这里写图片描述"><br>紧接着：<br>git config –local user.name ‘CeaserWang’<br>git config –local user.email ‘<span class="exturl" data-url="bWFpbHRvOiYjeDc4OyYjMTIwOyYjMTIwOyYjeDQwOyYjMTIwOyYjMTIwOyYjMTIwOyYjeDJlOyYjeDYzOyYjeDZmOyYjeDZkOw==">&#x78;&#120;&#120;&#x40;&#120;&#120;&#120;&#x2e;&#x63;&#x6f;&#x6d;<i class="fa fa-external-link-alt"></i></span>‘<br>进行配置用户和邮箱，此时我们可以展示一下:<br>git config user.name<br>git config user.email<br>同时再次查看config文件会发现user.name和user.email都存在了。<br><img src="/20170626211439173.png" alt="这里写图片描述"><br>或者 git config –list查看所有配置参数<br>git config –local user.name ‘CeaserWang’<br>git config –local user.email ‘<span class="exturl" data-url="bWFpbHRvOiYjMTIwOyYjMTIwOyYjeDc4OyYjNjQ7JiN4Nzg7JiMxMjA7JiN4Nzg7JiN4MmU7JiN4NjM7JiMxMTE7JiMxMDk7">&#120;&#120;&#x78;&#64;&#x78;&#120;&#x78;&#x2e;&#x63;&#111;&#109;<i class="fa fa-external-link-alt"></i></span>‘ 这些命令也可以用来修改，再说一下删除：<br>git config –local  –unset  user.name<br><img src="/20170626212216912.png" alt="这里写图片描述"><br>接下我们回到mygit根目录，修改下test.txt文件，然后git staus 查看状态：<br><img src="/20170626212952735.png" alt="这里写图片描述"><br>这时提示信息又发生一些变化。<br> modified:   test.txt意思是已经修改了。<br> (use “git checkout – <file>…” to discard changes in working directory 意识是 使用git checkout – <file>命令丢弃刚才的修改。<br>  首先我们的文件修改之后加入了一行文字（welcome）然后状态是modified状态，此时我们使用git checkout 命令回退刚才的修改：<br><img src="/20170626213638727.png" alt="这里写图片描述"><br>  会发现刚下的修改会取消了，状态回到愿原来的状态。这个命令要小心一点，因为文件没有放到版本库里边，真的丢弃了就找不回来了。</li>
 </ul>
 <p>另外git commit的提交说明可以直接：git commmit -m ‘提交说明’<br>提交日志时间是按照倒序的排列：<br><img src="/20170626220111432.png" alt="这里写图片描述"></p>
 ]]></content>
@@ -916,7 +916,7 @@ ENTRYPOINT command param1 param2（shell中执行）。
 <span id="more"></span>
 <p>命令：<br>一、https的方式<br>git remote add origin <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3VzZXIvZ2l0cmVzcG9yeS5naXQ=">https://github.com/user/gitrespory.git<i class="fa fa-external-link-alt"></i></span><br>git push -u origin master</p>
 <p>二、ssh的方式<br>ssh的方式需要在本地机器生成公钥和私钥，然后将公钥设置到github的远程仓库，设置方式：<br><img src="/20170730201503950.png" alt="这里写图片描述"></p>
-<p>然后执行：<br>git remote add origin <span class="exturl" data-url="bWFpbHRvOiYjMTAzOyYjeDY5OyYjMTE2OyYjNjQ7JiMxMDM7JiMxMDU7JiMxMTY7JiMxMDQ7JiN4NzU7JiM5ODsmI3gyZTsmIzk5OyYjMTExOyYjeDZkOw==">&#103;&#x69;&#116;&#64;&#103;&#105;&#116;&#104;&#x75;&#98;&#x2e;&#99;&#111;&#x6d;<i class="fa fa-external-link-alt"></i></span>:1156721874&#x2F;CrazyCode.git<br>git push -u origin master<br>输入用户名和密码之后即可建立关联，此后所有的提交的push都会提交到github的远程仓库。</p>
+<p>然后执行：<br>git remote add origin <span class="exturl" data-url="bWFpbHRvOiYjMTAzOyYjeDY5OyYjMTE2OyYjNjQ7JiN4Njc7JiN4Njk7JiN4NzQ7JiN4Njg7JiMxMTc7JiM5ODsmIzQ2OyYjOTk7JiN4NmY7JiN4NmQ7">&#103;&#x69;&#116;&#64;&#x67;&#x69;&#x74;&#x68;&#117;&#98;&#46;&#99;&#x6f;&#x6d;<i class="fa fa-external-link-alt"></i></span>:1156721874&#x2F;CrazyCode.git<br>git push -u origin master<br>输入用户名和密码之后即可建立关联，此后所有的提交的push都会提交到github的远程仓库。</p>
 <p>查看远程仓库信息：<br>git remote show<br>查看远程某个版本库详情：<br>git remote show origin<br>查看所有分支，会显示远程分支：<br>git branch -a<br>查看所有分支以及最近提交情况：</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ git branch -av</span><br><span class="line">  dev    080a6d7 delete</span><br><span class="line">* master a4ed124 commit</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <p>git clone：<br>将远程仓库克隆岛本地：<br>git clone <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2dvb2dsZS9wcm90b2J1Zi5naXQ=">https://github.com/google/protobuf.git<i class="fa fa-external-link-alt"></i></span><br>克隆到目录myprotobuf下<br>git clone <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2dvb2dsZS9wcm90b2J1Zi5naXQ=">https://github.com/google/protobuf.git<i class="fa fa-external-link-alt"></i></span> myprotobuf</p>
@@ -7573,6 +7573,210 @@ java.util.concurrent.Executors#callable(java.security.PrivilegedExceptionAction<
       </categories>
       <tags>
         <tag>cas</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>如何写好一篇好的技术方案</title>
+    <url>/2022/06/25/architecture/how_write_a_tech_plan/</url>
+    <content><![CDATA[<p><img src="https://s2.loli.net/2022/06/25/5g3GeQ9nRz6f2bF.webp" alt="641.png"></p>
+<h1 id="1-背景"><a href="#1-背景" class="headerlink" title="1 背景"></a>1 背景</h1><p>近期在写某个项目的技术方案时，来来回回修改许多版，同时也将之前自己写的&amp;别人写的技术方案都翻出来看了几遍，其实也很苦恼，于是也产生了一个想法：为什么我们需要写技术方案？<br>总结下来无非是几点，从不同人的视角来看：</p>
+<ol>
+<li><p>产品-验证技术方案是否能够match上产品方案</p>
+</li>
+<li><p>测试-验证技术方案是否足够&amp;准确的输入写测试方案</p>
+</li>
+<li><p>同事&amp;leader-参与技术方案评审,验证技术方案的合理性</p>
+</li>
+<li><p>新人（不单单指新同学也指新接触这一块的同学）-拿到技术方案可以很快对某一块的事情熟悉起来</p>
+<span id="more"></span>
+<h1 id="2-什么样的技术方案是一个好的技术方案"><a href="#2-什么样的技术方案是一个好的技术方案" class="headerlink" title="2 什么样的技术方案是一个好的技术方案"></a>2 什么样的技术方案是一个好的技术方案</h1></li>
+</ol>
+<p>我们都知道技术方案是指导我们开发的，那么我们就分别从开发的事前、事中、事后来讨论这个问题</p>
+<h2 id="1-事前"><a href="#1-事前" class="headerlink" title="1.事前"></a>1.事前</h2><h3 id="a-明确的目标——整个技术方案要达成什么目的"><a href="#a-明确的目标——整个技术方案要达成什么目的" class="headerlink" title="a.明确的目标——整个技术方案要达成什么目的"></a>a.明确的目标——整个技术方案要达成什么目的</h3><h3 id="b-低沟通成本——产品测试能从技术方案上获取足够的输入，不需要反复找你确认"><a href="#b-低沟通成本——产品测试能从技术方案上获取足够的输入，不需要反复找你确认" class="headerlink" title="b.低沟通成本——产品测试能从技术方案上获取足够的输入，不需要反复找你确认"></a>b.低沟通成本——产品测试能从技术方案上获取足够的输入，不需要反复找你确认</h3><h3 id="c-技术选型思考——为什么要这么做？和业内方案相比有什么好处和坏处，如何权衡的"><a href="#c-技术选型思考——为什么要这么做？和业内方案相比有什么好处和坏处，如何权衡的" class="headerlink" title="c.技术选型思考——为什么要这么做？和业内方案相比有什么好处和坏处，如何权衡的"></a>c.技术选型思考——为什么要这么做？和业内方案相比有什么好处和坏处，如何权衡的</h3><h2 id="2-事中"><a href="#2-事中" class="headerlink" title="2.事中"></a>2.事中</h2><h3 id="a-少调整-尽可能少的技术方案需要调整，-否则无法完成开发任务"><a href="#a-少调整-尽可能少的技术方案需要调整，-否则无法完成开发任务" class="headerlink" title="a.少调整-尽可能少的技术方案需要调整， 否则无法完成开发任务"></a>a.少调整-尽可能少的技术方案需要调整， 否则无法完成开发任务</h3><h2 id="3-事后"><a href="#3-事后" class="headerlink" title="3.事后"></a>3.事后</h2><h3 id="a-少补丁-尽可能少的bug或者遗漏"><a href="#a-少补丁-尽可能少的bug或者遗漏" class="headerlink" title="a.少补丁-尽可能少的bug或者遗漏"></a>a.少补丁-尽可能少的bug或者遗漏</h3><h3 id="b-可扩展-amp-可复用-相对简单的改动就能支持新增的需求、类似的场景可复用不需要重复开发"><a href="#b-可扩展-amp-可复用-相对简单的改动就能支持新增的需求、类似的场景可复用不需要重复开发" class="headerlink" title="b.可扩展&amp;可复用-相对简单的改动就能支持新增的需求、类似的场景可复用不需要重复开发"></a>b.可扩展&amp;可复用-相对简单的改动就能支持新增的需求、类似的场景可复用不需要重复开发</h3><p>﻿<br>一篇好的技术方案是可以贯穿整个研发的生命周期，并且起到很好的指导意义的，就如果写网络小说之前作者必须出一个大纲的逻辑是一致的。</p>
+<h1 id="3-如何写好一篇好的技术方案"><a href="#3-如何写好一篇好的技术方案" class="headerlink" title="3 如何写好一篇好的技术方案"></a>3 如何写好一篇好的技术方案</h1><p>那么如何写出一篇好的技术方案呢？下面列举出笔者认为技术方案应该做到的一些点</p>
+<h2 id="3-1-清晰的目标"><a href="#3-1-清晰的目标" class="headerlink" title="3.1 清晰的目标"></a>3.1 清晰的目标</h2><p>一份技术文档我认为是需要有一个清晰的目标的（业务需求建议自己总结而不是copy from prd，技术自发的那肯定得自己总结），那目标怎么来的呢？是从需求里转为过来的，那么如何将对应的需求转化为一个清晰的目标呢？我认为最重要的是要尽量定义一个可衡量的标准。需求的种类一般来说就2种，分别是</p>
+<h3 id="1-产品类需求——业务方or产品方发起提给技术，包括且不限于以下几种"><a href="#1-产品类需求——业务方or产品方发起提给技术，包括且不限于以下几种" class="headerlink" title="1.产品类需求——业务方or产品方发起提给技术，包括且不限于以下几种"></a>1.产品类需求——业务方or产品方发起提给技术，包括且不限于以下几种</h3><h4 id="a-页面交互——能提升多少的运营操作效率，多少PVUV这种可量化的数字"><a href="#a-页面交互——能提升多少的运营操作效率，多少PVUV这种可量化的数字" class="headerlink" title="a.页面交互——能提升多少的运营操作效率，多少PVUV这种可量化的数字"></a>a.页面交互——能提升多少的运营操作效率，多少PVUV这种可量化的数字</h4><h4 id="b-业务sop调整——带来的业务价值是什么？是能降多少本还是提升多少时效？"><a href="#b-业务sop调整——带来的业务价值是什么？是能降多少本还是提升多少时效？" class="headerlink" title="b.业务sop调整——带来的业务价值是什么？是能降多少本还是提升多少时效？"></a>b.业务sop调整——带来的业务价值是什么？是能降多少本还是提升多少时效？</h4><h4 id="c-数据订正——订正能解决什么问题？防止多少钱未结算？又或者是防止多少客诉？"><a href="#c-数据订正——订正能解决什么问题？防止多少钱未结算？又或者是防止多少客诉？" class="headerlink" title="c.数据订正——订正能解决什么问题？防止多少钱未结算？又或者是防止多少客诉？"></a>c.数据订正——订正能解决什么问题？防止多少钱未结算？又或者是防止多少客诉？</h4><h3 id="2-技术类需求——技术自发提出，包括且不限于以下几种"><a href="#2-技术类需求——技术自发提出，包括且不限于以下几种" class="headerlink" title="2.技术类需求——技术自发提出，包括且不限于以下几种"></a>2.技术类需求——技术自发提出，包括且不限于以下几种</h3><h4 id="a-性能优化——优化多少？20-、30-还是50-？"><a href="#a-性能优化——优化多少？20-、30-还是50-？" class="headerlink" title="a.性能优化——优化多少？20%、30%还是50%？"></a>a.性能优化——优化多少？20%、30%还是50%？</h4><h4 id="b-数据隔离——隔离的范围是什么，涉及多少张表，多少数据？可以减少当前的什么问题？减少多少"><a href="#b-数据隔离——隔离的范围是什么，涉及多少张表，多少数据？可以减少当前的什么问题？减少多少" class="headerlink" title="b.数据隔离——隔离的范围是什么，涉及多少张表，多少数据？可以减少当前的什么问题？减少多少"></a>b.数据隔离——隔离的范围是什么，涉及多少张表，多少数据？可以减少当前的什么问题？减少多少</h4><h4 id="c-各种小工具——没有小工具之前是什么样？有之后是什么样？可以带来什么好处？"><a href="#c-各种小工具——没有小工具之前是什么样？有之后是什么样？可以带来什么好处？" class="headerlink" title="c.各种小工具——没有小工具之前是什么样？有之后是什么样？可以带来什么好处？"></a>c.各种小工具——没有小工具之前是什么样？有之后是什么样？可以带来什么好处？</h4><h4 id="d-研发效能提升——提升多少？有没有可以量化的指标？而不是为了做而做"><a href="#d-研发效能提升——提升多少？有没有可以量化的指标？而不是为了做而做" class="headerlink" title="d.研发效能提升——提升多少？有没有可以量化的指标？而不是为了做而做"></a>d.研发效能提升——提升多少？有没有可以量化的指标？而不是为了做而做</h4><p>﻿<br>在众多的需求当中还有一些是我们要去辨别的伪需求——不是真正的用户想要的，如用户想要将一个飞机改造成火箭，但是产品可能提过来的仅仅是把飞机的两个翅膀砍掉，那么砍掉翅膀就能变成火箭了嘛？明显不能，所以这种需求一定要注意鉴别。</p>
+<h2 id="3-2-大纲图"><a href="#3-2-大纲图" class="headerlink" title="3.2 大纲图"></a>3.2 大纲图</h2><p>有句话叫“不谋全局者,不足谋一域”，在技术方案中我想也是如此。在一个技术方案中，一个大纲图是不可或缺的 ，有的人叫它技术架构图，有的人叫它数据流转图，这都不重要，重要的是我们能从这张图中看到整体的脉络，那么这张图需要有哪几个要点呢？</p>
+<ol>
+<li><p>图不用很细（比如加工比较复杂我们可以简单写**加工），但是要能看到全貌，具体的每个模块如果需要展开的，那么在对应的详细设计中体现即可，在这里我们关注的是整体</p>
+</li>
+<li><p>接口如有归属不同的应用要标明</p>
+</li>
+<li><p>数据存储介质不同要标明</p>
+</li>
+<li><p>数据流转的箭头要清晰明确</p>
+</li>
+<li><p>数据加工计算的输入和输出要体现，同时要体现加工的运行环境（比如到底是odps计算还是内存计算，内存计算的话是在那个应用）下面的图可供参考</p>
+</li>
+</ol>
+<p><img src="https://s2.loli.net/2022/06/25/amvlx5qMDS3coVU.jpg" alt="4d513d6abe5a254a0cded80189236b1.jpg">
+﻿﻿</p>
+<h2 id="3-3-模型设计"><a href="#3-3-模型设计" class="headerlink" title="3.3 模型设计"></a>3.3 模型设计</h2><p>讲到数据模型设计 那么E-R图是比不可少的 那么E-R图里应该是包含以下的信息的</p>
+<ol>
+<li><p>每个领域对象，如果要持久化，都有表来存储。我们设计完ER图的时候，应该根据这条原则做一番检查，避免漏掉一些表。在大型项目中，漏掉表是很常见的事情，应尽量避免。</p>
+</li>
+<li><p>领域对象之间的关系，如果要持久化，都要在表结构中体现。这种体现，可能是code字段，可能是外键，可能是中间表。我们设计完ER图的时候，也应该根据这条原则做一番检查，避免漏掉一些关系。在大型项目中，漏掉关系更是司空见惯，应尽量避免。</p>
+</li>
+<li><p>清晰定义的表名。设计ER图的时候，就要设计出清晰定义的表名。清晰定义的表名，可以帮助大家理解ER图，可以帮助大家映射回领域对象及其关系。在后续的设计和实施中，将沿用这个表名。</p>
+</li>
+<li><p>清晰定义的字段名、字段类型、字段长度和枚举值。很多同学容易忽略这点，他们往往清晰定义了表名，却没有重视表的字段。认真去做的时候，会发现，这里面有很多工作。例如，字段名是否合适，用什么类型好，字段长度多少合适，是否有枚举值等等，都需要一一斟酌。如果这点做好了，在实施的时候，可以避免很多麻烦，甚至避免返工。</p>
+</li>
+</ol>
+<h2 id="3-4-对外依赖提前确认"><a href="#3-4-对外依赖提前确认" class="headerlink" title="3.4 对外依赖提前确认"></a>3.4 对外依赖提前确认</h2><p>技术方案1：需要依赖缓存、分布式调度中间件，消费外部的消息，但是没有把对应的中间件使用方式，数据格式给贴出来</p>
+<p>技术方案2：需要依赖缓存、分布式调度中间件，消费外部的消息，将缓存接入的方法&amp;对应的缓存key-value设计写清楚、将分布式调度中间件接入所需要准备的依赖项梳理好、将外销消息对应的topic和数据格式列清楚</p>
+<p>两个方案对比好坏其实很明显。如果一开始我们在技术方案里面将外部依赖确定好，那么我们在开发的时候就一马平川，反之如果外部依赖都不确定的情况下就进入到开发，那么返工的概率将大大增加从而降低我们的工作效率</p>
+<p>那么对外的依赖有哪些以及我们要确认的都是些什么呢？下面列举了一些我们常见的一些依赖</p>
+<ul>
+<li><p>a.外部hsf依赖——需要确认对应hsf接口的类、方法、version，以及二方包（也可使用泛化调用）</p>
+</li>
+<li><p>b.外部消息依赖——需要确认消息的topic、数据格式</p>
+</li>
+<li><p>c.分布式调度、缓存等中间件——当前应用是否接入过改中间件，未接入需要去到官网确认接入文档，接入的话需要确认是否可以复用接入逻辑</p>
+</li>
+</ul>
+<p>﻿</p>
+<h2 id="3-5-内部前后模块依赖-amp-层次结构"><a href="#3-5-内部前后模块依赖-amp-层次结构" class="headerlink" title="3.5 内部前后模块依赖&amp;层次结构"></a>3.5 内部前后模块依赖&amp;层次结构</h2><p>首先模块依赖层次从高到底分为</p>
+<ul>
+<li><p>a.领域依赖（如交易依赖商品）</p>
+</li>
+<li><p>b.应用依赖（如cntcp应用依赖cngfc应用）</p>
+</li>
+<li><p>c.接口依赖（如滚存看板查询接口依赖于锁接口&amp;渠道集接口）</p>
+</li>
+</ul>
+<p>我们举接口依赖的例子来看：一共三个接口分别是滚存看板查询接口、锁接口、渠道集接口 滚存看板查询接口依赖于锁接口和渠道集接口<br>技术方案1-目录层次： 滚存看板查询接口、锁接口、渠道集接口<br>技术方案2-目录层次： 锁接口、渠道集接口、滚存看板查询接口<br>很明显，技术方案2是更加合理的，A依赖于B那么B应该先做<br>我们在写技术方案的时候要考虑什么应该在前什么应该在后而不是想一步写一步，要有一个清晰、有序的结构，而不是别人看起来是杂乱无章的。</p>
+<h2 id="3-6-一个模块里面应该有啥"><a href="#3-6-一个模块里面应该有啥" class="headerlink" title="3.6 一个模块里面应该有啥"></a>3.6 一个模块里面应该有啥</h2><p>下面列出一个技术方案的模块里面应该要写哪些东西，供参考</p>
+<h3 id="3-6-1-具体的接口定义"><a href="#3-6-1-具体的接口定义" class="headerlink" title="3.6.1 具体的接口定义"></a>3.6.1 具体的接口定义</h3><p>要求：实现一个飞机运力合同查询接口，入参为运力大区<br>技术方案1：<br>入参：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">&quot;area&quot;: &quot;南美&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>﻿<br>出参:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">&quot;date&quot;: &quot;***&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>﻿<br>技术方案2：<br>方法名：CapacityService.queryPlan</p>
+<p>入参：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">&quot;cnArea&quot;: &quot;南美&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>出参:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">&quot;date&quot;: &quot;***&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>技术方案2是更好的，为什么？测试、前端 、后续要接手该接口的人都能够一下子找到你的接口并清楚的知道他的输入输出是什么，并且1和2的入参一个area一个cnArea，那么到底那个更对呢？这里由于系统中在用的都是cnArea，固沿用cnArea是对的（一致性减小沟通成本）。</p>
+<p>这里总结对接口定义有几点要求：</p>
+<ol>
+<li>完整的类和方法名</li>
+<li>入参字段如果系统中已有那便沿用，如果没有那么英文的描述需要准确（可同产品业务商榷）</li>
+<li>出参字段要求同入参</li>
+</ol>
+<p>﻿</p>
+<h3 id="3-6-2-详细的时序图"><a href="#3-6-2-详细的时序图" class="headerlink" title="3.6.2 详细的时序图"></a>3.6.2 详细的时序图</h3><ul>
+<li><p>要求：实现一个学生信息查询接口</p>
+</li>
+<li><p>技术方案1：写出查询结果中执行的相关步骤。</p>
+<ul>
+<li>step1. 入参校验</li>
+<li>step2. 查询A表</li>
+<li>step3. 对A标返回结果做校验</li>
+<li>step4. 查询B表<br>······</li>
+</ul>
+</li>
+<li><p>技术方案2：在1的基础上使用时序图表达出来</p>
+</li>
+</ul>
+<p>推荐使用技术方案2，好处是尽管内容相同但是时序图能够更直观的看到层次、数据流转等信息</p>
+<p>﻿<br>除了以上比较基础的2点我觉得的还有一些要点<br>数据加工的详细图（如有）——同样推荐用图的形式可以更直观<br>消息设计（如有），明确消息生产方、消费方，tps、数据结构<br>自测用例（推荐），比较重要的功能点构造一些自测用例<br>······</p>
+<h2 id="3-7-技术选型分析"><a href="#3-7-技术选型分析" class="headerlink" title="3.7 技术选型分析"></a>3.7 技术选型分析</h2><ul>
+<li>要求：实现一个定时任务，定期将过期的数据删除</li>
+<li>技术方案1：使用spring自带的定时器进行数据清除</li>
+<li>技术方案2：使用分布式调度中间件（如schedulerx）进行定时过期数据清楚</li>
+</ul>
+<p>咋一看好像都能实现，那么我们仔细对比两个实现方式之后我认为大部分人还是会选择技术方案2，为什么？下面列出一些在选择技术方案时考虑的点</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>目标是否可达成</th>
+<th>实现难度</th>
+<th>可维护性</th>
+<th>可扩展性</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>技术方案1-spring定时器</td>
+<td>是</td>
+<td>易</td>
+<td>易</td>
+<td>低</td>
+</tr>
+<tr>
+<td>技术方案2-分布式调度中间件</td>
+<td>是</td>
+<td>易</td>
+<td>中</td>
+<td>高</td>
+</tr>
+</tbody></table>
+<p>﻿</p>
+<h2 id="3-8-安全生产"><a href="#3-8-安全生产" class="headerlink" title="3.8 安全生产"></a>3.8 安全生产</h2><p>安全生产包括几个部分，包括且不限于下面几个部分</p>
+<ul>
+<li>a. 监控</li>
+<li>b. 对账</li>
+<li>c. 灰度方案</li>
+<li>d. 数据隔离</li>
+<li>e. 兼容性评估</li>
+<li>f. 发布流程</li>
+</ul>
+<p>我们举一个例子。</p>
+<p>需求：在消费者收货成功时触发对商家的结算<br>技术方案1：<strong><strong><strong>，写了一堆如何如何触发结算，如何如何更好的支持后续的可扩展性<br>技术方案2：</strong></strong></strong>，写的方案可扩展性没有技术方案1高，但是做好了未触发结算的监控、触发结算之后的对账并设计好了对应的报表防止出现资损</p>
+<p>﻿<br>其实这也是我们在技术方案中可能会忽略的，埋头于代码结构如何如何的好，但是有些东西其实是要比单纯的代码更重要的，就比如风险控制，完备的监控、不可缺少的对账是保障公司资金安全更是保障我们自己绩效的工具【狗头】（此处应有表情）</p>
+<p>那么对于监控、对账的具体要求是什么呢？笔者认为</p>
+<p>监控：</p>
+<ul>
+<li>a.监控目标——写清楚监控的是什么内容</li>
+<li>b.监控点——如通过打印日志监控，那么日志打印在哪个类的哪个方法</li>
+<li>c.监控触发——是通过sunfire采集触发还是其它，如果是sunfire采集最好能把监控项地址贴出来</li>
+<li>d.监控订阅人——监控告警需要的订阅人</li>
+<li>e.监控触发后的解决方法——如果发生异常改如何解决？如手工触发结算</li>
+</ul>
+<p>﻿<br>对账：</p>
+<ul>
+<li>a.对账目标——写清楚对账是为什么</li>
+<li>b.对账方式——写清楚是怎么对账的（如通过odps天级定时任务，履行单上的关务资源code和日志表中关务cp回传报文的关务资源code相对比要一致，不一致的形成某个数据集，通过锦衣卫-资损风险平台配置）</li>
+<li>c.对账告警订阅人</li>
+<li>d.对账异常之后的解决办法</li>
+</ul>
+<p>﻿<br>还有其它几个部分</p>
+<ol>
+<li>灰度方案，包括且不限于</li>
+</ol>
+<ul>
+<li>a.多方前置准备</li>
+<li>b.灰度切流开关设计</li>
+<li>c.灰度切流节奏</li>
+<li>d.异常应对</li>
+</ul>
+<ol start="2">
+<li>向前兼容性，包括且不限于</li>
+</ol>
+<ul>
+<li>a.接口的向前兼容-尤其是对外的接口</li>
+<li>b.数据结构的向前兼容-如不能随意改变字段的存储类型和格式</li>
+</ul>
+<ol start="3">
+<li><p>环境隔离-如有租户隔离&amp;预发线上隔离的情况需要考虑数据</p>
+</li>
+<li><p>发布流程，包括且不限于</p>
+</li>
+</ol>
+<ul>
+<li>a.发布计划</li>
+<li>b.检查项列表</li>
+<li>c.发布流量监控</li>
+</ul>
+<p><img src="https://s2.loli.net/2022/06/25/i3qRYab8dQy5VFl.jpg" alt="带土.jpeg"></p>
+]]></content>
+      <categories>
+        <category>architecture</category>
+      </categories>
+      <tags>
+        <tag>architecture</tag>
       </tags>
   </entry>
   <entry>

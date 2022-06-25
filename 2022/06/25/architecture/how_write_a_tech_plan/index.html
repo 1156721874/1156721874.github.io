@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ceaser.wang","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.12.1","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="1 背景近期在写某个项目的技术方案时，来来回回修改许多版，同时也将之前自己写的&amp;别人写的技术方案都翻出来看了几遍，其实也很苦恼，于是也产生了一个想法：为什么我们需要写技术方案？总结下来无非是几点，从不同人的视角来看：  产品-验证技术方案是否能够match上产品方案  测试-验证技术方案是否足够&amp;准确的输入写测试方案  同事&amp;leader-参与技术方案评审,验证技术方案的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何写好一篇好的技术方案">
+<meta property="og:url" content="https://ceaser.wang/2022/06/25/architecture/how_write_a_tech_plan/index.html">
+<meta property="og:site_name" content="南贺神社">
+<meta property="og:description" content="1 背景近期在写某个项目的技术方案时，来来回回修改许多版，同时也将之前自己写的&amp;别人写的技术方案都翻出来看了几遍，其实也很苦恼，于是也产生了一个想法：为什么我们需要写技术方案？总结下来无非是几点，从不同人的视角来看：  产品-验证技术方案是否能够match上产品方案  测试-验证技术方案是否足够&amp;准确的输入写测试方案  同事&amp;leader-参与技术方案评审,验证技术方案的">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://s2.loli.net/2022/06/25/5g3GeQ9nRz6f2bF.webp">
+<meta property="og:image" content="https://s2.loli.net/2022/06/25/amvlx5qMDS3coVU.jpg">
+<meta property="og:image" content="https://s2.loli.net/2022/06/25/i3qRYab8dQy5VFl.jpg">
+<meta property="article:published_time" content="2022-06-25T14:25:00.000Z">
+<meta property="article:modified_time" content="2022-06-25T08:43:09.588Z">
+<meta property="article:author" content="CeaserWang">
+<meta property="article:tag" content="architecture">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2022/06/25/5g3GeQ9nRz6f2bF.webp">
+
+
+<link rel="canonical" href="https://ceaser.wang/2022/06/25/architecture/how_write_a_tech_plan/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://ceaser.wang/2022/06/25/architecture/how_write_a_tech_plan/","path":"2022/06/25/architecture/how_write_a_tech_plan/","title":"如何写好一篇好的技术方案"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>如何写好一篇好的技术方案 | 南贺神社</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">南贺神社</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">你写程序有写诗一样的感觉吗?</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">206</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">25</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">214</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E8%83%8C%E6%99%AF"><span class="nav-number">1.</span> <span class="nav-text">1 背景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E4%BB%80%E4%B9%88%E6%A0%B7%E7%9A%84%E6%8A%80%E6%9C%AF%E6%96%B9%E6%A1%88%E6%98%AF%E4%B8%80%E4%B8%AA%E5%A5%BD%E7%9A%84%E6%8A%80%E6%9C%AF%E6%96%B9%E6%A1%88"><span class="nav-number">2.</span> <span class="nav-text">2 什么样的技术方案是一个好的技术方案</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%BA%8B%E5%89%8D"><span class="nav-number">2.1.</span> <span class="nav-text">1.事前</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#a-%E6%98%8E%E7%A1%AE%E7%9A%84%E7%9B%AE%E6%A0%87%E2%80%94%E2%80%94%E6%95%B4%E4%B8%AA%E6%8A%80%E6%9C%AF%E6%96%B9%E6%A1%88%E8%A6%81%E8%BE%BE%E6%88%90%E4%BB%80%E4%B9%88%E7%9B%AE%E7%9A%84"><span class="nav-number">2.1.1.</span> <span class="nav-text">a.明确的目标——整个技术方案要达成什么目的</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#b-%E4%BD%8E%E6%B2%9F%E9%80%9A%E6%88%90%E6%9C%AC%E2%80%94%E2%80%94%E4%BA%A7%E5%93%81%E6%B5%8B%E8%AF%95%E8%83%BD%E4%BB%8E%E6%8A%80%E6%9C%AF%E6%96%B9%E6%A1%88%E4%B8%8A%E8%8E%B7%E5%8F%96%E8%B6%B3%E5%A4%9F%E7%9A%84%E8%BE%93%E5%85%A5%EF%BC%8C%E4%B8%8D%E9%9C%80%E8%A6%81%E5%8F%8D%E5%A4%8D%E6%89%BE%E4%BD%A0%E7%A1%AE%E8%AE%A4"><span class="nav-number">2.1.2.</span> <span class="nav-text">b.低沟通成本——产品测试能从技术方案上获取足够的输入，不需要反复找你确认</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#c-%E6%8A%80%E6%9C%AF%E9%80%89%E5%9E%8B%E6%80%9D%E8%80%83%E2%80%94%E2%80%94%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E8%BF%99%E4%B9%88%E5%81%9A%EF%BC%9F%E5%92%8C%E4%B8%9A%E5%86%85%E6%96%B9%E6%A1%88%E7%9B%B8%E6%AF%94%E6%9C%89%E4%BB%80%E4%B9%88%E5%A5%BD%E5%A4%84%E5%92%8C%E5%9D%8F%E5%A4%84%EF%BC%8C%E5%A6%82%E4%BD%95%E6%9D%83%E8%A1%A1%E7%9A%84"><span class="nav-number">2.1.3.</span> <span class="nav-text">c.技术选型思考——为什么要这么做？和业内方案相比有什么好处和坏处，如何权衡的</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E4%BA%8B%E4%B8%AD"><span class="nav-number">2.2.</span> <span class="nav-text">2.事中</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#a-%E5%B0%91%E8%B0%83%E6%95%B4-%E5%B0%BD%E5%8F%AF%E8%83%BD%E5%B0%91%E7%9A%84%E6%8A%80%E6%9C%AF%E6%96%B9%E6%A1%88%E9%9C%80%E8%A6%81%E8%B0%83%E6%95%B4%EF%BC%8C-%E5%90%A6%E5%88%99%E6%97%A0%E6%B3%95%E5%AE%8C%E6%88%90%E5%BC%80%E5%8F%91%E4%BB%BB%E5%8A%A1"><span class="nav-number">2.2.1.</span> <span class="nav-text">a.少调整-尽可能少的技术方案需要调整， 否则无法完成开发任务</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E4%BA%8B%E5%90%8E"><span class="nav-number">2.3.</span> <span class="nav-text">3.事后</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#a-%E5%B0%91%E8%A1%A5%E4%B8%81-%E5%B0%BD%E5%8F%AF%E8%83%BD%E5%B0%91%E7%9A%84bug%E6%88%96%E8%80%85%E9%81%97%E6%BC%8F"><span class="nav-number">2.3.1.</span> <span class="nav-text">a.少补丁-尽可能少的bug或者遗漏</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#b-%E5%8F%AF%E6%89%A9%E5%B1%95-amp-%E5%8F%AF%E5%A4%8D%E7%94%A8-%E7%9B%B8%E5%AF%B9%E7%AE%80%E5%8D%95%E7%9A%84%E6%94%B9%E5%8A%A8%E5%B0%B1%E8%83%BD%E6%94%AF%E6%8C%81%E6%96%B0%E5%A2%9E%E7%9A%84%E9%9C%80%E6%B1%82%E3%80%81%E7%B1%BB%E4%BC%BC%E7%9A%84%E5%9C%BA%E6%99%AF%E5%8F%AF%E5%A4%8D%E7%94%A8%E4%B8%8D%E9%9C%80%E8%A6%81%E9%87%8D%E5%A4%8D%E5%BC%80%E5%8F%91"><span class="nav-number">2.3.2.</span> <span class="nav-text">b.可扩展&amp;可复用-相对简单的改动就能支持新增的需求、类似的场景可复用不需要重复开发</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E5%A6%82%E4%BD%95%E5%86%99%E5%A5%BD%E4%B8%80%E7%AF%87%E5%A5%BD%E7%9A%84%E6%8A%80%E6%9C%AF%E6%96%B9%E6%A1%88"><span class="nav-number">3.</span> <span class="nav-text">3 如何写好一篇好的技术方案</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-%E6%B8%85%E6%99%B0%E7%9A%84%E7%9B%AE%E6%A0%87"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 清晰的目标</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%BA%A7%E5%93%81%E7%B1%BB%E9%9C%80%E6%B1%82%E2%80%94%E2%80%94%E4%B8%9A%E5%8A%A1%E6%96%B9or%E4%BA%A7%E5%93%81%E6%96%B9%E5%8F%91%E8%B5%B7%E6%8F%90%E7%BB%99%E6%8A%80%E6%9C%AF%EF%BC%8C%E5%8C%85%E6%8B%AC%E4%B8%94%E4%B8%8D%E9%99%90%E4%BA%8E%E4%BB%A5%E4%B8%8B%E5%87%A0%E7%A7%8D"><span class="nav-number">3.1.1.</span> <span class="nav-text">1.产品类需求——业务方or产品方发起提给技术，包括且不限于以下几种</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#a-%E9%A1%B5%E9%9D%A2%E4%BA%A4%E4%BA%92%E2%80%94%E2%80%94%E8%83%BD%E6%8F%90%E5%8D%87%E5%A4%9A%E5%B0%91%E7%9A%84%E8%BF%90%E8%90%A5%E6%93%8D%E4%BD%9C%E6%95%88%E7%8E%87%EF%BC%8C%E5%A4%9A%E5%B0%91PVUV%E8%BF%99%E7%A7%8D%E5%8F%AF%E9%87%8F%E5%8C%96%E7%9A%84%E6%95%B0%E5%AD%97"><span class="nav-number">3.1.1.1.</span> <span class="nav-text">a.页面交互——能提升多少的运营操作效率，多少PVUV这种可量化的数字</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#b-%E4%B8%9A%E5%8A%A1sop%E8%B0%83%E6%95%B4%E2%80%94%E2%80%94%E5%B8%A6%E6%9D%A5%E7%9A%84%E4%B8%9A%E5%8A%A1%E4%BB%B7%E5%80%BC%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F%E6%98%AF%E8%83%BD%E9%99%8D%E5%A4%9A%E5%B0%91%E6%9C%AC%E8%BF%98%E6%98%AF%E6%8F%90%E5%8D%87%E5%A4%9A%E5%B0%91%E6%97%B6%E6%95%88%EF%BC%9F"><span class="nav-number">3.1.1.2.</span> <span class="nav-text">b.业务sop调整——带来的业务价值是什么？是能降多少本还是提升多少时效？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#c-%E6%95%B0%E6%8D%AE%E8%AE%A2%E6%AD%A3%E2%80%94%E2%80%94%E8%AE%A2%E6%AD%A3%E8%83%BD%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F%E9%98%B2%E6%AD%A2%E5%A4%9A%E5%B0%91%E9%92%B1%E6%9C%AA%E7%BB%93%E7%AE%97%EF%BC%9F%E5%8F%88%E6%88%96%E8%80%85%E6%98%AF%E9%98%B2%E6%AD%A2%E5%A4%9A%E5%B0%91%E5%AE%A2%E8%AF%89%EF%BC%9F"><span class="nav-number">3.1.1.3.</span> <span class="nav-text">c.数据订正——订正能解决什么问题？防止多少钱未结算？又或者是防止多少客诉？</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%8A%80%E6%9C%AF%E7%B1%BB%E9%9C%80%E6%B1%82%E2%80%94%E2%80%94%E6%8A%80%E6%9C%AF%E8%87%AA%E5%8F%91%E6%8F%90%E5%87%BA%EF%BC%8C%E5%8C%85%E6%8B%AC%E4%B8%94%E4%B8%8D%E9%99%90%E4%BA%8E%E4%BB%A5%E4%B8%8B%E5%87%A0%E7%A7%8D"><span class="nav-number">3.1.2.</span> <span class="nav-text">2.技术类需求——技术自发提出，包括且不限于以下几种</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#a-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E2%80%94%E2%80%94%E4%BC%98%E5%8C%96%E5%A4%9A%E5%B0%91%EF%BC%9F20-%E3%80%8130-%E8%BF%98%E6%98%AF50-%EF%BC%9F"><span class="nav-number">3.1.2.1.</span> <span class="nav-text">a.性能优化——优化多少？20%、30%还是50%？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#b-%E6%95%B0%E6%8D%AE%E9%9A%94%E7%A6%BB%E2%80%94%E2%80%94%E9%9A%94%E7%A6%BB%E7%9A%84%E8%8C%83%E5%9B%B4%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%8C%E6%B6%89%E5%8F%8A%E5%A4%9A%E5%B0%91%E5%BC%A0%E8%A1%A8%EF%BC%8C%E5%A4%9A%E5%B0%91%E6%95%B0%E6%8D%AE%EF%BC%9F%E5%8F%AF%E4%BB%A5%E5%87%8F%E5%B0%91%E5%BD%93%E5%89%8D%E7%9A%84%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F%E5%87%8F%E5%B0%91%E5%A4%9A%E5%B0%91"><span class="nav-number">3.1.2.2.</span> <span class="nav-text">b.数据隔离——隔离的范围是什么，涉及多少张表，多少数据？可以减少当前的什么问题？减少多少</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#c-%E5%90%84%E7%A7%8D%E5%B0%8F%E5%B7%A5%E5%85%B7%E2%80%94%E2%80%94%E6%B2%A1%E6%9C%89%E5%B0%8F%E5%B7%A5%E5%85%B7%E4%B9%8B%E5%89%8D%E6%98%AF%E4%BB%80%E4%B9%88%E6%A0%B7%EF%BC%9F%E6%9C%89%E4%B9%8B%E5%90%8E%E6%98%AF%E4%BB%80%E4%B9%88%E6%A0%B7%EF%BC%9F%E5%8F%AF%E4%BB%A5%E5%B8%A6%E6%9D%A5%E4%BB%80%E4%B9%88%E5%A5%BD%E5%A4%84%EF%BC%9F"><span class="nav-number">3.1.2.3.</span> <span class="nav-text">c.各种小工具——没有小工具之前是什么样？有之后是什么样？可以带来什么好处？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#d-%E7%A0%94%E5%8F%91%E6%95%88%E8%83%BD%E6%8F%90%E5%8D%87%E2%80%94%E2%80%94%E6%8F%90%E5%8D%87%E5%A4%9A%E5%B0%91%EF%BC%9F%E6%9C%89%E6%B2%A1%E6%9C%89%E5%8F%AF%E4%BB%A5%E9%87%8F%E5%8C%96%E7%9A%84%E6%8C%87%E6%A0%87%EF%BC%9F%E8%80%8C%E4%B8%8D%E6%98%AF%E4%B8%BA%E4%BA%86%E5%81%9A%E8%80%8C%E5%81%9A"><span class="nav-number">3.1.2.4.</span> <span class="nav-text">d.研发效能提升——提升多少？有没有可以量化的指标？而不是为了做而做</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-%E5%A4%A7%E7%BA%B2%E5%9B%BE"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 大纲图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-%E6%A8%A1%E5%9E%8B%E8%AE%BE%E8%AE%A1"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 模型设计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-4-%E5%AF%B9%E5%A4%96%E4%BE%9D%E8%B5%96%E6%8F%90%E5%89%8D%E7%A1%AE%E8%AE%A4"><span class="nav-number">3.4.</span> <span class="nav-text">3.4 对外依赖提前确认</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-5-%E5%86%85%E9%83%A8%E5%89%8D%E5%90%8E%E6%A8%A1%E5%9D%97%E4%BE%9D%E8%B5%96-amp-%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84"><span class="nav-number">3.5.</span> <span class="nav-text">3.5 内部前后模块依赖&amp;层次结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-6-%E4%B8%80%E4%B8%AA%E6%A8%A1%E5%9D%97%E9%87%8C%E9%9D%A2%E5%BA%94%E8%AF%A5%E6%9C%89%E5%95%A5"><span class="nav-number">3.6.</span> <span class="nav-text">3.6 一个模块里面应该有啥</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-6-1-%E5%85%B7%E4%BD%93%E7%9A%84%E6%8E%A5%E5%8F%A3%E5%AE%9A%E4%B9%89"><span class="nav-number">3.6.1.</span> <span class="nav-text">3.6.1 具体的接口定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-6-2-%E8%AF%A6%E7%BB%86%E7%9A%84%E6%97%B6%E5%BA%8F%E5%9B%BE"><span class="nav-number">3.6.2.</span> <span class="nav-text">3.6.2 详细的时序图</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-7-%E6%8A%80%E6%9C%AF%E9%80%89%E5%9E%8B%E5%88%86%E6%9E%90"><span class="nav-number">3.7.</span> <span class="nav-text">3.7 技术选型分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-8-%E5%AE%89%E5%85%A8%E7%94%9F%E4%BA%A7"><span class="nav-number">3.8.</span> <span class="nav-text">3.8 安全生产</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="CeaserWang"
+      src="/../0xcc/index/Uchiha.jpg">
+  <p class="site-author-name" itemprop="name">CeaserWang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">214</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">206</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tLzExNTY3MjE4NzQ=" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;1156721874"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmNlYXNlcndhbmdAb3V0bG9vay5jb20=" title="E-Mail → mailto:ceaserwang@outlook.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+  </div>
+  <div class="cc-license site-overview-item animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-user-friends fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly90d29kcmFnb25sYWtlLmNvbQ==" title="https:&#x2F;&#x2F;twodragonlake.com">TwoDragonLake</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9yb290Y2x1c3Rlci5naXRodWIuaW8=" title="https:&#x2F;&#x2F;rootcluster.github.io">RootCluster</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9tdXNlZmxvdy5pbw==" title="https:&#x2F;&#x2F;museflow.io">MuseFlow</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9pbmNvZGVyLm9yZw==" title="https:&#x2F;&#x2F;incoder.org">BladeCode</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9rYWlmYS5kZXY=" title="https:&#x2F;&#x2F;kaifa.dev">Alyenc</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmRhemhpZGF5b25nLmNu" title="https:&#x2F;&#x2F;blog.dazhidayong.cn">Killua</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9qb2NlbHluc2hhbmcuY24v" title="https:&#x2F;&#x2F;jocelynshang.cn&#x2F;">Jocelyn</span>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2022/06/25/architecture/how_write_a_tech_plan/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
+      <meta itemprop="name" content="CeaserWang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="如何写好一篇好的技术方案 | 南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          如何写好一篇好的技术方案
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2022-06-25 14:25:00 / Modified: 08:43:09" itemprop="dateCreated datePublished" datetime="2022-06-25T14:25:00+00:00">2022-06-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/architecture/" itemprop="url" rel="index"><span itemprop="name">architecture</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2022/06/25/architecture/how_write_a_tech_plan/" class="post-meta-item leancloud_visitors" data-flag-title="如何写好一篇好的技术方案" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p><img src="https://s2.loli.net/2022/06/25/5g3GeQ9nRz6f2bF.webp" alt="641.png"></p>
+<h1 id="1-背景"><a href="#1-背景" class="headerlink" title="1 背景"></a>1 背景</h1><p>近期在写某个项目的技术方案时，来来回回修改许多版，同时也将之前自己写的&amp;别人写的技术方案都翻出来看了几遍，其实也很苦恼，于是也产生了一个想法：为什么我们需要写技术方案？<br>总结下来无非是几点，从不同人的视角来看：</p>
+<ol>
+<li><p>产品-验证技术方案是否能够match上产品方案</p>
+</li>
+<li><p>测试-验证技术方案是否足够&amp;准确的输入写测试方案</p>
+</li>
+<li><p>同事&amp;leader-参与技术方案评审,验证技术方案的合理性</p>
+</li>
+<li><p>新人（不单单指新同学也指新接触这一块的同学）-拿到技术方案可以很快对某一块的事情熟悉起来</p>
+<span id="more"></span>
+<h1 id="2-什么样的技术方案是一个好的技术方案"><a href="#2-什么样的技术方案是一个好的技术方案" class="headerlink" title="2 什么样的技术方案是一个好的技术方案"></a>2 什么样的技术方案是一个好的技术方案</h1></li>
+</ol>
+<p>我们都知道技术方案是指导我们开发的，那么我们就分别从开发的事前、事中、事后来讨论这个问题</p>
+<h2 id="1-事前"><a href="#1-事前" class="headerlink" title="1.事前"></a>1.事前</h2><h3 id="a-明确的目标——整个技术方案要达成什么目的"><a href="#a-明确的目标——整个技术方案要达成什么目的" class="headerlink" title="a.明确的目标——整个技术方案要达成什么目的"></a>a.明确的目标——整个技术方案要达成什么目的</h3><h3 id="b-低沟通成本——产品测试能从技术方案上获取足够的输入，不需要反复找你确认"><a href="#b-低沟通成本——产品测试能从技术方案上获取足够的输入，不需要反复找你确认" class="headerlink" title="b.低沟通成本——产品测试能从技术方案上获取足够的输入，不需要反复找你确认"></a>b.低沟通成本——产品测试能从技术方案上获取足够的输入，不需要反复找你确认</h3><h3 id="c-技术选型思考——为什么要这么做？和业内方案相比有什么好处和坏处，如何权衡的"><a href="#c-技术选型思考——为什么要这么做？和业内方案相比有什么好处和坏处，如何权衡的" class="headerlink" title="c.技术选型思考——为什么要这么做？和业内方案相比有什么好处和坏处，如何权衡的"></a>c.技术选型思考——为什么要这么做？和业内方案相比有什么好处和坏处，如何权衡的</h3><h2 id="2-事中"><a href="#2-事中" class="headerlink" title="2.事中"></a>2.事中</h2><h3 id="a-少调整-尽可能少的技术方案需要调整，-否则无法完成开发任务"><a href="#a-少调整-尽可能少的技术方案需要调整，-否则无法完成开发任务" class="headerlink" title="a.少调整-尽可能少的技术方案需要调整， 否则无法完成开发任务"></a>a.少调整-尽可能少的技术方案需要调整， 否则无法完成开发任务</h3><h2 id="3-事后"><a href="#3-事后" class="headerlink" title="3.事后"></a>3.事后</h2><h3 id="a-少补丁-尽可能少的bug或者遗漏"><a href="#a-少补丁-尽可能少的bug或者遗漏" class="headerlink" title="a.少补丁-尽可能少的bug或者遗漏"></a>a.少补丁-尽可能少的bug或者遗漏</h3><h3 id="b-可扩展-amp-可复用-相对简单的改动就能支持新增的需求、类似的场景可复用不需要重复开发"><a href="#b-可扩展-amp-可复用-相对简单的改动就能支持新增的需求、类似的场景可复用不需要重复开发" class="headerlink" title="b.可扩展&amp;可复用-相对简单的改动就能支持新增的需求、类似的场景可复用不需要重复开发"></a>b.可扩展&amp;可复用-相对简单的改动就能支持新增的需求、类似的场景可复用不需要重复开发</h3><p>﻿<br>一篇好的技术方案是可以贯穿整个研发的生命周期，并且起到很好的指导意义的，就如果写网络小说之前作者必须出一个大纲的逻辑是一致的。</p>
+<h1 id="3-如何写好一篇好的技术方案"><a href="#3-如何写好一篇好的技术方案" class="headerlink" title="3 如何写好一篇好的技术方案"></a>3 如何写好一篇好的技术方案</h1><p>那么如何写出一篇好的技术方案呢？下面列举出笔者认为技术方案应该做到的一些点</p>
+<h2 id="3-1-清晰的目标"><a href="#3-1-清晰的目标" class="headerlink" title="3.1 清晰的目标"></a>3.1 清晰的目标</h2><p>一份技术文档我认为是需要有一个清晰的目标的（业务需求建议自己总结而不是copy from prd，技术自发的那肯定得自己总结），那目标怎么来的呢？是从需求里转为过来的，那么如何将对应的需求转化为一个清晰的目标呢？我认为最重要的是要尽量定义一个可衡量的标准。需求的种类一般来说就2种，分别是</p>
+<h3 id="1-产品类需求——业务方or产品方发起提给技术，包括且不限于以下几种"><a href="#1-产品类需求——业务方or产品方发起提给技术，包括且不限于以下几种" class="headerlink" title="1.产品类需求——业务方or产品方发起提给技术，包括且不限于以下几种"></a>1.产品类需求——业务方or产品方发起提给技术，包括且不限于以下几种</h3><h4 id="a-页面交互——能提升多少的运营操作效率，多少PVUV这种可量化的数字"><a href="#a-页面交互——能提升多少的运营操作效率，多少PVUV这种可量化的数字" class="headerlink" title="a.页面交互——能提升多少的运营操作效率，多少PVUV这种可量化的数字"></a>a.页面交互——能提升多少的运营操作效率，多少PVUV这种可量化的数字</h4><h4 id="b-业务sop调整——带来的业务价值是什么？是能降多少本还是提升多少时效？"><a href="#b-业务sop调整——带来的业务价值是什么？是能降多少本还是提升多少时效？" class="headerlink" title="b.业务sop调整——带来的业务价值是什么？是能降多少本还是提升多少时效？"></a>b.业务sop调整——带来的业务价值是什么？是能降多少本还是提升多少时效？</h4><h4 id="c-数据订正——订正能解决什么问题？防止多少钱未结算？又或者是防止多少客诉？"><a href="#c-数据订正——订正能解决什么问题？防止多少钱未结算？又或者是防止多少客诉？" class="headerlink" title="c.数据订正——订正能解决什么问题？防止多少钱未结算？又或者是防止多少客诉？"></a>c.数据订正——订正能解决什么问题？防止多少钱未结算？又或者是防止多少客诉？</h4><h3 id="2-技术类需求——技术自发提出，包括且不限于以下几种"><a href="#2-技术类需求——技术自发提出，包括且不限于以下几种" class="headerlink" title="2.技术类需求——技术自发提出，包括且不限于以下几种"></a>2.技术类需求——技术自发提出，包括且不限于以下几种</h3><h4 id="a-性能优化——优化多少？20-、30-还是50-？"><a href="#a-性能优化——优化多少？20-、30-还是50-？" class="headerlink" title="a.性能优化——优化多少？20%、30%还是50%？"></a>a.性能优化——优化多少？20%、30%还是50%？</h4><h4 id="b-数据隔离——隔离的范围是什么，涉及多少张表，多少数据？可以减少当前的什么问题？减少多少"><a href="#b-数据隔离——隔离的范围是什么，涉及多少张表，多少数据？可以减少当前的什么问题？减少多少" class="headerlink" title="b.数据隔离——隔离的范围是什么，涉及多少张表，多少数据？可以减少当前的什么问题？减少多少"></a>b.数据隔离——隔离的范围是什么，涉及多少张表，多少数据？可以减少当前的什么问题？减少多少</h4><h4 id="c-各种小工具——没有小工具之前是什么样？有之后是什么样？可以带来什么好处？"><a href="#c-各种小工具——没有小工具之前是什么样？有之后是什么样？可以带来什么好处？" class="headerlink" title="c.各种小工具——没有小工具之前是什么样？有之后是什么样？可以带来什么好处？"></a>c.各种小工具——没有小工具之前是什么样？有之后是什么样？可以带来什么好处？</h4><h4 id="d-研发效能提升——提升多少？有没有可以量化的指标？而不是为了做而做"><a href="#d-研发效能提升——提升多少？有没有可以量化的指标？而不是为了做而做" class="headerlink" title="d.研发效能提升——提升多少？有没有可以量化的指标？而不是为了做而做"></a>d.研发效能提升——提升多少？有没有可以量化的指标？而不是为了做而做</h4><p>﻿<br>在众多的需求当中还有一些是我们要去辨别的伪需求——不是真正的用户想要的，如用户想要将一个飞机改造成火箭，但是产品可能提过来的仅仅是把飞机的两个翅膀砍掉，那么砍掉翅膀就能变成火箭了嘛？明显不能，所以这种需求一定要注意鉴别。</p>
+<h2 id="3-2-大纲图"><a href="#3-2-大纲图" class="headerlink" title="3.2 大纲图"></a>3.2 大纲图</h2><p>有句话叫“不谋全局者,不足谋一域”，在技术方案中我想也是如此。在一个技术方案中，一个大纲图是不可或缺的 ，有的人叫它技术架构图，有的人叫它数据流转图，这都不重要，重要的是我们能从这张图中看到整体的脉络，那么这张图需要有哪几个要点呢？</p>
+<ol>
+<li><p>图不用很细（比如加工比较复杂我们可以简单写**加工），但是要能看到全貌，具体的每个模块如果需要展开的，那么在对应的详细设计中体现即可，在这里我们关注的是整体</p>
+</li>
+<li><p>接口如有归属不同的应用要标明</p>
+</li>
+<li><p>数据存储介质不同要标明</p>
+</li>
+<li><p>数据流转的箭头要清晰明确</p>
+</li>
+<li><p>数据加工计算的输入和输出要体现，同时要体现加工的运行环境（比如到底是odps计算还是内存计算，内存计算的话是在那个应用）下面的图可供参考</p>
+</li>
+</ol>
+<p><img src="https://s2.loli.net/2022/06/25/amvlx5qMDS3coVU.jpg" alt="4d513d6abe5a254a0cded80189236b1.jpg">
+﻿﻿</p>
+<h2 id="3-3-模型设计"><a href="#3-3-模型设计" class="headerlink" title="3.3 模型设计"></a>3.3 模型设计</h2><p>讲到数据模型设计 那么E-R图是比不可少的 那么E-R图里应该是包含以下的信息的</p>
+<ol>
+<li><p>每个领域对象，如果要持久化，都有表来存储。我们设计完ER图的时候，应该根据这条原则做一番检查，避免漏掉一些表。在大型项目中，漏掉表是很常见的事情，应尽量避免。</p>
+</li>
+<li><p>领域对象之间的关系，如果要持久化，都要在表结构中体现。这种体现，可能是code字段，可能是外键，可能是中间表。我们设计完ER图的时候，也应该根据这条原则做一番检查，避免漏掉一些关系。在大型项目中，漏掉关系更是司空见惯，应尽量避免。</p>
+</li>
+<li><p>清晰定义的表名。设计ER图的时候，就要设计出清晰定义的表名。清晰定义的表名，可以帮助大家理解ER图，可以帮助大家映射回领域对象及其关系。在后续的设计和实施中，将沿用这个表名。</p>
+</li>
+<li><p>清晰定义的字段名、字段类型、字段长度和枚举值。很多同学容易忽略这点，他们往往清晰定义了表名，却没有重视表的字段。认真去做的时候，会发现，这里面有很多工作。例如，字段名是否合适，用什么类型好，字段长度多少合适，是否有枚举值等等，都需要一一斟酌。如果这点做好了，在实施的时候，可以避免很多麻烦，甚至避免返工。</p>
+</li>
+</ol>
+<h2 id="3-4-对外依赖提前确认"><a href="#3-4-对外依赖提前确认" class="headerlink" title="3.4 对外依赖提前确认"></a>3.4 对外依赖提前确认</h2><p>技术方案1：需要依赖缓存、分布式调度中间件，消费外部的消息，但是没有把对应的中间件使用方式，数据格式给贴出来</p>
+<p>技术方案2：需要依赖缓存、分布式调度中间件，消费外部的消息，将缓存接入的方法&amp;对应的缓存key-value设计写清楚、将分布式调度中间件接入所需要准备的依赖项梳理好、将外销消息对应的topic和数据格式列清楚</p>
+<p>两个方案对比好坏其实很明显。如果一开始我们在技术方案里面将外部依赖确定好，那么我们在开发的时候就一马平川，反之如果外部依赖都不确定的情况下就进入到开发，那么返工的概率将大大增加从而降低我们的工作效率</p>
+<p>那么对外的依赖有哪些以及我们要确认的都是些什么呢？下面列举了一些我们常见的一些依赖</p>
+<ul>
+<li><p>a.外部hsf依赖——需要确认对应hsf接口的类、方法、version，以及二方包（也可使用泛化调用）</p>
+</li>
+<li><p>b.外部消息依赖——需要确认消息的topic、数据格式</p>
+</li>
+<li><p>c.分布式调度、缓存等中间件——当前应用是否接入过改中间件，未接入需要去到官网确认接入文档，接入的话需要确认是否可以复用接入逻辑</p>
+</li>
+</ul>
+<p>﻿</p>
+<h2 id="3-5-内部前后模块依赖-amp-层次结构"><a href="#3-5-内部前后模块依赖-amp-层次结构" class="headerlink" title="3.5 内部前后模块依赖&amp;层次结构"></a>3.5 内部前后模块依赖&amp;层次结构</h2><p>首先模块依赖层次从高到底分为</p>
+<ul>
+<li><p>a.领域依赖（如交易依赖商品）</p>
+</li>
+<li><p>b.应用依赖（如cntcp应用依赖cngfc应用）</p>
+</li>
+<li><p>c.接口依赖（如滚存看板查询接口依赖于锁接口&amp;渠道集接口）</p>
+</li>
+</ul>
+<p>我们举接口依赖的例子来看：一共三个接口分别是滚存看板查询接口、锁接口、渠道集接口 滚存看板查询接口依赖于锁接口和渠道集接口<br>技术方案1-目录层次： 滚存看板查询接口、锁接口、渠道集接口<br>技术方案2-目录层次： 锁接口、渠道集接口、滚存看板查询接口<br>很明显，技术方案2是更加合理的，A依赖于B那么B应该先做<br>我们在写技术方案的时候要考虑什么应该在前什么应该在后而不是想一步写一步，要有一个清晰、有序的结构，而不是别人看起来是杂乱无章的。</p>
+<h2 id="3-6-一个模块里面应该有啥"><a href="#3-6-一个模块里面应该有啥" class="headerlink" title="3.6 一个模块里面应该有啥"></a>3.6 一个模块里面应该有啥</h2><p>下面列出一个技术方案的模块里面应该要写哪些东西，供参考</p>
+<h3 id="3-6-1-具体的接口定义"><a href="#3-6-1-具体的接口定义" class="headerlink" title="3.6.1 具体的接口定义"></a>3.6.1 具体的接口定义</h3><p>要求：实现一个飞机运力合同查询接口，入参为运力大区<br>技术方案1：<br>入参：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">&quot;area&quot;: &quot;南美&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>﻿<br>出参:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">&quot;date&quot;: &quot;***&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>﻿<br>技术方案2：<br>方法名：CapacityService.queryPlan</p>
+<p>入参：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">&quot;cnArea&quot;: &quot;南美&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>出参:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">&quot;date&quot;: &quot;***&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>技术方案2是更好的，为什么？测试、前端 、后续要接手该接口的人都能够一下子找到你的接口并清楚的知道他的输入输出是什么，并且1和2的入参一个area一个cnArea，那么到底那个更对呢？这里由于系统中在用的都是cnArea，固沿用cnArea是对的（一致性减小沟通成本）。</p>
+<p>这里总结对接口定义有几点要求：</p>
+<ol>
+<li>完整的类和方法名</li>
+<li>入参字段如果系统中已有那便沿用，如果没有那么英文的描述需要准确（可同产品业务商榷）</li>
+<li>出参字段要求同入参</li>
+</ol>
+<p>﻿</p>
+<h3 id="3-6-2-详细的时序图"><a href="#3-6-2-详细的时序图" class="headerlink" title="3.6.2 详细的时序图"></a>3.6.2 详细的时序图</h3><ul>
+<li><p>要求：实现一个学生信息查询接口</p>
+</li>
+<li><p>技术方案1：写出查询结果中执行的相关步骤。</p>
+<ul>
+<li>step1. 入参校验</li>
+<li>step2. 查询A表</li>
+<li>step3. 对A标返回结果做校验</li>
+<li>step4. 查询B表<br>······</li>
+</ul>
+</li>
+<li><p>技术方案2：在1的基础上使用时序图表达出来</p>
+</li>
+</ul>
+<p>推荐使用技术方案2，好处是尽管内容相同但是时序图能够更直观的看到层次、数据流转等信息</p>
+<p>﻿<br>除了以上比较基础的2点我觉得的还有一些要点<br>数据加工的详细图（如有）——同样推荐用图的形式可以更直观<br>消息设计（如有），明确消息生产方、消费方，tps、数据结构<br>自测用例（推荐），比较重要的功能点构造一些自测用例<br>······</p>
+<h2 id="3-7-技术选型分析"><a href="#3-7-技术选型分析" class="headerlink" title="3.7 技术选型分析"></a>3.7 技术选型分析</h2><ul>
+<li>要求：实现一个定时任务，定期将过期的数据删除</li>
+<li>技术方案1：使用spring自带的定时器进行数据清除</li>
+<li>技术方案2：使用分布式调度中间件（如schedulerx）进行定时过期数据清楚</li>
+</ul>
+<p>咋一看好像都能实现，那么我们仔细对比两个实现方式之后我认为大部分人还是会选择技术方案2，为什么？下面列出一些在选择技术方案时考虑的点</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>目标是否可达成</th>
+<th>实现难度</th>
+<th>可维护性</th>
+<th>可扩展性</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>技术方案1-spring定时器</td>
+<td>是</td>
+<td>易</td>
+<td>易</td>
+<td>低</td>
+</tr>
+<tr>
+<td>技术方案2-分布式调度中间件</td>
+<td>是</td>
+<td>易</td>
+<td>中</td>
+<td>高</td>
+</tr>
+</tbody></table>
+<p>﻿</p>
+<h2 id="3-8-安全生产"><a href="#3-8-安全生产" class="headerlink" title="3.8 安全生产"></a>3.8 安全生产</h2><p>安全生产包括几个部分，包括且不限于下面几个部分</p>
+<ul>
+<li>a. 监控</li>
+<li>b. 对账</li>
+<li>c. 灰度方案</li>
+<li>d. 数据隔离</li>
+<li>e. 兼容性评估</li>
+<li>f. 发布流程</li>
+</ul>
+<p>我们举一个例子。</p>
+<p>需求：在消费者收货成功时触发对商家的结算<br>技术方案1：<strong><strong><strong>，写了一堆如何如何触发结算，如何如何更好的支持后续的可扩展性<br>技术方案2：</strong></strong></strong>，写的方案可扩展性没有技术方案1高，但是做好了未触发结算的监控、触发结算之后的对账并设计好了对应的报表防止出现资损</p>
+<p>﻿<br>其实这也是我们在技术方案中可能会忽略的，埋头于代码结构如何如何的好，但是有些东西其实是要比单纯的代码更重要的，就比如风险控制，完备的监控、不可缺少的对账是保障公司资金安全更是保障我们自己绩效的工具【狗头】（此处应有表情）</p>
+<p>那么对于监控、对账的具体要求是什么呢？笔者认为</p>
+<p>监控：</p>
+<ul>
+<li>a.监控目标——写清楚监控的是什么内容</li>
+<li>b.监控点——如通过打印日志监控，那么日志打印在哪个类的哪个方法</li>
+<li>c.监控触发——是通过sunfire采集触发还是其它，如果是sunfire采集最好能把监控项地址贴出来</li>
+<li>d.监控订阅人——监控告警需要的订阅人</li>
+<li>e.监控触发后的解决方法——如果发生异常改如何解决？如手工触发结算</li>
+</ul>
+<p>﻿<br>对账：</p>
+<ul>
+<li>a.对账目标——写清楚对账是为什么</li>
+<li>b.对账方式——写清楚是怎么对账的（如通过odps天级定时任务，履行单上的关务资源code和日志表中关务cp回传报文的关务资源code相对比要一致，不一致的形成某个数据集，通过锦衣卫-资损风险平台配置）</li>
+<li>c.对账告警订阅人</li>
+<li>d.对账异常之后的解决办法</li>
+</ul>
+<p>﻿<br>还有其它几个部分</p>
+<ol>
+<li>灰度方案，包括且不限于</li>
+</ol>
+<ul>
+<li>a.多方前置准备</li>
+<li>b.灰度切流开关设计</li>
+<li>c.灰度切流节奏</li>
+<li>d.异常应对</li>
+</ul>
+<ol start="2">
+<li>向前兼容性，包括且不限于</li>
+</ol>
+<ul>
+<li>a.接口的向前兼容-尤其是对外的接口</li>
+<li>b.数据结构的向前兼容-如不能随意改变字段的存储类型和格式</li>
+</ul>
+<ol start="3">
+<li><p>环境隔离-如有租户隔离&amp;预发线上隔离的情况需要考虑数据</p>
+</li>
+<li><p>发布流程，包括且不限于</p>
+</li>
+</ol>
+<ul>
+<li>a.发布计划</li>
+<li>b.检查项列表</li>
+<li>c.发布流量监控</li>
+</ul>
+<p><img src="https://s2.loli.net/2022/06/25/i3qRYab8dQy5VFl.jpg" alt="带土.jpeg"></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>CeaserWang
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://ceaser.wang/2022/06/25/architecture/how_write_a_tech_plan/" title="如何写好一篇好的技术方案">https://ceaser.wang/2022/06/25/architecture/how_write_a_tech_plan/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/architecture/" rel="tag"><i class="fa fa-tag"></i> architecture</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/02/05/architecture/what_is_architecture/" rel="prev" title="浅谈架构">
+                  <i class="fa fa-chevron-left"></i> 浅谈架构
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CeaserWang</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.0.6/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.1.1/mermaid.min.js","integrity":"sha256-8L3O8tirFUa8Va4NSTAyIbHJeLd6OnlcxgupV9F77e0="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"ryAR9bttS7fex1FPEPAylmmJ-gzGzoHsz","app_key":"dYqygoN4Y01Bl38OdRoCHUYn","server_url":null,"security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+
+</body>
+</html>

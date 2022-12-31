@@ -9,7 +9,7 @@ categories: life
 
 说来惭愧，博客一年没怎么更新了，说什么理由都是借口，哈哈哈，其实在Java领域玩了这么多年，对于技术细节探索和新技术兴趣，没有刚开始进入这个领域热情高涨了，转而对技术架构设计产生了极大的热情，
 但是技术架构探索和积累是完全通过理论加实践实际操作搅拌出来了，第二个是在做嵌入式相关的学习，目前还没有输出像样子的东西，不好意思写博客，今年的复盘如下：
-![](https://s3.bmp.ovh/imgs/2022/12/30/fb9eddf1a2111791.jpg)
+[![image.jpg](https://i.postimg.cc/0jVNfctH/image.jpg)](https://postimg.cc/FkJmFgXj)
 <!-- more -->
 我的2022：
 一月：做核酸
@@ -467,4 +467,4 @@ SRP要求每个软件模块职责要单一，衡量标准是模块是否只有�
 至于个人主义会不会颠覆传统的婚姻制度，以上是我个人的推论，不代表个人对婚姻爱情的看法，仅仅是逻辑推理过程，实际情况需要实事求是。
 
 
-[![image.jpg](https://i.postimg.cc/GtrDNT3Z/image.jpg)](https://postimg.cc/TL7h5wD9)
+[![image.jpg](https://s3.bmp.ovh/imgs/2022/12/30/fb9eddf1a2111791.jpg)](https://s3.bmp.ovh/imgs/2022/12/30/fb9eddf1a2111791.jpg)

@@ -897,7 +897,7 @@ ENTRYPOINT command param1 param2（shell中执行）。
 <ul>
 <li>&#x2F;etc&#x2F;gitconfig （针对于整个OS,不常用）  git config –system</li>
 <li>~&#x2F;.gitconfig(很常用)                      git config –global</li>
-<li>针对于特定项目的 位于当前项目的  .git&#x2F;config文件中。 git config –local<br> 我们针对于第二种和第三种情况进行说明：<br>  <strong>git config –global</strong><br> 首先进入.git目录查看 config文件内容：<br> git config命令一些参数：<br><img src="/20170626210947905.png" alt="这里写图片描述"><br>config文件内容：<br> <img src="/20170626210740993.png" alt="这里写图片描述"><br>紧接着：<br>git config –local user.name ‘CeaserWang’<br>git config –local user.email ‘<span class="exturl" data-url="bWFpbHRvOiYjMTIwOyYjeDc4OyYjMTIwOyYjNjQ7JiN4Nzg7JiN4Nzg7JiMxMjA7JiN4MmU7JiM5OTsmI3g2ZjsmI3g2ZDs=">&#120;&#x78;&#120;&#64;&#x78;&#x78;&#120;&#x2e;&#99;&#x6f;&#x6d;<i class="fa fa-external-link-alt"></i></span>‘<br>进行配置用户和邮箱，此时我们可以展示一下:<br>git config user.name<br>git config user.email<br>同时再次查看config文件会发现user.name和user.email都存在了。<br><img src="/20170626211439173.png" alt="这里写图片描述"><br>或者 git config –list查看所有配置参数<br>git config –local user.name ‘CeaserWang’<br>git config –local user.email ‘<span class="exturl" data-url="bWFpbHRvOiYjeDc4OyYjeDc4OyYjMTIwOyYjeDQwOyYjeDc4OyYjeDc4OyYjMTIwOyYjeDJlOyYjeDYzOyYjeDZmOyYjeDZkOw==">&#x78;&#x78;&#120;&#x40;&#x78;&#x78;&#120;&#x2e;&#x63;&#x6f;&#x6d;<i class="fa fa-external-link-alt"></i></span>‘ 这些命令也可以用来修改，再说一下删除：<br>git config –local  –unset  user.name<br><img src="/20170626212216912.png" alt="这里写图片描述"><br>接下我们回到mygit根目录，修改下test.txt文件，然后git staus 查看状态：<br><img src="/20170626212952735.png" alt="这里写图片描述"><br>这时提示信息又发生一些变化。<br> modified:   test.txt意思是已经修改了。<br> (use “git checkout – <file>…” to discard changes in working directory 意识是 使用git checkout – <file>命令丢弃刚才的修改。<br>  首先我们的文件修改之后加入了一行文字（welcome）然后状态是modified状态，此时我们使用git checkout 命令回退刚才的修改：<br><img src="/20170626213638727.png" alt="这里写图片描述"><br>  会发现刚下的修改会取消了，状态回到愿原来的状态。这个命令要小心一点，因为文件没有放到版本库里边，真的丢弃了就找不回来了。</li>
+<li>针对于特定项目的 位于当前项目的  .git&#x2F;config文件中。 git config –local<br> 我们针对于第二种和第三种情况进行说明：<br>  <strong>git config –global</strong><br> 首先进入.git目录查看 config文件内容：<br> git config命令一些参数：<br><img src="/20170626210947905.png" alt="这里写图片描述"><br>config文件内容：<br> <img src="/20170626210740993.png" alt="这里写图片描述"><br>紧接着：<br>git config –local user.name ‘CeaserWang’<br>git config –local user.email ‘<span class="exturl" data-url="bWFpbHRvOiYjMTIwOyYjeDc4OyYjeDc4OyYjNjQ7JiN4Nzg7JiN4Nzg7JiN4Nzg7JiN4MmU7JiN4NjM7JiMxMTE7JiMxMDk7">&#120;&#x78;&#x78;&#64;&#x78;&#x78;&#x78;&#x2e;&#x63;&#111;&#109;<i class="fa fa-external-link-alt"></i></span>‘<br>进行配置用户和邮箱，此时我们可以展示一下:<br>git config user.name<br>git config user.email<br>同时再次查看config文件会发现user.name和user.email都存在了。<br><img src="/20170626211439173.png" alt="这里写图片描述"><br>或者 git config –list查看所有配置参数<br>git config –local user.name ‘CeaserWang’<br>git config –local user.email ‘<span class="exturl" data-url="bWFpbHRvOiYjMTIwOyYjMTIwOyYjMTIwOyYjeDQwOyYjMTIwOyYjeDc4OyYjeDc4OyYjeDJlOyYjeDYzOyYjeDZmOyYjeDZkOw==">&#120;&#120;&#120;&#x40;&#120;&#x78;&#x78;&#x2e;&#x63;&#x6f;&#x6d;<i class="fa fa-external-link-alt"></i></span>‘ 这些命令也可以用来修改，再说一下删除：<br>git config –local  –unset  user.name<br><img src="/20170626212216912.png" alt="这里写图片描述"><br>接下我们回到mygit根目录，修改下test.txt文件，然后git staus 查看状态：<br><img src="/20170626212952735.png" alt="这里写图片描述"><br>这时提示信息又发生一些变化。<br> modified:   test.txt意思是已经修改了。<br> (use “git checkout – <file>…” to discard changes in working directory 意识是 使用git checkout – <file>命令丢弃刚才的修改。<br>  首先我们的文件修改之后加入了一行文字（welcome）然后状态是modified状态，此时我们使用git checkout 命令回退刚才的修改：<br><img src="/20170626213638727.png" alt="这里写图片描述"><br>  会发现刚下的修改会取消了，状态回到愿原来的状态。这个命令要小心一点，因为文件没有放到版本库里边，真的丢弃了就找不回来了。</li>
 </ul>
 <p>另外git commit的提交说明可以直接：git commmit -m ‘提交说明’<br>提交日志时间是按照倒序的排列：<br><img src="/20170626220111432.png" alt="这里写图片描述"></p>
 ]]></content>
@@ -916,7 +916,7 @@ ENTRYPOINT command param1 param2（shell中执行）。
 <span id="more"></span>
 <p>命令：<br>一、https的方式<br>git remote add origin <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3VzZXIvZ2l0cmVzcG9yeS5naXQ=">https://github.com/user/gitrespory.git<i class="fa fa-external-link-alt"></i></span><br>git push -u origin master</p>
 <p>二、ssh的方式<br>ssh的方式需要在本地机器生成公钥和私钥，然后将公钥设置到github的远程仓库，设置方式：<br><img src="/20170730201503950.png" alt="这里写图片描述"></p>
-<p>然后执行：<br>git remote add origin <span class="exturl" data-url="bWFpbHRvOiYjMTAzOyYjMTA1OyYjMTE2OyYjNjQ7JiMxMDM7JiN4Njk7JiMxMTY7JiMxMDQ7JiN4NzU7JiN4NjI7JiN4MmU7JiM5OTsmIzExMTsmI3g2ZDs=">&#103;&#105;&#116;&#64;&#103;&#x69;&#116;&#104;&#x75;&#x62;&#x2e;&#99;&#111;&#x6d;<i class="fa fa-external-link-alt"></i></span>:1156721874&#x2F;CrazyCode.git<br>git push -u origin master<br>输入用户名和密码之后即可建立关联，此后所有的提交的push都会提交到github的远程仓库。</p>
+<p>然后执行：<br>git remote add origin <span class="exturl" data-url="bWFpbHRvOiYjeDY3OyYjeDY5OyYjMTE2OyYjNjQ7JiN4Njc7JiMxMDU7JiN4NzQ7JiN4Njg7JiMxMTc7JiM5ODsmI3gyZTsmI3g2MzsmI3g2ZjsmI3g2ZDs=">&#x67;&#x69;&#116;&#64;&#x67;&#105;&#x74;&#x68;&#117;&#98;&#x2e;&#x63;&#x6f;&#x6d;<i class="fa fa-external-link-alt"></i></span>:1156721874&#x2F;CrazyCode.git<br>git push -u origin master<br>输入用户名和密码之后即可建立关联，此后所有的提交的push都会提交到github的远程仓库。</p>
 <p>查看远程仓库信息：<br>git remote show<br>查看远程某个版本库详情：<br>git remote show origin<br>查看所有分支，会显示远程分支：<br>git branch -a<br>查看所有分支以及最近提交情况：</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ git branch -av</span><br><span class="line">  dev    080a6d7 delete</span><br><span class="line">* master a4ed124 commit</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <p>git clone：<br>将远程仓库克隆岛本地：<br>git clone <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2dvb2dsZS9wcm90b2J1Zi5naXQ=">https://github.com/google/protobuf.git<i class="fa fa-external-link-alt"></i></span><br>克隆到目录myprotobuf下<br>git clone <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2dvb2dsZS9wcm90b2J1Zi5naXQ=">https://github.com/google/protobuf.git<i class="fa fa-external-link-alt"></i></span> myprotobuf</p>
@@ -8637,7 +8637,7 @@ java.util.concurrent.Executors#callable(java.security.PrivilegedExceptionAction<
 <p>首先，，恩格斯在《家庭、私有制和国家的起源》中指出，如果以爱情为基础的婚姻是合乎道德的，那么只有继续保持爱情的婚姻才会继续合乎道德，恩格式的这句话无疑洞悉了现代婚姻的本质，<br>当爱情不在的时候，以爱情为基础的婚姻也就不可能存在了，其次，爱情的流变性导致失望情绪的蔓延，因为爱情是一种玄学，不但科学解决不了，哲学也无能为力，爱情不但玄之又玄，而且极易流变，当昨天的梦中女神，成为今天的枕边悍妇，当曾经的大长腿欧巴成为渣男，爱情就消失了，而这种爱情的消失，导致人们普遍流露出失望的情绪，如果一个人能凭借着爱情组建婚姻，那么ta很大程度也会走向失望，那些能够白头到老的更多是处于一种相对封闭的环境中，他们的价值观改变不大，如果是2个人的价值观不断流变，那么大概率的结果就是分道扬镳。同时在爱情为基础的婚姻观下，婚姻成为人们实现自我的一种途径，他们认为婚姻应该是玩乐，而不是任务，婚姻应该是让人兴奋的，而不是让人厌倦的，婚姻应该是充满了激情的，而不是充满亲情的，当然们在婚姻生活中感受不到这种情绪后，分道扬镳就会自然产生。所以因为个人主义的崛起，人们对婚姻观念发生了翻天覆地的改变，他最终导致了越来越多的离婚发生。</p>
 <p>至于个人主义会不会颠覆传统的婚姻制度，以上是我个人的推论，不代表个人对婚姻爱情的看法，仅仅是逻辑推理过程，实际情况需要实事求是。</p>
 <p><img src="https://s3.bmp.ovh/imgs/2022/12/30/fb9eddf1a2111791.jpg" alt="image.jpg"></p>
-<p>如果你觉得我的文章有用，可以打上我一杯雀巢咖啡</p>
+<p>如果你觉得我的文章有用，可以打赏我一杯雀巢咖啡</p>
 <p><img src="https://i.postimg.cc/8Pmvqq4J/b1c4562d7729c208aef2f861473f309.jpg" alt="image.jpg"></p>
 ]]></content>
       <categories>
@@ -8720,6 +8720,109 @@ java.util.concurrent.Executors#callable(java.security.PrivilegedExceptionAction<
 <li>应急手段,发现变更先回滚,容量不够降和限,容灾切换来兜底。</li>
 <li>应急建设,实战攻防日常练,定位自愈助提升,历史故障取经验。</li>
 </ol>
+]]></content>
+      <categories>
+        <category>life</category>
+      </categories>
+      <tags>
+        <tag>leek</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>在人间做韭菜的那些年(3)--项目推进迭代流程</title>
+    <url>/2021/04/24/life/leeklife_2/</url>
+    <content><![CDATA[<h3 id="项目推进"><a href="#项目推进" class="headerlink" title="项目推进"></a>项目推进</h3><p>互联网做项目都是一把梭，在企业没有现有的项目管理系统的前提下，需要有一套行之有效的项目推进的步骤，以下是笔者认为还算ok的一套流程:<br><img src="https://i.loli.net/2021/04/24/MunjWY9IglcKHt8.png" alt="image.png"></p>
+<span id="more"></span>
+
+<p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tLzExNTY3MjE4NzQvMTE1NjcyMTg3NC5naXRodWIuaW8vYmxvYi9kZXYvc291cmNlL19wb3N0cy9saWZlLyVFOSVBMSVCOSVFNyU5QiVBRSVFNiU4RSVBOCVFOCVCRiU5QiVFOCVCRiVBRCVFNCVCQiVBMyVFNiVCNSU4MSVFNyVBOCU4Qi54bHN4">项目推进迭代流程.xlsx<i class="fa fa-external-link-alt"></i></span></p>
+<h4 id="prd阶段"><a href="#prd阶段" class="headerlink" title="prd阶段"></a>prd阶段</h4><h5 id="基本输出"><a href="#基本输出" class="headerlink" title="基本输出"></a>基本输出</h5><p>这个阶段是pd同学在做头脑风暴，根据需求方需求和以及自己做的市场调研做出的产品设计的描述，会有业务架构图、数据流、资金流、数据流等一些信息，同时会有涉及到界面交互的信息描述。<br>这些设计都是根据需求来的，有的是现有需求，有的是未来的需求做提前的准备，也有解决历史问题等。<br>这个阶段pd同学会输出一份prd的设计文档，这个prd文档会到下一个步骤用。</p>
+<h5 id="参与人"><a href="#参与人" class="headerlink" title="参与人"></a>参与人</h5><p>如果项目复杂，pd同学内部会有一个全体的评估，因为有些prd的设计是一个人做出来的，难免考虑的不是很全面，如果有设计不合理的地方，推进到下一个阶段会遭到技术同学的无情蹂躏。<br>如果项目牵涉到多个团队的情况，在产品设计层，主牵头的pd团队会召集其他团队的pd进行多次讨论敲定产品设计，主要是打通业务流程，划分每个团队的职责边界。<br>另外ui视觉交互会直接和pd讨论，让ui输出一份视觉交互稿，这个交互稿同样在下一个步骤使用。</p>
+<h4 id="项目评估"><a href="#项目评估" class="headerlink" title="项目评估"></a>项目评估</h4><p>此阶段pd会发起邮件通知如下人员参加prd评审:</p>
+<ul>
+<li>pd<ul>
+<li>牵头产品团队的pd</li>
+<li>如果涉及到多个团队的pd会拉上其他团队的主要负责人。</li>
+</ul>
+</li>
+<li>技术&#x2F;技术架构&#x2F;技术风控<ul>
+<li>开发团队小组人员</li>
+<li>架构师(涉及到主要架构调整的)</li>
+<li>运维相关的风险控制相关人员，以及技术安全相关(可选)</li>
+</ul>
+</li>
+<li>前端开发<ul>
+<li>团队的前端开发</li>
+</ul>
+</li>
+<li>测试<ul>
+<li>相关业务团队的测试人员</li>
+</ul>
+</li>
+<li>ui视觉交互<br>视觉交互人员</li>
+<li>产品风控<ul>
+<li>法务</li>
+<li>合规</li>
+<li>监管</li>
+</ul>
+</li>
+<li>业务方<ul>
+<li>实际提出需求的人员，比如运营人员、市场人员。</li>
+</ul>
+</li>
+</ul>
+<p>这个会议的主讲人pd同学为主，ui设计为辅的旋律，同时pd和技术在会议上会出现打架斗殴的现象，哈哈哈，如果技术和pd的方案出现冲突，双方会敲定都能接受的方式；<br>同时在达成一致的时候，ui交互稿也会做出调整；<br>其他角色会在宣讲过程中提出自己的意见和建议；<br>会议纪要一般是pd同学在做；</p>
+<p>这个会议会存在pd设计被重新打回的情况，另外本次会议达成的一致，以及带会下去解决的问题，这些不一致需要敲定下一个时间去再去沟通达成一致，就是多次开会，不过下次会议只会拉上和冲突问题相关的人员，其他人员时间宝贵，不相关的就不会拉上。</p>
+<p>如果项目很大，又很紧急，这个时候，技术可以提前做架构上的工作，以及可以做的提前要做的事情，但是不会出排期，以及具体分工。</p>
+<h4 id="交互-amp-视觉"><a href="#交互-amp-视觉" class="headerlink" title="交互&amp;视觉"></a>交互&amp;视觉</h4><h5 id="参与人-1"><a href="#参与人-1" class="headerlink" title="参与人"></a>参与人</h5><ul>
+<li>ui</li>
+<li>技术</li>
+<li>测试</li>
+<li>前端<br>上一个阶段经过多次互相伤害，在业务流程match、技术同学实现得到认可，ui同学得到认可就会进入交互&amp;视觉阶段，根据上一个阶段的达成的一致，重新和技术以及质量同学走一遍。</li>
+</ul>
+<p>主旋律是ui同学携带ui设计稿，串通用户操作的行为，讲解一些交互细节。</p>
+<h3 id="技术方案评审"><a href="#技术方案评审" class="headerlink" title="技术方案评审"></a>技术方案评审</h3><p>上一个阶段过了之后，技术同学会输出一份系统详细设计，然后拉一个会议进行一波评审。</p>
+<h4 id="参与人-2"><a href="#参与人-2" class="headerlink" title="参与人"></a>参与人</h4><ul>
+<li>后端开发</li>
+<li>前端(非必须)</li>
+<li>测试(非必须)</li>
+</ul>
+<p>这里边的测试人员会根据这个系分输出一份测试用例。<br>这里整理了一份系分设计的模板:<br><a href="https://ceaser.wang/2021/03/12/develop_minds/system_detail_design/">系分设计模板</a></p>
+<p>涉及各个模块的类图、流程图、以及整体的架构设计、数据库设计，表的设计、各系统之间的关联和交互、风险控制等等。<br>这里说一下韭菜集团贯彻的三板斧：</p>
+<ul>
+<li>可监控<br>系统运行对技术参数和业务运行是否正常的数据可以有一个监控和观测的口子</li>
+<li>可应急<br>如果线上系统发生了故障，比如机房故障、或者代码逻辑引发的bug、依赖的第三方系统服务不可用，都是不可以事先预测的，那么如果出现了这种问题，我们在架构上或者说是技术实现上要做防御性建设的处理。<br>机房挂掉(挖掘机技术哪家强，中国山东找蓝翔)可以使用多机房部署、异地多活等，代码逻辑出现问题导致的资金损失，要先止血，关键链路可以切断(实现的时候要做配置开关)处理、渠道路由切换、回滚等，第三方系统不可用，比如缓存系统不可用，可以使用降级方案。</li>
+<li>可灰度<br>一个新功能上线默认认为是存在风险的，因此要先进行小范围的机器部署和发布或者进行路由配置，测试流量进入新迭代的逻辑或者机器。</li>
+</ul>
+<p>这三个发布前提是韭菜集团每个技术团队的必须要践行的，否则不能发布。</p>
+<h3 id="接口评审"><a href="#接口评审" class="headerlink" title="接口评审"></a>接口评审</h3><p>  这个步骤理论上可以和技术方案评审 合并，也可以单独拿出来和前端同学评审</p>
+<h4 id="参与人-3"><a href="#参与人-3" class="headerlink" title="参与人"></a>参与人</h4><ul>
+<li>后端</li>
+<li>前端(api)</li>
+<li>其他依赖当前系统的对接人(rpc)</li>
+</ul>
+<p>主讲人是后端开发，对前端接口的形式和参数、返回值进行说明，收集接口使用人的建议。<br>每个公司都有自己的一套api mock系统，开源的有rap2.<br>参考:</p>
+<h3 id="功能开发"><a href="#功能开发" class="headerlink" title="功能开发"></a>功能开发</h3><p>这个阶段是梭哈阶段，针对系分设计完成编码实现，编码阶段涉及的东西很多，这里抛一偏编码军规。<br>参考:<br><a href="https://ceaser.wang/2021/05/05/life/leeklife_1/">Api 文档管理系统 RAP2环境搭建</a></p>
+<p>这里说一点我对开发层面的一些看法。<br>如果一个业务功能能通过pd设计的方式优雅解决掉，就最好不要通过技术手段去实现掉，设计大于实现，抽象大于编程，每一行代码都透露着线上问题的淫笑，选择大于努力。<br>敬畏每一行代码。<br><strong>salute！</strong><br>你懂我意思吗~</p>
+<h3 id="接口联调"><a href="#接口联调" class="headerlink" title="接口联调"></a>接口联调</h3><p>这个阶段是各个后端服务能力的开发相互之间联合调试的阶段，发现存在的问题及时修复。<br>常用远程debug进行调试。<br>目前大部分的工程搭建都是spring boot，因为可以参考spring boot的远程调试：<br><a href="https://ceaser.wang/2019/06/08/spring_boot_and_cloud/spring_boot_cloud(3)JDWP%E8%BF%9C%E7%A8%8B%E8%B0%83%E8%AF%95%E8%AF%A6%E8%A7%A3%E4%BB%A5%E5%8F%8A%E8%B0%83%E8%AF%95spring-boot-loader%E7%9A%84%E5%90%AF%E5%8A%A8%E4%B8%8E%E5%8A%A0%E8%BD%BD%E5%85%A8%E6%B5%81%E7%A8%8B/">spring_boot_cloud(3)JDWP远程调试详解以及调试spring-boot-loader的启动与加载全流程</a></p>
+<h3 id="代码评审-CR"><a href="#代码评审-CR" class="headerlink" title="代码评审(CR)"></a>代码评审(CR)</h3><p>技术人员的核心输出是code，良好的编码不仅能让系统稳定，还能提高系统的维护性以及扩展性，可读性也是要保证的。<br>优雅的编码就像写诗一样，不仅会喜欢上这个过程，还会让人无法自拔，提高技术热情。<br>设计模式能组织代码优雅编排，同时满足扩展性和可读性。</p>
+<h4 id="参与人-4"><a href="#参与人-4" class="headerlink" title="参与人"></a>参与人</h4><ul>
+<li>后端技术</li>
+<li>测试同学<br>代码评审第一是为了发现当前编码存在的问题，第二是优雅编程。切记不要在CR的时候炫技装逼，有伤大雅，格局不够大。。。</li>
+</ul>
+<h3 id="测试用例评审"><a href="#测试用例评审" class="headerlink" title="测试用例评审"></a>测试用例评审</h3><p>CR之后，技术同学会发起提测，申请测试资源，测试人员在之前的系分产出了一份测试用例，技术同学提测后，会对整个测试用例进行评审，因为中间在编码阶段技术会可能发现一些坑，对现有逻辑改造等，这些需要告知到测试，让测试回归一下。<br>另外开发同学在邮件提测的时候要声明：</p>
+<ul>
+<li>提测的业务需求范围</li>
+<li>提测的功能(可以部分功能提测)</li>
+<li>对那些业务范围需要回归一下</li>
+<li>后端代码分支、系分文档地址</li>
+<li>前端代码分支</li>
+<li>数据库坐标</li>
+<li>提测建议</li>
+</ul>
+<h3 id="冒烟测试"><a href="#冒烟测试" class="headerlink" title="冒烟测试"></a>冒烟测试</h3><p>开发同学对自己开发的系统自己进行全局性的测试，测试粒度比较粗，主要功能是否实现，有无系统报错，数据是否正确等等。<br>这里尽量把问题都自我发现掉，最好不要让测试去发现，养成owner意识。</p>
+<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><p>测试阶段是质量同学的职责，根据之前评审的测试用例，对本次开发的需求范围进行测试，包括功能测试，压力测试等等。<br>测试同学测试验收完毕之后，会通知开发同学发布uat环境。<br>如果测试有问题，开发同学消灭bugs。</p>
+<h3 id="UAT"><a href="#UAT" class="headerlink" title="UAT"></a>UAT</h3><p>UAT是最接近生产环境的一个环境，数据库都是线上的数据库，程序是本次需求的程序，有些问题由于业务丰富度以及数据的丰富程度，不会在开发和测试环境暴露出来，到了uat环境就会暴露出来。<br>uat环境测试同学验证完毕之后，会通知开发同学进入线上环境，如果有问题，通知开发同学消灭bugs。</p>
+<h3 id="上线"><a href="#上线" class="headerlink" title="上线"></a>上线</h3><p>这个是我们最终要交付的环境，我们都要敬畏的系统，所有同学的一致目标环境。<br>uat环境在测试同学验证完毕之后，会给开发同学发起上线通知，开发同学将代码发布到线上机器。<br>发布完毕，测试同学会对正式环境进行一波验收和回归。<br>这里在测试的时候可以使用三板斧里边的灰度方式，减少测试数据影响范围。<br>没问题皆大欢喜，有问题解决bug，如果是阻塞问题要是用三板斧里边的应急策略。<br>正常上线完毕之后，要对系统的运行情况能监控，有的是技术上的监控，比如内存、cpu、磁盘、网络、io等进行监控，出现技术故障的时候可以提供参考。<br>第二种就是对业务进行监控，我们在实现业务的时候，比如交易笔数、访问量、退款笔数、这些数据都是业务数据，我们在编码的时候需要按照日志规范打印这些日志，监控系统根据日志模板抓取app的日志，抠出来里边的业务数据，<br>比如退款笔数1小时达到了1500笔，而1000属于每日平均水平，这个时候就会触发监控系统的报警。</p>
 ]]></content>
       <categories>
         <category>life</category>
@@ -8855,109 +8958,6 @@ java.util.concurrent.Executors#callable(java.security.PrivilegedExceptionAction<
 </ul>
 <h3 id="书籍推荐"><a href="#书籍推荐" class="headerlink" title="书籍推荐"></a>书籍推荐</h3><p>  《第一性原理》、《金字塔原理》、《假性亲密关系》、《非暴力沟通》</p>
 <h3 id="新年快乐"><a href="#新年快乐" class="headerlink" title="新年快乐"></a>新年快乐</h3><p>  2021年，成长很多，非常感谢！<br>  2022年，万事如意，枝繁叶茂！<br>  happy new year ~~~<br>  <img src="https://s2.loli.net/2021/12/31/aDvFJZGchUW3YgS.jpg" alt="28551b4cb1c76ad3d62afcc5_1_.jpg"></p>
-]]></content>
-      <categories>
-        <category>life</category>
-      </categories>
-      <tags>
-        <tag>leek</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>在人间做韭菜的那些年(3)--项目推进迭代流程</title>
-    <url>/2021/04/24/life/leeklife_2/</url>
-    <content><![CDATA[<h3 id="项目推进"><a href="#项目推进" class="headerlink" title="项目推进"></a>项目推进</h3><p>互联网做项目都是一把梭，在企业没有现有的项目管理系统的前提下，需要有一套行之有效的项目推进的步骤，以下是笔者认为还算ok的一套流程:<br><img src="https://i.loli.net/2021/04/24/MunjWY9IglcKHt8.png" alt="image.png"></p>
-<span id="more"></span>
-
-<p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tLzExNTY3MjE4NzQvMTE1NjcyMTg3NC5naXRodWIuaW8vYmxvYi9kZXYvc291cmNlL19wb3N0cy9saWZlLyVFOSVBMSVCOSVFNyU5QiVBRSVFNiU4RSVBOCVFOCVCRiU5QiVFOCVCRiVBRCVFNCVCQiVBMyVFNiVCNSU4MSVFNyVBOCU4Qi54bHN4">项目推进迭代流程.xlsx<i class="fa fa-external-link-alt"></i></span></p>
-<h4 id="prd阶段"><a href="#prd阶段" class="headerlink" title="prd阶段"></a>prd阶段</h4><h5 id="基本输出"><a href="#基本输出" class="headerlink" title="基本输出"></a>基本输出</h5><p>这个阶段是pd同学在做头脑风暴，根据需求方需求和以及自己做的市场调研做出的产品设计的描述，会有业务架构图、数据流、资金流、数据流等一些信息，同时会有涉及到界面交互的信息描述。<br>这些设计都是根据需求来的，有的是现有需求，有的是未来的需求做提前的准备，也有解决历史问题等。<br>这个阶段pd同学会输出一份prd的设计文档，这个prd文档会到下一个步骤用。</p>
-<h5 id="参与人"><a href="#参与人" class="headerlink" title="参与人"></a>参与人</h5><p>如果项目复杂，pd同学内部会有一个全体的评估，因为有些prd的设计是一个人做出来的，难免考虑的不是很全面，如果有设计不合理的地方，推进到下一个阶段会遭到技术同学的无情蹂躏。<br>如果项目牵涉到多个团队的情况，在产品设计层，主牵头的pd团队会召集其他团队的pd进行多次讨论敲定产品设计，主要是打通业务流程，划分每个团队的职责边界。<br>另外ui视觉交互会直接和pd讨论，让ui输出一份视觉交互稿，这个交互稿同样在下一个步骤使用。</p>
-<h4 id="项目评估"><a href="#项目评估" class="headerlink" title="项目评估"></a>项目评估</h4><p>此阶段pd会发起邮件通知如下人员参加prd评审:</p>
-<ul>
-<li>pd<ul>
-<li>牵头产品团队的pd</li>
-<li>如果涉及到多个团队的pd会拉上其他团队的主要负责人。</li>
-</ul>
-</li>
-<li>技术&#x2F;技术架构&#x2F;技术风控<ul>
-<li>开发团队小组人员</li>
-<li>架构师(涉及到主要架构调整的)</li>
-<li>运维相关的风险控制相关人员，以及技术安全相关(可选)</li>
-</ul>
-</li>
-<li>前端开发<ul>
-<li>团队的前端开发</li>
-</ul>
-</li>
-<li>测试<ul>
-<li>相关业务团队的测试人员</li>
-</ul>
-</li>
-<li>ui视觉交互<br>视觉交互人员</li>
-<li>产品风控<ul>
-<li>法务</li>
-<li>合规</li>
-<li>监管</li>
-</ul>
-</li>
-<li>业务方<ul>
-<li>实际提出需求的人员，比如运营人员、市场人员。</li>
-</ul>
-</li>
-</ul>
-<p>这个会议的主讲人pd同学为主，ui设计为辅的旋律，同时pd和技术在会议上会出现打架斗殴的现象，哈哈哈，如果技术和pd的方案出现冲突，双方会敲定都能接受的方式；<br>同时在达成一致的时候，ui交互稿也会做出调整；<br>其他角色会在宣讲过程中提出自己的意见和建议；<br>会议纪要一般是pd同学在做；</p>
-<p>这个会议会存在pd设计被重新打回的情况，另外本次会议达成的一致，以及带会下去解决的问题，这些不一致需要敲定下一个时间去再去沟通达成一致，就是多次开会，不过下次会议只会拉上和冲突问题相关的人员，其他人员时间宝贵，不相关的就不会拉上。</p>
-<p>如果项目很大，又很紧急，这个时候，技术可以提前做架构上的工作，以及可以做的提前要做的事情，但是不会出排期，以及具体分工。</p>
-<h4 id="交互-amp-视觉"><a href="#交互-amp-视觉" class="headerlink" title="交互&amp;视觉"></a>交互&amp;视觉</h4><h5 id="参与人-1"><a href="#参与人-1" class="headerlink" title="参与人"></a>参与人</h5><ul>
-<li>ui</li>
-<li>技术</li>
-<li>测试</li>
-<li>前端<br>上一个阶段经过多次互相伤害，在业务流程match、技术同学实现得到认可，ui同学得到认可就会进入交互&amp;视觉阶段，根据上一个阶段的达成的一致，重新和技术以及质量同学走一遍。</li>
-</ul>
-<p>主旋律是ui同学携带ui设计稿，串通用户操作的行为，讲解一些交互细节。</p>
-<h3 id="技术方案评审"><a href="#技术方案评审" class="headerlink" title="技术方案评审"></a>技术方案评审</h3><p>上一个阶段过了之后，技术同学会输出一份系统详细设计，然后拉一个会议进行一波评审。</p>
-<h4 id="参与人-2"><a href="#参与人-2" class="headerlink" title="参与人"></a>参与人</h4><ul>
-<li>后端开发</li>
-<li>前端(非必须)</li>
-<li>测试(非必须)</li>
-</ul>
-<p>这里边的测试人员会根据这个系分输出一份测试用例。<br>这里整理了一份系分设计的模板:<br><a href="https://ceaser.wang/2021/03/12/develop_minds/system_detail_design/">系分设计模板</a></p>
-<p>涉及各个模块的类图、流程图、以及整体的架构设计、数据库设计，表的设计、各系统之间的关联和交互、风险控制等等。<br>这里说一下韭菜集团贯彻的三板斧：</p>
-<ul>
-<li>可监控<br>系统运行对技术参数和业务运行是否正常的数据可以有一个监控和观测的口子</li>
-<li>可应急<br>如果线上系统发生了故障，比如机房故障、或者代码逻辑引发的bug、依赖的第三方系统服务不可用，都是不可以事先预测的，那么如果出现了这种问题，我们在架构上或者说是技术实现上要做防御性建设的处理。<br>机房挂掉(挖掘机技术哪家强，中国山东找蓝翔)可以使用多机房部署、异地多活等，代码逻辑出现问题导致的资金损失，要先止血，关键链路可以切断(实现的时候要做配置开关)处理、渠道路由切换、回滚等，第三方系统不可用，比如缓存系统不可用，可以使用降级方案。</li>
-<li>可灰度<br>一个新功能上线默认认为是存在风险的，因此要先进行小范围的机器部署和发布或者进行路由配置，测试流量进入新迭代的逻辑或者机器。</li>
-</ul>
-<p>这三个发布前提是韭菜集团每个技术团队的必须要践行的，否则不能发布。</p>
-<h3 id="接口评审"><a href="#接口评审" class="headerlink" title="接口评审"></a>接口评审</h3><p>  这个步骤理论上可以和技术方案评审 合并，也可以单独拿出来和前端同学评审</p>
-<h4 id="参与人-3"><a href="#参与人-3" class="headerlink" title="参与人"></a>参与人</h4><ul>
-<li>后端</li>
-<li>前端(api)</li>
-<li>其他依赖当前系统的对接人(rpc)</li>
-</ul>
-<p>主讲人是后端开发，对前端接口的形式和参数、返回值进行说明，收集接口使用人的建议。<br>每个公司都有自己的一套api mock系统，开源的有rap2.<br>参考:</p>
-<h3 id="功能开发"><a href="#功能开发" class="headerlink" title="功能开发"></a>功能开发</h3><p>这个阶段是梭哈阶段，针对系分设计完成编码实现，编码阶段涉及的东西很多，这里抛一偏编码军规。<br>参考:<br><a href="https://ceaser.wang/2021/05/05/life/leeklife_1/">Api 文档管理系统 RAP2环境搭建</a></p>
-<p>这里说一点我对开发层面的一些看法。<br>如果一个业务功能能通过pd设计的方式优雅解决掉，就最好不要通过技术手段去实现掉，设计大于实现，抽象大于编程，每一行代码都透露着线上问题的淫笑，选择大于努力。<br>敬畏每一行代码。<br><strong>salute！</strong><br>你懂我意思吗~</p>
-<h3 id="接口联调"><a href="#接口联调" class="headerlink" title="接口联调"></a>接口联调</h3><p>这个阶段是各个后端服务能力的开发相互之间联合调试的阶段，发现存在的问题及时修复。<br>常用远程debug进行调试。<br>目前大部分的工程搭建都是spring boot，因为可以参考spring boot的远程调试：<br><a href="https://ceaser.wang/2019/06/08/spring_boot_and_cloud/spring_boot_cloud(3)JDWP%E8%BF%9C%E7%A8%8B%E8%B0%83%E8%AF%95%E8%AF%A6%E8%A7%A3%E4%BB%A5%E5%8F%8A%E8%B0%83%E8%AF%95spring-boot-loader%E7%9A%84%E5%90%AF%E5%8A%A8%E4%B8%8E%E5%8A%A0%E8%BD%BD%E5%85%A8%E6%B5%81%E7%A8%8B/">spring_boot_cloud(3)JDWP远程调试详解以及调试spring-boot-loader的启动与加载全流程</a></p>
-<h3 id="代码评审-CR"><a href="#代码评审-CR" class="headerlink" title="代码评审(CR)"></a>代码评审(CR)</h3><p>技术人员的核心输出是code，良好的编码不仅能让系统稳定，还能提高系统的维护性以及扩展性，可读性也是要保证的。<br>优雅的编码就像写诗一样，不仅会喜欢上这个过程，还会让人无法自拔，提高技术热情。<br>设计模式能组织代码优雅编排，同时满足扩展性和可读性。</p>
-<h4 id="参与人-4"><a href="#参与人-4" class="headerlink" title="参与人"></a>参与人</h4><ul>
-<li>后端技术</li>
-<li>测试同学<br>代码评审第一是为了发现当前编码存在的问题，第二是优雅编程。切记不要在CR的时候炫技装逼，有伤大雅，格局不够大。。。</li>
-</ul>
-<h3 id="测试用例评审"><a href="#测试用例评审" class="headerlink" title="测试用例评审"></a>测试用例评审</h3><p>CR之后，技术同学会发起提测，申请测试资源，测试人员在之前的系分产出了一份测试用例，技术同学提测后，会对整个测试用例进行评审，因为中间在编码阶段技术会可能发现一些坑，对现有逻辑改造等，这些需要告知到测试，让测试回归一下。<br>另外开发同学在邮件提测的时候要声明：</p>
-<ul>
-<li>提测的业务需求范围</li>
-<li>提测的功能(可以部分功能提测)</li>
-<li>对那些业务范围需要回归一下</li>
-<li>后端代码分支、系分文档地址</li>
-<li>前端代码分支</li>
-<li>数据库坐标</li>
-<li>提测建议</li>
-</ul>
-<h3 id="冒烟测试"><a href="#冒烟测试" class="headerlink" title="冒烟测试"></a>冒烟测试</h3><p>开发同学对自己开发的系统自己进行全局性的测试，测试粒度比较粗，主要功能是否实现，有无系统报错，数据是否正确等等。<br>这里尽量把问题都自我发现掉，最好不要让测试去发现，养成owner意识。</p>
-<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><p>测试阶段是质量同学的职责，根据之前评审的测试用例，对本次开发的需求范围进行测试，包括功能测试，压力测试等等。<br>测试同学测试验收完毕之后，会通知开发同学发布uat环境。<br>如果测试有问题，开发同学消灭bugs。</p>
-<h3 id="UAT"><a href="#UAT" class="headerlink" title="UAT"></a>UAT</h3><p>UAT是最接近生产环境的一个环境，数据库都是线上的数据库，程序是本次需求的程序，有些问题由于业务丰富度以及数据的丰富程度，不会在开发和测试环境暴露出来，到了uat环境就会暴露出来。<br>uat环境测试同学验证完毕之后，会通知开发同学进入线上环境，如果有问题，通知开发同学消灭bugs。</p>
-<h3 id="上线"><a href="#上线" class="headerlink" title="上线"></a>上线</h3><p>这个是我们最终要交付的环境，我们都要敬畏的系统，所有同学的一致目标环境。<br>uat环境在测试同学验证完毕之后，会给开发同学发起上线通知，开发同学将代码发布到线上机器。<br>发布完毕，测试同学会对正式环境进行一波验收和回归。<br>这里在测试的时候可以使用三板斧里边的灰度方式，减少测试数据影响范围。<br>没问题皆大欢喜，有问题解决bug，如果是阻塞问题要是用三板斧里边的应急策略。<br>正常上线完毕之后，要对系统的运行情况能监控，有的是技术上的监控，比如内存、cpu、磁盘、网络、io等进行监控，出现技术故障的时候可以提供参考。<br>第二种就是对业务进行监控，我们在实现业务的时候，比如交易笔数、访问量、退款笔数、这些数据都是业务数据，我们在编码的时候需要按照日志规范打印这些日志，监控系统根据日志模板抓取app的日志，抠出来里边的业务数据，<br>比如退款笔数1小时达到了1500笔，而1000属于每日平均水平，这个时候就会触发监控系统的报警。</p>
 ]]></content>
       <categories>
         <category>life</category>

@@ -470,7 +470,7 @@ SRP要求每个软件模块职责要单一，衡量标准是模块是否只有�
 ![image.jpg](https://s3.bmp.ovh/imgs/2022/12/30/fb9eddf1a2111791.jpg)
 
 
-如果你觉得我的文章有用，可以打上我一杯雀巢咖啡
+如果你觉得我的文章有用，可以打赏我一杯雀巢咖啡
 
 
 ![image.jpg](https://i.postimg.cc/8Pmvqq4J/b1c4562d7729c208aef2f861473f309.jpg)

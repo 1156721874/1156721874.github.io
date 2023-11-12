@@ -23,16 +23,16 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"ceaser.wang","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.12.1","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="硬件知识_LED原理图(辅线)怎样点亮一个LED？  看原理图，确定控制LED的引脚， 看主芯片手册，确定如何设置&#x2F;控制引脚 写程序  原理图led的电阻很小，接通电源以后，其本身的电流很大，会被烧毁因此在他之前加了一个电阻：">
+    <meta name="description" content="硬件知识_LED原理图(辅线)怎样点亮一个LED？  看原理图，确定控制LED的引脚， 看主芯片手册，确定如何设置&#x2F;控制引脚 写程序">
 <meta property="og:type" content="article">
 <meta property="og:title" content="第1个ARM裸板程序及引申">
 <meta property="og:url" content="https://ceaser.wang/2023/05/01/embed/diyigearmluobanchengxu/index.html">
 <meta property="og:site_name" content="南贺神社">
-<meta property="og:description" content="硬件知识_LED原理图(辅线)怎样点亮一个LED？  看原理图，确定控制LED的引脚， 看主芯片手册，确定如何设置&#x2F;控制引脚 写程序  原理图led的电阻很小，接通电源以后，其本身的电流很大，会被烧毁因此在他之前加了一个电阻：">
+<meta property="og:description" content="硬件知识_LED原理图(辅线)怎样点亮一个LED？  看原理图，确定控制LED的引脚， 看主芯片手册，确定如何设置&#x2F;控制引脚 写程序">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://s2.loli.net/2023/11/12/YITWXSRGCQB8em9.png">
 <meta property="og:image" content="https://s2.loli.net/2023/05/01/TMUk48wPXho9KWE.png">
 <meta property="og:image" content="https://s2.loli.net/2023/05/01/gkCuEthS3zjFmX1.png">
-<meta property="og:image" content="https://s2.loli.net/2023/11/12/YITWXSRGCQB8em9.png">
 <meta property="og:image" content="https://s2.loli.net/2023/05/01/PVkBqd91YbR8zUX.png">
 <meta property="og:image" content="https://s2.loli.net/2023/05/01/bBUsd51ZpfOxciu.png">
 <meta property="og:image" content="https://s2.loli.net/2023/05/01/mHWpOifNJRslraG.png">
@@ -55,11 +55,11 @@
 <meta property="og:image" content="https://s2.loli.net/2023/11/12/cptFg5YebHxl8uw.png">
 <meta property="og:image" content="https://i.postimg.cc/8Pmvqq4J/b1c4562d7729c208aef2f861473f309.jpg">
 <meta property="article:published_time" content="2023-05-01T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-11-12T07:31:43.840Z">
+<meta property="article:modified_time" content="2023-11-12T07:38:36.828Z">
 <meta property="article:author" content="CeaserWang">
 <meta property="article:tag" content="embed">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://s2.loli.net/2023/05/01/TMUk48wPXho9KWE.png">
+<meta name="twitter:image" content="https://s2.loli.net/2023/11/12/YITWXSRGCQB8em9.png">
 
 
 <link rel="canonical" href="https://ceaser.wang/2023/05/01/embed/diyigearmluobanchengxu/">
@@ -313,7 +313,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-11-12 07:31:43" itemprop="dateModified" datetime="2023-11-12T07:31:43+00:00">2023-11-12</time>
+      <time title="Modified: 2023-11-12 07:38:36" itemprop="dateModified" datetime="2023-11-12T07:38:36+00:00">2023-11-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -346,12 +346,9 @@
 <ol>
 <li>看原理图，确定控制LED的引脚，</li>
 <li>看主芯片手册，确定如何设置&#x2F;控制引脚</li>
-<li>写程序</li>
+<li>写程序<br><img src="https://s2.loli.net/2023/11/12/YITWXSRGCQB8em9.png" alt="image.png"><span id="more"></span></li>
 </ol>
 <h2 id="原理图"><a href="#原理图" class="headerlink" title="原理图"></a>原理图</h2><p>led的电阻很小，接通电源以后，其本身的电流很大，会被烧毁<br><img src="https://s2.loli.net/2023/05/01/TMUk48wPXho9KWE.png" alt="image.png"><br>因此在他之前加了一个电阻：<br><img src="https://s2.loli.net/2023/05/01/gkCuEthS3zjFmX1.png" alt="image.png"></p>
-<p><img src="https://s2.loli.net/2023/11/12/YITWXSRGCQB8em9.png" alt="image.png"></p>
-<span id="more"></span>
-
 <p>这里的开关使我们手动的，在芯片里边都是引脚，引脚可以输出一个电压值<br><img src="https://s2.loli.net/2023/05/01/PVkBqd91YbR8zUX.png" alt="image.png"><br>还可以<br><img src="https://s2.loli.net/2023/05/01/bBUsd51ZpfOxciu.png" alt="image.png"></p>
 <p>有些芯片的引脚驱动不足，电压很低，不能驱动LED，这个时候需要三极管<br><img src="https://s2.loli.net/2023/05/01/mHWpOifNJRslraG.png" alt="image.png"><br><img src="https://s2.loli.net/2023/05/01/f3QMhN9qomtFWBg.png" alt="image.png"></p>
 <h2 id="硬件知识"><a href="#硬件知识" class="headerlink" title="硬件知识"></a>硬件知识</h2><p>打开s3c2440的芯片手册，搜索LED<br><img src="https://s2.loli.net/2023/05/01/KmMtz96dpRVCBwF.png" alt="image.png"><br>这个LED接了一个3.3V的电源，然后接到芯片的nLED_1，当nLED_1输出高电平的时候，LED熄灭，当nLED_1输出低电平的时候，n指的是低电平有效。<br>我们在s3c2440手册里边找到nLED_1连接的脚本是EINT4&#x2F;GPT4<br><img src="https://s2.loli.net/2023/05/01/gQR2Vx6OYCcDtjJ.png" alt="image.png"></p>

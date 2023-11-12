@@ -31,7 +31,7 @@
 <meta property="og:description" content="需求我们在向线程池提交任务的时候，提交的顺序是ABCD，提交之后任务执行完毕的时间都是不确定的，比如执行完毕的顺序是CBAD，然后实际开发中有这样的需求是，只要得到第一个任务的执行结果，其他任务的执行结果就不考虑了，试想，如果没有jdk的实现的api的话，我们也可以操作，增加一个队列，让任务执行完毕之后，将任务的执行结果放入到队列的头部，第二执行完毕的任务的执行结果放在结果队列的第二个位置，以此类">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2020-06-30T13:36:00.000Z">
-<meta property="article:modified_time" content="2023-11-12T07:31:43.792Z">
+<meta property="article:modified_time" content="2023-11-12T07:38:36.792Z">
 <meta property="article:author" content="CeaserWang">
 <meta property="article:tag" content="CompletionService">
 <meta name="twitter:card" content="summary">
@@ -288,7 +288,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-11-12 07:31:43" itemprop="dateModified" datetime="2023-11-12T07:31:43+00:00">2023-11-12</time>
+      <time title="Modified: 2023-11-12 07:38:36" itemprop="dateModified" datetime="2023-11-12T07:38:36+00:00">2023-11-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">

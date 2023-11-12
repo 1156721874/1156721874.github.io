@@ -10,15 +10,14 @@ categories: embed
 1. 看原理图，确定控制LED的引脚，
 2. 看主芯片手册，确定如何设置/控制引脚
 3. 写程序
+![image.png](https://s2.loli.net/2023/11/12/YITWXSRGCQB8em9.png)
+<!-- more -->
 
 ## 原理图
 led的电阻很小，接通电源以后，其本身的电流很大，会被烧毁
 ![image.png](https://s2.loli.net/2023/05/01/TMUk48wPXho9KWE.png)
 因此在他之前加了一个电阻：
 ![image.png](https://s2.loli.net/2023/05/01/gkCuEthS3zjFmX1.png)
-
-![image.png](https://s2.loli.net/2023/11/12/YITWXSRGCQB8em9.png)
-<!-- more -->
 
 这里的开关使我们手动的，在芯片里边都是引脚，引脚可以输出一个电压值
 ![image.png](https://s2.loli.net/2023/05/01/PVkBqd91YbR8zUX.png)

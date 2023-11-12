@@ -185,9 +185,9 @@ links:
   BladeCode: https://incoder.org
   Alyenc: https://kaifa.dev
   Killua: https://blog.dazhidayong.cn
-  Jocelyn: https://jocelynshang.cn/
+  Cylong: https://www.cylong.com
 
-# Table of Contents in the Sidebar
+# Table of Contents in the Sidebar Jocelyn: https://jocelynshang.cn/
 # Front-matter variable (nonsupport wrap expand_all).
 toc:
   enable: true

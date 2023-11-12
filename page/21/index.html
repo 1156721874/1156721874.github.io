@@ -85,7 +85,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">208</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">216</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">208</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">217</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
         </a>
@@ -156,7 +156,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">216</span>
+          <span class="site-state-item-count">217</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -245,6 +245,107 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/09/28/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-2-%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
+      <meta itemprop="name" content="CeaserWang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2018/09/28/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-2-%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" class="post-title-link" itemprop="url">设计模式(2)-代理模式</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-09-28 20:20:31" itemprop="dateCreated datePublished" datetime="2018-09-28T20:20:31+00:00">2018-09-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-11-12 07:06:59" itemprop="dateModified" datetime="2023-11-12T07:06:59+00:00">2023-11-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/DesignPatterns/" itemprop="url" rel="index"><span itemprop="name">DesignPatterns</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2018/09/28/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-2-%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/" class="post-meta-item leancloud_visitors" data-flag-title="设计模式(2)-代理模式" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><img src="/20151010130746987.png" alt="这里写图片描述"><br><strong>1、静态代理：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- more --&gt;</span><br><span class="line">interface ProxyBase&#123;</span><br><span class="line">	public void f();</span><br><span class="line">	public void g();</span><br><span class="line">	public void h();</span><br><span class="line">&#125;</span><br><span class="line">//代理程序</span><br><span class="line">class Proxy implement ProxyBase&#123;</span><br><span class="line">	private ProxyBase implementation;</span><br><span class="line">	public Proxy()&#123;</span><br><span class="line">		//目标程序</span><br><span class="line">		implementation = new ProxyImplementation();</span><br><span class="line">	&#125;</span><br><span class="line">	public void f()&#123;</span><br><span class="line">		implementation.f();</span><br><span class="line">	&#125;</span><br><span class="line">	public void g()&#123;</span><br><span class="line">		implementation.g();</span><br><span class="line">	&#125;</span><br><span class="line">	public void h()&#123;</span><br><span class="line">		implementation.h();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">//目标程序</span><br><span class="line">class ProxyImplementation implements ProxyBase&#123;</span><br><span class="line">	public void f()&#123;</span><br><span class="line">		System.out.println(“ProxyImplementation.f()”);</span><br><span class="line">	&#125;</span><br><span class="line">	public void g()&#123;</span><br><span class="line">		System.out.println(“ProxyImplementation.g()”);</span><br><span class="line">	&#125;</span><br><span class="line">	public void h()&#123;</span><br><span class="line">		System.out.println(“ProxyImplementation.h()”);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">//客户端程序调用代理</span><br><span class="line">public class ProxyDemo&#123;</span><br><span class="line">	public static void main(String[] args)&#123;</span><br><span class="line">		//客户端调用代理程序</span><br><span class="line">		Proxy p = new Proxy();</span><br><span class="line">		p.f();</span><br><span class="line">		p.g();</span><br><span class="line">		p.h();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>2、动态代理</strong><br>动态代理分为JDK的接口动态代理和CGLIB的基于类的动态代理，<br>JDK的动态代理机制只能代理实现了接口的类，而不能实现接口的类就不能实现JDK的动态代理，cglib是针对类来实现代理的，他的原理是对指定的目标类生成一个子类，并覆盖其中方法实现增强，但因为采用的是继承，所以不能对final修饰的类进行代理。<br><strong>jdk动态代理：</strong><br><strong><span class="exturl" data-url="aHR0cDovL3Jlam95Lml0ZXllLmNvbS9ibG9nLzE2Mjc0MDU=">jdk动态代理的实现原理参考<i class="fa fa-external-link-alt"></i></span></strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">//代理接口</span><br><span class="line">interface Foo&#123;</span><br><span class="line">	public void f(String s);</span><br><span class="line">	public void g(int i);</span><br><span class="line">	public void h(int i, String s);</span><br><span class="line">&#125;</span><br><span class="line">//接口实现类，即被代理类</span><br><span class="line">class FooImpl implements Foo&#123;</span><br><span class="line">	public void f(String s)&#123;</span><br><span class="line">		System.out.println(“FooImpl.f(), s=” + s);</span><br><span class="line">	&#125;</span><br><span class="line">	public void g(int i) &#123;</span><br><span class="line">		System.out.println(“FooImpl.g(), i=” + i);</span><br><span class="line">	&#125;</span><br><span class="line">	public void h(int i, String s) &#123;</span><br><span class="line">		System.out.println(“FooImpl.h(), i=” + i + “, s=” + s);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">//动态代理处理类</span><br><span class="line">class ProxyHandler implements InvocationHandler&#123;</span><br><span class="line">	//代理实现类</span><br><span class="line">	private Object delegate;            </span><br><span class="line">     	public ProxyHandler (Object obj) &#123;    </span><br><span class="line">         	delegate = obj;    </span><br><span class="line">     	&#125;    </span><br><span class="line">	public Object invoke(Object proxy, Method method, Object[] args)&#123;</span><br><span class="line">  		System.out.println(“Before mothod:” + method);</span><br><span class="line">  		method.invoke(this.delegate, args);</span><br><span class="line">  		System.out.println(“After mothod:” + method);</span><br><span class="line">  		return null;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">public class DynamicProxyDemo&#123;</span><br><span class="line">	public static void main(String[] args)&#123;</span><br><span class="line">		Foo foo = new FooImpl();</span><br><span class="line">		ProxyHandler handler = new ProxyHandler(foo);</span><br><span class="line">		//产生动态代理</span><br><span class="line">	Foo proxy = (Foo)Proxy.newProxyInstance(Foo.class.getClassLoader(), new Class[]&#123;Foo.class&#125;, handler);</span><br><span class="line">		proxy.f(“f”);</span><br><span class="line">		proxy.g(1);</span><br><span class="line">		proxy.h(“h”, 2);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>CGLIB动态代理</strong><br>在使用CGLIB时需引入cglib-nodep-2.1_3.jar包<br>被代理对象</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">package com.ljq.test;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * 定义一个HelloWorld类</span><br><span class="line"> *</span><br><span class="line"> * @author jiqinlin</span><br><span class="line"> *</span><br><span class="line"> */</span><br><span class="line">public class HelloWorld &#123;</span><br><span class="line">    public void sayHelloWorld() &#123;</span><br><span class="line">        System.out.println(&quot;HelloWorld!&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>代理类</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line">package com.ljq.test;</span><br><span class="line"></span><br><span class="line">import java.lang.reflect.Method;</span><br><span class="line"></span><br><span class="line">import net.sf.cglib.proxy.Enhancer;</span><br><span class="line">import net.sf.cglib.proxy.MethodInterceptor;</span><br><span class="line">import net.sf.cglib.proxy.MethodProxy;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * 通过Cglib实现在方法调用前后向控制台输出两句字符串</span><br><span class="line"> *</span><br><span class="line"> * @author jiqinlin</span><br><span class="line"> *</span><br><span class="line"> */</span><br><span class="line">public class CglibProxy implements MethodInterceptor &#123;</span><br><span class="line">    //要代理的原始对象</span><br><span class="line">    private Object obj;</span><br><span class="line"></span><br><span class="line">    public Object createProxy(Object target) &#123;</span><br><span class="line">        this.obj = target;</span><br><span class="line">        Enhancer enhancer = new Enhancer();</span><br><span class="line">        enhancer.setSuperclass(this.obj.getClass());// 设置代理目标</span><br><span class="line">        enhancer.setCallback(this);// 设置回调</span><br><span class="line">        enhancer.setClassLoader(target.getClass().getClassLoader());</span><br><span class="line">        return enhancer.create();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 在代理实例上处理方法调用并返回结果</span><br><span class="line">     *</span><br><span class="line">     * @param proxy</span><br><span class="line">     *            代理类</span><br><span class="line">     * @param method</span><br><span class="line">     *            被代理的方法</span><br><span class="line">     * @param params</span><br><span class="line">     *            该方法的参数数组</span><br><span class="line">     * @param methodProxy</span><br><span class="line">     */</span><br><span class="line">    public Object intercept(Object proxy, Method method, Object[] params,</span><br><span class="line">            MethodProxy methodProxy) throws Throwable &#123;</span><br><span class="line">        Object result = null;</span><br><span class="line">        // 调用之前</span><br><span class="line">        doBefore();</span><br><span class="line">        // 调用原始对象的方法</span><br><span class="line">        result = methodProxy.invokeSuper(proxy, params);</span><br><span class="line">        // 调用之后</span><br><span class="line">        doAfter();</span><br><span class="line">        return result;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private void doBefore() &#123;</span><br><span class="line">        System.out.println(&quot;before method invoke&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private void doAfter() &#123;</span><br><span class="line">        System.out.println(&quot;after method invoke&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>测试类</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">package com.ljq.test;</span><br><span class="line"></span><br><span class="line">public class HelloWorldTest &#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        HelloWorld helloWorld=new HelloWorld();</span><br><span class="line">        CglibProxy cglibProxy=new CglibProxy();</span><br><span class="line">        HelloWorld hw=(HelloWorld)cglibProxy.createProxy(helloWorld);</span><br><span class="line">        hw.sayHelloWorld();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
     <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/09/28/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-1-%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8FSingleton/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -281,7 +382,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-11-12 07:06:38" itemprop="dateModified" datetime="2023-11-12T07:06:38+00:00">2023-11-12</time>
+      <time title="Modified: 2023-11-12 07:06:59" itemprop="dateModified" datetime="2023-11-12T07:06:59+00:00">2023-11-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -380,7 +481,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-11-12 07:06:38" itemprop="dateModified" datetime="2023-11-12T07:06:38+00:00">2023-11-12</time>
+      <time title="Modified: 2023-11-12 07:06:58" itemprop="dateModified" datetime="2023-11-12T07:06:58+00:00">2023-11-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -479,7 +580,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-11-12 07:06:38" itemprop="dateModified" datetime="2023-11-12T07:06:38+00:00">2023-11-12</time>
+      <time title="Modified: 2023-11-12 07:06:58" itemprop="dateModified" datetime="2023-11-12T07:06:58+00:00">2023-11-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -578,7 +679,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-11-12 07:06:38" itemprop="dateModified" datetime="2023-11-12T07:06:38+00:00">2023-11-12</time>
+      <time title="Modified: 2023-11-12 07:06:58" itemprop="dateModified" datetime="2023-11-12T07:06:58+00:00">2023-11-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -677,7 +778,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-11-12 07:06:38" itemprop="dateModified" datetime="2023-11-12T07:06:38+00:00">2023-11-12</time>
+      <time title="Modified: 2023-11-12 07:06:58" itemprop="dateModified" datetime="2023-11-12T07:06:58+00:00">2023-11-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -776,7 +877,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-11-12 07:06:38" itemprop="dateModified" datetime="2023-11-12T07:06:38+00:00">2023-11-12</time>
+      <time title="Modified: 2023-11-12 07:06:58" itemprop="dateModified" datetime="2023-11-12T07:06:58+00:00">2023-11-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -875,7 +976,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-11-12 07:06:38" itemprop="dateModified" datetime="2023-11-12T07:06:38+00:00">2023-11-12</time>
+      <time title="Modified: 2023-11-12 07:06:58" itemprop="dateModified" datetime="2023-11-12T07:06:58+00:00">2023-11-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -974,7 +1075,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-11-12 07:06:38" itemprop="dateModified" datetime="2023-11-12T07:06:38+00:00">2023-11-12</time>
+      <time title="Modified: 2023-11-12 07:06:59" itemprop="dateModified" datetime="2023-11-12T07:06:59+00:00">2023-11-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1087,7 +1188,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-11-12 07:06:38" itemprop="dateModified" datetime="2023-11-12T07:06:38+00:00">2023-11-12</time>
+      <time title="Modified: 2023-11-12 07:06:58" itemprop="dateModified" datetime="2023-11-12T07:06:58+00:00">2023-11-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1125,98 +1226,6 @@
             </div>
           <!--/noindex-->
         
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/09/28/SPRING%E6%8A%80%E6%9C%AF%E5%86%85%E5%B9%95%EF%BC%9A%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90SPRING%E6%9E%B6%E6%9E%84%E4%B8%8E%E8%AE%BE%E8%AE%A1%E5%8E%9F%E7%90%86-%E7%AC%AC2%E7%89%88-%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%94%EF%BC%89-3-AOPProxy%E7%9A%84%E7%94%9F%E6%88%90%E8%BF%87%E7%A8%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
-      <meta itemprop="name" content="CeaserWang">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="南贺神社">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 南贺神社">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2018/09/28/SPRING%E6%8A%80%E6%9C%AF%E5%86%85%E5%B9%95%EF%BC%9A%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90SPRING%E6%9E%B6%E6%9E%84%E4%B8%8E%E8%AE%BE%E8%AE%A1%E5%8E%9F%E7%90%86-%E7%AC%AC2%E7%89%88-%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%94%EF%BC%89-3-AOPProxy%E7%9A%84%E7%94%9F%E6%88%90%E8%BF%87%E7%A8%8B/" class="post-title-link" itemprop="url"> SPRING技术内幕：深入解析SPRING架构与设计原理(第2版)-笔记（五）(3)AOPProxy的生成过程</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2018-09-28 19:27:34" itemprop="dateCreated datePublished" datetime="2018-09-28T19:27:34+00:00">2018-09-28</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-11-12 07:06:38" itemprop="dateModified" datetime="2023-11-12T07:06:38+00:00">2023-11-12</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/spring/" itemprop="url" rel="index"><span itemprop="name">spring</span></a>
-        </span>
-    </span>
-
-  
-    <span id="/2018/09/28/SPRING%E6%8A%80%E6%9C%AF%E5%86%85%E5%B9%95%EF%BC%9A%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90SPRING%E6%9E%B6%E6%9E%84%E4%B8%8E%E8%AE%BE%E8%AE%A1%E5%8E%9F%E7%90%86-%E7%AC%AC2%E7%89%88-%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%94%EF%BC%89-3-AOPProxy%E7%9A%84%E7%94%9F%E6%88%90%E8%BF%87%E7%A8%8B/" class="post-meta-item leancloud_visitors" data-flag-title=" SPRING技术内幕：深入解析SPRING架构与设计原理(第2版)-笔记（五）(3)AOPProxy的生成过程" title="Views">
-      <span class="post-meta-item-icon">
-        <i class="far fa-eye"></i>
-      </span>
-      <span class="post-meta-item-text">Views: </span>
-      <span class="leancloud-visitors-count"></span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>AOPProxy的生成过程：<br><img src="/20150519215814452.png" alt="这里写图片描述"></p>
-
       
     </div>
 

@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ceaser.wang","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.12.1","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="选择什么开发板我们学习单片机的目的是什么，是为了后期学习linux系统驱动做铺垫。它的层级结构是这样的：单片机-&gt;bootloader-&gt;linux系统&#x2F;驱动-&gt;app                                      :纯c&#x2F;c++无界面                                      :qt&#x2F;an">
+<meta property="og:type" content="article">
+<meta property="og:title" content="开发板熟悉与体验(jz2440)">
+<meta property="og:url" content="https://ceaser.wang/2023/04/24/embed/kaifabanshuxihetiyan/index.html">
+<meta property="og:site_name" content="南贺神社">
+<meta property="og:description" content="选择什么开发板我们学习单片机的目的是什么，是为了后期学习linux系统驱动做铺垫。它的层级结构是这样的：单片机-&gt;bootloader-&gt;linux系统&#x2F;驱动-&gt;app                                      :纯c&#x2F;c++无界面                                      :qt&#x2F;an">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://s2.loli.net/2023/05/01/BGu1cCqo2LsmU3y.png">
+<meta property="og:image" content="https://s2.loli.net/2023/05/01/YzpM71Xv3flhreC.png">
+<meta property="og:image" content="https://s2.loli.net/2023/05/01/4XcUry2pGwILqWY.png">
+<meta property="og:image" content="https://s2.loli.net/2023/05/01/UBo9PQyFuNbHh1X.png">
+<meta property="og:image" content="https://s2.loli.net/2023/05/01/KaMgHwTV1Fb6tJv.png">
+<meta property="og:image" content="https://s2.loli.net/2023/05/01/1Z6qYdcQ8eHUC4A.png">
+<meta property="og:image" content="https://s2.loli.net/2023/05/01/Zbvy9qhVoYw36cT.png">
+<meta property="og:image" content="https://s2.loli.net/2023/05/01/jDoGpTqfAK4Qy5H.png">
+<meta property="og:image" content="https://s2.loli.net/2023/05/01/DYPBrMJLq8m4uG5.png">
+<meta property="og:image" content="https://s2.loli.net/2023/05/01/nghrGv7b1RkWEUF.png">
+<meta property="article:published_time" content="2023-04-24T22:12:45.000Z">
+<meta property="article:modified_time" content="2023-11-12T07:06:58.806Z">
+<meta property="article:author" content="CeaserWang">
+<meta property="article:tag" content="embed">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2023/05/01/BGu1cCqo2LsmU3y.png">
+
+
+<link rel="canonical" href="https://ceaser.wang/2023/04/24/embed/kaifabanshuxihetiyan/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://ceaser.wang/2023/04/24/embed/kaifabanshuxihetiyan/","path":"2023/04/24/embed/kaifabanshuxihetiyan/","title":"开发板熟悉与体验(jz2440)"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>开发板熟悉与体验(jz2440) | 南贺神社</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">南贺神社</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">你写程序有写诗一样的感觉吗?</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">208</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">217</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%80%89%E6%8B%A9%E4%BB%80%E4%B9%88%E5%BC%80%E5%8F%91%E6%9D%BF"><span class="nav-number">1.</span> <span class="nav-text">选择什么开发板</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%94%99%E8%AF%AF%E8%A7%82%E7%82%B9"><span class="nav-number">1.1.</span> <span class="nav-text">错误观点</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E4%BB%80%E4%B9%88%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7"><span class="nav-number">2.</span> <span class="nav-text">使用什么开发工具</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BC%80%E5%8F%91%E6%9D%BF%E4%BB%8B%E7%BB%8D"><span class="nav-number">3.</span> <span class="nav-text">开发板介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BC%80%E5%8F%91%E6%9D%BF%E6%8E%A5%E5%8F%A3%E4%BB%8B%E7%BB%8D%E4%B8%8E%E4%B8%B2%E5%8F%A3%E8%BF%9E%E6%8E%A5"><span class="nav-number">4.</span> <span class="nav-text">开发板接口介绍与串口连接</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%8E%E4%B9%88%E4%BD%BF%E7%94%A8%E8%BF%99%E4%B8%AA%E5%BC%80%E5%8F%91%E6%9D%BF%EF%BC%8C%E5%AE%83%E9%87%8C%E8%BE%B9%E6%9C%89%E5%A6%82%E4%B8%8B%E5%87%A0%E4%B8%AA%E6%A0%B8%E5%BF%83%E6%8E%A5%E5%8F%A3"><span class="nav-number">4.1.</span> <span class="nav-text">怎么使用这个开发板，它里边有如下几个核心接口</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8eop%E7%83%A7%E5%86%99%E8%A3%B8%E6%9D%BF%E7%A8%8B%E5%BA%8F"><span class="nav-number">5.</span> <span class="nav-text">使用eop烧写裸板程序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#eop%E7%83%A7%E5%86%99"><span class="nav-number">5.1.</span> <span class="nav-text">eop烧写</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="CeaserWang"
+      src="/../0xcc/index/Uchiha.jpg">
+  <p class="site-author-name" itemprop="name">CeaserWang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">217</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">208</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tLzExNTY3MjE4NzQ=" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;1156721874"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmNlYXNlcndhbmdAb3V0bG9vay5jb20=" title="E-Mail → mailto:ceaserwang@outlook.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+  </div>
+  <div class="cc-license site-overview-item animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-user-friends fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly90d29kcmFnb25sYWtlLmNvbQ==" title="https:&#x2F;&#x2F;twodragonlake.com">TwoDragonLake</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9yb290Y2x1c3Rlci5naXRodWIuaW8=" title="https:&#x2F;&#x2F;rootcluster.github.io">RootCluster</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9tdXNlZmxvdy5pbw==" title="https:&#x2F;&#x2F;museflow.io">MuseFlow</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9pbmNvZGVyLm9yZw==" title="https:&#x2F;&#x2F;incoder.org">BladeCode</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9rYWlmYS5kZXY=" title="https:&#x2F;&#x2F;kaifa.dev">Alyenc</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmRhemhpZGF5b25nLmNu" title="https:&#x2F;&#x2F;blog.dazhidayong.cn">Killua</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9qb2NlbHluc2hhbmcuY24v" title="https:&#x2F;&#x2F;jocelynshang.cn&#x2F;">Jocelyn</span>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2023/04/24/embed/kaifabanshuxihetiyan/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
+      <meta itemprop="name" content="CeaserWang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="开发板熟悉与体验(jz2440) | 南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          开发板熟悉与体验(jz2440)
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2023-04-24 22:12:45" itemprop="dateCreated datePublished" datetime="2023-04-24T22:12:45+00:00">2023-04-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-11-12 07:06:58" itemprop="dateModified" datetime="2023-11-12T07:06:58+00:00">2023-11-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/embed/" itemprop="url" rel="index"><span itemprop="name">embed</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2023/04/24/embed/kaifabanshuxihetiyan/" class="post-meta-item leancloud_visitors" data-flag-title="开发板熟悉与体验(jz2440)" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="选择什么开发板"><a href="#选择什么开发板" class="headerlink" title="选择什么开发板"></a>选择什么开发板</h1><p>我们学习单片机的目的是什么，是为了后期学习linux系统驱动做铺垫。<br>它的层级结构是这样的：<br>单片机-&gt;bootloader-&gt;linux系统&#x2F;驱动-&gt;app<br>                                      :纯c&#x2F;c++无界面<br>                                      :qt&#x2F;android</p>
+<p>在单片机-&gt;bootloader-&gt;linux系统&#x2F;驱动-&gt;app-&gt;qt这个学习路线上我们可以使用同一套开发板。<br>怎么选择开发板？答案是资料丰富<br>他们百度搜索结果条数</p>
+<ul>
+<li><p>三星系列的</p>
+</li>
+<li><p>s3c2440     92万</p>
+</li>
+<li><p>s3c6410     43万</p>
+</li>
+<li><p>s5pv210     22万</p>
+</li>
+<li><p>exynos4412  14万</p>
+</li>
+<li><p>ti</p>
+</li>
+<li><p>AM437x       4.5万</p>
+</li>
+<li><p>AM335x       164万 营销好 用户多，工控芯片</p>
+</li>
+<li><p>freescale</p>
+<ul>
+<li>I.MX6       21万</li>
+</ul>
+</li>
+<li><p>全志，瑞芯微  资料不开放<br>从教程丰富程度，我们选择s3c2440</p>
+<h2 id="错误观点"><a href="#错误观点" class="headerlink" title="错误观点"></a>错误观点</h2><p>有人说s3c2440过时了，他的cpu还是arm9，性能差，过时了，但是他的知识没有过时。<br><img src="https://s2.loli.net/2023/05/01/BGu1cCqo2LsmU3y.png" alt="image.png"><br>我们在操作硬件的时候，不是操作的cpu，不接触cpu的指令，而是操作内存和寄存器，以及硬件的口径。<br>只有在中断的时候，才和cpu有点关系，但是不同的cpu之间关系比较小，没啥成本，并且我们以后再学习linux内核的时候，linux已经帮我们做好了封装和处理，根本不需要我们关心。</p>
+</li>
+</ul>
+<p>驱动&#x3D;软件框架+硬件操作</p>
+<p>软件框架都是一样的，所有内核都是linux内核，硬件操作，只要在s3c2440掌握了i2c，spi的原理，其他的硬件开发板都是一样的。</p>
+<h1 id="使用什么开发工具"><a href="#使用什么开发工具" class="headerlink" title="使用什么开发工具"></a>使用什么开发工具</h1><p>ads,keil,mdk<br>只要写一个main函数，所有细节都封装了，谁来调main，c写的main函数代码生成代码怎么放在内存里边，这些工具都帮你做了，但是这些工具封装了太多的细节，不适合初学者，初学者应该学习细节，扎实基础，因此不会使用这些开发工具。<br>基于arm+linux裸机学习我们可以学习更多知识。<br>学习了s3c2440+linux裸机开发+arm芯片，回过头来再去学习STM32就是几分钟搞定的事情。<br>这样我们就能无缝进入后续的学习bootloader、linux驱动。</p>
+<h1 id="开发板介绍"><a href="#开发板介绍" class="headerlink" title="开发板介绍"></a>开发板介绍</h1><p>s3c2440开发板，实际上他的性能并不是很强，但是他的资料非常的丰富<br><img src="https://s2.loli.net/2023/05/01/YzpM71Xv3flhreC.png" alt="20210906021414799.png"><br><img src="https://s2.loli.net/2023/05/01/4XcUry2pGwILqWY.png" alt="20210906021415633.png"></p>
+<h1 id="开发板接口介绍与串口连接"><a href="#开发板接口介绍与串口连接" class="headerlink" title="开发板接口介绍与串口连接"></a>开发板接口介绍与串口连接</h1><h2 id="怎么使用这个开发板，它里边有如下几个核心接口"><a href="#怎么使用这个开发板，它里边有如下几个核心接口" class="headerlink" title="怎么使用这个开发板，它里边有如下几个核心接口"></a>怎么使用这个开发板，它里边有如下几个核心接口</h2><p><img src="https://s2.loli.net/2023/05/01/UBo9PQyFuNbHh1X.png" alt="image.png"></p>
+<ul>
+<li>接通电源</li>
+<li>按下开关</li>
+<li>使用串口(usb串口)观察信息<ul>
+<li>连接以后windows会自动安装驱动(如果没法自动安装，可以下载PL2303_Prolific_DriverInstaller_v1.7.0.exe或者驱动精灵暗转)</li>
+<li>然后我们需要在pc安装一个mobaxterm软件，用来连接串口，这样开发板通过串口返回的信息我们可以在这个软件里边看到，也可以用这个软件通过串口发送命令给开发板</li>
+</ul>
+</li>
+<li>使用jtag口（usb烧写器）烧写程序</li>
+<li>如果板上程序支持usb下载，板子的bus接口连接pc的usb接口<ul>
+<li>烧写软件：oflash.ext</li>
+<li>硬件:op&#x2F;eop、 easy open jtag</li>
+<li>驱动<ul>
+<li>eop连接到pc</li>
+<li>安装eop驱动</li>
+<li>暗转app</li>
+<li>开发板通过排线连接到eop，eop通过usb线连接到pc</li>
+<li>执行oflash.exe xxx.bin</li>
+<li>断开开发板和eop，断开eop和pc的连线</li>
+<li>设置从nor或者nand启动</li>
+<li>重新上电</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>启动选择开关：从nor启动，还是从nand启动</li>
+</ul>
+<p>mobaxterm设置串口的时候，注意下波特率和不选中限流：<br><img src="https://s2.loli.net/2023/05/01/KaMgHwTV1Fb6tJv.png" alt="image.png"></p>
+<h1 id="使用eop烧写裸板程序"><a href="#使用eop烧写裸板程序" class="headerlink" title="使用eop烧写裸板程序"></a>使用eop烧写裸板程序</h1><h2 id="eop烧写"><a href="#eop烧写" class="headerlink" title="eop烧写"></a>eop烧写</h2><p> 将eop连接到pc，然后安装驱动(下载驱动程序OpenOCD with GUI setup.exe)，开发板通过排线连接到eop，eop通过usb线连接到pc 这三个步骤做完。<br> oflash.exe烧写的bin文件，可以是u-boot.bin，它可以选择烧写到nor或者nand上，烧写到0地址。<br> 也可以直接烧写我么自己写的程序，比如led.bin。烧写到nand上去，烧写到0地址。</p>
+<ol>
+<li><p>命令模式下，切换到要烧写的文件所在的目录里，执行oflash xx.bin<br><img src="https://s2.loli.net/2023/05/01/1Z6qYdcQ8eHUC4A.png" alt="image.png"></p>
+</li>
+<li><p>烧写到nand flash（2次确认）<br><img src="https://s2.loli.net/2023/05/01/Zbvy9qhVoYw36cT.png" alt="image.png"></p>
+</li>
+<li><p>烧写到0地址<br><img src="https://s2.loli.net/2023/05/01/jDoGpTqfAK4Qy5H.png" alt="image.png"></p>
+</li>
+<li><p>将开发板的启动开关设置为nand启动</p>
+</li>
+<li><p>将jtag线拔掉，拔掉的原因是jtag上有复位引脚，不然无法启动</p>
+</li>
+<li><p>按下电源开关关闭开发板，然后重新上电，启动开发板，就会看到烧写的程序运行，如果是led的程序，开发板的灯就会闪烁</p>
+</li>
+</ol>
+<p>如果是烧写uboot，在启动以后我们可以通过mobaxterm连接到串口，在uboot等待3秒之内，在mobaxterm的串口命令窗口按下空格键，就会进入uboot 的菜单<br><img src="https://s2.loli.net/2023/05/01/DYPBrMJLq8m4uG5.png" alt="image.png"><br>空格以后：<br><img src="https://s2.loli.net/2023/05/01/nghrGv7b1RkWEUF.png" alt="image.png"></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>CeaserWang
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://ceaser.wang/2023/04/24/embed/kaifabanshuxihetiyan/" title="开发板熟悉与体验(jz2440)">https://ceaser.wang/2023/04/24/embed/kaifabanshuxihetiyan/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/embed/" rel="tag"><i class="fa fa-tag"></i> embed</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/12/30/life/2022_end_review/" rel="prev" title="2022 year-end review">
+                  <i class="fa fa-chevron-left"></i> 2022 year-end review
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/05/01/embed/diyigearmluobanchengxu/" rel="next" title="第1个ARM裸板程序及引申">
+                  第1个ARM裸板程序及引申 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CeaserWang</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.0.6/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.1.1/mermaid.min.js","integrity":"sha256-8L3O8tirFUa8Va4NSTAyIbHJeLd6OnlcxgupV9F77e0="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"ryAR9bttS7fex1FPEPAylmmJ-gzGzoHsz","app_key":"dYqygoN4Y01Bl38OdRoCHUYn","server_url":null,"security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+
+</body>
+</html>

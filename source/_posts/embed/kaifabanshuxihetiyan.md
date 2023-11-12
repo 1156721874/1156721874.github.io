@@ -14,6 +14,8 @@ categories: embed
 
 在单片机->bootloader->linux系统/驱动->app->qt这个学习路线上我们可以使用同一套开发板。
 怎么选择开发板？答案是资料丰富
+![image.png](https://s2.loli.net/2023/11/12/XI9cFBofaCWkiH8.png)
+<!-- more -->
 他们百度搜索结果条数
 - 三星系列的
  - s3c2440     92万
@@ -101,3 +103,10 @@ mobaxterm设置串口的时候，注意下波特率和不选中限流：
 ![image.png](https://s2.loli.net/2023/05/01/DYPBrMJLq8m4uG5.png)
 空格以后：
 ![image.png](https://s2.loli.net/2023/05/01/nghrGv7b1RkWEUF.png)
+【本节结束】
+
+
+![image.png](https://s2.loli.net/2023/11/12/F7zHMlmXtxbu81j.png)
+
+如果你觉得我的文章有用，可以打赏我一杯雀巢咖啡
+![image.jpg](https://i.postimg.cc/8Pmvqq4J/b1c4562d7729c208aef2f861473f309.jpg)

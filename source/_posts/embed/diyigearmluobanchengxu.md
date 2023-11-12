@@ -17,6 +17,9 @@ led的电阻很小，接通电源以后，其本身的电流很大，会被烧�
 因此在他之前加了一个电阻：
 ![image.png](https://s2.loli.net/2023/05/01/gkCuEthS3zjFmX1.png)
 
+![image.png](https://s2.loli.net/2023/11/12/YITWXSRGCQB8em9.png)
+<!-- more -->
+
 这里的开关使我们手动的，在芯片里边都是引脚，引脚可以输出一个电压值
 ![image.png](https://s2.loli.net/2023/05/01/PVkBqd91YbR8zUX.png)
 还可以
@@ -289,3 +292,8 @@ Disassembly of section .comment:
 ```
 下面对这段指令进行解析:
 ![解析C程序的内部机制.jpg](https://s2.loli.net/2023/11/12/U4LcDuHOaCokinr.jpg)
+
+【本节结束】
+![image.png](https://s2.loli.net/2023/11/12/cptFg5YebHxl8uw.png)
+如果你觉得我的文章有用，可以打赏我一杯雀巢咖啡
+![image.jpg](https://i.postimg.cc/8Pmvqq4J/b1c4562d7729c208aef2f861473f309.jpg)

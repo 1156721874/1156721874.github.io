@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ceaser.wang","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.12.1","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="硬件知识_LED原理图(辅线)怎样点亮一个LED？  看原理图，确定控制LED的引脚， 看主芯片手册，确定如何设置&#x2F;控制引脚 写程序  原理图led的电阻很小，接通电源以后，其本身的电流很大，会被烧毁因此在他之前加了一个电阻： 这里的开关使我们手动的，在芯片里边都是引脚，引脚可以输出一个电压值还可以 有些芯片的引脚驱动不足，电压很低，不能驱动LED，这个时候需要三极管 硬件知识打开s3c">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第1个ARM裸板程序及引申">
+<meta property="og:url" content="https://ceaser.wang/2023/05/01/embed/diyigearmluobanchengxu/index.html">
+<meta property="og:site_name" content="南贺神社">
+<meta property="og:description" content="硬件知识_LED原理图(辅线)怎样点亮一个LED？  看原理图，确定控制LED的引脚， 看主芯片手册，确定如何设置&#x2F;控制引脚 写程序  原理图led的电阻很小，接通电源以后，其本身的电流很大，会被烧毁因此在他之前加了一个电阻： 这里的开关使我们手动的，在芯片里边都是引脚，引脚可以输出一个电压值还可以 有些芯片的引脚驱动不足，电压很低，不能驱动LED，这个时候需要三极管 硬件知识打开s3c">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://s2.loli.net/2023/05/01/TMUk48wPXho9KWE.png">
+<meta property="og:image" content="https://s2.loli.net/2023/05/01/gkCuEthS3zjFmX1.png">
+<meta property="og:image" content="https://s2.loli.net/2023/05/01/PVkBqd91YbR8zUX.png">
+<meta property="og:image" content="https://s2.loli.net/2023/05/01/bBUsd51ZpfOxciu.png">
+<meta property="og:image" content="https://s2.loli.net/2023/05/01/mHWpOifNJRslraG.png">
+<meta property="og:image" content="https://s2.loli.net/2023/05/01/f3QMhN9qomtFWBg.png">
+<meta property="og:image" content="https://s2.loli.net/2023/05/01/KmMtz96dpRVCBwF.png">
+<meta property="og:image" content="https://s2.loli.net/2023/05/01/gQR2Vx6OYCcDtjJ.png">
+<meta property="og:image" content="https://s2.loli.net/2023/05/01/V6tceIa2QZNYdGE.png">
+<meta property="og:image" content="https://s2.loli.net/2023/05/01/V6tceIa2QZNYdGE.png">
+<meta property="og:image" content="https://s2.loli.net/2023/05/01/wHu3a9y4tqZSknX.png">
+<meta property="og:image" content="https://s2.loli.net/2023/05/01/Hq2pimJxKaRrwDv.png">
+<meta property="og:image" content="https://s2.loli.net/2023/05/01/G4q2T3K6aUlXE1A.png">
+<meta property="og:image" content="https://s2.loli.net/2023/05/01/H5GrkCWlLD2Qw7T.png">
+<meta property="og:image" content="https://s3.bmp.ovh/imgs/2023/05/27/6c3d971cd12ba611.png">
+<meta property="og:image" content="https://s3.bmp.ovh/imgs/2023/05/27/88729adcce5541c4.png">
+<meta property="og:image" content="https://s3.bmp.ovh/imgs/2023/05/27/535c9277e2ab23f9.png">
+<meta property="og:image" content="https://s3.bmp.ovh/imgs/2023/05/27/15efca16247ab67c.png">
+<meta property="og:image" content="https://s2.loli.net/2023/11/12/rkCfSFTe5vRscgV.jpg">
+<meta property="og:image" content="https://s2.loli.net/2023/11/12/azStEmYAbQKjl3f.jpg">
+<meta property="og:image" content="https://s2.loli.net/2023/11/12/U4LcDuHOaCokinr.jpg">
+<meta property="article:published_time" content="2023-05-01T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-11-12T07:06:38.382Z">
+<meta property="article:author" content="CeaserWang">
+<meta property="article:tag" content="embed">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2023/05/01/TMUk48wPXho9KWE.png">
+
+
+<link rel="canonical" href="https://ceaser.wang/2023/05/01/embed/diyigearmluobanchengxu/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://ceaser.wang/2023/05/01/embed/diyigearmluobanchengxu/","path":"2023/05/01/embed/diyigearmluobanchengxu/","title":"第1个ARM裸板程序及引申"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>第1个ARM裸板程序及引申 | 南贺神社</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">南贺神社</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">你写程序有写诗一样的感觉吗?</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">208</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">216</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%A1%AC%E4%BB%B6%E7%9F%A5%E8%AF%86-LED%E5%8E%9F%E7%90%86%E5%9B%BE-%E8%BE%85%E7%BA%BF"><span class="nav-number">1.</span> <span class="nav-text">硬件知识_LED原理图(辅线)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%9F%E7%90%86%E5%9B%BE"><span class="nav-number">1.1.</span> <span class="nav-text">原理图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A1%AC%E4%BB%B6%E7%9F%A5%E8%AF%86"><span class="nav-number">1.2.</span> <span class="nav-text">硬件知识</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BC%96%E7%A8%8B%E8%AE%BE%E7%BD%AE%E5%AE%83%E7%9A%84%E7%8A%B6%E6%80%81"><span class="nav-number">2.</span> <span class="nav-text">编程设置它的状态</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%83%A7%E5%86%99"><span class="nav-number">3.</span> <span class="nav-text">烧写</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B1%87%E7%BC%96%E4%B8%8E%E6%9C%BA%E5%99%A8%E7%A0%81"><span class="nav-number">4.</span> <span class="nav-text">汇编与机器码</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AD%97%E8%8A%82%E5%BA%8F%E5%92%8C%E4%BD%8D%E6%93%8D%E4%BD%9C"><span class="nav-number">5.</span> <span class="nav-text">字节序和位操作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#C%E8%AF%AD%E8%A8%80%E7%82%B9%E4%BA%AELED"><span class="nav-number">6.</span> <span class="nav-text">C语言点亮LED</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A7%A3%E6%9E%90C%E7%A8%8B%E5%BA%8F%E7%9A%84%E5%86%85%E9%83%A8%E6%9C%BA%E5%88%B6"><span class="nav-number">7.</span> <span class="nav-text">解析C程序的内部机制</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="CeaserWang"
+      src="/../0xcc/index/Uchiha.jpg">
+  <p class="site-author-name" itemprop="name">CeaserWang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">216</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">208</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tLzExNTY3MjE4NzQ=" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;1156721874"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmNlYXNlcndhbmdAb3V0bG9vay5jb20=" title="E-Mail → mailto:ceaserwang@outlook.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+  </div>
+  <div class="cc-license site-overview-item animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-user-friends fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly90d29kcmFnb25sYWtlLmNvbQ==" title="https:&#x2F;&#x2F;twodragonlake.com">TwoDragonLake</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9yb290Y2x1c3Rlci5naXRodWIuaW8=" title="https:&#x2F;&#x2F;rootcluster.github.io">RootCluster</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9tdXNlZmxvdy5pbw==" title="https:&#x2F;&#x2F;museflow.io">MuseFlow</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9pbmNvZGVyLm9yZw==" title="https:&#x2F;&#x2F;incoder.org">BladeCode</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9rYWlmYS5kZXY=" title="https:&#x2F;&#x2F;kaifa.dev">Alyenc</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmRhemhpZGF5b25nLmNu" title="https:&#x2F;&#x2F;blog.dazhidayong.cn">Killua</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9qb2NlbHluc2hhbmcuY24v" title="https:&#x2F;&#x2F;jocelynshang.cn&#x2F;">Jocelyn</span>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2023/05/01/embed/diyigearmluobanchengxu/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
+      <meta itemprop="name" content="CeaserWang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="第1个ARM裸板程序及引申 | 南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          第1个ARM裸板程序及引申
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2023-05-01 16:00:00" itemprop="dateCreated datePublished" datetime="2023-05-01T16:00:00+00:00">2023-05-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-11-12 07:06:38" itemprop="dateModified" datetime="2023-11-12T07:06:38+00:00">2023-11-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/embed/" itemprop="url" rel="index"><span itemprop="name">embed</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2023/05/01/embed/diyigearmluobanchengxu/" class="post-meta-item leancloud_visitors" data-flag-title="第1个ARM裸板程序及引申" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="硬件知识-LED原理图-辅线"><a href="#硬件知识-LED原理图-辅线" class="headerlink" title="硬件知识_LED原理图(辅线)"></a>硬件知识_LED原理图(辅线)</h1><p>怎样点亮一个LED？</p>
+<ol>
+<li>看原理图，确定控制LED的引脚，</li>
+<li>看主芯片手册，确定如何设置&#x2F;控制引脚</li>
+<li>写程序</li>
+</ol>
+<h2 id="原理图"><a href="#原理图" class="headerlink" title="原理图"></a>原理图</h2><p>led的电阻很小，接通电源以后，其本身的电流很大，会被烧毁<br><img src="https://s2.loli.net/2023/05/01/TMUk48wPXho9KWE.png" alt="image.png"><br>因此在他之前加了一个电阻：<br><img src="https://s2.loli.net/2023/05/01/gkCuEthS3zjFmX1.png" alt="image.png"></p>
+<p>这里的开关使我们手动的，在芯片里边都是引脚，引脚可以输出一个电压值<br><img src="https://s2.loli.net/2023/05/01/PVkBqd91YbR8zUX.png" alt="image.png"><br>还可以<br><img src="https://s2.loli.net/2023/05/01/bBUsd51ZpfOxciu.png" alt="image.png"></p>
+<p>有些芯片的引脚驱动不足，电压很低，不能驱动LED，这个时候需要三极管<br><img src="https://s2.loli.net/2023/05/01/mHWpOifNJRslraG.png" alt="image.png"><br><img src="https://s2.loli.net/2023/05/01/f3QMhN9qomtFWBg.png" alt="image.png"></p>
+<h2 id="硬件知识"><a href="#硬件知识" class="headerlink" title="硬件知识"></a>硬件知识</h2><p>打开s3c2440的芯片手册，搜索LED<br><img src="https://s2.loli.net/2023/05/01/KmMtz96dpRVCBwF.png" alt="image.png"><br>这个LED接了一个3.3V的电源，然后接到芯片的nLED_1，当nLED_1输出高电平的时候，LED熄灭，当nLED_1输出低电平的时候，n指的是低电平有效。<br>我们在s3c2440手册里边找到nLED_1连接的脚本是EINT4&#x2F;GPT4<br><img src="https://s2.loli.net/2023/05/01/gQR2Vx6OYCcDtjJ.png" alt="image.png"></p>
+<p>我们打开s3c2440找到gpt4的使用，芯片里边有A-J组引脚，gpt4在Port F(GPF)这一组里边<br><img src="https://s2.loli.net/2023/05/01/V6tceIa2QZNYdGE.png" alt="image.png"><br>现在的问题是怎么把GPT4的引脚设置为输出低电平？</p>
+<ol>
+<li>GPT4配置为输出引脚，注意每个引脚都可以配置为输出引脚还是输入引脚<br><img src="https://s2.loli.net/2023/05/01/V6tceIa2QZNYdGE.png" alt="image.png"><br>GPT4可以设置输入，也可以设置输出，也可以设置中断功能。<br><img src="https://s2.loli.net/2023/05/01/wHu3a9y4tqZSknX.png" alt="image.png"></li>
+</ol>
+<h1 id="编程设置它的状态"><a href="#编程设置它的状态" class="headerlink" title="编程设置它的状态"></a>编程设置它的状态</h1><p>这个是GPFCON和GPFDAT寄存器的地址：<br><img src="https://s2.loli.net/2023/05/01/Hq2pimJxKaRrwDv.png" alt="image.png"><br>设置GPFCON的[9:8]为0b01，那么GPF4设置为输出引脚,即把0x100写入GPFCON，就是写到地址0x56000050.<br>下面是GPFDATA寄存器的设置说明<br><img src="https://s2.loli.net/2023/05/01/G4q2T3K6aUlXE1A.png" alt="image.png"><br>GPFDATA的意思是设置对应引脚编号的位置为对应引脚输出的值。<br>比如是GPF4：<br>LED熄灭：那么就设置GPFDATA的第4位为1，即为输出高电平，把0x10写到地址0x56000054上；<br>LED点亮：设置GPFDATA的第4位为0，即为输出低电平，把0写到地址0x56000054上；</p>
+<p>接下来就是写代码去配置，在写代码配置之前，需要先来了解下s3c2440框架和启动过程<br><img src="https://s2.loli.net/2023/05/01/H5GrkCWlLD2Qw7T.png" alt="image.png"><br>启动过程如下：</p>
+<ol>
+<li><p>nor启动：nor flash基地址为0，片内RAM地址为0x4000,0000<br>cpu读出nor上第一个指令（前4字节），执行。<br>cpu继续读出其他指令执行。</p>
+</li>
+<li><p>nand启动：片内4Kram基地址为0，nor flash不可访问，2440硬件把nand前4K内容复制到片内RAM，然后cpu从0地址取出第一条指令执行。</p>
+</li>
+</ol>
+<p>另外，cpu操作寄存器的形式如下：<br><img src="https://s3.bmp.ovh/imgs/2023/05/27/6c3d971cd12ba611.png"></p>
+<ol start="4">
+<li><p>操作寄存器的几个汇编指令<br>4.1 LDR 指令<br>读内存，LDR R0,[R1] ,假设R1的值是x，读取地址x上的数据（4字节），保存到R0中。<br>4.2 STR指令<br>写内存指令，STR R0,[R1]<br>假设R1的值是x，把R0的值写到地址X（4字节）<br>4.3 B指令<br>跳转<br>4.4 MOV指令<br>MOV R0,R1 把R1的值赋值给R0，R0&#x3D;R1；<br>MOV R0,#0x100，R0&#x3D;0x100;<br>4.5 LDR R0,&#x3D;0x12345678:R0&#x3D;0x12345678<br>这是一条伪指令，它会被拆分为几条真正的RAM指令<br>如果我们用MOV R0,0x12345678，这样是错误的，不能正确执行，因为一条ARM指令长度是32位，除了数据意外，还需要表示指令本身以及其他变量。<br><img src="https://s3.bmp.ovh/imgs/2023/05/27/88729adcce5541c4.png"><br>所以引入伪指令 LDR R0,&#x3D;0x12345678<br>4.6 加减法<br>add r0,r1,#4:r0&#x3D;r1+4 ;<br>sub r0,r1,#4:r0&#x3D;r1-4;<br>sub r0,r1,r2:r0&#x3D;r1-r2;<br>4.7 bl指令<br>branch and link</p>
+</li>
+<li><p>编写程序<br>我们写的第一个程序是汇编程序，不会上来就写c语言main函数。<br>新建文件led_on.S</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">/*</span><br><span class="line"> * 点亮LED1: gpf4</span><br><span class="line"> */</span><br><span class="line"></span><br><span class="line">.text</span><br><span class="line">.global _start</span><br><span class="line"></span><br><span class="line">_start:</span><br><span class="line"></span><br><span class="line">/* 配置GPF4为输出引脚</span><br><span class="line"> * 把0x100写到地址0x56000050</span><br><span class="line"> */</span><br><span class="line">	ldr r1, =0x56000050</span><br><span class="line">	ldr r0, =0x100	/* mov r0, #0x100 */</span><br><span class="line">	str r0, [r1]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">/* 设置GPF4输出高电平</span><br><span class="line"> * 把0写到地址0x56000054</span><br><span class="line"> */</span><br><span class="line">	ldr r1, =0x56000054</span><br><span class="line">	ldr r0, =0	/* mov r0, #0 */</span><br><span class="line">	str r0, [r1]</span><br><span class="line"></span><br><span class="line">	/* 死循环 */</span><br><span class="line">halt:</span><br><span class="line">	b halt</span><br></pre></td></tr></table></figure>
+<p>将此文件放在linux系统编译：<br>5.1.  预编译<br> arm-linux-gcc -c -o led_on.o led_on.S<br>5.2. 连接<br>arm-linux-ld -Ttext 0 led_on.o -o led_on.elf<br>5.3. 得到bin文件<br>arm-linux-objcopy -o binary -S led_on.elf led_on.bin<br>这些命令写的时候容易出错，可以放在一个文件里边。<br>文件名为Makefile</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">all:</span><br><span class="line">	arm-linux-gcc -c -o led_on.o led_on.S</span><br><span class="line">	arm-linux-ld -Ttext 0 led_on.o -o led_on.elf</span><br><span class="line">	arm-linux-objcopy -O binary -S led_on.elf led_on.bin</span><br><span class="line">	arm-linux-objdump -D led_on.elf &gt; led_on.dis</span><br><span class="line">clean:</span><br><span class="line">	rm *.bin *.o *.elf</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>5.4. 然后使用make clean来清除，使用make命令来编译</p>
+<h1 id="烧写"><a href="#烧写" class="headerlink" title="烧写"></a>烧写</h1><p>将在linux下编译好的并文件copy到windows平台下<br>硬件接好烧写器<br>烧写命令:<br>oflash led_on.bin<br><img src="https://s3.bmp.ovh/imgs/2023/05/27/535c9277e2ab23f9.png"><br>一次输入0、1、0、0、0<br>接下来把烧写排线拔掉，关电，设置为nand启动，上电。<br>效果就是有一个灯亮了。</p>
+<h1 id="汇编与机器码"><a href="#汇编与机器码" class="headerlink" title="汇编与机器码"></a>汇编与机器码</h1><p>上边的makefile文件有一条	arm-linux-objdump -D led_on.elf &gt; led_on.dis 这条命令是反汇编指令，会得到一个 led_on.dis文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">led_on.elf:     file format elf32-littlearm</span><br><span class="line"></span><br><span class="line">Disassembly of section .text:</span><br><span class="line"></span><br><span class="line">00000000 &lt;_start&gt;:</span><br><span class="line">   0:	e59f1014 	ldr	r1, [pc, #20]	; 1c &lt;.text+0x1c&gt;</span><br><span class="line">   4:	e3a00c01 	mov	r0, #256	; 0x100</span><br><span class="line">   8:	e5810000 	str	r0, [r1]</span><br><span class="line">   c:	e59f100c 	ldr	r1, [pc, #12]	; 20 &lt;.text+0x20&gt;</span><br><span class="line">  10:	e3a00000 	mov	r0, #0	; 0x0</span><br><span class="line">  14:	e5810000 	str	r0, [r1]</span><br><span class="line"></span><br><span class="line">00000018 &lt;halt&gt;:</span><br><span class="line">  18:	eafffffe 	b	18 &lt;halt&gt;</span><br><span class="line">  1c:	56000050 	undefined</span><br><span class="line">  20:	56000054 	undefined</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>上边我们提到cpu可以直接访问的寄存器从R0到R15，pc是什么，pc是一个别名，有一张如下的映射表：</p>
+<p>User 模式  SVC 模式   IRQ 模式   FIQ 模式  APCS</p>
+<p>R0 ——- R0 ——- R0 ——- R0        a1<br>R1 ——- R1 ——- R1 ——- R1        a2<br>R2 ——- R2 ——- R2 ——- R2        a3<br>R3 ——- R3 ——- R3 ——- R3        a4<br>R4 ——- R4 ——- R4 ——- R4        v1<br>R5 ——- R5 ——- R5 ——- R5        v2<br>R6 ——- R6 ——- R6 ——- R6        v3<br>R7 ——- R7 ——- R7 ——- R7        v4<br>R8 ——- R8 ——- R8         R8_fiq    v5<br>R9 ——- R9 ——- R9         R9_fiq    v6<br>R10 —— R10 —— R10        R10_fiq   sl<br>R11 —— R11 —— R11        R11_fiq   fp<br>R12 —— R12 —— R12        R12_fiq   ip<br>R13        R13_svc    R13_irq    R13_fiq   sp<br>R14        R14_svc    R14_irq    R14_fiq   lr<br>————- R15 &#x2F; PC ————-       pc<br>上边的汇编指令执行的时候哦，会是如下的方式：<br><img src="https://s3.bmp.ovh/imgs/2023/05/27/15efca16247ab67c.png"></p>
+<h1 id="字节序和位操作"><a href="#字节序和位操作" class="headerlink" title="字节序和位操作"></a>字节序和位操作</h1><p><img src="https://s2.loli.net/2023/11/12/rkCfSFTe5vRscgV.jpg" alt="编程知识_节序_位操作.jpg"></p>
+<h1 id="C语言点亮LED"><a href="#C语言点亮LED" class="headerlink" title="C语言点亮LED"></a>C语言点亮LED</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">	unsigned int *pGPFCON = (unsigned int *)0x56000050;</span><br><span class="line">	unsigned int *pGPFDAT = (unsigned int *)0x56000054;</span><br><span class="line"></span><br><span class="line">	/* 配置GPF4为输出引脚 */</span><br><span class="line">	*pGPFCON = 0x100;</span><br><span class="line"></span><br><span class="line">	/* 设置GPF4输出0 */</span><br><span class="line">	*pGPFDAT = 0;</span><br><span class="line"></span><br><span class="line">	return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>新建一个Start.S文件，用于为C语言文件设置内存，调用main函数：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">.text</span><br><span class="line">.global _start</span><br><span class="line"></span><br><span class="line">_start:</span><br><span class="line"></span><br><span class="line">	/* 设置内存: sp 栈 */</span><br><span class="line">	ldr sp, =4096  /* nand启动 */</span><br><span class="line">//	ldr sp, =0x40000000+4096  /* nor启动 */</span><br><span class="line"></span><br><span class="line">	/* 调用main */</span><br><span class="line">	bl main</span><br><span class="line"></span><br><span class="line">halt:</span><br><span class="line">	b halt</span><br></pre></td></tr></table></figure>
+
+<p>C语言视角内存操作：<br><img src="https://s2.loli.net/2023/11/12/azStEmYAbQKjl3f.jpg" alt="编写C程序控制LED.jpg"></p>
+<h1 id="解析C程序的内部机制"><a href="#解析C程序的内部机制" class="headerlink" title="解析C程序的内部机制"></a>解析C程序的内部机制</h1><p>上面点亮LED的代码，反编译为汇编指令:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">led.elf:     file format elf32-littlearm</span><br><span class="line"></span><br><span class="line">Disassembly of section .text:</span><br><span class="line"></span><br><span class="line">00000000 &lt;_start&gt;:</span><br><span class="line">   0:	e3a0da01 	mov	sp, #4096	; 0x1000</span><br><span class="line">   4:	eb000000 	bl	c &lt;main&gt;</span><br><span class="line"></span><br><span class="line">00000008 &lt;halt&gt;:</span><br><span class="line">   8:	eafffffe 	b	8 &lt;halt&gt;</span><br><span class="line"></span><br><span class="line">0000000c &lt;main&gt;:</span><br><span class="line">   c:	e1a0c00d 	mov	ip, sp</span><br><span class="line">  10:	e92dd800 	stmdb	sp!, &#123;fp, ip, lr, pc&#125;</span><br><span class="line">  14:	e24cb004 	sub	fp, ip, #4	; 0x4</span><br><span class="line">  18:	e24dd008 	sub	sp, sp, #8	; 0x8</span><br><span class="line">  1c:	e3a03456 	mov	r3, #1442840576	; 0x56000000</span><br><span class="line">  20:	e2833050 	add	r3, r3, #80	; 0x50</span><br><span class="line">  24:	e50b3010 	str	r3, [fp, #-16]</span><br><span class="line">  28:	e3a03456 	mov	r3, #1442840576	; 0x56000000</span><br><span class="line">  2c:	e2833054 	add	r3, r3, #84	; 0x54</span><br><span class="line">  30:	e50b3014 	str	r3, [fp, #-20]</span><br><span class="line">  34:	e51b2010 	ldr	r2, [fp, #-16]</span><br><span class="line">  38:	e3a03c01 	mov	r3, #256	; 0x100</span><br><span class="line">  3c:	e5823000 	str	r3, [r2]</span><br><span class="line">  40:	e51b2014 	ldr	r2, [fp, #-20]</span><br><span class="line">  44:	e3a03000 	mov	r3, #0	; 0x0</span><br><span class="line">  48:	e5823000 	str	r3, [r2]</span><br><span class="line">  4c:	e3a03000 	mov	r3, #0	; 0x0</span><br><span class="line">  50:	e1a00003 	mov	r0, r3</span><br><span class="line">  54:	e24bd00c 	sub	sp, fp, #12	; 0xc</span><br><span class="line">  58:	e89da800 	ldmia	sp, &#123;fp, sp, pc&#125;</span><br><span class="line">Disassembly of section .comment:</span><br><span class="line"></span><br><span class="line">00000000 &lt;.comment&gt;:</span><br><span class="line">   0:	43434700 	cmpmi	r3, #0	; 0x0</span><br><span class="line">   4:	4728203a 	undefined</span><br><span class="line">   8:	2029554e 	eorcs	r5, r9, lr, asr #10</span><br><span class="line">   c:	2e342e33 	mrccs	14, 1, r2, cr4, cr3, &#123;1&#125;</span><br><span class="line">  10:	Address 0x10 is out of bounds.</span><br></pre></td></tr></table></figure>
+<p>下面对这段指令进行解析:<br><img src="https://s2.loli.net/2023/11/12/U4LcDuHOaCokinr.jpg" alt="解析C程序的内部机制.jpg"></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>CeaserWang
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://ceaser.wang/2023/05/01/embed/diyigearmluobanchengxu/" title="第1个ARM裸板程序及引申">https://ceaser.wang/2023/05/01/embed/diyigearmluobanchengxu/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/embed/" rel="tag"><i class="fa fa-tag"></i> embed</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/12/30/life/2022_end_review/" rel="prev" title="2022 year-end review">
+                  <i class="fa fa-chevron-left"></i> 2022 year-end review
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CeaserWang</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.0.6/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.1.1/mermaid.min.js","integrity":"sha256-8L3O8tirFUa8Va4NSTAyIbHJeLd6OnlcxgupV9F77e0="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"ryAR9bttS7fex1FPEPAylmmJ-gzGzoHsz","app_key":"dYqygoN4Y01Bl38OdRoCHUYn","server_url":null,"security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+
+</body>
+</html>

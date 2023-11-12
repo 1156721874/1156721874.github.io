@@ -281,7 +281,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-11-12 07:06:58" itemprop="dateModified" datetime="2023-11-12T07:06:58+00:00">2023-11-12</time>
+      <time title="Modified: 2023-11-12 07:31:15" itemprop="dateModified" datetime="2023-11-12T07:31:15+00:00">2023-11-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -421,7 +421,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-11-12 07:06:58" itemprop="dateModified" datetime="2023-11-12T07:06:58+00:00">2023-11-12</time>
+      <time title="Modified: 2023-11-12 07:31:15" itemprop="dateModified" datetime="2023-11-12T07:31:15+00:00">2023-11-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -451,83 +451,15 @@
     
     <div class="post-body" itemprop="articleBody">
           <h1 id="选择什么开发板"><a href="#选择什么开发板" class="headerlink" title="选择什么开发板"></a>选择什么开发板</h1><p>我们学习单片机的目的是什么，是为了后期学习linux系统驱动做铺垫。<br>它的层级结构是这样的：<br>单片机-&gt;bootloader-&gt;linux系统&#x2F;驱动-&gt;app<br>                                      :纯c&#x2F;c++无界面<br>                                      :qt&#x2F;android</p>
-<p>在单片机-&gt;bootloader-&gt;linux系统&#x2F;驱动-&gt;app-&gt;qt这个学习路线上我们可以使用同一套开发板。<br>怎么选择开发板？答案是资料丰富<br>他们百度搜索结果条数</p>
-<ul>
-<li><p>三星系列的</p>
-</li>
-<li><p>s3c2440     92万</p>
-</li>
-<li><p>s3c6410     43万</p>
-</li>
-<li><p>s5pv210     22万</p>
-</li>
-<li><p>exynos4412  14万</p>
-</li>
-<li><p>ti</p>
-</li>
-<li><p>AM437x       4.5万</p>
-</li>
-<li><p>AM335x       164万 营销好 用户多，工控芯片</p>
-</li>
-<li><p>freescale</p>
-<ul>
-<li>I.MX6       21万</li>
-</ul>
-</li>
-<li><p>全志，瑞芯微  资料不开放<br>从教程丰富程度，我们选择s3c2440</p>
-<h2 id="错误观点"><a href="#错误观点" class="headerlink" title="错误观点"></a>错误观点</h2><p>有人说s3c2440过时了，他的cpu还是arm9，性能差，过时了，但是他的知识没有过时。<br><img src="https://s2.loli.net/2023/05/01/BGu1cCqo2LsmU3y.png" alt="image.png"><br>我们在操作硬件的时候，不是操作的cpu，不接触cpu的指令，而是操作内存和寄存器，以及硬件的口径。<br>只有在中断的时候，才和cpu有点关系，但是不同的cpu之间关系比较小，没啥成本，并且我们以后再学习linux内核的时候，linux已经帮我们做好了封装和处理，根本不需要我们关心。</p>
-</li>
-</ul>
-<p>驱动&#x3D;软件框架+硬件操作</p>
-<p>软件框架都是一样的，所有内核都是linux内核，硬件操作，只要在s3c2440掌握了i2c，spi的原理，其他的硬件开发板都是一样的。</p>
-<h1 id="使用什么开发工具"><a href="#使用什么开发工具" class="headerlink" title="使用什么开发工具"></a>使用什么开发工具</h1><p>ads,keil,mdk<br>只要写一个main函数，所有细节都封装了，谁来调main，c写的main函数代码生成代码怎么放在内存里边，这些工具都帮你做了，但是这些工具封装了太多的细节，不适合初学者，初学者应该学习细节，扎实基础，因此不会使用这些开发工具。<br>基于arm+linux裸机学习我们可以学习更多知识。<br>学习了s3c2440+linux裸机开发+arm芯片，回过头来再去学习STM32就是几分钟搞定的事情。<br>这样我们就能无缝进入后续的学习bootloader、linux驱动。</p>
-<h1 id="开发板介绍"><a href="#开发板介绍" class="headerlink" title="开发板介绍"></a>开发板介绍</h1><p>s3c2440开发板，实际上他的性能并不是很强，但是他的资料非常的丰富<br><img src="https://s2.loli.net/2023/05/01/YzpM71Xv3flhreC.png" alt="20210906021414799.png"><br><img src="https://s2.loli.net/2023/05/01/4XcUry2pGwILqWY.png" alt="20210906021415633.png"></p>
-<h1 id="开发板接口介绍与串口连接"><a href="#开发板接口介绍与串口连接" class="headerlink" title="开发板接口介绍与串口连接"></a>开发板接口介绍与串口连接</h1><h2 id="怎么使用这个开发板，它里边有如下几个核心接口"><a href="#怎么使用这个开发板，它里边有如下几个核心接口" class="headerlink" title="怎么使用这个开发板，它里边有如下几个核心接口"></a>怎么使用这个开发板，它里边有如下几个核心接口</h2><p><img src="https://s2.loli.net/2023/05/01/UBo9PQyFuNbHh1X.png" alt="image.png"></p>
-<ul>
-<li>接通电源</li>
-<li>按下开关</li>
-<li>使用串口(usb串口)观察信息<ul>
-<li>连接以后windows会自动安装驱动(如果没法自动安装，可以下载PL2303_Prolific_DriverInstaller_v1.7.0.exe或者驱动精灵暗转)</li>
-<li>然后我们需要在pc安装一个mobaxterm软件，用来连接串口，这样开发板通过串口返回的信息我们可以在这个软件里边看到，也可以用这个软件通过串口发送命令给开发板</li>
-</ul>
-</li>
-<li>使用jtag口（usb烧写器）烧写程序</li>
-<li>如果板上程序支持usb下载，板子的bus接口连接pc的usb接口<ul>
-<li>烧写软件：oflash.ext</li>
-<li>硬件:op&#x2F;eop、 easy open jtag</li>
-<li>驱动<ul>
-<li>eop连接到pc</li>
-<li>安装eop驱动</li>
-<li>暗转app</li>
-<li>开发板通过排线连接到eop，eop通过usb线连接到pc</li>
-<li>执行oflash.exe xxx.bin</li>
-<li>断开开发板和eop，断开eop和pc的连线</li>
-<li>设置从nor或者nand启动</li>
-<li>重新上电</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>启动选择开关：从nor启动，还是从nand启动</li>
-</ul>
-<p>mobaxterm设置串口的时候，注意下波特率和不选中限流：<br><img src="https://s2.loli.net/2023/05/01/KaMgHwTV1Fb6tJv.png" alt="image.png"></p>
-<h1 id="使用eop烧写裸板程序"><a href="#使用eop烧写裸板程序" class="headerlink" title="使用eop烧写裸板程序"></a>使用eop烧写裸板程序</h1><h2 id="eop烧写"><a href="#eop烧写" class="headerlink" title="eop烧写"></a>eop烧写</h2><p> 将eop连接到pc，然后安装驱动(下载驱动程序OpenOCD with GUI setup.exe)，开发板通过排线连接到eop，eop通过usb线连接到pc 这三个步骤做完。<br> oflash.exe烧写的bin文件，可以是u-boot.bin，它可以选择烧写到nor或者nand上，烧写到0地址。<br> 也可以直接烧写我么自己写的程序，比如led.bin。烧写到nand上去，烧写到0地址。</p>
-<ol>
-<li><p>命令模式下，切换到要烧写的文件所在的目录里，执行oflash xx.bin<br><img src="https://s2.loli.net/2023/05/01/1Z6qYdcQ8eHUC4A.png" alt="image.png"></p>
-</li>
-<li><p>烧写到nand flash（2次确认）<br><img src="https://s2.loli.net/2023/05/01/Zbvy9qhVoYw36cT.png" alt="image.png"></p>
-</li>
-<li><p>烧写到0地址<br><img src="https://s2.loli.net/2023/05/01/jDoGpTqfAK4Qy5H.png" alt="image.png"></p>
-</li>
-<li><p>将开发板的启动开关设置为nand启动</p>
-</li>
-<li><p>将jtag线拔掉，拔掉的原因是jtag上有复位引脚，不然无法启动</p>
-</li>
-<li><p>按下电源开关关闭开发板，然后重新上电，启动开发板，就会看到烧写的程序运行，如果是led的程序，开发板的灯就会闪烁</p>
-</li>
-</ol>
-<p>如果是烧写uboot，在启动以后我们可以通过mobaxterm连接到串口，在uboot等待3秒之内，在mobaxterm的串口命令窗口按下空格键，就会进入uboot 的菜单<br><img src="https://s2.loli.net/2023/05/01/DYPBrMJLq8m4uG5.png" alt="image.png"><br>空格以后：<br><img src="https://s2.loli.net/2023/05/01/nghrGv7b1RkWEUF.png" alt="image.png"></p>
-
+<p>在单片机-&gt;bootloader-&gt;linux系统&#x2F;驱动-&gt;app-&gt;qt这个学习路线上我们可以使用同一套开发板。<br>怎么选择开发板？答案是资料丰富<br><img src="https://s2.loli.net/2023/11/12/XI9cFBofaCWkiH8.png" alt="image.png"></p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/04/24/embed/kaifabanshuxihetiyan/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -589,7 +521,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-11-12 07:06:59" itemprop="dateModified" datetime="2023-11-12T07:06:59+00:00">2023-11-12</time>
+      <time title="Modified: 2023-11-12 07:31:15" itemprop="dateModified" datetime="2023-11-12T07:31:15+00:00">2023-11-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -688,7 +620,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-11-12 07:06:58" itemprop="dateModified" datetime="2023-11-12T07:06:58+00:00">2023-11-12</time>
+      <time title="Modified: 2023-11-12 07:31:15" itemprop="dateModified" datetime="2023-11-12T07:31:15+00:00">2023-11-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -796,7 +728,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-11-12 07:06:58" itemprop="dateModified" datetime="2023-11-12T07:06:58+00:00">2023-11-12</time>
+      <time title="Modified: 2023-11-12 07:31:15" itemprop="dateModified" datetime="2023-11-12T07:31:15+00:00">2023-11-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -900,7 +832,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-11-12 07:06:59" itemprop="dateModified" datetime="2023-11-12T07:06:59+00:00">2023-11-12</time>
+      <time title="Modified: 2023-11-12 07:31:15" itemprop="dateModified" datetime="2023-11-12T07:31:15+00:00">2023-11-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -999,7 +931,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-11-12 07:06:59" itemprop="dateModified" datetime="2023-11-12T07:06:59+00:00">2023-11-12</time>
+      <time title="Modified: 2023-11-12 07:31:15" itemprop="dateModified" datetime="2023-11-12T07:31:15+00:00">2023-11-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1103,7 +1035,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-11-12 07:06:59" itemprop="dateModified" datetime="2023-11-12T07:06:59+00:00">2023-11-12</time>
+      <time title="Modified: 2023-11-12 07:31:15" itemprop="dateModified" datetime="2023-11-12T07:31:15+00:00">2023-11-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1202,7 +1134,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-11-12 07:06:59" itemprop="dateModified" datetime="2023-11-12T07:06:59+00:00">2023-11-12</time>
+      <time title="Modified: 2023-11-12 07:31:15" itemprop="dateModified" datetime="2023-11-12T07:31:15+00:00">2023-11-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1301,7 +1233,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-11-12 07:06:59" itemprop="dateModified" datetime="2023-11-12T07:06:59+00:00">2023-11-12</time>
+      <time title="Modified: 2023-11-12 07:31:15" itemprop="dateModified" datetime="2023-11-12T07:31:15+00:00">2023-11-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">

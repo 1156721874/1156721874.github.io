@@ -1,4 +1,4 @@
-[---
+---
 title: 第1个ARM裸板程序及引申
 date: 2023-05-01 16:00:00
 tags: [embed]
@@ -289,11 +289,272 @@ Disassembly of section .comment:
    c:	2e342e33 	mrccs	14, 1, r2, cr4, cr3, {1}
   10:	Address 0x10 is out of bounds.
 ```
+在讲解这段指令之前，需要先解释下里边的一些陌生指令：
+stmdb和ldmia指令。
+![image.png](https://s2.loli.net/2023/11/19/Bs1eIUb5qH9ayEL.png)
+
 下面对这段指令进行解析:
 ![解析C程序的内部机制.jpg](https://s2.loli.net/2023/11/12/U4LcDuHOaCokinr.jpg)
 
-【本节结束】
-![image.png](https://s2.loli.net/2023/11/12/cptFg5YebHxl8uw.png)
+
+# 给C程序传递参数
+修改Start.S文件:
+```
+
+.text
+.global _start
+
+_start:
+
+	/* 设置内存: sp 栈 */
+	ldr sp, =4096  /* nand启动 */
+//	ldr sp, =0x40000000+4096  /* nor启动 */
+
+	mov r0, #4
+	bl led_on
+
+	ldr r0, =100000
+	bl delay
+
+	mov r0, #5
+	bl led_on
+
+halt:
+	b halt
+
+```
+修改ldc.c文件：
+```
+
+void delay(volatile int d)
+{
+	while (d--);
+}
+
+int led_on(int which)
+{
+	unsigned int *pGPFCON = (unsigned int *)0x56000050;
+	unsigned int *pGPFDAT = (unsigned int *)0x56000054;
+
+	if (which == 4)
+	{
+		/* 配置GPF4为输出引脚 */
+		*pGPFCON = 0x100;
+	}
+	else if (which == 5)
+	{
+		/* 配置GPF5为输出引脚 */
+		*pGPFCON = 0x400;
+	}
+
+	/* 设置GPF4/5输出0 */
+	*pGPFDAT = 0;
+
+	return 0;
+}
+
+```
+程序先让第一个灯亮，然后等了一段时间(delay函数)，又让第二个灯亮，参数传递使用了r0寄存器，那么调用者和被调用者之前都是使用那些寄存器呢，下面是一套使用标准：
+![image.png](https://s2.loli.net/2023/11/19/Qfd6RgjpSiBbqEh.png)
+
+
+# 关闭看门狗
+以上程序在运行的时候，2个灯被依次点亮，然后又会往复循环点亮，这是因为系统有保护机制，防止程序卡死，不能使用，会重新复位系统，内置了看门狗机制，我们可以关闭看门狗：
+Start.S修改：
+```
+.text
+.global _start
+
+_start:
+
+  /* 关闭看门狗 */
+  ldr r0, =0x53000000
+  ldr r1, =0
+  str r1, [r0]
+
+	/* 设置内存: sp 栈 */
+	ldr sp, =4096  /* nand启动 */
+//	ldr sp, =0x40000000+4096  /* nor启动 */
+
+	mov r0, #4
+	bl led_on
+
+	ldr r0, =100000
+	bl delay
+
+	mov r0, #5
+	bl led_on
+
+halt:
+	b halt
+```
+
+# 程序兼容nor启动和nand启动
+修改Start.S
+```
+
+.text
+.global _start
+
+_start:
+
+	/* 关闭看门狗 */
+	ldr r0, =0x53000000
+	ldr r1, =0
+	str r1, [r0]
+
+	/* 设置内存: sp 栈 */
+	/* 分辨是nor/nand启动
+	 * 写0到0地址, 再读出来
+	 * 如果得到0, 表示0地址上的内容被修改了, 它对应ram, 这就是nand启动
+	 * 否则就是nor启动
+	 */
+	mov r1, #0
+	ldr r0, [r1] /* 读出原来的值备份 */
+	str r1, [r1] /* 0->[0] */
+	ldr r2, [r1] /* r2=[0] */
+	cmp r1, r2   /* r1==r2? 如果相等表示是NAND启动 */
+	ldr sp, =0x40000000+4096 /* 先假设是nor启动 */
+	moveq sp, #4096  /* nand启动 */
+	streq r0, [r1]   /* 恢复原来的值 */
+
+
+	bl main
+
+halt:
+	b halt
+
+```
+修改led.c文件：
+```
+
+#include "s3c2440_soc.h"
+
+void delay(volatile int d)
+{
+	while (d--);
+}
+
+int main(void)
+{
+	int val = 0;  /* val: 0b000, 0b111 */
+	int tmp;
+
+	/* 设置GPFCON让GPF4/5/6配置为输出引脚 */
+	GPFCON &= ~((3<<8) | (3<<10) | (3<<12));
+	GPFCON |=  ((1<<8) | (1<<10) | (1<<12));
+
+	/* 循环点亮 */
+	while (1)
+	{
+		tmp = ~val;
+		tmp &= 7;
+		GPFDAT &= ~(7<<4);
+		GPFDAT |= (tmp<<4);
+		delay(100000);
+		val++;
+		if (val == 8)
+			val =0;
+
+	}
+
+	return 0;
+}
+```
+以上2个文件兼容nor和nand启动。
+
+
+# 按钮控制led点亮
+![image.png](https://s2.loli.net/2023/11/19/BfnTmzg1GlW3j2c.png)
+EINT0控制LED_1，EINT2控制LED_2，EINT11控制LED_4。查看原理图
+![image.png](https://s2.loli.net/2023/11/19/Zvu4QGN2dimYbg1.png)
+寻找他们对应的引脚：
+![image.png](https://s2.loli.net/2023/11/19/cCRre7P5ptQwE1T.png)
+![image.png](https://s2.loli.net/2023/11/19/SrUzhMkGpNlt7CT.png)
+按键和引脚的对应关系:EINT0:GPF0,EINT2:GPF2,EINT11:GPG3;
+想找到GPFCON的2个引脚配置：
+GPFCON引脚的地址是：0x56000050
+![image.png](https://s2.loli.net/2023/11/19/AYKRnj7pq8skNxB.png)
+GPGCON引脚配置：
+GPGCON引脚的地址是：0x56000060
+![image.png](https://s2.loli.net/2023/11/19/c9ybNWzfK8GJskm.png)
+GPFDATA和GPGDATA的地址分别是：0x56000054、0x56000064，这些都可以通过S3C2440芯片手册找到。
+还有一个问题是，怎么判断按键是被按下或者松开？看下原理图：
+![image.png](https://s2.loli.net/2023/11/19/5UwPS8ib1pcsnhf.png)
+这样，只要我们的程序只要检测到引脚GPF0是高电平意味着开关没有被按下，如果是低电平，意味着开关被按下。
+然后就是确认3盏灯的控制引脚：
+![image.png](https://s2.loli.net/2023/11/19/kSNCWVE8YcpK7a9.png)
+分别是GPF4，GPF5，GPF6.
+接下里就可以把led.c程序写出来：
+```
+#include "s3c2440_soc.h"
+
+void delay(volatile int d)
+{
+	while (d--);
+}
+
+int main(void)
+{
+	int val1, val2;
+
+	/* 设置GPFCON让GPF4/5/6配置为输出引脚 */
+	GPFCON &= ~((3<<8) | (3<<10) | (3<<12));
+	GPFCON |=  ((1<<8) | (1<<10) | (1<<12));
+
+	/* 配置3个按键引脚为输入引脚:
+	 * GPF0(S2),GPF2(S3),GPG3(S4)
+	 */
+	GPFCON &= ~((3<<0) | (3<<4));  /* gpf0,2 */
+	GPGCON &= ~((3<<6));  /* gpg3 */
+
+	/* 循环点亮 */
+	while (1)
+	{
+		val1 = GPFDAT;
+		val2 = GPGDAT;
+
+		if (val1 & (1<<0)) /* s2 --> gpf6 */
+		{
+			/* 松开 */
+			GPFDAT |= (1<<6);
+		}
+		else
+		{
+			/* 按下 */
+			GPFDAT &= ~(1<<6);
+		}
+
+		if (val1 & (1<<2)) /* s3 --> gpf5 */
+		{
+			/* 松开 */
+			GPFDAT |= (1<<5);
+		}
+		else
+		{
+			/* 按下 */
+			GPFDAT &= ~(1<<5);
+		}
+
+		if (val2 & (1<<3)) /* s4 --> gpf4 */
+		{
+			/* 松开 */
+			GPFDAT |= (1<<4);
+		}
+		else
+		{
+			/* 按下 */
+			GPFDAT &= ~(1<<4);
+		}
+
+
+	}
+
+	return 0;
+}
+
+```
+
+
 如果你觉得我的文章有用，可以打赏我一杯雀巢咖啡
 ![image.jpg](https://i.postimg.cc/8Pmvqq4J/b1c4562d7729c208aef2f861473f309.jpg)
-](https://video.100ask.net/p/t_pc/course_pc_detail/big_column/p_5e5dbba57d468_PAnaJsaJ)https://video.100ask.net/p/t_pc/course_pc_detail/big_column/p_5e5dbba57d468_PAnaJsaJ

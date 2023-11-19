@@ -1,4 +1,4 @@
----
+[---
 title: 第1个ARM裸板程序及引申
 date: 2023-05-01 16:00:00
 tags: [embed]
@@ -296,3 +296,4 @@ Disassembly of section .comment:
 ![image.png](https://s2.loli.net/2023/11/12/cptFg5YebHxl8uw.png)
 如果你觉得我的文章有用，可以打赏我一杯雀巢咖啡
 ![image.jpg](https://i.postimg.cc/8Pmvqq4J/b1c4562d7729c208aef2f861473f309.jpg)
+](https://video.100ask.net/p/t_pc/course_pc_detail/big_column/p_5e5dbba57d468_PAnaJsaJ)https://video.100ask.net/p/t_pc/course_pc_detail/big_column/p_5e5dbba57d468_PAnaJsaJ

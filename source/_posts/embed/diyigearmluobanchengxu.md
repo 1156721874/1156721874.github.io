@@ -355,6 +355,7 @@ int led_on(int which)
 
 ```
 程序先让第一个灯亮，然后等了一段时间(delay函数)，又让第二个灯亮，参数传递使用了r0寄存器，那么调用者和被调用者之前都是使用那些寄存器呢，下面是一套使用标准：
+
 ![image.png](https://s2.loli.net/2023/11/19/Qfd6RgjpSiBbqEh.png)
 
 
@@ -466,24 +467,38 @@ int main(void)
 
 # 按钮控制led点亮
 ![image.png](https://s2.loli.net/2023/11/19/BfnTmzg1GlW3j2c.png)
+
 EINT0控制LED_1，EINT2控制LED_2，EINT11控制LED_4。查看原理图
+
 ![image.png](https://s2.loli.net/2023/11/19/Zvu4QGN2dimYbg1.png)
+
 寻找他们对应的引脚：
+
 ![image.png](https://s2.loli.net/2023/11/19/cCRre7P5ptQwE1T.png)
+
 ![image.png](https://s2.loli.net/2023/11/19/SrUzhMkGpNlt7CT.png)
+
 按键和引脚的对应关系:EINT0:GPF0,EINT2:GPF2,EINT11:GPG3;
 想找到GPFCON的2个引脚配置：
 GPFCON引脚的地址是：0x56000050
+
 ![image.png](https://s2.loli.net/2023/11/19/AYKRnj7pq8skNxB.png)
+
 GPGCON引脚配置：
 GPGCON引脚的地址是：0x56000060
+
 ![image.png](https://s2.loli.net/2023/11/19/c9ybNWzfK8GJskm.png)
+
 GPFDATA和GPGDATA的地址分别是：0x56000054、0x56000064，这些都可以通过S3C2440芯片手册找到。
 还有一个问题是，怎么判断按键是被按下或者松开？看下原理图：
+
 ![image.png](https://s2.loli.net/2023/11/19/5UwPS8ib1pcsnhf.png)
+
 这样，只要我们的程序只要检测到引脚GPF0是高电平意味着开关没有被按下，如果是低电平，意味着开关被按下。
 然后就是确认3盏灯的控制引脚：
+
 ![image.png](https://s2.loli.net/2023/11/19/kSNCWVE8YcpK7a9.png)
+
 分别是GPF4，GPF5，GPF6.
 接下里就可以把led.c程序写出来：
 ```

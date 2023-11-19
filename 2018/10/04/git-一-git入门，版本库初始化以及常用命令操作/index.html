@@ -52,7 +52,7 @@
 <meta property="og:image" content="https://ceaser.wang/20170626213638727.png">
 <meta property="og:image" content="https://ceaser.wang/20170626220111432.png">
 <meta property="article:published_time" content="2018-10-04T11:49:40.000Z">
-<meta property="article:modified_time" content="2023-11-19T08:19:30.027Z">
+<meta property="article:modified_time" content="2023-11-19T08:21:30.991Z">
 <meta property="article:author" content="CeaserWang">
 <meta property="article:tag" content="git">
 <meta property="article:tag" content="git init">
@@ -113,7 +113,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">208</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">216</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">208</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">217</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
         </a>
@@ -184,7 +184,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">216</span>
+          <span class="site-state-item-count">217</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -310,7 +310,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-11-19 08:19:30" itemprop="dateModified" datetime="2023-11-19T08:19:30+00:00">2023-11-19</time>
+      <time title="Modified: 2023-11-19 08:21:30" itemprop="dateModified" datetime="2023-11-19T08:21:30+00:00">2023-11-19</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -379,7 +379,7 @@
 <ul>
 <li>&#x2F;etc&#x2F;gitconfig （针对于整个OS,不常用）  git config –system</li>
 <li>~&#x2F;.gitconfig(很常用)                      git config –global</li>
-<li>针对于特定项目的 位于当前项目的  .git&#x2F;config文件中。 git config –local<br> 我们针对于第二种和第三种情况进行说明：<br>  <strong>git config –global</strong><br> 首先进入.git目录查看 config文件内容：<br> git config命令一些参数：<br><img src="/20170626210947905.png" alt="这里写图片描述"><br>config文件内容：<br> <img src="/20170626210740993.png" alt="这里写图片描述"><br>紧接着：<br>git config –local user.name ‘CeaserWang’<br>git config –local user.email ‘<span class="exturl" data-url="bWFpbHRvOiYjeDc4OyYjeDc4OyYjMTIwOyYjNjQ7JiN4Nzg7JiMxMjA7JiN4Nzg7JiM0NjsmIzk5OyYjeDZmOyYjMTA5Ow==">&#x78;&#x78;&#120;&#64;&#x78;&#120;&#x78;&#46;&#99;&#x6f;&#109;<i class="fa fa-external-link-alt"></i></span>‘<br>进行配置用户和邮箱，此时我们可以展示一下:<br>git config user.name<br>git config user.email<br>同时再次查看config文件会发现user.name和user.email都存在了。<br><img src="/20170626211439173.png" alt="这里写图片描述"><br>或者 git config –list查看所有配置参数<br>git config –local user.name ‘CeaserWang’<br>git config –local user.email ‘<span class="exturl" data-url="bWFpbHRvOiYjeDc4OyYjeDc4OyYjeDc4OyYjeDQwOyYjMTIwOyYjMTIwOyYjeDc4OyYjeDJlOyYjeDYzOyYjeDZmOyYjeDZkOw==">&#x78;&#x78;&#x78;&#x40;&#120;&#120;&#x78;&#x2e;&#x63;&#x6f;&#x6d;<i class="fa fa-external-link-alt"></i></span>‘ 这些命令也可以用来修改，再说一下删除：<br>git config –local  –unset  user.name<br><img src="/20170626212216912.png" alt="这里写图片描述"><br>接下我们回到mygit根目录，修改下test.txt文件，然后git staus 查看状态：<br><img src="/20170626212952735.png" alt="这里写图片描述"><br>这时提示信息又发生一些变化。<br> modified:   test.txt意思是已经修改了。<br> (use “git checkout – <file>…” to discard changes in working directory 意识是 使用git checkout – <file>命令丢弃刚才的修改。<br>  首先我们的文件修改之后加入了一行文字（welcome）然后状态是modified状态，此时我们使用git checkout 命令回退刚才的修改：<br><img src="/20170626213638727.png" alt="这里写图片描述"><br>  会发现刚下的修改会取消了，状态回到愿原来的状态。这个命令要小心一点，因为文件没有放到版本库里边，真的丢弃了就找不回来了。</li>
+<li>针对于特定项目的 位于当前项目的  .git&#x2F;config文件中。 git config –local<br> 我们针对于第二种和第三种情况进行说明：<br>  <strong>git config –global</strong><br> 首先进入.git目录查看 config文件内容：<br> git config命令一些参数：<br><img src="/20170626210947905.png" alt="这里写图片描述"><br>config文件内容：<br> <img src="/20170626210740993.png" alt="这里写图片描述"><br>紧接着：<br>git config –local user.name ‘CeaserWang’<br>git config –local user.email ‘<span class="exturl" data-url="bWFpbHRvOiYjMTIwOyYjMTIwOyYjeDc4OyYjNjQ7JiN4Nzg7JiMxMjA7JiMxMjA7JiN4MmU7JiN4NjM7JiN4NmY7JiN4NmQ7">&#120;&#120;&#x78;&#64;&#x78;&#120;&#120;&#x2e;&#x63;&#x6f;&#x6d;<i class="fa fa-external-link-alt"></i></span>‘<br>进行配置用户和邮箱，此时我们可以展示一下:<br>git config user.name<br>git config user.email<br>同时再次查看config文件会发现user.name和user.email都存在了。<br><img src="/20170626211439173.png" alt="这里写图片描述"><br>或者 git config –list查看所有配置参数<br>git config –local user.name ‘CeaserWang’<br>git config –local user.email ‘<span class="exturl" data-url="bWFpbHRvOiYjMTIwOyYjMTIwOyYjeDc4OyYjNjQ7JiN4Nzg7JiN4Nzg7JiN4Nzg7JiN4MmU7JiN4NjM7JiMxMTE7JiMxMDk7">&#120;&#120;&#x78;&#64;&#x78;&#x78;&#x78;&#x2e;&#x63;&#111;&#109;<i class="fa fa-external-link-alt"></i></span>‘ 这些命令也可以用来修改，再说一下删除：<br>git config –local  –unset  user.name<br><img src="/20170626212216912.png" alt="这里写图片描述"><br>接下我们回到mygit根目录，修改下test.txt文件，然后git staus 查看状态：<br><img src="/20170626212952735.png" alt="这里写图片描述"><br>这时提示信息又发生一些变化。<br> modified:   test.txt意思是已经修改了。<br> (use “git checkout – <file>…” to discard changes in working directory 意识是 使用git checkout – <file>命令丢弃刚才的修改。<br>  首先我们的文件修改之后加入了一行文字（welcome）然后状态是modified状态，此时我们使用git checkout 命令回退刚才的修改：<br><img src="/20170626213638727.png" alt="这里写图片描述"><br>  会发现刚下的修改会取消了，状态回到愿原来的状态。这个命令要小心一点，因为文件没有放到版本库里边，真的丢弃了就找不回来了。</li>
 </ul>
 <p>另外git commit的提交说明可以直接：git commmit -m ‘提交说明’<br>提交日志时间是按照倒序的排列：<br><img src="/20170626220111432.png" alt="这里写图片描述"></p>
 

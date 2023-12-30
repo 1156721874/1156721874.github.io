@@ -13,5 +13,5 @@ Emial: ceaserwang@outlook.com
 GitHub: https://github.com/1156721874
 WeChat: wzq657
 
-![](..about/index/IMG_0134.JPG)
+![](about/index/IMG_0134.JPG)
 <!-- <img style="transform: rotate(90deg);margin-top:20%" src="./index/IMG_0134.JPG" width = "3024" height = "4032" alt="图片名称" /> -->

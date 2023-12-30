@@ -17,7 +17,7 @@ public abstract class SingleThreadEventLoop extends SingleThreadEventExecutor im
 }
 ```
 之前提到的ChannelPromise 结构，其实是一个异步返回结果的封装，它持有channel和当前的SingleThreadEventLoop :
-![这里写图片描述](20171105134757100.png)
+![这里写图片描述](2018/10/04/netty源码分析-十七-Netty线程模型深度解读与架构设计原则/20171105134757100.png)
 
 进入unsafe实现类AbstractUnsafe的register方法：
 

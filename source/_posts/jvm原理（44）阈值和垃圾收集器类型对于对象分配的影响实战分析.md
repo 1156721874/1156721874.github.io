@@ -164,7 +164,7 @@ public class MyTest2 {
 ```
 加入线程程等待是为了我们在运行程序之后要运行jvisualvm。
 然后运行jvisualvm。
-![gc1.png](gc1.png)
+![gc1.png](2019/05/18/jvm原理（44）阈值和垃圾收集器类型对于对象分配的影响实战分析/gc1.png)
 由于jvisualvm的监听要在jvm里边消耗内存，所以我们的程序会打印minor gc日志：
 ```
 [GC (Allocation Failure) [DefNew: 8192K->1024K(9216K), 0.0108187 secs] 13312K->6888K(19456K), 0.0108706 secs] [Times: user=0.00 sys=0.00, real=0.01 secs]
@@ -182,13 +182,13 @@ public class MyTest2 {
 
 #### jmc
 上面程序运行的时候我们可以使用jmc查看jvm的使用情况：
-![gc2.png](gc2.png)
+![gc2.png](2019/05/18/jvm原理（44）阈值和垃圾收集器类型对于对象分配的影响实战分析/gc2.png)
 从图中可以看到metaspace的使用量快满了的时候jvm会进行一次gc。
 同时也可以可以查看jvm的启动参数：
-![gc3.png](gc3.png)
+![gc3.png](2019/05/18/jvm原理（44）阈值和垃圾收集器类型对于对象分配的影响实战分析/gc3.png)
 #### jmc的飞行器
-![gc4.png](gc4.png)
-![gc5.png](gc5.png)
+![gc4.png](2019/05/18/jvm原理（44）阈值和垃圾收集器类型对于对象分配的影响实战分析/gc4.png)
+![gc5.png](2019/05/18/jvm原理（44）阈值和垃圾收集器类型对于对象分配的影响实战分析/gc5.png)
 
 
 #### jcmd查看jvm启动参数

@@ -130,10 +130,10 @@ buildSqlMapClient方法的实现：
 **12.3 sqlmapclienttemplate的实现**
 
 sqlmapclienttemplate封装了对ibatis的操作，其继承关系如下：
-![这里写图片描述](20150726132920921.png)
+![这里写图片描述](2018/09/28/SPRING技术内幕-笔记（十二）spring驱动ibatis的设计与实现/20150726132920921.png)
 
 sqlmapclienttemplate是一个核心，这个类持有一个sqlmapclient，这个类是ibatis的类，是直接使用ibatis时调用的，它提供了使用ibatis的API，类似于hibernate的session，同时，sqlmapclientdaosupport中持有一个salmapclienttemplate，尽管对ibatis的操作是由sqlmapclienttemplate来完成，但应用可以通过扩展sqlmapclientdaosupport来对ibatis进行操作。spring封装ibatis操作基本上封装在sqlmapclienttemplate的设计和实现中。其设计时序图：
-![这里写图片描述](20150726142033632.png)
+![这里写图片描述](2018/09/28/SPRING技术内幕-笔记（十二）spring驱动ibatis的设计与实现/20150726142033632.png)
 
 在这个时序过程中，template会从sqlmapclient中得到session和datasource，并进行一系列的初始化过程，然后回调sqlmapclientcallback的doinsqlmapclient方法执行具体的动作，最后释放数据库连接和关闭session。
 代码实现：

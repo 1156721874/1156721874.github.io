@@ -23,7 +23,7 @@ categories: netty
         }
 ```
 我们在NioServerSocketChannel里边并没有找到attr方法，那么看一下NioServerSocketChannel层次关系：
-![这里写图片描述](20171029153531008.png)
+![这里写图片描述](2018/10/04/netty源码分析-十四-Netty初始化流程总结及Channel与ChannelHandlerContext作用域分析/20171029153531008.png)
 在DefaultAttributeMap找到：
 
 ```
@@ -58,7 +58,7 @@ To address this issue, we decided to keep only one map per Channel internally. A
 
  我们看一下实际的代码是怎么写的：
  Channel的实现类NioServerSocketChannel的父类DefaultAttributeMap的attr方法：
- ![这里写图片描述](20171029161754857.png)
+ ![这里写图片描述](2018/10/04/netty源码分析-十四-Netty初始化流程总结及Channel与ChannelHandlerContext作用域分析/20171029161754857.png)
 
  ChannelHandlerContext 实现类AbstractChannelHandlerContext的attr方法:
 ```

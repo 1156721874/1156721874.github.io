@@ -4,7 +4,7 @@ date: 2018-09-28 20:08:54
 tags: DesignPatterns
 categories: DesignPatterns
 ---
-![这里写图片描述](20151010111725317.png)
+![这里写图片描述](2018-09-28/设计模式-1-单例模式Singleton/20151010111725317.png)
 单例模式的四种实现方式：
 **1、饿汉模式**
 <!-- more -->

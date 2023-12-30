@@ -38,12 +38,12 @@ docker hub：https://hub.docker.com/explore/
   docker image ls
   ```
 
-  ![1-1](1-1.png)
+  ![1-1](2018-11-18/1-docker-使用镜像/1-1.png)
   查看镜像、容器、数据卷所占用的空间:
   ```
   docker system df
   ```
-  ![1-2](1-2.png)
+  ![1-2](2018-11-18/1-docker-使用镜像/1-2.png)
 
 ## 虚悬镜像
   定义：镜像既没有仓库名，也没有标签，均为 <none>
@@ -370,7 +370,7 @@ docker hub：https://hub.docker.com/explore/
   ```
     # 编译阶段
     FROM golang:1.10.3
-    
+
     COPY server.go /build/
 
     WORKDIR /build

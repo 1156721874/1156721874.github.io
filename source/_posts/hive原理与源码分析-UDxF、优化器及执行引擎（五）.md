@@ -39,7 +39,7 @@ UDF的全称是User-Defined-Functions
 用于窗口函数的计算
 
 **UDF存在下列Operator中**
-![这里写图片描述](20170514170358457.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-UDxF、优化器及执行引擎（五）/20170514170358457.png)
 
 **演示**
 https://cwiki.apache.org/confluence/display/Hive/HivePlugins#HivePlugins-CreatingCustomUDFs
@@ -87,12 +87,12 @@ https://cwiki.apache.org/confluence/display/Hive/HivePlugins#HivePlugins-Creatin
 https://www.codatlas.com/github.com/apache/hive/master/ql/src/java/org/apache/hadoop/hive/ql/udf/generic/GenericUDAFSum.java
 
 **回忆一下Group By执行的四种模式**
-![这里写图片描述](20170514195921527.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-UDxF、优化器及执行引擎（五）/20170514195921527.png)
 
 https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/hadoop/hive/ql/parse/SemanticAnalyzer.java?line=9749
 
 **对应一下UDAF四种模式**
-![这里写图片描述](2017051420054406.png)  
+![这里写图片描述](2018/10/04/hive原理与源码分析-UDxF、优化器及执行引擎（五）/2017051420054406.png)  
 
 **自定义UDAF**
 https://cwiki.apache.org/confluence/display/Hive/GenericUDAFCaseStudy
@@ -156,7 +156,7 @@ https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/had
 https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/hadoop/hive/ql/exec/LateralViewJoinOperator.java?line=43
 
 逻辑执行计划：
-![这里写图片描述](20170514202109291.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-UDxF、优化器及执行引擎（五）/20170514202109291.png)
 
 **UDTF源码举例**
 https://www.codatlas.com/github.com/apache/hive/master/ql/src/java/org/apache/hadoop/hive/ql/udf/generic/GenericUDTFExplode.java
@@ -223,10 +223,10 @@ hive默认的分隔符是"ctra+a"，倘若每行数据里边有tab分隔符，�
 ```
 
 **Hive流程 – 回顾**
-![这里写图片描述](20170514205734778.png)  
+![这里写图片描述](2018/10/04/hive原理与源码分析-UDxF、优化器及执行引擎（五）/20170514205734778.png)  
 
 Optimizer其实优化器的调用者：
-![这里写图片描述](20170514205912937.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-UDxF、优化器及执行引擎（五）/20170514205912937.png)
 
 **基于规则的优化的执行**
 根据配置初始化一个规则列表，然后一条规则一条规则地执行
@@ -251,12 +251,12 @@ Optimizer其实优化器的调用者：
 ```
 
 **基于规则的优化的执行**
-![这里写图片描述](20170514215438866.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-UDxF、优化器及执行引擎（五）/20170514215438866.png)
 
 **demo 1： 简单谓词下推优化器**
 https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/hadoop/hive/ql/ppd/SimplePredicatePushDown.java?line=55
 
-![这里写图片描述](20170514220105056.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-UDxF、优化器及执行引擎（五）/20170514220105056.png)
 
 **demo 2： ReduceSinkDeDuplication**
 https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/hadoop/hive/ql/optimizer/correlation/ReduceSinkDeDuplication.java?line=94
@@ -277,7 +277,7 @@ https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/had
           ReduceSinkDeduplicateProcFactory.getJoinReducerProc());
     }
 ```
-![这里写图片描述](20170514220833201.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-UDxF、优化器及执行引擎（五）/20170514220833201.png)
 
 **demo 3： JoinReorder**
 我们建议小表放在左边，大表放在右边，但是没有这种情况下，
@@ -287,7 +287,7 @@ https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/had
 只能是大表，不能是大的子查询
 	思考：为什么？
 所以，打开这个开关时，简单查询是不需要小表放左边的
-![这里写图片描述](20170514221850831.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-UDxF、优化器及执行引擎（五）/20170514221850831.png)
 我们看一下这个开关：
 https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/hadoop/hive/ql/optimizer/Optimizer.java?line=186
 
@@ -297,7 +297,7 @@ https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/had
     }
 ```
 https://insight.io/github.com/apache/hive/blob/master/common/src/java/org/apache/hadoop/hive/conf/HiveConf.java?line=3353
-![这里写图片描述](20170514222441553.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-UDxF、优化器及执行引擎（五）/20170514222441553.png)
 默认情况是开发，但是只能是表，不能是子查询。
 
 **更多优化器**
@@ -306,10 +306,10 @@ https://insight.io/github.com/apache/hive/blob/master/common/src/java/org/apache
 如果是源码程序员，可尝试手动写一个优化器
 
 **Hive流程 – 回顾**
-![这里写图片描述](20170514222707054.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-UDxF、优化器及执行引擎（五）/20170514222707054.png)
 
 **Hive执行引擎**
-![这里写图片描述](20170514222926367.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-UDxF、优化器及执行引擎（五）/20170514222926367.png)
 
 
 **执行引擎**
@@ -323,10 +323,10 @@ https://insight.io/github.com/apache/hive/blob/master/common/src/java/org/apache
 Tez + LLAP
 
 **代码部分**
-![这里写图片描述](20170514223227098.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-UDxF、优化器及执行引擎（五）/20170514223227098.png)
 物理执行引擎生成一个TaskCompiler，TaskCompiler会对不同的执行引擎，比如spark，tez、mr等执行不同的物理计划编译器，local是mapreduce（四个线程做map，一个线程做reduce）。
 https://www.codatlas.com/github.com/apache/hive/master/ql/src/java/org/apache/hadoop/hive/ql/parse/TaskCompiler.java?line=87
 
 **Hive流程 – 我们还没介绍的**
-![这里写图片描述](20170514223655980.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-UDxF、优化器及执行引擎（五）/20170514223655980.png)
 逻辑执行计划生成物理执行计划，而物理执行计划是如何调整的。

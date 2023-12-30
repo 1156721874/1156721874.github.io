@@ -293,7 +293,7 @@ categories: docker
   数据卷设计的是用来存放数据的，并不会随着容器的删除而删除，有点类似于Linux里边的mount操作，如果想在删除容器的时候顺带删除数据卷，可以使用docker rm -v。
 
   无主的数据卷可能会占据很多空间，要清理请使用以下命令：
-  
+
   ```
   >docker volume prune
   ```
@@ -611,4 +611,4 @@ categories: docker
   我们在容器里边敲了很多命令，
   那么此时我们可以到宿主机的E:\Study\dockerWorkspace\volumes\volume1\.bash_history里边看一下，
   我们敲得命令的记录：
-  ![4-2](4-2.png)
+  ![4-2](2018-11-24/4-docker-数据卷/4-2.png)

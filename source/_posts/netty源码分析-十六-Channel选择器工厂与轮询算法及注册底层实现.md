@@ -79,9 +79,9 @@ children的来源是newChild()方法：
     protected abstract EventExecutor newChild(Executor executor, Object... args) throws Exception;
 ```
 这个是EventExecutor 的创建，接下来我们看一下register方法，我们打了一个断点：
-![这里写图片描述](20171105130718472.png)
+![这里写图片描述](2018/10/04/netty源码分析-十六-Channel选择器工厂与轮询算法及注册底层实现/20171105130718472.png)
 之后debug进入register方法，我们进入的是SingleThreadEventLoop:
-![这里写图片描述](20171105130647892.png)
+![这里写图片描述](2018/10/04/netty源码分析-十六-Channel选择器工厂与轮询算法及注册底层实现/20171105130647892.png)
 
 ```
 /**

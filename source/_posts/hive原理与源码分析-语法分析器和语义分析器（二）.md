@@ -209,7 +209,7 @@ Driver的run方法最终会执行compile()操作,Compiler作语法解析和语�
 回顾一下解析步骤：
 **第一部分：语法分析**
 语法解析Parser
-![这里写图片描述](20170507124349883.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-语法分析器和语义分析器（二）/20170507124349883.png)
 
 tree = ParseUtils.parse(command, ctx);【[源码](https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/hadoop/hive/ql/Driver.java?line=510)】ParseUtils封装了ParseDriver 对sql的解析工作，ParseUtils的[parse](https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/hadoop/hive/ql/parse/ParseUtils.java?line=74)方法：
 ```
@@ -335,7 +335,7 @@ selectStatement
    ;
 ```
 用图形表示：
-![这里写图片描述](20170507135143434.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-语法分析器和语义分析器（二）/20170507135143434.png)
 TMP_FIEL是输出路径，hive是基于mr的上层框架，mr必须要有一个数据文件，mr任务完毕之后结果会存放在TMP_FIEL此路径下边，然后cli回去读取这个结果文件，展示数据结果。而另一个框架瞅准了hive的这个弱点，没有临时文件，impala边执行边输出结果。
 
 **增加一种语法**这时候，你知道了……
@@ -345,7 +345,7 @@ TMP_FIEL是输出路径，hive是基于mr的上层框架，mr必须要有一个�
 如果要引入关键字，还需要修改HiveLexer.g
 
 **第二部分：语义解析初步 - SemanticAnalyzer**
-![这里写图片描述](20170507140229032.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-语法分析器和语义分析器（二）/20170507140229032.png)
 **SQL执行顺序**
 一个SQL大致分为以下7部分，按顺序执行
 (5)SELECT (6)DISTINCT <select list>
@@ -355,11 +355,11 @@ TMP_FIEL是输出路径，hive是基于mr的上层框架，mr必须要有一个�
 (4)HAVING <having condition>
 (7) ORDER BY <order by list>
 **Operators对应SQL**
-![这里写图片描述](20170507142034604.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-语法分析器和语义分析器（二）/20170507142034604.png)
 **Operator过程**
 每个步骤对应一个逻辑运算符(Operator)
 每个Operator输出一个虚表(VirtualTable)
-![这里写图片描述](20170507142121618.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-语法分析器和语义分析器（二）/20170507142121618.png)
 **语义解析器 - SemanticAnalyzer**
 语义解析器：
 输入AST树（见3.3.2）
@@ -405,7 +405,7 @@ BaseSemanticAnalyzer sem = SemanticAnalyzerFactory.get(queryState, tree);
   }
 ```
 analyzeInternal方法有很多实现：
-![这里写图片描述](20170507143542388.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-语法分析器和语义分析器（二）/20170507143542388.png)
 
 **用于查询的 SemanticAnalyzer**
 继承自BaseSemanticAnalyzer的语义分析器有很多种
@@ -420,7 +420,7 @@ analyzeInternal方法有很多实现：
 注意：输入的ASTTree后续的QB的生成，逻辑执行计划、逻辑执行计划的优化、物理执行计划的切分、物理执行计划的优化、以及mr任务的生成全部都在这1万多行的代码里边的逻辑中。
 
 **生成QB - genResolvedParseTree()**
-![这里写图片描述](20170507144838047.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-语法分析器和语义分析器（二）/20170507144838047.png)
 
 关注[SemanticAnalyzer](https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/hadoop/hive/ql/parse/SemanticAnalyzer.java?line=10880) 的 analyzeInterna方法：
 ```
@@ -533,7 +533,7 @@ doPhase1执行完毕之后得到QB，QB里边的只是一些关键字还有一�
 getMetaData又会递归的去取元数据（从mysql中），经过doPhase1和getMetaData得到一个完整的QB，接下来就是逻辑执行技术的生成。
 
 **Logical Plan Generator - SemanticAnalyzer.genPlan()**
-![这里写图片描述](20170507151904057.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-语法分析器和语义分析器（二）/20170507151904057.png)
 **Logical Plan Generator - genPlan**
 genPlan()实现QB->Operator
 genPlan() 也是深度优先的递归
@@ -549,7 +549,7 @@ getMetaData又会递归的去取元数据（从mysql中），经过doPhase1和ge
   }
 ```
 大体的递归过程：
-![这里写图片描述](20170507152953495.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-语法分析器和语义分析器（二）/20170507152953495.png)
 
 **表达式分析**
 •类型推倒 100  INT 100.1  DOUBLE ‘Hello’  STRING TRUE  BOOL

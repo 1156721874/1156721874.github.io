@@ -6,7 +6,7 @@ categories: DesignPatterns
 ---
 工厂模式有三种：简单工厂模式，抽象工厂模式和工厂方法模式。
 1、简单工厂模式
-![这里写图片描述](20151011152009034.png)
+![这里写图片描述](2018/09/28/设计模式-6-工厂模式Factory/20151011152009034.png)
 <!-- more -->
 以图形为例：
 ```
@@ -29,7 +29,7 @@ class Rectangle implements Shape{
 //图形工厂
 class ShapeFactory{
 	public static Shape createShape(String name) throws InstantiationException,
-                                      IllegalAccessException, 
+                                      IllegalAccessException,
                                       ClassNotFoundException
  	{
 	//使用java的反射机制来产生对象实例
@@ -49,7 +49,7 @@ public class ShapeDemo{
 2、抽象工厂模式
 抽象工厂模式中可以包括多个抽象产品类，每个抽象产品类可以产生出多个具体产品类，一个抽象工厂用于定义所需产品的组合形式，抽象工厂派生具体工厂类，这些具体工厂类就是简单工厂模式中的工厂类，具体工厂类负责具体产品实例的创建：
 
-![这里写图片描述](20151011153515037.png)
+![这里写图片描述](2018/09/28/设计模式-6-工厂模式Factory/20151011153515037.png)
 以换肤为例：
 
 ```
@@ -134,7 +134,7 @@ public class SkinDemo{
 ```
 3、工厂方法模式
 工厂方法中也只包含一个抽象产品类，抽象产品类可以派生出多个具体产品类。工厂方法定义一个用于创建产品的接口，让子类决定实例化哪一个类，使得类的实例化延迟到子类。
-![这里写图片描述](20151011154239096.png)
+![这里写图片描述](2018/09/28/设计模式-6-工厂模式Factory/20151011154239096.png)
 以汽车制造为例：
 
 ```

@@ -38,7 +38,7 @@ sun.misc.Launcher$AppClassLoader@18b4aac2
 很明显他们都是由应用类加载器加载，我们能不能想办法让扩展类加载器加载他们呢，试想我们修改变量【Java.ext.dirs】指向当前程序所在的路径是不是就可以了呢?
 为此我们定位到【jvm_lecture\out\production\classes】下边，执行命令：
 java -Djava.ext.dirs=./ com.twodragonlake.jvm.classloader.MyTest22
-![这里写图片描述](20180406163908960.png)
+![这里写图片描述](2018/10/04/jvm原理（18）类加载器命名空间总结与扩展类加载器要点分析/20180406163908960.png)
 奇怪的是按照双亲委托模型，在去加载MyTest22的时候先是应用类加载器委托扩展类加载器，扩展类加载器的加载路径是当前路径，MyTest22也在当前路径下边，但是为什么还是应用类加载器加载的呢？
 这是因为扩展类加载器只能通过jar的形式来加载，不能加载class文件的形式，因此我们把MyTest文件放到jar里边：
 

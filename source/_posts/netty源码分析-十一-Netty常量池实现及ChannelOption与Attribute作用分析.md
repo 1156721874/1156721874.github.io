@@ -59,7 +59,7 @@ ServerBootstrap的init方法是服务初始的关键逻辑：
 ```
 这里边有2个重要的类：ChannelOption和AttributeKey。
 ChannelOption：
-![这里写图片描述](20171028105501784.png)
+![这里写图片描述](2018/10/04/netty源码分析-十一-Netty常量池实现及ChannelOption与Attribute作用分析/20171028105501784.png)
 
 ```
 ChannelOption的doc说明
@@ -290,7 +290,7 @@ ChannelOption是用来配置ChannelConfig的，那么看一下ChannelConfig：
 对于ChannelConfig来说他是对Channel一个整个配置的信息。
 
 再来看一下AttributeKey：
-![这里写图片描述](20171028115151418.png)
+![这里写图片描述](2018/10/04/netty源码分析-十一-Netty常量池实现及ChannelOption与Attribute作用分析/20171028115151418.png)
 可以看到它和ChannelOption的上层结构是一样的。
 
 ```

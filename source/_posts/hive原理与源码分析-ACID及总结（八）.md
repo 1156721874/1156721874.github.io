@@ -43,7 +43,7 @@ categories: cloud
 目前只支持ORCFile
 	https://www.codatlas.com/github.com/apache/hive/master/ql/src/java/org/apache/hadoop/hive/ql/io/AcidInputFormat.java?line=108 源码告诉你为什么
 	要支持文件的事物，除了os提供之外，就是hive自己实现，比如：OrcInputFormat
-	![这里写图片描述](20170529130405614.png)
+	![这里写图片描述](2018/10/04/hive原理与源码分析-ACID及总结（八）/20170529130405614.png)
 表必须是Bucket表
 	可以只有一个Bucket，但性能会比单机还差
 表上必须有transactional=true的标记
@@ -66,7 +66,7 @@ categories: cloud
 从理论上，以后可以支持多种文件的事务，但目前还不支持
 
 **文件合并**
-![这里写图片描述](20170529131048959.png)  
+![这里写图片描述](2018/10/04/hive原理与源码分析-ACID及总结（八）/20170529131048959.png)  
 读的时候对原始文件和增量文件进行合并
 
 **ACID增量在HDFS上的存储**
@@ -87,7 +87,7 @@ categories: cloud
 读取Splits同时读取Delta
 Key Ranges
 Indexes
-![这里写图片描述](20170529131539090.png)  
+![这里写图片描述](2018/10/04/hive原理与源码分析-ACID及总结（八）/20170529131539090.png)  
 
 Delta会读到内存，有益处的风险，Delta一般 不会超过10个。
 
@@ -128,12 +128,12 @@ Delta会读到内存，有益处的风险，Delta一般 不会超过10个。
 **Minor Compaction**
 当有10个（可配置）以上的增量文件时
 结果：1个Base + 1个Delta
-![这里写图片描述](20170529141813052.png)  
+![这里写图片描述](2018/10/04/hive原理与源码分析-ACID及总结（八）/20170529141813052.png)  
 
 **Major Compaction**
 当Delta达到基表的10%文件大小（可配置）时运行
 结果只有一个基表
-![这里写图片描述](20170529141959387.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-ACID及总结（八）/20170529141959387.png)
 
 **Compactor如何执行？**
 MetaStore定期执行
@@ -154,7 +154,7 @@ Delta会读到内存，有益处的风险，Delta一般 不会超过10个。
 https://issues.apache.org/jira/browse/HIVE-5317
 
 **Hive再看**
-![这里写图片描述](20170529142929705.png)  
+![这里写图片描述](2018/10/04/hive原理与源码分析-ACID及总结（八）/20170529142929705.png)  
 
 **复习及总结**
 Hive是什么？

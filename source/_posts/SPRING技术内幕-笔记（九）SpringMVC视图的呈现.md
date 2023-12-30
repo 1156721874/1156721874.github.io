@@ -74,7 +74,7 @@ viewResolver.resolveViewName(viewName, locale)可以看子类BeanNameViewResolve
 回到各种视图的解析SPringMVC有各种视图的支持，PDF，JSTL，等等，使用了第三方框架，从而让视图丰富多彩。
 这是SPring的视图类型结构图：
 
-![这里写图片描述](20150624212800016.png)
+![这里写图片描述](2018/09/28/SPRING技术内幕-笔记（九）SpringMVC视图的呈现/20150624212800016.png)
 
 **9.2JSP视图的实现**
 

@@ -71,11 +71,11 @@ categories: docker
   [root@bba6e1a84871 /]# ls /
   anaconda-post.log  bin  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
   ```
-  ![2-1](2-1.png)
+  ![2-1](2018/11/20/2-docker-容器/2-1.png)
   PS：使用attach退出终端后，容器也会终止，退出。
 ### exec 命令
 
-  ![2-2](2-2.png)
+  ![2-2](2018/11/20/2-docker-容器/2-2.png)
 
   ```
   >docker run -dit jdk8:v1
@@ -107,6 +107,6 @@ categories: docker
 
 ## 清理所有处于终止状态的容器
   用 docker container ls -a 命令可以查看所有已经创建的包括终止状态的容器，如果数量太多要一个个删除可能会很麻烦，用下面的命令可以清理掉所有处于终止状态的容器。
-  ![2-3](2-3.png)
+  ![2-3](2018/11/20/2-docker-容器/2-3.png)
   同样的道理也可以清理镜像：
-  ![2-4](2-4.png)
+  ![2-4](2018/11/20/2-docker-容器/2-4.png)

@@ -15,7 +15,7 @@ git push -u origin master
 
 二、ssh的方式
 ssh的方式需要在本地机器生成公钥和私钥，然后将公钥设置到github的远程仓库，设置方式：
-![这里写图片描述](20170730201503950.png)
+![这里写图片描述](2018/10/04/git-七-远程与github/20170730201503950.png)
 
 然后执行：
 git remote add origin git@github.com:1156721874/CrazyCode.git

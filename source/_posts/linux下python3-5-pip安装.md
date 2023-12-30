@@ -6,7 +6,7 @@ categories: python
 ---
 
 安装包;
-![这里写图片描述](20161201220019448.png)
+![这里写图片描述](2018/10/04/linux下python3-5-pip安装/20161201220019448.png)
 <!-- more -->
 
 python依赖环境安装：
@@ -37,7 +37,7 @@ cd setuptools-2.0
 python setup.py install
 
 验证;
-![这里写图片描述](20161128214730486.png)
+![这里写图片描述](2018/10/04/linux下python3-5-pip安装/20161128214730486.png)
 
 ok可以正常安装软件
 
@@ -52,5 +52,5 @@ pip install “ipython[notebook]”
 ipython notebook
  pip install jupyter
 浏览器会打开下面这个页面：
-![这里写图片描述](20161203200608554.png)
+![这里写图片描述](2018/10/04/linux下python3-5-pip安装/20161203200608554.png)
 点击要打开的文件比如Computer_Sketchy_score.ipynb，就可以打开了

@@ -8,7 +8,7 @@ categories: spring
 TransactionInterceptor的invoke的回调过程中会使用createTransactionIfNecessary，这个方法在其基类TransactionAspectSupport中实现，期间会使用AbstractPlatformTransactionManager调用getTransaction(txAttr)，这个过程要对不同情况进行处理，得到TransactionStatus，然后塞进TransactionInfo中，最后将TransactionInfo与当前线程绑定，TransactionInfo穿插在整个事物处理过程中。
 createTransactionIfNecessary的调用时序图：
 <!-- more -->
-![这里写图片描述](20150716102610570.png)
+![这里写图片描述](2018/09/28/SPRING技术内幕-笔记（十一）spring事物处理的设计与实现/20150716102610570.png)
 
 ```
 	protected TransactionInfo createTransactionIfNecessary(

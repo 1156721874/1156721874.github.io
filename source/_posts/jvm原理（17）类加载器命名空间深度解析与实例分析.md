@@ -45,7 +45,7 @@ Caused by: java.lang.ClassCastException: com.twodragonlake.jvm.classloader.MyPer
 	... 5 more
 ```
 分析：首先loader1和loader2虽然都是MyTest16的对象，但是他们之间在类加载的层次上没有任何的关系，loader1加载MyPerson的时候通过向上委托一直到启动类加载器然后又往下到应用类加载器都无法加载，只能通过loader1加载器来加载，loader1加载的MyPerson的class对象clazz1属于loader1的命名空间，同样的道理clazz2属于loader2的命名空间，clazz1和clazz2是不同的2个class对象，所以我们在通过反射调用clazz1的实体object1的setMyPerson方法的时候，传入的是clazz2的实体对象，clazz2和clazz1属于不同的命名空间，相互之间不可见，在强制向下转型的时候肯定是抛出转型失败的错误。
-![这里写图片描述](20180406153748449.png)
-![这里写图片描述](20180406153811702.png)
+![这里写图片描述](2018/10/04/jvm原理（17）类加载器命名空间深度解析与实例分析/20180406153748449.png)
+![这里写图片描述](2018/10/04/jvm原理（17）类加载器命名空间深度解析与实例分析/20180406153811702.png)
 子加载器加载的类可以看到父加载器加载的类；
 父加载器加载的类无法看到子加载器加载的类；

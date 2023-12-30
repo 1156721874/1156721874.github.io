@@ -28,12 +28,12 @@ git log refs/remotes/origin/master
 git fetch origin master:refs/remotes/origin/mymaster
 
 在.git目录下进入config文件：
-![这里写图片描述](20170801224506574.png)
+![这里写图片描述](2018/10/04/git-十一-git远程分支底层剖析/20170801224506574.png)
 可以看到本地和远程的对应关系。
 在.git/refs/下边有三个目录：
 heads/  remotes/  tags/
 分别是本地的指针、远程的分支指针，以及标签的指针，指向的都是当前分支指向的提交id：
-![这里写图片描述](20170801224804261.png)
+![这里写图片描述](2018/10/04/git-十一-git远程分支底层剖析/20170801224804261.png)
 
  标签里边的内容：
 

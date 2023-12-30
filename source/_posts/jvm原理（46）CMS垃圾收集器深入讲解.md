@@ -21,7 +21,7 @@ categories: jvm
  会比初始标记阶段稍长一些，但远比并发标记的时间短。
 
 - cms收集器的运作步骤哦如下图所示，在整个过程中耗时最长的并发标记和并发清除过程收集器线程都可以与用户线程一起工作，因此，从总体上看，cms收集器的内存回收过程是与用户线程一起并发执行的。
-![cms1.png](cms1.png)
+![cms1.png](2019/05/19/jvm原理（46）CMS垃圾收集器深入讲解/cms1.png)
  - 优点
   - 并发收集、低停顿，oracle公司的一些官方文档中也称之为并发底停顿(concurrent low pause collector)
  - 缺点
@@ -46,17 +46,17 @@ categories: jvm
 
 #### phase1 initial mark
 - 这个是cms两次stop-the-world事件的其中一次，这个阶段的目标是：标记那些直接被gc root引用或者被年轻代存活对象所引用的所有对象。
-![cms2.png](cms2.png)
+![cms2.png](2019/05/19/jvm原理（46）CMS垃圾收集器深入讲解/cms2.png)
 
 #### phase2：concurrent mark
 - 在这个阶段garbage collecor会遍历老年代，然后标记所存活的对象，他会根据上个阶段找到gc roots遍历查找，并发标记阶段，她会与用户的应用程序并发运行。并不是老年代所有的存活对象会被标记，因为在标记期间用户的程序可能会改变一些引用
-![cms3.png](cms3.png)
+![cms3.png](2019/05/19/jvm原理（46）CMS垃圾收集器深入讲解/cms3.png)
 在上面的图中，与阶段一的图进行比对，就会发现有一个对象的引用已经发生了变化。
 
 #### phase3：concurrent preclean
 - 这也是一个并发阶段，与应用的线程并发运行，并不会stop应用的线程，在并发运行的过程中，一些对象的引用可能会发生变化，但是这种情况发生时，jvm会将包含这个对象的区域(card)标记为Dirty，这也是Card Marking
 - 在pre-clean阶段，那些能够从Dirty对象到达的对象也会被标记，这个标记做完之后，dirty card标记就会被清除了
-![cms4.png](cms4.png)
+![cms4.png](2019/05/19/jvm原理（46）CMS垃圾收集器深入讲解/cms4.png)
 
 #### phase4：concurrent abortable Preclean
 - 这也是一个并发阶段，但是同样不会影响用户的应用线程，这个阶段就是为了尽量承担stw中最终标记阶段的工作。这个阶段持续时间依赖于很多的
@@ -73,7 +73,7 @@ categories: jvm
 
 #### phase6：concurrent sweep
 - 这里不需要stw，它是与用户的应用程序并发运行，这个阶段是：清除那些不再使用的对象，回收它们的占用空间将来使用。
-![cms5.png](cms5.png)
+![cms5.png](2019/05/19/jvm原理（46）CMS垃圾收集器深入讲解/cms5.png)
 
 #### phase7：concurrent reset
 - 这个阶段也是并发执行的，它会重设cms内部的数据结构，为了下次的gc做准备。

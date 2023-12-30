@@ -6,7 +6,7 @@ categories: cloud
 ---
 
 **hive流程回顾**
-![这里写图片描述](20170521124731490.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-服务化：LLAP、HiveServer2、MetaStore（七）/20170521124731490.png)
 <!-- more -->
 
 **LLAP**
@@ -33,7 +33,7 @@ LLAP是Live Long and Prosper（生生不息，繁荣昌盛）的缩写，现已�
 弹性扩展
 
 **LLAP示例**
-![这里写图片描述](20170521133759952.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-服务化：LLAP、HiveServer2、MetaStore（七）/20170521133759952.png)
 
 **执行示例**
 Tez AM控制查询执行
@@ -99,7 +99,7 @@ tez任务的执行，查询片段会交给llap执行，直接在内存中执行�
 
 
 **ORCFile在LLAP使用LowLevelCache**
-![这里写图片描述](20170521140811396.png)  
+![这里写图片描述](2018/10/04/hive原理与源码分析-服务化：LLAP、HiveServer2、MetaStore（七）/20170521140811396.png)  
 
 **过载控制**
 目前，自身没有控制
@@ -117,15 +117,15 @@ tez任务的执行，查询片段会交给llap执行，直接在内存中执行�
 http://public-repo-1.hortonworks.com/slider/0.30/HortonworksTechnicalPreview-Slider.pdf
 
 **Hive Server 2**
-![这里写图片描述](20170521154336328.png)  
+![这里写图片描述](2018/10/04/hive原理与源码分析-服务化：LLAP、HiveServer2、MetaStore（七）/20170521154336328.png)  
 注意metadata可以放在外边，不一定在hiveserver2里边。
 **认证模型**
-![这里写图片描述](20170521154645267.png)  
+![这里写图片描述](2018/10/04/hive原理与源码分析-服务化：LLAP、HiveServer2、MetaStore（七）/20170521154645267.png)  
 
 博客:
 http://blog.cloudera.com/blog/2013/07/how-hiveserver2-brings-security-and-concurrency-to-apache-hive/
 
-![这里写图片描述](20170521154941019.png)  
+![这里写图片描述](2018/10/04/hive原理与源码分析-服务化：LLAP、HiveServer2、MetaStore（七）/20170521154941019.png)  
 
 **代码查看**
 一个标准的Thrift Server
@@ -178,25 +178,25 @@ Run:
 	select * from tablename limit 10;
 
 **新版支持监控Web UI**
-![这里写图片描述](20170521160025567.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-服务化：LLAP、HiveServer2、MetaStore（七）/20170521160025567.png)
 10002端口
 https://cwiki.apache.org/confluence/display/Hive/Setting+Up+HiveServer2
-![这里写图片描述](20170521160520699.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-服务化：LLAP、HiveServer2、MetaStore（七）/20170521160520699.png)
 
-![这里写图片描述](20170521161036186.png)  
+![这里写图片描述](2018/10/04/hive原理与源码分析-服务化：LLAP、HiveServer2、MetaStore（七）/20170521161036186.png)  
 
 **JDBC**
 https://cwiki.apache.org/confluence/display/Hive/HiveJDBCInterface
 https://www.codatlas.com/github.com/apache/hive/master/jdbc/src/java/org/apache/hive/jdbc/HiveConnection.java?line=113
 JDBC的本质是一个HiveServer2的Thrift Client，只不过对用户暴露了JDBC接口
 
-![这里写图片描述](20170521161551376.png)  
+![这里写图片描述](2018/10/04/hive原理与源码分析-服务化：LLAP、HiveServer2、MetaStore（七）/20170521161551376.png)  
 
 **JDBC**
-![这里写图片描述](20170521161700376.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-服务化：LLAP、HiveServer2、MetaStore（七）/20170521161700376.png)
 
 **MetaStore (HMS)**
-![这里写图片描述](20170521161821236.png)  
+![这里写图片描述](2018/10/04/hive原理与源码分析-服务化：LLAP、HiveServer2、MetaStore（七）/20170521161821236.png)  
 
 **MetaStore配置**
 hive.metastore.uris
@@ -215,18 +215,18 @@ https://cwiki.apache.org/confluence/display/Hive/Setting+Up+HiveServer2
 https://cwiki.apache.org/confluence/display/Hive/AdminManual+MetastoreAdmin
 
 **层次结构**
-![这里写图片描述](20170521162507869.png)  
+![这里写图片描述](2018/10/04/hive原理与源码分析-服务化：LLAP、HiveServer2、MetaStore（七）/20170521162507869.png)  
 
 
 **MetaStore代码**
 服务端：
 https://insight.io/github.com/apache/hive/blob/master/metastore/src/java/org/apache/hadoop/hive/metastore/HiveMetaStore.java?line=165
-![这里写图片描述](20170521163135751.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-服务化：LLAP、HiveServer2、MetaStore（七）/20170521163135751.png)
 客户端：
 https://insight.io/github.com/apache/hive/blob/master/metastore/src/java/org/apache/hadoop/hive/metastore/IMetaStoreClient.java?line=104
-![这里写图片描述](20170521163229862.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-服务化：LLAP、HiveServer2、MetaStore（七）/20170521163229862.png)
 IMetaStoreClient内部含有很多获取表的方法。
 
 **本地与远程**
 https://insight.io/github.com/apache/hive/blob/master/metastore/src/java/org/apache/hadoop/hive/metastore/HiveMetaStoreClient.java?line=155
-![这里写图片描述](20170521164029248.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-服务化：LLAP、HiveServer2、MetaStore（七）/20170521164029248.png)

@@ -120,7 +120,7 @@ MySample is loaded by : com.twodragonlake.jvm.classloader.MyTest16@677327b6  【
 MyCat is loaded by : sun.misc.Launcher$AppClassLoader@18b4aac2                【MyCat由AppClassLoader加载】
 ```
 但是为什么出现MySample的ClassNotFoundException的异常呢，原因就是类的命名空间：
-![这里写图片描述](20180405180203363.png)
+![这里写图片描述](2018/10/04/jvm原理（15）类加载器命名空间实战剖析与透彻理解/20180405180203363.png)
 即，子加载器可以看到父加载器加载的类，但是父加载器看不到子加载器加载的类，这个例子当中，MySample由子加载器MyTest16加载，MyCat由父加载器AppClassLoader加载，因此在父加载器里边看不到子加载器MyTest16加载的类MySample，所以抛出ClassNotFoundException异常。
 
 ok，最后一个例子，

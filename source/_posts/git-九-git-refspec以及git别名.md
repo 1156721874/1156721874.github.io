@@ -12,13 +12,13 @@ categories: git
 ```
 git config --global alias.br branch
 ```
-![这里写图片描述](20170801193146297.png)
+![这里写图片描述](2018/10/04/git-九-git-refspec以及git别名/20170801193146297.png)
 别名配置在~/.gitconfig（用户目录）里边
 
 **refspec：**
 新建三个分支：dev、test、master：
 然后切换到dev，将devpush到远程仓库出现如下问题：
-![这里写图片描述](20170801194728281.png)
+![这里写图片描述](2018/10/04/git-九-git-refspec以及git别名/20170801194728281.png)
 原因：
 表面意思是远程分支没有dev这个分支，命令提示：
 
@@ -42,7 +42,7 @@ $ git push
 Everything up-to-date
 ```
 然后我们去github的页面可以看到出现我们的dev分支。
-![这里写图片描述](20170801195813246.png)  
+![这里写图片描述](2018/10/04/git-九-git-refspec以及git别名/20170801195813246.png)  
 通过命令我们可以看到多出来一个远程分支：
 
 ```

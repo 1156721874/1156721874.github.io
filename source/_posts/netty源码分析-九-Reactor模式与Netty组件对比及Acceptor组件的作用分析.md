@@ -5,7 +5,7 @@ tags: Reactor模式 Acceptor组件
 categories: netty
 ---
 
-![这里写图片描述](20171021143958299.png)
+![这里写图片描述](2018/10/04/netty源码分析-九-Reactor模式与Netty组件对比及Acceptor组件的作用分析/20171021143958299.png)
 Reactor模式的角色构成（Reactor模式一共有5种角色构成 ）：
 <!-- more -->
 1、Handle（句柄或是描述符）：本质上表示一种资源，是由操作系统提供的；该资源表示一个个的事件，比如说文件描述符，活是 针对网络编程中的Socket描述符，事件既可以来自外部，也可以来自内部，外部事件比如说客户端的连接请求，客户端发送过来数据等；内部事件比如说操作系统产生的定时器任务事件等。它本质就是一个文件描述符。Handle是事件产生的发源地。
@@ -26,7 +26,7 @@ Reactor模式的角色构成（Reactor模式一共有5种角色构成 ）：
 6、Initiation Dispatcher回调事件处理器的handle_event回调方法来执行特定于应用的功能（开发者自己所编写的功能），从而响应这个事件。所发生的事件类型可以作为该方法参数并被该方法内部使用来执行额外的特定于服务的分离与分发。
 
 下面我们结合netty的源码看一下这2张图：
-![这里写图片描述](20171021154108934.png)
+![这里写图片描述](2018/10/04/netty源码分析-九-Reactor模式与Netty组件对比及Acceptor组件的作用分析/20171021154108934.png)
  Initiation Dispatcher对应右边图的mainReactor和subReactor，只是右边图把所谓的初始化分离器拆开，变成2个Reactor，中间用acceptor连接起来，右图，当我们服务端一个channel绑定一个端口的时候，就会生成一个Reactor，Reactor是连接netty的bossgroup和workgroup的桥梁，我们跟踪一下代码，我们从
 ```
 ChannelFuture channelFuture = serverBootstrap.bind(8899).sync();

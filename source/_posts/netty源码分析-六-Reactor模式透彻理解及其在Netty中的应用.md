@@ -6,10 +6,10 @@ categories: netty
 ---
 
 前边讲了EventLoopGroup的一些知识，在netty的架构这块我们使用一种bossGroup加workerGroup的方式，bossGroup只负责请求的转发，workerGroup是具体的数据处理，其实netty整个框架使用的是Reactor(响应器)的设计模式。这方面知名的大佬就是Doug Lea，Java.util.current包的很多线程的API和工具都出自大佬之手。
-![这里写图片描述](20170923142146979.jpg)
+![这里写图片描述](2018/10/04/netty源码分析-六-Reactor模式透彻理解及其在Netty中的应用/20170923142146979.jpg)
 <!-- more -->
 大佬的一片文章对这种模式做了非常细致的介绍,《[Scalable IO in Java](http://gee.cs.oswego.edu/dl/cpjslides/nio.pdf)》
-![这里写图片描述](20170923142426064.png)  
+![这里写图片描述](2018/10/04/netty源码分析-六-Reactor模式透彻理解及其在Netty中的应用/20170923142426064.png)  
 
 大多数的网络服务都是下面的流程：
 读取请求
@@ -18,7 +18,7 @@ categories: netty
 编码相应
 发送响应
 经典的io模式是这样的：
-![这里写图片描述](20170923142529241.png)
+![这里写图片描述](2018/10/04/netty源码分析-六-Reactor模式透彻理解及其在Netty中的应用/20170923142529241.png)
 
 ```
 class Server implements Runnable {
@@ -49,7 +49,7 @@ class Server implements Runnable {
 每一个请求开一个线程去处理。
 
 这种方式不是一直能够好的做法，会有阻塞和瓶颈。接下来是Reactor Design的方式：
-![这里写图片描述](20170923143326543.png)
+![这里写图片描述](2018/10/04/netty源码分析-六-Reactor模式透彻理解及其在Netty中的应用/20170923143326543.png)
 
 ```
 class Reactor implements Runnable {
@@ -173,9 +173,9 @@ class Sender implements Runnable {
 ```
 
 接着是handler基于线程池的实现：
-![这里写图片描述](20170923160427112.png)
+![这里写图片描述](2018/10/04/netty源码分析-六-Reactor模式透彻理解及其在Netty中的应用/20170923160427112.png)
 
 这个版本是对于handler的减压，接着多个selector的Reactor：
 
-![这里写图片描述](20170923161803582.png)
+![这里写图片描述](2018/10/04/netty源码分析-六-Reactor模式透彻理解及其在Netty中的应用/20170923161803582.png)
 mainReactor相当于bossGroup,subReactorx 相当于netty里边的workerGroup.整个过程下来其实就是netty的 框架内在的模式。

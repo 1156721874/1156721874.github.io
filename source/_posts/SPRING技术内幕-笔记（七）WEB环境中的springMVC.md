@@ -5,23 +5,23 @@ tags: spring
 categories: spring
 ---
 **7.1Tomcat的web.XML对springMVC 的描述**：
-![这里写图片描述](20150610221403198.png)
+![这里写图片描述](2018/09/28/SPRING技术内幕-笔记（七）WEB环境中的springMVC/20150610221403198.png)
 
 <!-- more -->
 dispatcherServlet定义了对应的URL的映射，context-param制定了bean的定义文件的路径，contextLoaderListener作为简历IOC容器的入口，加载IOC容器到servletContext中，即上下文。
 
 **7.2上下文在？WEB容器中的启动**
 在WEB容器中启动spring应用的过程：
-![这里写图片描述](20150610222104616.png)
+![这里写图片描述](2018/09/28/SPRING技术内幕-笔记（七）WEB环境中的springMVC/20150610222104616.png)
 
 ContextLoaderListener是一个监听器应为实现了servletAPI的ServletContextListener，就有了contextInitialized，contextDestroyed，而IOC容器的载入过程是由ContextLoaderListener的基类ContextLoader完成的：
 他们关系：
-![这里写图片描述](20150610222828706.png)
+![这里写图片描述](2018/09/28/SPRING技术内幕-笔记（七）WEB环境中的springMVC/20150610222828706.png)
 
 **7.3WEB容器中的上下文设置**
 
 WebApplicationContext的上下文设置：
-![这里写图片描述](20150610223037173.png)
+![这里写图片描述](2018/09/28/SPRING技术内幕-笔记（七）WEB环境中的springMVC/20150610223037173.png)
 
 在这个体系中XMLWebAppliocationContext初始化过程中建立了IOC容器：
 

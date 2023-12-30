@@ -14,20 +14,20 @@ categories: cloud
 数据服务：HiveServer2，多种API访问Hadoop上的数据，JDBC，ODBC
 元数据服务：数据什么样，数据在哪里，Hadoop上的唯一标准
 **Hive和Hadoop的关系**
-![这里写图片描述](20170502212603341.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-hive源码架构与理论（一）/20170502212603341.png)
 **Hive Cli**
-![这里写图片描述](20170502212656437.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-hive源码架构与理论（一）/20170502212656437.png)
 
 **Compiler的流程**
 hive简单理解的功能就是把一条sql进行解析成mr任务去给hadoop执行，那么hive的核心就是怎么去解释这条sql：
-![这里写图片描述](20170502212923204.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-hive源码架构与理论（一）/20170502212923204.png)
 **hive架构**
-![这里写图片描述](20170502213042020.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-hive源码架构与理论（一）/20170502213042020.png)
 
 源码在哪里？
 
 三个重要的模块：
-![这里写图片描述](20170502214223020.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-hive源码架构与理论（一）/20170502214223020.png)
 **HiveParser:**
 这个类是解析sql的入口
 [源码位置](https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/hadoop/hive/ql/parse/ParseDriver.java?line=183)
@@ -129,13 +129,13 @@ public abstract class Operator<T extends Serializable> implements Serializable,
   ......................略.............
 ```
 从代码中可以看到Operator 有很多children和parent，由此这是一个有向无环图（DAG）,QB经过genPlan（）方法变成了一个DAG,接下来的**Optimizer optm = new Optimizer();** 是逻辑优化器，那么hive有多少逻辑优化器呢？进入[Optimizer](https://github.com/cloudera/hive/blob/trunk/ql/src/java/org/apache/hadoop/hive/ql/optimizer/Optimizer.java)：
-![这里写图片描述](20170504214748395.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-hive源码架构与理论（一）/20170504214748395.png)
 经过这些优化器，sinkOp 变成了一个改写的Operator ，genMapRedTasks(qb);方法是对逻辑优化器进行切分生成一个task有向无环图，以及task的拆分，以及task的物理优化都会在genMapRedTasks（）中进行。
-![这里写图片描述](20170504215533873.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-hive源码架构与理论（一）/20170504215533873.png)
 以上逻辑是整个hivesql的编译流程代码的大体脉络。
 
 **Hive和数据库RDBMS**
-![这里写图片描述](20170504220038302.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-hive源码架构与理论（一）/20170504220038302.png)
 
 **Hive数据模型**
 DataBase

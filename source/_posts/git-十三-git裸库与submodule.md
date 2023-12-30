@@ -35,9 +35,9 @@ drwxr-xr-x 1 Administrator 197121   0 8月   2 20:52 refs/
 
 准备2个仓库，即2个项目：
 子仓库：
-![这里写图片描述](20170802211927985.png)
+![这里写图片描述](2018/10/04/git-十三-git裸库与submodule/20170802211927985.png)
 父仓库：
-![这里写图片描述](20170802212123602.png)
+![这里写图片描述](2018/10/04/git-十三-git裸库与submodule/20170802212123602.png)
 
 **将子仓库纳入到父仓库：**
 git submodule add https://github.com/1156721874/child.git mymodule
@@ -52,7 +52,7 @@ warning: LF will be replaced by CRLF in .gitmodules.
 The file will have its original line endings in your working directory.
 ```
 子模块出现在mygit中：
-![这里写图片描述](20170802212522296.png)；
+![这里写图片描述](2018/10/04/git-十三-git裸库与submodule/20170802212522296.png)；
 当前mygit多出来mudule的配置文件夹：
 
 ```
@@ -91,10 +91,10 @@ To https://github.com/1156721874/mygit.git
    8004460..9f82bed  master -> master
 
 ```
-![这里写图片描述](20170802213041221.png)  
+![这里写图片描述](2018/10/04/git-十三-git裸库与submodule/20170802213041221.png)  
 
 我们验证下在child下添加一个文件在mygit仓库的mymodule同步出现：
-![这里写图片描述](20170802213719567.png)
+![这里写图片描述](2018/10/04/git-十三-git裸库与submodule/20170802213719567.png)
 
 如果我们引用了很多的子模块我们是不是需要进入每一个子模块执行git pull呢？这样做显然是麻烦的，所以git提供了批量的方式：
 git submodule foreach git pull
@@ -102,7 +102,7 @@ git submodule foreach git pull
 命令很明显，就是每个仓库执行git pull
 
 这时候如果另外一个开发者加入进来，需要执行clone mygit操作：
-![这里写图片描述](20170802215333635.png)
+![这里写图片描述](2018/10/04/git-十三-git裸库与submodule/20170802215333635.png)
 
 我们虽然讲父级模块克隆下来，但是内容是空的，需要使用【 git submodule init】初始化子模块，然后【 git submodule update --recursive
 】递归更新子模块内容。
@@ -115,10 +115,10 @@ git submodule add https://github.com/1156721874/child.git mymodule --recursive
 克隆的时候加上参数 --recursive即可。
 
 此时在父级模块mygit里边的.git目录下出现modules文件件，进入modules是一个完整的仓库的配合格局：
-![这里写图片描述](20170802220455849.png)
+![这里写图片描述](2018/10/04/git-十三-git裸库与submodule/20170802220455849.png)
 
 mymodule的删除，git没有提供直接的命令删除submodule，但是我们可以使用一系列命令组合完成删除：
-![这里写图片描述](20170802221743396.png)
+![这里写图片描述](2018/10/04/git-十三-git裸库与submodule/20170802221743396.png)
 即：
 第一： git rm --cached mymodule/ 删除暂存区文件
 第二：rm -rf mymodule/ 删除工作区文件
@@ -127,6 +127,6 @@ mymodule的删除，git没有提供直接的命令删除submodule，但是我们
 第五：抓状态恢复正常。
 
 远程仓库的当然也会删除掉：
-![这里写图片描述](20170802222005477.png)
+![这里写图片描述](2018/10/04/git-十三-git裸库与submodule/20170802222005477.png)
 
 最后说一下这种submodule的项目管理方式和jar嵌入的方式的不同点就是，jar包的形式是子模块很少发生代码的变化，而submodule的方式是用在依赖的子模块变动非常大的情况。

@@ -41,9 +41,9 @@ Exception in thread "main"
 Exception: java.lang.OutOfMemoryError thrown from the UncaughtExceptionHandler in thread "main"
 ```
 现在修改-XX:MaxMetaspaceSize=200m运行，打开jvisualvm监控类的和metasapce的曲线：
-![metaspace](metaspace.png)
+![metaspace](2019/04/21/jvm原理（40）JVM元空间深度解析/metaspace.png)
 metaspace是一直上升的，等程序出现oom的时候，会看到metaspace的上升停止了：
-![metaspace](metaspace1.png)
+![metaspace](2019/04/21/jvm原理（40）JVM元空间深度解析/metaspace1.png)
 验证了MaxMetaspaceSize的作用。
 目前我们通过程序和监控的方式知道metaspace会出现oom，那么metaspace到底是什么呢？通过这篇文章：
 [Java 永久代去哪儿了](https://www.infoq.cn/article/Java-PERMGEN-Removed) 我们就能知道。

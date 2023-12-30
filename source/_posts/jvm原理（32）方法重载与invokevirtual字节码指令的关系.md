@@ -26,7 +26,7 @@ public class MyTest4 {
 }
 ```
 打开jclasslib可以看到main方法会有invokestatic 的调用：
-![这里写图片描述](20180915090702298.png)
+![这里写图片描述](2018/10/04/jvm原理（32）方法重载与invokevirtual字节码指令的关系/20180915090702298.png)
 
 **方法的静态分派（invokevirtual ）**
 

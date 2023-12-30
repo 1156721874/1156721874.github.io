@@ -237,9 +237,9 @@ ansible-playbook stop.yml <br/>
 
 <a name="5f2e4fbc"></a>
 binlog监控：
-![binlog.png](binlog.png)
+![binlog.png](2019/07/25/tidb-install-pit/binlog.png)
 manager监控：
-![manager.png](manager.png)
+![manager.png](2019/07/25/tidb-install-pit/manager.png)
 
 ### 全量备份与恢复
 https://pingcap.com/docs-cn/v3.0/how-to/maintain/backup-and-restore/

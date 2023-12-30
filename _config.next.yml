@@ -185,7 +185,7 @@ links:
   BladeCode: https://incoder.org
   Alyenc: https://kaifa.dev
   Killua: https://blog.dazhidayong.cn
-  Jocelyn: https://jocelynshang.cn/
+  Cylong: https://www.cylong.com
 
 # Table of Contents in the Sidebar
 # Front-matter variable (nonsupport wrap expand_all).
@@ -489,7 +489,7 @@ google_site_verification:
 
 # Bing Webmaster tools verification.
 # See: https://www.bing.com/webmasters
-bing_site_verification: 
+bing_site_verification:
 
 # Yandex Webmaster tools verification.
 # See: https://webmaster.yandex.ru

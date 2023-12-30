@@ -789,13 +789,13 @@ Found 1 deadlock.
 
 ### jmc(Java Mission control)图形化展示
 执行jmc，左侧选择MyTest5的MBean服务器。右侧展示：
-![jmc1](jmc1.png)
+![jmc1](2019/04/30/jvm原理（41）jmap-jstat-jcmd-jmc-jhat讲解与实战/jmc1.png)
 左侧选择飞行记录器，右侧展示：
-![jmc2](jmc2.png)
+![jmc2](2019/04/30/jvm原理（41）jmap-jstat-jcmd-jmc-jhat讲解与实战/jmc2.png)
 jmc相比局isualvm和jconsole具有展示更多的系统信息，更加丰富。
 
 我们运行MyTest4的程序(不断创建class的程序)，然后使用jmc观察meatspace的变化：
-![jmc3](jmc3.png)
+![jmc3](2019/04/30/jvm原理（41）jmap-jstat-jcmd-jmc-jhat讲解与实战/jmc3.png)
 meatspace是一直在攀升的，当到达-XX:MaxMetaspaceSize=200m设置的200m时，变化也就会停止。
 
 ### jhat 对转储文件进行展示分析

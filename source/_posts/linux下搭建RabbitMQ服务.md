@@ -37,7 +37,7 @@ Rabbitmq试用业务范围：
  2:登录到指定的一台linux服务器
    选择要创建一个文件夹，我选择的目录是(目录名称可随便)：
    /data/rabbitMQ
-![这里写图片描述](20160802101807942.png)
+![这里写图片描述](2018/09/28/linux下搭建RabbitMQ服务/20160802101807942.png)
 3：进入到该目录,做以下操作
  cd  /data/rabbitMQ
  tar xvzf otp_src_R15B01.tar.gz
@@ -47,7 +47,7 @@ Rabbitmq试用业务范围：
 最后一步执行完，可能会报一个错：
  No curses library functions found(这是缺少ncurses-5.2.tar包)
 把ncurses-5.2.tar放到指定路径，我这里放到的是/data/ncurses 下，最好和之前放同一个路径
-![这里写图片描述](20160802101839630.png)
+![这里写图片描述](2018/09/28/linux下搭建RabbitMQ服务/20160802101839630.png)
 执行以下操作：
 tar zxvf ncurses-5.2.tar #解压缩并且释放 文件包
 cd ncurses-5.2    #进入解压缩的目录（注意版本）
@@ -58,7 +58,7 @@ make install #安装编译好的NCURSES库
 
 等操作完以上命令，在重新执行搭建Erlang环境的 ./configure 命令：
 编译后的输出如下图
-![这里写图片描述](20160802101906459.png)
+![这里写图片描述](2018/09/28/linux下搭建RabbitMQ服务/20160802101906459.png)
  提示没有wxWidgets和fop，但是问题不大。继续：
  make
  sudo make install
@@ -73,7 +73,7 @@ make install #安装编译好的NCURSES库
 需要安装simplejson。从此处下载最新的版本： http://pypi.python.org/pypi/simplejson#downloads 。我下载的版本是 simplejson-3.8.0.tar.gz
 安装这个很简单，执行以下3个步骤即可：
 进入到该目录：
-![这里写图片描述](20160802101942194.png)
+![这里写图片描述](2018/09/28/linux下搭建RabbitMQ服务/20160802101942194.png)
 tar xvzf simplejson-3.8.0.tar.gz
 cd simplejson-3.8.0
 sudo python setup.py install
@@ -85,7 +85,7 @@ sudo python setup.py install
 我下载的版本是 rabbitmq-server-3.5.4.tar.gz
 
 进入该目录：
-![这里写图片描述](20160802102010282.png)
+![这里写图片描述](2018/09/28/linux下搭建RabbitMQ服务/20160802102010282.png)
 所需要的包
 yum install xmlto
 
@@ -116,7 +116,7 @@ cd /usr/local/sbin/
 server-name:你指定的linux服务器ip，我的是10.1.100.67
 
 浏览器输入：http://10.1.100.67:15672/ 则说明环境搭建成功
-![这里写图片描述](20160802102045118.png)
+![这里写图片描述](2018/09/28/linux下搭建RabbitMQ服务/20160802102045118.png)
 输入默认用户名和密码：guest ，提示登陆失败
  翻看官方的release文档后，得知由于账号guest具有所有的操作权限，并且又是默认账号，出于安全因素的考虑，guest用户只能通过localhost登陆使用，并建议修改guest用户的密码以及新建其他账号管理使用rabbitmq(该功能是在3.3.0版本引入的)。
 
@@ -124,7 +124,7 @@ server-name:你指定的linux服务器ip，我的是10.1.100.67
 解决方法：
 进入/data/rabbitMQ/rabbitmq-server/rabbitmq-server-3.5.4/ebin目录下rabbit.app中找到：loopback_users里的<<"guest">>删除。
  并重启rabbitmq，则可以用guest账号登陆管理控制台。成功界面如下：
-![这里写图片描述](20160802102122048.png)
+![这里写图片描述](2018/09/28/linux下搭建RabbitMQ服务/20160802102122048.png)
 
 
                  Java 代码与spring集成

@@ -222,7 +222,7 @@ JdkDynamicAopProxy目标对象方法的调用是通过AopUtils的invokeJoinpoint
 **拦截器链的调用**
 
 不论是JdkDynamicAopProxy还是Cglib2AopProxy归根到底是通过ReflectiveMethodInvocation的proceed方法调用拦截器链的，
-![这里写图片描述](20150521220420283.png)
+![这里写图片描述](2018/09/28/SPRING技术内幕：深入解析SPRING架构与设计原理-第2版-笔记（六）AOP拦截器调用的实现/20150521220420283.png)
 advised（class：AdvisedSupport  ）持有拦截器链，getInterceptorsAndDynamicInterceptionAdvice方法的实现在其基类AdvisedSupport中：
 
 ```
@@ -386,7 +386,7 @@ public abstract class GlobalAdvisorAdapterRegistry {
 ```
 DefaultAdvisorAdapterRegistry中设置了一个adapters成员变量，放的是一系列AdvisorAdapter适配器，spring的advice对应的是一个适配器，这些是适配器的作用是：一是调用adapter的support方法，通过这个方法来判断取得的advice属于什么类型的advice通知，从而根据不同的advice类型来注册不同的adviceinterceptor，也就是前面看到的哪些拦截器；第二，这些adviceinterceptor都是springAOP框架设计好的，是为了实现不同的advice功能提供服务，有了这些adviceinterceptor，就可以方便使用由spring提供的各种不同advice来设计AOP应用，也就是说，正是这些adviceinterceptor最终实现了advice通知在AOPProxy代理对象中的织入功能。
 advisorAdaptor接口中类的设计层次与关系：
-![这里写图片描述](20150524144221973.png)
+![这里写图片描述](2018/09/28/SPRING技术内幕：深入解析SPRING架构与设计原理-第2版-笔记（六）AOP拦截器调用的实现/20150524144221973.png)
 DefaultAdvisorAdapterRegistry代码：
 ```
 public class DefaultAdvisorAdapterRegistry implements AdvisorAdapterRegistry, Serializable {

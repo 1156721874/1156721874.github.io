@@ -6,7 +6,7 @@ categories: spring
 ---
 8.1SPringMVC设置概览
 在web.xml文件里边配置的DispatcherServlet是web请求的入口，它的处理过程如下：
-![这里写图片描述](20150613213240218.png)
+![这里写图片描述](2018/09/28/SPRING技术内幕-笔记（八）SpringMVC的设计与实现/20150613213240218.png)
 <!-- more -->
 
 DispatcherServlet的任务有2个：
@@ -239,7 +239,7 @@ initHandlerMappings中mapping关系的作用是为http请求找到相应的contr
 **8.2、MVC处理http分发请求**
 
   **1、handlerMapping 的配置和设计原理：**
-![这里写图片描述](20150622193305255.png)
+![这里写图片描述](2018/09/28/SPRING技术内幕-笔记（八）SpringMVC的设计与实现/20150622193305255.png)
 
 以SimpleUrlHandlerMapping的分析handlerMapping的设计与实现
 接口HandlerMapping的代码：
@@ -554,7 +554,7 @@ protected void doService(HttpServletRequest request, HttpServletResponse respons
 doDispatch的实现（典型的command模式的应用）：
 Dodispatcher协同模型和控制器的过程：
 
-![这里写图片描述](20150622213746614.png)
+![这里写图片描述](2018/09/28/SPRING技术内幕-笔记（八）SpringMVC的设计与实现/20150622213746614.png)
 
 ```
 protected void doDispatch(HttpServletRequest request, HttpServletResponse response) throws Exception {

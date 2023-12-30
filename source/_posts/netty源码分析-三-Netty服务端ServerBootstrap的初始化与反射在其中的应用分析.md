@@ -6,7 +6,7 @@ categories: netty
 ---
 
 上一节说到EventLoopGroup只是对bossGroup和workerGroup的一些初始化，包括线程数量，执行器（命令模式），我们的服务端接下来使用ServerBootstrap对bossGroup和workerGroup进行了包装，整个过程是一个方法链的调用过程，每个方法返回调用者本身：
-![这里写图片描述](20170916120817979.png)
+![这里写图片描述](2018/10/04/netty源码分析-三-Netty服务端ServerBootstrap的初始化与反射在其中的应用分析/20170916120817979.png)
 <!-- more -->
 然后进行了启动，先看一下ServerBootstrap的结构：
 
@@ -83,7 +83,7 @@ public abstract class AbstractBootstrap<B extends AbstractBootstrap<B, C>, C ext
     }
 ```
 这里用到了ReflectiveChannelFactory，这里牵扯了三个factory和他们之间的关系，如图：
-![这里写图片描述](20170916110106930.png)
+![这里写图片描述](2018/10/04/netty源码分析-三-Netty服务端ServerBootstrap的初始化与反射在其中的应用分析/20170916110106930.png)
 
 这个图我们只要了解一下即可，接下来 return channelFactory(new ReflectiveChannelFactory<C>(channelClass));，进入channelFactory方法：
 

@@ -221,7 +221,7 @@ public class Test {
 }
 ```
 以为我的机器是8核的：
-![这里写图片描述](20170910175123805.png)
+![这里写图片描述](2018/10/04/netty源码分析-一-EventLoopGroup/20170910175123805.png)
 运行结果是16。
 接着往下走调用MultithreadEventLoopGroup的父类MultithreadEventExecutorGroup的构造器：
 

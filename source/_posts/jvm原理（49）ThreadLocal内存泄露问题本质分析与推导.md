@@ -1,12 +1,12 @@
 ---
 title: jvm原理（49）ThreadLocal内存泄露问题本质分析与推导
-date: 2020-04-0 21:37:13
+date: 2020-04-01 21:37:13
 tags: [ThreadLocal、存泄露]
 categories: jvm
 ---
 
 ### threadLocal内存溢出分析
-![threadlocal-stack-heap.png](threadlocal-stack-heap.png)
+![threadlocal-stack-heap.png](2020/04/01/jvm原理（49）ThreadLocal内存泄露问题本质分析与推导/threadlocal-stack-heap.png)
 <!-- more -->
 我们使用ThreadLocal的方式一般是static的。
 public static ThreadLocal<String> threadlocal = new ThreadLocal();

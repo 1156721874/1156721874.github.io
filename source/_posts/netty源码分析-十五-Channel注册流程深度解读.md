@@ -104,10 +104,10 @@ public abstract class AbstractBootstrap<B extends AbstractBootstrap<B, C>, C ext
  ChannelFuture regFuture = config().group().register(channel);
 ```
 但是我们看到的register是在MultithreadEventLoopGroup里边：
-![这里写图片描述](20171104122652131.png)
+![这里写图片描述](2018/10/04/netty源码分析-十五-Channel注册流程深度解读/20171104122652131.png)
 
 这个比较让人困惑，其实很简单：
-![这里写图片描述](20171104122817431.png)
+![这里写图片描述](2018/10/04/netty源码分析-十五-Channel注册流程深度解读/20171104122817431.png)
 即 NioEventLoopGroup的父类是MultithreadEventLoopGroup，register是父类的方法，所以我们才进入MultithreadEventLoopGroup里边。
 ```
     public ChannelFuture register(Channel channel) {

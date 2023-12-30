@@ -43,13 +43,13 @@ ps：举例，老年代50G，新生代30G，使用cms收集器收集垃圾的时
 - 另外，g1提供更多手段，以达到对gc停顿时间的可控。
 
 #### HotPot虚拟机主要构成
-![jvm-construct.png](jvm-construct.png)
+![jvm-construct.png](2019/06/07/jvm原理（47）G1垃圾收集器系列深入讲解/jvm-construct.png)
 
 #### 传统垃圾收集器堆结构
-![jvm-men-construct.png](jvm-men-construct.png)
+![jvm-men-construct.png](2019/06/07/jvm原理（47）G1垃圾收集器系列深入讲解/jvm-men-construct.png)
 
 #### G1收集器堆结构
-![jvm-g1-construct.png](jvm-g1-construct.png)
+![jvm-g1-construct.png](2019/06/07/jvm原理（47）G1垃圾收集器系列深入讲解/jvm-g1-construct.png)
 
 图中的每个区域，比如O区域，在随着时间的推移和内存的使用，可能会被定义为E或者S区域。
 但是这三种类型是固定的，也是为了延续之前老的内存结构的概念名字。
@@ -77,7 +77,7 @@ ps：举例，老年代50G，新生代30G，使用cms收集器收集垃圾的时
 - 收集集合（CSet）：一组可被回收的分区的集合，在Cset中存活的数据会被GC过程中被移动到另一个可用分区，CSet中的分区可以来自eden空间、survivor空间、或者老年代。
 - 记忆集合（RSet）：RSet记录了其他Region中的对象引用本region中对象的关系，属于point-into结构（谁引用了我的对象）。RSet的价值在于使用垃圾收集器不需要扫描整个堆找到谁引用了当前分区中的对象，只需要扫描RSet即可。
 - Region1和Region3中的对象引用了Region2中的对象，因此在Region2的Rset中记录了这两个引用。
-![g1-Rset.png](g1-Rset.png)
+![g1-Rset.png](2019/06/07/jvm原理（47）G1垃圾收集器系列深入讲解/g1-Rset.png)
 - G1 GC是在point-out的card table之上再加了一层结构来构成point-into Rset：每个region会记录下到底哪些别的region有指向自己的指针，而这些指针分别在哪些card的范围内。
 - 这个Rset其实是一个hash table，key是别的region的起始地址，value是一个集合，里面元素是card table的index。举例来说，如果region A的Rset里有一项的key是regionB，value里有index为1234的card，它的意思就是regionB的一个card里有引用指向region A。所以对regionA来说，该Rset记录的是point-into的关系；而card table仍然记录了point-out的关系。
 - Snapshot-At-The-Begining（SATB）：
@@ -134,7 +134,7 @@ young Gc 而发生的。
 - G1OldCSetRegionThresoldPercent：一次mixed Gc中能被选入CSet的最多old generation region数量。
 
 - G1 GC其他的参数
-![g1-params.png](g1-params.png)
+![g1-params.png](2019/06/07/jvm原理（47）G1垃圾收集器系列深入讲解/g1-params.png)
 
 
 #### G1 Oracle官方doc
@@ -187,22 +187,22 @@ https://www.oracle.com/technetwork/tutorials/tutorials-1876574.html
   - 灰色：对象本身被扫描，但还没有扫描完该对象中的子对象（它的field还没有被标记或标记完）
   - 白色：未被扫描对象，扫描完成所有对象之后，最终为白色的为不可达对象，即垃圾对象（对象没有被标记到）
 
-![three-color.png](three-color.png)
+![three-color.png](2019/06/07/jvm原理（47）G1垃圾收集器系列深入讲解/three-color.png)
 
-![three-color1.png](three-color1.png)
+![three-color1.png](2019/06/07/jvm原理（47）G1垃圾收集器系列深入讲解/three-color1.png)
 
-![three-color2.png](three-color2.png)
+![three-color2.png](2019/06/07/jvm原理（47）G1垃圾收集器系列深入讲解/three-color2.png)
 
 但是如果在标记过程中，应用程序也运行，那么对象的指针就有可能改变。这样的话，我们就会遇到一个问题：对象丢失问题。
 - 当垃圾收集器扫描到下面情况时
- ![three-color3.png](three-color3.png)
+ ![three-color3.png](2019/06/07/jvm原理（47）G1垃圾收集器系列深入讲解/three-color3.png)
 - 这时候应用程序执行了以下操作：
   - A.c = C
   - B.c = null
 - 这样，对象的状态图变成如下情形：
- ![three-color4.png](three-color4.png)
+ ![three-color4.png](2019/06/07/jvm原理（47）G1垃圾收集器系列深入讲解/three-color4.png)
  这时候垃圾收集器再标记扫描的时候就会变成下图这样
-![three-color5.png](three-color5.png)
+![three-color5.png](2019/06/07/jvm原理（47）G1垃圾收集器系列深入讲解/three-color5.png)
 这个时候A和C是矛盾的，A是黑色的，意味着他自己和他下面的也扫描完了，这样C会被认为是垃圾，但是A指向了C，如果回收了C是严重的不对。
 - 很显然，此时C是白色，被认为是垃圾需要清理掉，显然这是不合理的，出现了漏标。
 
@@ -243,7 +243,7 @@ https://www.oracle.com/technetwork/tutorials/tutorials-1876574.html
 - 漏标情况只会发生在白色对象中，且满足以下任意一个条件
     - 并发标记时，应用线程给一个黑色对象的引用类型字段赋值了该白色对象（黑色对象意味着自己和孩子都被扫描了，而黑色下边挂白色的，白色会被认为是垃圾）
     - 并发标记时，应用线程删除所有灰色对象到该白色对象的引用（灰色的意味着孩子还没有被扫描，此时删除孩子的引用）。
-    ![three-color6.png](three-color6.png)
+    ![three-color6.png](2019/06/07/jvm原理（47）G1垃圾收集器系列深入讲解/three-color6.png)
     三个灰色对象都指向一个白色对象，此时删除三个灰色对象到白色对象的引用，此时我们可能认为W会被当做垃圾回收，但是存在一种情况是一个黑色对象也引用了白色对象，这样 就回到了第一种情况。
 
 - 对于第一种情况，利用post-write- barrier，记录所有新增得引用关系，然后根据这些引用关系为根重新扫描一遍

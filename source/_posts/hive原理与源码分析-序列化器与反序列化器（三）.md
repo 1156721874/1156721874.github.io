@@ -90,7 +90,7 @@ Stage-3：mr任务
 Stage-0：对mr输出文件的输出
 
 **逻辑执行计划Stage-3**
-![这里写图片描述](20170507201653831.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-序列化器与反序列化器（三）/20170507201653831.png)
 
 TableScanOperator:  from src  a /from src b 【a表加载进入内存，b在磁盘上边】
 FilterOperator: where  a.key<100
@@ -118,7 +118,7 @@ FileSyncOperator:输出
 关于MR和Tez的性能比较点这：http://www.cnblogs.com/linn/p/5325147.html
 
 **SerDe所处的位置**
-![这里写图片描述](20170507203959466.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-序列化器与反序列化器（三）/20170507203959466.png)
 
 **序列化和反序列化的目的**
 Serde是用于序列化和反序列化。
@@ -248,7 +248,7 @@ ObjectInspector作用相当大，它解耦了数据使用和数据格式
 在输入端和输出端切换不同的输入/输出格式
 在不同的Operator上使用不同的数据格式
 https://insight.io/github.com/apache/hive/blob/master/serde/src/java/org/apache/hadoop/hive/serde2/objectinspector/ObjectInspector.java
-![这里写图片描述](20170507212442779.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-序列化器与反序列化器（三）/20170507212442779.png)
 
 我们在上文的 explain select * from src a join src b on a.key=b.key where a.key<100;执行计划的时候，在stage-3有一个 Map Operator，这个操作是一个读操作，即反序列化Deserializer。
 **Deserializer是如何工作的**
@@ -310,7 +310,7 @@ public class ReduceSinkDesc extends AbstractOperatorDesc {
 ```
 
 在FileSinkDesc的注解@Explain中有个displayName=File Output Operator和我们之前的执行计划中的输出：
-![这里写图片描述](20170507220329675.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-序列化器与反序列化器（三）/20170507220329675.png)
 由此我们在根据执行bebug的时候就是根据类似于这种注解去判断的。
 
 Hive的本质是一条SQL生成的一系列Operators，并执行它们 每个Operators的原理和适应条件，决定查询的性能 这里的代码是[ReduceSinkOperator](https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/hadoop/hive/ql/exec/ReduceSinkOperator.java?line=560):

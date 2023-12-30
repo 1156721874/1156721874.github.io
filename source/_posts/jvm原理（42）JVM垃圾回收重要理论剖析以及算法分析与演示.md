@@ -8,8 +8,8 @@ categories: jvm
 ### 内存区域的回顾
 垃圾收集器和java的内存分布有着紧密的联系，因此我们要对jvm的内存布局回顾一下，jvm的内存布局大致分为如下：
 <!-- more -->
-![memarea](memarea.png)
-![memarea1](memarea1.png)
+![memarea](2019/05/01/jvm原理（42）JVM垃圾回收重要理论剖析以及算法分析与演示/memarea.png)
+![memarea1](2019/05/01/jvm原理（42）JVM垃圾回收重要理论剖析以及算法分析与演示/memarea1.png)
 
 JVM运行时数据区域-例子
 ```
@@ -27,7 +27,7 @@ public void method(){
 #### 引用计数算法（Reference Counting）
 - 给对象添加一个引用计数器，当有一个地方引用它，计数器加1，当引用失效，计数器减一，任何时刻计数器为0的对象就是不可能再被使用的。
 - 引用计数器算法无法解决对象循环引用的问题。
-![countreference](countreference.png)
+![countreference](2019/05/01/jvm原理（42）JVM垃圾回收重要理论剖析以及算法分析与演示/countreference.png)
 上图所示，A引用B，B引用A，但是外界引用都断了，不存在对“环”的引用，但是他们的引用计数器都是1，引用计数算法就不会对他们进行回收，会一直在内存中。
 
 
@@ -65,11 +65,11 @@ Reference Chain）相连，则证明此对象是不可用的
   - 效率问题，标记和清理两个过程效率都不高
   - 空间问题，标记清理之后会产生大量不连续的内存碎片，空间碎片太多可能会导致后续使用中无法找到足够的连续内存而提前
   触发另一次的垃圾搜索集动作。
-  ![runtimeStack-Heap.png](runtimeStack-Heap.png)
-  ![runtimeStack-Heap1.png](runtimeStack-Heap1.png)
-  ![runtimeStack-Heap2.png](runtimeStack-Heap2.png)  
-  ![runtimeStack-Heap3.png](runtimeStack-Heap3.png)  
-  ![runtimeStack-Heap4.png](runtimeStack-Heap4.png)  
+  ![runtimeStack-Heap.png](2019/05/01/jvm原理（42）JVM垃圾回收重要理论剖析以及算法分析与演示/runtimeStack-Heap.png)
+  ![runtimeStack-Heap1.png](2019/05/01/jvm原理（42）JVM垃圾回收重要理论剖析以及算法分析与演示/runtimeStack-Heap1.png)
+  ![runtimeStack-Heap2.png](2019/05/01/jvm原理（42）JVM垃圾回收重要理论剖析以及算法分析与演示/runtimeStack-Heap2.png)  
+  ![runtimeStack-Heap3.png](2019/05/01/jvm原理（42）JVM垃圾回收重要理论剖析以及算法分析与演示/runtimeStack-Heap3.png)  
+  ![runtimeStack-Heap4.png](2019/05/01/jvm原理（42）JVM垃圾回收重要理论剖析以及算法分析与演示/runtimeStack-Heap4.png)  
   最后阴影部分被回收掉，F、J、M不能被root trace到，因此也会被回收。
 
 - 效率不高，需要扫描所有对象，堆越大，GC越大。碎片越严重。
@@ -86,11 +86,11 @@ Reference Chain）相连，则证明此对象是不可用的
 - Oracle Hotspot虚拟机默认eden和survivor的大小比例是8:1，也就是每次只有10% 的内存是"浪费"的。
 - 复制收集算法在对象存活率高的时候，效率有所下降。
 - 如果不想浪费50%的空间，就需要有额外的空间进行分配担保用于应付半区内存中所有对象都有100%存活的极端情况，所以在老年代一般不能直接选用这种算法。
-![coping1.png](coping1.png)
-![coping2.png](coping2.png)
-![coping3.png](coping3.png)
-![coping4.png](coping4.png)
-![coping5.png](coping5.png)
+![coping1.png](2019/05/01/jvm原理（42）JVM垃圾回收重要理论剖析以及算法分析与演示/coping1.png)
+![coping2.png](2019/05/01/jvm原理（42）JVM垃圾回收重要理论剖析以及算法分析与演示/coping2.png)
+![coping3.png](2019/05/01/jvm原理（42）JVM垃圾回收重要理论剖析以及算法分析与演示/coping3.png)
+![coping4.png](2019/05/01/jvm原理（42）JVM垃圾回收重要理论剖析以及算法分析与演示/coping4.png)
+![coping5.png](2019/05/01/jvm原理（42）JVM垃圾回收重要理论剖析以及算法分析与演示/coping5.png)
 - 只需要扫描存活的对象，效率更高
 - 不会产生碎片
 - 需要浪费额外的内存作为复制区
@@ -99,7 +99,7 @@ Reference Chain）相连，则证明此对象是不可用的
 
 #### 标记整理算法(Mark-Compact)
 - 标记过程仍然一样，但后续步骤不是进行直接清理，而是令所有存活的对象一端移动，然后直接清理掉这端边界以外的内存。
-![mark-compact1.png](mark-compact1.png)
+![mark-compact1.png](2019/05/01/jvm原理（42）JVM垃圾回收重要理论剖析以及算法分析与演示/mark-compact1.png)
 - 没有内存碎片
 - 比Mark-Sweep耗费更多的时间进行compact
 
@@ -110,9 +110,9 @@ Reference Chain）相连，则证明此对象是不可用的
 只有少量存活，那就选用复制算法只需要付出少量存活对象的复制成本就可以完成收集。
 
 综合前面几种GC算法的优缺点，针对不同生命周期的对象采用不同的GC算法。
-![choice.png](choice.png)
+![choice.png](2019/05/01/jvm原理（42）JVM垃圾回收重要理论剖析以及算法分析与演示/choice.png)
 - Hotspot JVM 6(jdk8之前)中共划分为三个代：年轻代(Ypung Generation)\老年代(Old Generation)和永久代(Permanent Generation)
-![choice1.png](choice1.png)
+![choice1.png](2019/05/01/jvm原理（42）JVM垃圾回收重要理论剖析以及算法分析与演示/choice1.png)
 - 年轻代
   - 新生代的对象都放在新生代，年轻代用复制算法进行GC（理论上年轻代的对象的生命周期非常短，所以适合复制算法）
   - 年轻代分三个区。一个Eden区，两个Survivor区（可以通过参数设置Survivor个数）。对象在Eden区中生成，当Eden区满时，
@@ -129,7 +129,7 @@ Reference Chain）相连，则证明此对象是不可用的
   - 比不属于堆(Heap)但是GC也会涉及到这个区域
   - 存放了每个Class的结构信息，包括常量池、字段描述、方法描述、与垃圾收集要收集的对象关系不大。
 
-  ![memstruct.png](memstruct.png)
+  ![memstruct.png](2019/05/01/jvm原理（42）JVM垃圾回收重要理论剖析以及算法分析与演示/memstruct.png)
 
 ### 内存分配
 1. 堆上分配
@@ -149,7 +149,7 @@ Reference Chain）相连，则证明此对象是不可用的
   - Phantom：贝莱就没有引用，当jvm heap中释放时会通知
 
 ###垃圾收集算法
-![Recycling_algorithm.png](Recycling_algorithm.png)
+![Recycling_algorithm.png](2019/05/01/jvm原理（42）JVM垃圾回收重要理论剖析以及算法分析与演示/Recycling_algorithm.png)
 
 ### GC的时机
 - 在分代模型的基础上，GC从时机上分为两种：scavenge GC和Full GC
@@ -182,7 +182,7 @@ Reference Chain）相连，则证明此对象是不可用的
 - 在新生代，采用复制算法；在老年代，采用Mark-comopact算法
 - 因为是单线程GC，没有多线程切换的额外开销，简单实用
 - Hotspot Client模式缺省的收集器
-![serial.png](serial.png)
+![serial.png](2019/05/01/jvm原理（42）JVM垃圾回收重要理论剖析以及算法分析与演示/serial.png)
 
 #### ParNew收集器
 - ParNew收集器就是Serial的多线程版本，除了使用多个收集器线程外，其余行为包括算法、stw、对象分配规则、回收策略等都与serial收集器一模一样。
@@ -208,7 +208,7 @@ serial OLd外别无选择，因为PS无法与CMS收集器配合工作
 - 采用多线程，Mark-compact算法
 - 更注重吞吐量
 - Parallel Scavenge + Parallel Old = 高吞吐量，但GC停顿可能不理想。
-![parallel_old.png](parallel_old.png)
+![parallel_old.png](2019/05/01/jvm原理（42）JVM垃圾回收重要理论剖析以及算法分析与演示/parallel_old.png)
 
 
 #### CMS收集器(Concurrent Mark Sweep)

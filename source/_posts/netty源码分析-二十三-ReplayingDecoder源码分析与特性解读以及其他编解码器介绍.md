@@ -189,7 +189,7 @@ ReplayingDecoder 和ByteToMessageDecoder 最大的不同就是ReplayingDecoder �
  }
 ```
 这段代码表达的意思是先读取前边4隔壁字节（即，一个int类型），然后再去读取后边个字节，如果前边四个字节无法读取，直接返回，如果可以读取前四个字节，那么紧接着读取同样长度个字节，这种方式是一种消息头，消息体的协议模型，先读取消息头，之后再去读取消息体：
-![这里写图片描述](20171217140403291.png)  
+![这里写图片描述](2018/10/04/netty源码分析-二十三-ReplayingDecoder源码分析与特性解读以及其他编解码器介绍/20171217140403291.png)  
 好了先说到这里，协议以后再讨论，那现在我们使用ReplayingDecoder可以简化为：
 
 is simplified like the following with ReplayingDecoder:

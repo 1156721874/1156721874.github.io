@@ -269,13 +269,13 @@ categories: cloud
 			  is_enabled 'member'
 			  is_disabled 'member'
 			10插入
-                ![这里写图片描述](20151211133642653.png)
+                ![这里写图片描述](2018/09/28/hadoop-1-1-2-hbase0-98-hive-pig-sqoop-mysql-vsftp-tomcat-linux搭建命令/20151211133642653.png)
                 Put ‘member’,’name’,’info:age’,’24’
 			11 查询
 			Get ‘member’,’name’
 			Get ‘member’,’name’,’info’
 			Get ‘member’,’name’,’info:age’
-			![这里写图片描述](20151211133723437.png)
+			![这里写图片描述](2018/09/28/hadoop-1-1-2-hbase0-98-hive-pig-sqoop-mysql-vsftp-tomcat-linux搭建命令/20151211133723437.png)
 			12 更新
 			Put ‘member’,’name’,’info:age’,’24’
 			13 通过时间戳来获取数据
@@ -310,25 +310,25 @@ categories: cloud
 			6、 执行操作系统命令
 				Sh 进入操作系统命令状态
 			7、  pig数据类型
-![这里写图片描述](20151211134053215.png)
+![这里写图片描述](2018/09/28/hadoop-1-1-2-hbase0-98-hive-pig-sqoop-mysql-vsftp-tomcat-linux搭建命令/20151211134053215.png)
 			8、 pig Latin常用语句
-			![这里写图片描述](20151211134124883.png)
+			![这里写图片描述](2018/09/28/hadoop-1-1-2-hbase0-98-hive-pig-sqoop-mysql-vsftp-tomcat-linux搭建命令/20151211134124883.png)
 			9、 举例
 				 Records = LOAD ‘input/a/b/exe.txt’  AS  (year:chararray,temperature:int,quality:int);
 			     变量                                抽象结构
 			10 、展现
 				Dump Records
-    ![这里写图片描述](20151211134209802.png)
+    ![这里写图片描述](2018/09/28/hadoop-1-1-2-hbase0-98-hive-pig-sqoop-mysql-vsftp-tomcat-linux搭建命令/20151211134209802.png)
 		    11、 查看结构
 			Describe records
-    ![这里写图片描述](20151211134249127.png)
+    ![这里写图片描述](2018/09/28/hadoop-1-1-2-hbase0-98-hive-pig-sqoop-mysql-vsftp-tomcat-linux搭建命令/20151211134249127.png)
 		    12、 筛选
 		(1)	Filtered_records = filter records by temperature !=9999 and (quality == 0 or quality == 4 or quality==5 or quality == 9);
 		(2)	dump Filtered_records
 		13 、group函数
 			 (1)Group_records = group filtered_records by year ;
 		     (2)Dump Group_records;
-![这里写图片描述](20151211134326654.png)
+![这里写图片描述](2018/09/28/hadoop-1-1-2-hbase0-98-hive-pig-sqoop-mysql-vsftp-tomcat-linux搭建命令/20151211134326654.png)
 		14 、Max函数
 			Max_temp = foreach grouped_records generate group ,max(filtered_records.tempetature);
 		Dump Max_temp
@@ -438,35 +438,35 @@ categories: cloud
 			Set the path to where bin/hive is available
 			export HIVE_HOME=/home/hadoop/hive-0.11.0
 			5 命令
-			![这里写图片描述](20151211134706254.png)
+			![这里写图片描述](2018/09/28/hadoop-1-1-2-hbase0-98-hive-pig-sqoop-mysql-vsftp-tomcat-linux搭建命令/20151211134706254.png)
 			从mysql导入数据的例子
-			![这里写图片描述](20151211134735349.png)
+			![这里写图片描述](2018/09/28/hadoop-1-1-2-hbase0-98-hive-pig-sqoop-mysql-vsftp-tomcat-linux搭建命令/20151211134735349.png)
 			导入到hbase命令
-			![这里写图片描述](20151211134815140.png)
+			![这里写图片描述](2018/09/28/hadoop-1-1-2-hbase0-98-hive-pig-sqoop-mysql-vsftp-tomcat-linux搭建命令/20151211134815140.png)
 			从oracle导入数据
-			![这里写图片描述](20151211134841352.png)
-            ![这里写图片描述](20151211134910954.png)
+			![这里写图片描述](2018/09/28/hadoop-1-1-2-hbase0-98-hive-pig-sqoop-mysql-vsftp-tomcat-linux搭建命令/20151211134841352.png)
+            ![这里写图片描述](2018/09/28/hadoop-1-1-2-hbase0-98-hive-pig-sqoop-mysql-vsftp-tomcat-linux搭建命令/20151211134910954.png)
 
 **六、其他linux上的hadoop使用技巧与命令**
 1、复制一台机器的上的hadoop到其他机器
 	Scp  -rp  ./hadoop-0.20.2  grid@h1:/home/grid
 2、awk命令
 	输入：
-	![这里写图片描述](20151211135104291.png)
+	![这里写图片描述](2018/09/28/hadoop-1-1-2-hbase0-98-hive-pig-sqoop-mysql-vsftp-tomcat-linux搭建命令/20151211135104291.png)
 	输出：
-	![这里写图片描述](20151211135133008.png)
+	![这里写图片描述](2018/09/28/hadoop-1-1-2-hbase0-98-hive-pig-sqoop-mysql-vsftp-tomcat-linux搭建命令/20151211135133008.png)
 	找出含有rr的文件名：
-	![这里写图片描述](20151211135208891.png)
+	![这里写图片描述](2018/09/28/hadoop-1-1-2-hbase0-98-hive-pig-sqoop-mysql-vsftp-tomcat-linux搭建命令/20151211135208891.png)
 利用AWK复制hadoop结点
-![这里写图片描述](20151211135241062.png)
+![这里写图片描述](2018/09/28/hadoop-1-1-2-hbase0-98-hive-pig-sqoop-mysql-vsftp-tomcat-linux搭建命令/20151211135241062.png)
 或者把命令放到文件中然后执行文件：
-![这里写图片描述](20151211135308637.png)
+![这里写图片描述](2018/09/28/hadoop-1-1-2-hbase0-98-hive-pig-sqoop-mysql-vsftp-tomcat-linux搭建命令/20151211135308637.png)
 知识点：
 1、	awk和sed命令 功能很强大
 2、	集群的实施
-![这里写图片描述](20151211135343825.png)
+![这里写图片描述](2018/09/28/hadoop-1-1-2-hbase0-98-hive-pig-sqoop-mysql-vsftp-tomcat-linux搭建命令/20151211135343825.png)
 解决办法：
-![这里写图片描述](20151211135419203.png)
+![这里写图片描述](2018/09/28/hadoop-1-1-2-hbase0-98-hive-pig-sqoop-mysql-vsftp-tomcat-linux搭建命令/20151211135419203.png)
 DNS软件： 推荐“bind”
 创建用户
 Sudo groupadd hadoop

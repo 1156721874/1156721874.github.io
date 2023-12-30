@@ -691,8 +691,8 @@ public class MyTest5 {
 world
 
 #### 详解
-![ThreadLocal.png](ThreadLocal.png)
-![ThreadLocal2.png](ThreadLocal2.png)
+![ThreadLocal.png](2020/03/08/jvm原理（48）强引用-软引用-弱引用-虚引用-ThreadLocal/ThreadLocal.png)
+![ThreadLocal2.png](2020/03/08/jvm原理（48）强引用-软引用-弱引用-虚引用-ThreadLocal/ThreadLocal2.png)
 
 Entry为什么是WeakReference,是因为当线程执行完run方法之后，就会处于消亡的状态，也不会指向ThreadLocal对象，那么这个时候应该被回收，否则就会出现内存泄露。
 

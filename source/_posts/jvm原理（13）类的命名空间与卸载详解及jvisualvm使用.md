@@ -138,9 +138,9 @@ com.twodragonlake.jvm.classloader.MyTest@135fbaa4
 可以看到myClassLoader从E:\data\classes\com\twodragonlake\jvm\classloader下边加载了一次之后，myClassLoader1和myClassLoader2都会使用之前myClassLoader加载的结果，因为myClassLoader1和myClassLoader2的父加载器都是myClassLoader。
 
 **类的卸载**
-![这里写图片描述](20180318175607171.png)
-![这里写图片描述](20180318175636684.png)
-![这里写图片描述](20180318180041169.png)
+![这里写图片描述](2018/10/04/jvm原理（13）类的命名空间与卸载详解及jvisualvm使用/20180318175607171.png)
+![这里写图片描述](2018/10/04/jvm原理（13）类的命名空间与卸载详解及jvisualvm使用/20180318175636684.png)
+![这里写图片描述](2018/10/04/jvm原理（13）类的命名空间与卸载详解及jvisualvm使用/20180318180041169.png)
 即Java虚拟机自带的加载器加载的类不会在整个jvm的生命周期中被卸载，而自定义加载器加载的类可以被卸载。
 
 修改MyTest16的main方法：
@@ -222,6 +222,6 @@ com.twodragonlake.jvm.classloader.MyTest@330bedb4
 可以看到【[Unloading class com.twodragonlake.jvm.classloader.MyTest 0x00000007c0061828]】证明之前的被卸载了。
 为了直观的看到jvm对它的回收我们使用jvisualvm工具，我们在System.gc();这行代码后面加上 Thread.sleep(100000);以便于我们观察。
 先运行jvisualvm：
-![这里写图片描述](20180318194540694.png)
+![这里写图片描述](2018/10/04/jvm原理（13）类的命名空间与卸载详解及jvisualvm使用/20180318194540694.png)
 然后运行我们的main方法在visualvm里边打开我们的程序进程，找到监视，可以看到有一个类被卸载：
-![这里写图片描述](20180318194809142.png)
+![这里写图片描述](2018/10/04/jvm原理（13）类的命名空间与卸载详解及jvisualvm使用/20180318194809142.png)

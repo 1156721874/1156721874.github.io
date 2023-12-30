@@ -19,18 +19,18 @@ categories: netty
 
 通常会有2种实现方式：
 1、在ChannelHandler的回调方法中，使用自己定义的业务线程池，这样就可以实现异步调用。
-![这里写图片描述](20171111111532427.png)
+![这里写图片描述](2018/10/04/netty源码分析-十八-Netty底层架构系统总结与应用实践/20171111111532427.png)
 2、借助于netty提供的向ChannelPipeLine添加ChannelHandler时调用的addLast方法来传递EventExecutor。
 说明：默认情况下（调用addLast(handler)），ChannelHandler中的回调方法都是由I/O线程所执行，如果调用了ChannelPipeline addLast(EventExecutorGroup group, ChannelHandler... handlers);方法，那么ChannelHandler中的回调方法就是由参数中的group线程组来执行。
-![这里写图片描述](20171111111707281.png)  
+![这里写图片描述](2018/10/04/netty源码分析-十八-Netty底层架构系统总结与应用实践/20171111111707281.png)  
 
 netty的异步：
-![这里写图片描述](20171111123724142.png)  
+![这里写图片描述](2018/10/04/netty源码分析-十八-Netty底层架构系统总结与应用实践/20171111123724142.png)  
 
 从上图可以看到，ChannelPromise继承了Promise 接口，而Promise是可以写的(writable)，什么是可以写的，之前的Future都是get，isSuccess之类的方法，在ChannelPromise里边可以看到setSuccess(Void result)【setSuccess只能写一次，下一次写报错】之类的写方法。ChannelPromise字面意思是承诺的意思，不管是成功还是失败会承诺给你一个结果。
 
 JDK所提供的Future只能通过手工方式检查执行结果，而这个操作是会阻塞的；Netty则对ChannelFuture进行了增强，这里涉及到的是观察者模式，通过ChannelFutureListener以回调的方式来获取执行结果，去除了手工检查阻塞的操作，值得注意的是：ChannelFutureListener的operationcomplete方法是由I/O线程执行的，因此要注意的是不要再这里执行耗时操作，否则需要需要通过另外的线程或线程池来执行。
-![这里写图片描述](20171111143540741.png)
+![这里写图片描述](2018/10/04/netty源码分析-十八-Netty底层架构系统总结与应用实践/20171111143540741.png)
 举例：jdk的Future得到返回结果是使用get或者isDone获取，而这两个方式是阻塞的，即使是用超时时间的方法如果时间到了获取不到也是返回null，这些事情都是开发人员自己做的，而Netty解决了这个弊端，netty通过在Future上加入了监听器的模式，注册到Future上若干Listner，Future持有Channel，当某一个事件发生的时候，Future调用对应的Listner的方法，方法入参会有当前Future的引用，所以在Listener里边就会得到Future的Channel，之后在Listener里边得到Channel的数据进行处理，这也是上边说的不要再Listener的方法里边处理耗时的业务的原因。
 
 再说一下ChannelHandler，ChannelHandler有入栈和出栈的Handler，就拿ChannelInboundHandlerAdapter 来说，我们要写一个入栈处理器，需要必须重写接口里边的所有方法，但是我们只用一部分方法，而Adapter是一种适配器模式，会把所有方法实现，我们在用的时候直接用适配的类（要么重写要么直接使用）去实现业务逻辑就可以了，大大方便了开发者以及减轻来了开发者的工作量。
@@ -83,7 +83,7 @@ public abstract class SimpleChannelInboundHandler<I> extends ChannelInboundHandl
 很直观就是加了一个泛型I，I就是接受的消息的类型，比如String，Object等，而在ChannelInboundHandlerAdapter 里边四需要把消息 强制类型转换的，这是他们最大的区别。除此之外SimpleChannelInboundHandler会对消息执行ReferenceCountUtil.release(Object)和ReferenceCountUtil.retain(Object)  分别是释放一个消息引用和保持一个消息引用（流到下一个handler）.
 我们一般会使用ChannelInboundHandlerAdapter 和SimpleChannelInboundHandler处理入栈数据。
 实际应用：
-![这里写图片描述](20171111154834954.png)
+![这里写图片描述](2018/10/04/netty源码分析-十八-Netty底层架构系统总结与应用实践/20171111154834954.png)
 
 ReferenceCountUtil的release方法：
 ```

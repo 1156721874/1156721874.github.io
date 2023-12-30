@@ -68,12 +68,12 @@ abstract public class VirtualMachineError extends Error
 
 #### jvisualvm
 打开之后选择：文件--》装入，选择刚才dump出来的文件。
-![jvisualvm](jvisualvm.png)
+![jvisualvm](2019/04/13/jvm原理（38）Java对象内存分配原理与布局以及jvisualvm使用/jvisualvm.png)
 
 可以看到内存溢出的对象数很多：
-![jvisualvm](jvisualvm1.png)
+![jvisualvm](2019/04/13/jvm原理（38）Java对象内存分配原理与布局以及jvisualvm使用/jvisualvm1.png)
 
-![jvisualvm](jvisualvm2.png)
+![jvisualvm](2019/04/13/jvm原理（38）Java对象内存分配原理与布局以及jvisualvm使用/jvisualvm2.png)
 
 我们在修改下程序：
 ```
@@ -84,7 +84,7 @@ for(;;){
 ```
 这个时候我们运行程序的时候就不会出现oom的错误。
 此时我们打开jvisualvm可以看到动态的数据：
-![jvisualvm](jvisualvm3.png)
+![jvisualvm](2019/04/13/jvm原理（38）Java对象内存分配原理与布局以及jvisualvm使用/jvisualvm3.png)
 程序的堆平稳在2M的层次上。
 
 好，现在我们修改下jvm的启动参数为：  -Xms1m -Xmx1m -XX:+HeapDumpOnOutOfMemoryError 运行，

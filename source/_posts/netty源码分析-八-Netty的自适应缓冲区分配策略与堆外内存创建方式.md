@@ -6,7 +6,7 @@ categories: netty
 ---
 
 我们总结一下netty的模式：
-![这里写图片描述](20170923212403693.png)
+![这里写图片描述](2018/10/04/netty源码分析-八-Netty的自适应缓冲区分配策略与堆外内存创建方式/20170923212403693.png)
 <!-- more -->
 
 bossGroup将得到的selectedKyes中的socketchannel接收到，然后封装成NioServerSocketChannel,NioServerSocketChannel注册到workerGroup里边，最后客户端直接和workerGroup 里边的NioServerSocketChannel通信交换信息，即bossGroup负责派发，workerGroup 负责真正数据的处理。

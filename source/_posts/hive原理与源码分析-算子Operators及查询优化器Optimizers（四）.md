@@ -5,7 +5,7 @@ tags: hive
 categories: cloud
 ---
 
-![这里写图片描述](20170509211147684.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-算子Operators及查询优化器Optimizers（四）/20170509211147684.png)
 
 <!-- more -->
 **Operator接口**
@@ -31,7 +31,7 @@ hadoop在执行任务的时候会在每个节点创建一个进程。
 每个实例最后执行一次close()方法
 对于Operator比较正要的有group by Operator和join Operator
 前文章节SemanticAnalyzer生成一个QB，之后递归genplan(),然后是genBodyPlan()，genBodyPlan会对group by进行处理：
-![这里写图片描述](20170509213828136.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-算子Operators及查询优化器Optimizers（四）/20170509213828136.png)
 HiveConf.ConfVars.HIVEMAPSIDEAGGREGATE：在map阶段进行预聚合减少数据量
  HiveConf.ConfVars.HIVEGROUPBYSKEW：将一个group by拆成2个group by减少数据量
  **Hive Group By**
@@ -39,15 +39,15 @@ HiveConf.ConfVars.HIVEMAPSIDEAGGREGATE：在map阶段进行预聚合减少数据
 HiveConf.ConfVars.HIVEGROUPBYSKEW：hive.groupby.skewindata，是否优化倾斜的查询为两道作业
 https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/hadoop/hive/ql/parse/SemanticAnalyzer.java?line=9713
 一共四中情况
-![这里写图片描述](20170509215359704.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-算子Operators及查询优化器Optimizers（四）/20170509215359704.png)
 
 **Hive GroupBy hive.groupby.skewindata**
-![这里写图片描述](20170509215502001.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-算子Operators及查询优化器Optimizers（四）/20170509215502001.png)
 Hive GroupBy hive.groupby.skewindata关闭的时候只有一道mr作业，当参数打开的时候，会进行预聚合，整个过程是2道mr作业。
 
 **hive.groupby.skewindata源码**
 https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/hadoop/hive/ql/parse/SemanticAnalyzer.java?line=6114
-![这里写图片描述](20170513102443029.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-算子Operators及查询优化器Optimizers（四）/20170513102443029.png)
 
 这样我们就能完美了吗，我们的group by就不会倾斜了吗？大部分的group by是不会倾斜的，但是有一种是特殊的。
 
@@ -59,7 +59,7 @@ https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/had
 group by聚合：
 https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/hadoop/hive/ql/exec/GroupByOperator.java?line=735
 group by的聚合逻辑就是这个process方法， process方法会调用 processHashAggr和 processAggr方法，即hash聚合和普通 聚合的方法。
-![这里写图片描述](20170513103611159.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-算子Operators及查询优化器Optimizers（四）/20170513103611159.png)
 
 **Join关联**
 Join是Hive是最难的部分，也是最需要优化的部分
@@ -87,12 +87,12 @@ group by的聚合逻辑就是这个process方法， process方法会调用 proce
 
 JoinOperator：
 https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/hadoop/hive/ql/exec/JoinOperator.java?line=78
-![这里写图片描述](20170513110021266.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-算子Operators及查询优化器Optimizers（四）/20170513110021266.png)
 从这个过程中我们可以看到，可以看到左边的表放到内存（放不下才会放到磁盘），因此我们join的时候要把小标放到左边，提供性能。
 
 commonJoinOperation下边还有一些特化的Operator：
 
-![这里写图片描述](20170513110611864.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-算子Operators及查询优化器Optimizers（四）/20170513110611864.png)
 
 先说最简单的commonJoinOperator
 https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/hadoop/hive/ql/exec/CommonJoinOperator.java?line=569
@@ -161,9 +161,9 @@ https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/had
 从 (n-1)张小表创建Hashtable，Hashtable的键是 Joinkey, 把这张Hashtable广播到每一个结点的map上，只处理大表.
 每一个大表的mapper在小表的hashtable中查找join key -> Join Result
 Ex: Join by “CityId”
-![这里写图片描述](20170513112913270.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-算子Operators及查询优化器Optimizers（四）/20170513112913270.png)
 MapJoin适合小表足够小的情况，否则就走 ReduceSinkOperator
-![这里写图片描述](20170513113327235.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-算子Operators及查询优化器Optimizers（四）/20170513113327235.png)
 
 **如何决定MapJoin**
 内存要求: N-1 张小表必须能够完全读入内存
@@ -179,11 +179,11 @@ MapJoin适合小表足够小的情况，否则就走 ReduceSinkOperator
 构造查询计划Query Plan时，决定MapJoin优化
 	“逻辑优化器Logical (Compile-time) optimizers” ：修改逻辑执行计划，把JoinOperator修改成MapJoinOperator
 	“物理优化器Physical (Runtime) optimizers” 修改物理执行计划(MapRedWork, TezWork, SparkWork), 引入条件判断等机制
-	![这里写图片描述](20170513125436340.png)
+	![这里写图片描述](2018/10/04/hive原理与源码分析-算子Operators及查询优化器Optimizers（四）/20170513125436340.png)
 
 逻辑优化之后ReduceSinkOperator.和普通的join operator被摘掉，换成mapjoin。
 物理执行计划会被关联到具体的执行引擎，逻辑执行计划的小表部分会在本地执行，即左边小表在本地执行，逻辑执行计划的大表部分会被在远端执行。
-![这里写图片描述](20170513130349171.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-算子Operators及查询优化器Optimizers（四）/20170513130349171.png)
 
 **MapJoin Optimizers (MR)**
 Query Hint: 编译时知道哪个表是小表的情况.（手动模式，加一个/*+ MAPJOIN(cities) */ *注释）
@@ -193,8 +193,8 @@ MapJoin适合小表足够小的情况，否则就走 ReduceSinkOperator
 		创建Conditional Tasks 把每个表是小表的情况考虑进去
 		Noconditional mode: 如果没有子查询的话，表的大小是在编译时可以知道的，否则是不知道的(join of intermediate results..)
 		自动模式模式分了三种情况，其中一个属于小表，这是前两种情况，第三种是都不是小表。
-![这里写图片描述](20170513131323724.png)
-![这里写图片描述](20170513131358807.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-算子Operators及查询优化器Optimizers（四）/20170513131323724.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-算子Operators及查询优化器Optimizers（四）/20170513131358807.png)
 这个过程在CommonJoinResolver中，
 https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/hadoop/hive/ql/optimizer/physical/CommonJoinResolver.java?line=71
 实现细节是：
@@ -206,7 +206,7 @@ https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/had
 如果把分桶键（Bucket Key）作为关联键（Join Key）: For each bucket of table, rows with matching joinKey values will be in corresponding bucket of other table
 像Mapjoin, but big-table mappers load to memory only relevant small-table bucket‟s hashmap
 Ex: Bucketed by “CityId”, Join by “CityId”
-![这里写图片描述](20170513132619074.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-算子Operators及查询优化器Optimizers（四）/20170513132619074.png)
 1和3在一个桶（奇数），2和4一个桶（偶数）。
 
 **Bucket MapJoin 执行过程**
@@ -228,7 +228,7 @@ https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/had
 Map直接读取小表中相应的文件，相应的部分，避免了广播的开销
 小表没有大小的限制
 前提是，要知道经常使用哪个键做Join
-![这里写图片描述](20170513134449192.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-算子Operators及查询优化器Optimizers（四）/20170513134449192.png)
 
 **SMB Join Optimizers: MR**
 SMB 需要识别„大表‟，以便在大表上运行mapper，执行过程中读取„小表‟. 通常来说，在编译时决定
@@ -238,7 +238,7 @@ https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/had
 自动触发: “hive.auto.convert.sortmerge.join.bigtable.selection.policy” 一个处理类
 	Triggered by “hive.auto.convert.sortmerge.join”
 	Logical Optimizer: SortedBucketMapJoinProc
-![这里写图片描述](20170513134553834.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-算子Operators及查询优化器Optimizers（四）/20170513134553834.png)
 逻辑优化器SortedMergeBucketMapjoinProc的处理过程：
 https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/hadoop/hive/ql/optimizer/SortedMergeBucketMapjoinProc.java?line=42
 ```
@@ -269,7 +269,7 @@ https://insight.io/github.com/apache/hive/blob/master/ql/src/java/org/apache/had
   }
 ```
 回到原来的那个汇总：
-![这里写图片描述](20170513110611864.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-算子Operators及查询优化器Optimizers（四）/20170513110611864.png)
 join operator是最基本的，其他的mapjoin，SMB都是属于优化。
 
 **倾斜关联Skew Join**
@@ -285,7 +285,7 @@ A join B on A.id=B.id and A.id=1
 开关“hive.optimize.skewjoin.compiletime”
 Logical Optimizer逻辑优化器: SkewJoinOptimizer查看元数据
 直接指定倾斜建，是最好的一种，他会直接给出union的方式处理倾斜：
-![这里写图片描述](20170513141135746.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-算子Operators及查询优化器Optimizers（四）/20170513141135746.png)
 但是实际环境是苛刻的很多情况并不知道那个建会倾斜，往下看。
 
 **Skew Join Optimizers (Runtime, MR)**
@@ -294,5 +294,5 @@ A join B on A.id=B.id and A.id=1
 JoinOperator处理时候计数，如果某个可以被某个节点处理次数超过 “hive.skewjoin.key” 域值
 倾斜键Skew key被跳过并且把值拷到单独的目录
 ConditionalTask会单独针对倾斜的键作处理，并将结果作Union
-![这里写图片描述](20170513141311082.png)
+![这里写图片描述](2018/10/04/hive原理与源码分析-算子Operators及查询优化器Optimizers（四）/20170513141311082.png)
 即最终结果是倾斜的建处理之后的结果加上未倾斜的common join的结果。不可否认这是一种笨重的方法，最好的方法是直接指定那个键会倾斜，单独处理倾斜。当出现处理慢的时候我们排查是join慢还是group by慢，如果是join慢能不能用map join处理，如果是group by慢，能不能进行预聚合。

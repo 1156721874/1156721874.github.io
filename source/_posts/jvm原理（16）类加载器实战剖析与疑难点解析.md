@@ -48,7 +48,7 @@ class : 1735600054
 class loader :sun.misc.Launcher$AppClassLoader@18b4aac2
 ```
 MyTest是由应用类加载器加载，这个没啥毛病，那么我们能不能想办法让启动类加载器去加载MyTest呢？要想让启动类加载器加载MyTest必须让启动类加载器能够找到MyTest的class文件，那就需要把MyTest放到启动类加载器的加载目录里边。ok，那么我们找到启动类加载器的一个路径比如【C:\Program Files\Java\jdk1.8.0_111\jre\classes】我们定位到此目录下边，此时你会发现C:\Program Files\Java\jdk1.8.0_111\jre\下边并没有classes文件夹，我们新建一个classes即可，既然sun.boot.class.path变量指定了这个目录我们就能从里边尝试加载类，然后我们把工程下边的【com.twodragonlake.jvm.classloader.MyTest.class】放到C:\Program Files\Java\jdk1.8.0_111\jre\下边，
-![这里写图片描述](2018040520113087.png)
+![这里写图片描述](2018/10/04/jvm原理（16）类加载器实战剖析与疑难点解析/2018040520113087.png)
 OK，此时我们运行MyTest18_1 得到打印结果：
 
 ```
@@ -77,7 +77,7 @@ sun.misc.Launcher$ExtClassLoader@12a3a380
 sun.misc.Launcher$AppClassLoader@18b4aac2
 ```
 那好我们能不能修改扩展类加载器的加载路径java.ext.dirs的值，让其从当前目录加载如何？
-![这里写图片描述](20180405202814804.png)
+![这里写图片描述](2018/10/04/jvm原理（16）类加载器实战剖析与疑难点解析/20180405202814804.png)
 显然AESKeyGenerator无法被加载，因为当前目录不存在这个类。
 
 下一个例子：

@@ -6,7 +6,7 @@ categories: netty
 ---
 
 理解Reactor模式的另外一篇文章是一篇论文：《[reactor-siemens](http://www.dre.vanderbilt.edu/~schmidt/PDF/reactor-siemens.pdf)》，论文的环境是日志服务器的例子：
-![这里写图片描述](20170923190027064.png)
+![这里写图片描述](2018/10/04/netty源码分析-七-Acceptor与Dispatcher角色分析/20170923190027064.png)
 <!-- more -->
 客户端将日志发送到日志服务器，日志服务器将日志通过各种设备输出。
 意图：
@@ -22,7 +22,7 @@ synchronous event demultiplexer.
 Reactor 设计模式是为了处理由一个或多个客户端向一个应用发送的请求，应用中的每个服务有单独的时间处理器组成，事件处理器的作用是特定服务的请求进行分发，时间处理器的分发是由initiation dispatcher来进行，initiation dispatcher会管理诸多的事件处理器，服务请求的分离是由同步的事件分离器处理。
 
 我们拿出来论文的核心知识点说一下：
-![这里写图片描述](20170923184440826.png)
+![这里写图片描述](2018/10/04/netty源码分析-七-Acceptor与Dispatcher角色分析/20170923184440826.png)
 
 图A是初始化的过程：
 1. The logging server (1) registers the Logging Acceptor with the Initiation Dispatcher to handle connection requests;

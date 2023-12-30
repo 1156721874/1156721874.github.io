@@ -30,13 +30,13 @@
 <meta property="og:site_name" content="南贺神社">
 <meta property="og:description" content="在jdk8中什么是函数式接口：1、被@FunctionalInterface注解修饰的。">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://ceaser.wang/20170326140327392.png">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%EF%BC%88jdk8-%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80%E7%B1%BB%EF%BC%89/20170326140327392.png">
 <meta property="article:published_time" content="2018-10-04T10:25:22.000Z">
-<meta property="article:modified_time" content="2023-12-30T08:31:13.010Z">
+<meta property="article:modified_time" content="2023-12-30T14:30:27.419Z">
 <meta property="article:author" content="CeaserWang">
 <meta property="article:tag" content="jdk8 lambda FunctionalInterface">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://ceaser.wang/20170326140327392.png">
+<meta name="twitter:image" content="https://ceaser.wang/2018/10/04/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%EF%BC%88jdk8-%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80%E7%B1%BB%EF%BC%89/20170326140327392.png">
 
 
 <link rel="canonical" href="https://ceaser.wang/2018/10/04/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%EF%BC%88jdk8-%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80%E7%B1%BB%EF%BC%89/">
@@ -92,7 +92,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">208</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">217</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">209</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">221</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
         </a>
@@ -163,7 +163,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">217</span>
+          <span class="site-state-item-count">221</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -174,7 +174,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">208</span>
+        <span class="site-state-item-count">209</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -289,7 +289,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:13" itemprop="dateModified" datetime="2023-12-30T08:31:13+00:00">2023-12-30</time>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -353,7 +353,7 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">//空对象</span><br><span class="line">   private static final Optional&lt;?&gt; EMPTY = new Optional&lt;&gt;();</span><br><span class="line"></span><br><span class="line">//Optional维护的值</span><br><span class="line"> private final T value;</span><br><span class="line">//是否是空值</span><br><span class="line">   public boolean isPresent() &#123;</span><br><span class="line">       return value != null;</span><br><span class="line">   &#125;</span><br><span class="line">   //如果不是空值，那么执行针对于value的行为。</span><br><span class="line">       public void ifPresent(Consumer&lt;? super T&gt; consumer) &#123;</span><br><span class="line">       if (value != null)</span><br><span class="line">           consumer.accept(value);</span><br><span class="line">   &#125;</span><br><span class="line">   //构造一个值为value的Optional对象，value不能为空，否则报错。</span><br><span class="line">   public static &lt;T&gt; Optional&lt;T&gt; of(T value) &#123;</span><br><span class="line">       return new Optional&lt;&gt;(value);</span><br><span class="line">   &#125;</span><br><span class="line">   //返回一个空值</span><br><span class="line">   public static&lt;T&gt; Optional&lt;T&gt; empty() &#123;</span><br><span class="line">       @SuppressWarnings(&quot;unchecked&quot;)</span><br><span class="line">       Optional&lt;T&gt; t = (Optional&lt;T&gt;) EMPTY;</span><br><span class="line">       return t;</span><br><span class="line">   &#125;</span><br><span class="line">   //创建一个允许空值的Optional对象</span><br><span class="line">      public static &lt;T&gt; Optional&lt;T&gt; ofNullable(T value) &#123;</span><br><span class="line">       return value == null ? empty() : of(value);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
 <p>example：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Created by CeaserWang on 2017/1/8.</span><br><span class="line"> * optional 不要作为成员变量或者参数，optional只是为了应对null异常而来的</span><br><span class="line"> */</span><br><span class="line">public class OptionalTest &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        OptionalTest OptionalTest = new OptionalTest();</span><br><span class="line">        OptionalTest.optionalA();</span><br><span class="line">        OptionalTest.optionalB();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    public void optionalA()&#123;</span><br><span class="line">        //Optional optional = Optional.of(&quot;hello&quot;);</span><br><span class="line">        Optional optional = Optional.ofNullable(null);//创建一个空的对象</span><br><span class="line">        optional.ifPresent(item -&gt; System.out.println(item));//如果为空此行代码不会报错。</span><br><span class="line"></span><br><span class="line">        System.out.println(optional.orElse(&quot;world&quot;));//如果为空输出word</span><br><span class="line">        System.out.println(optional.orElseGet(() -&gt; &quot;opop&quot;));//如果为空，取Supplier提供的值</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    public void optionalB()&#123;</span><br><span class="line">        Company company = new Company();</span><br><span class="line">        Employee e1 = new Employee();</span><br><span class="line">        Employee e2 = new Employee();</span><br><span class="line">        company.setEmployyee(Arrays.asList(e1,e2));</span><br><span class="line"></span><br><span class="line">        Optional&lt;Company&gt; optional = Optional.ofNullable(company);</span><br><span class="line">        System.out.println(optional.map(icompany -&gt; icompany.getEmployyee()).orElse(Collections.emptyList()));</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>函数式编程和以往的面向对象的方式有一定的区别，函数式编程方法的参数可以传递行为，这些行为包括但不限于以上介绍的这些，jdk8提供的函数式编程的辅助类在java.util.function包下边：<br><img src="/20170326140327392.png" alt="这里写图片描述"></p>
+<p>函数式编程和以往的面向对象的方式有一定的区别，函数式编程方法的参数可以传递行为，这些行为包括但不限于以上介绍的这些，jdk8提供的函数式编程的辅助类在java.util.function包下边：<br><img src="/2018/10/04/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%EF%BC%88jdk8-%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80%E7%B1%BB%EF%BC%89/20170326140327392.png" alt="这里写图片描述"></p>
 <p>这些针对于函数式编程的辅助类，对以后的收集器，流是基础，后续的jdk新加的框架都是使用这些基类展开的。</p>
 <p><strong>jdk8新加入的default方法</strong><br>default方法的加入是为了兼容jdk8以前的版本的需要。<br>（1）当前有两个接口MyInterface和MyInterface1，它们都有相同名字的default方法，之后实现类Myclass同时implements了MyInterface和MyInterface1，同时Myclass实现了default方法，此时Myclass调用default调的是谁的？<br>（2）一个接口I有一个default方法，另一个实现类A实现了了此接口，并且重写了default方法，之后另一个类B继承了实现类A并且实现了接口I，那么在这种情况下，实现类B调用的default方法又是谁的呢？针对这两种情况编写测试代码：</p>
 <p>接口MyInterface</p>

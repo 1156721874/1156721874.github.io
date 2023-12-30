@@ -30,13 +30,13 @@
 <meta property="og:site_name" content="南贺神社">
 <meta property="og:description" content="Visitor思想：表 示一个作用于某对象结构中的各元素的操作。它使你可以在不改变各元素的类的前提下定义作用于这些元素的新操作。场景：其 实你不用去理解上面这句话。该模式其实又是一个在代码的物理结构上和Bridge模式很相似的模 式。但是，其语义，其目的，在逻辑上又是不同的。如果说Bridge，以及上述我称为可视为Bridge扩 展的模式中，作为参数的Bridge类，是作为调用类的被访问对象的话，">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://ceaser.wang/20161027210622521.png">
+<meta property="og:image" content="https://ceaser.wang/2018/09/28/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%8822%EF%BC%89-%E8%AE%BF%E9%97%AE%E8%80%85%E6%A8%A1%E5%BC%8F/20161027210622521.png">
 <meta property="article:published_time" content="2018-09-28T21:45:19.000Z">
-<meta property="article:modified_time" content="2023-12-30T08:31:13.022Z">
+<meta property="article:modified_time" content="2023-12-30T14:30:27.427Z">
 <meta property="article:author" content="CeaserWang">
 <meta property="article:tag" content="DesignPatterns">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://ceaser.wang/20161027210622521.png">
+<meta name="twitter:image" content="https://ceaser.wang/2018/09/28/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%8822%EF%BC%89-%E8%AE%BF%E9%97%AE%E8%80%85%E6%A8%A1%E5%BC%8F/20161027210622521.png">
 
 
 <link rel="canonical" href="https://ceaser.wang/2018/09/28/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%8822%EF%BC%89-%E8%AE%BF%E9%97%AE%E8%80%85%E6%A8%A1%E5%BC%8F/">
@@ -92,7 +92,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">208</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">217</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">209</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">221</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
         </a>
@@ -163,7 +163,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">217</span>
+          <span class="site-state-item-count">221</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -174,7 +174,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">208</span>
+        <span class="site-state-item-count">209</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -289,7 +289,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:13" itemprop="dateModified" datetime="2023-12-30T08:31:13+00:00">2023-12-30</time>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -320,7 +320,7 @@
     <div class="post-body" itemprop="articleBody">
         <p>Visitor<br><strong>思想：</strong>表 示一个作用于某对象结构中的各元素的操作。它使你可以在不改变各元素的类的前提下定义作用于这些元素的新操作。<br><strong>场景：</strong>其 实你不用去理解上面这句话。该模式其实又是一个在代码的物理结构上和Bridge模式很相似的模 式。但是，其语义，其目的，在逻辑上又是不同的。如果说Bridge，以及上述我称为可视为Bridge扩 展的模式中，作为参数的Bridge类，是作为调用类的被访问对象的话，Visitor， 在大多数情形下，如其英文含义，它在语义上是完全相反的。不是他被调用的类处理，更大程度上它处于主动状态，是它去访问，去处理调用它的类。调用它的类， 把自己对别人隐藏起来的东西，暴露给Visitor品尝，任君蹂躏（这个，这个~~千 万别想歪了;-））。另一方面，即使逻辑上没有这种Visitor主 动去访问调用类的语义，只要Visitor类中的操作，是依赖于调用类的具体实现类（它本身或他某 个层次的子类）的某些状态或者方法的，那么，就可以应用该模式来分离出这样的可重用的操作。</p>
 <span id="more"></span>
-<p><strong>实现：</strong>类 似Bridge模式。<br><strong>重构成本：</strong>中。<br>Visitor访问者设计模式是在不修改已有程序结构的前提下，通过添加额外的“访问者”来完成对已有代码功能的提升。<br> Visitor访问者设计模式的角色：<br>(1) 访问者角色（Visitor）：声明一个访问接口。接口的名称和方法的参数标识了向访问者发送请求的元素角色。这样访问者就可以通过该元素角色的特定接口直接访问它。<br>(2) 具体访问者角色（Concrete Visitor）：实现访问者角色（Visitor）接口<br>(3)元素角色（Element）：定义一个Accept操作，它以一个访问者为参数。<br>(4) 具体元素角色（Concrete Element）：实现元素角色（Element）接口。<br>(5) 对象结构角色（Object Structure）：具体元素的集合，提供一个高层的接口允许访问者角色访问它的元素。<br>Visitor访问者设计模式结构如下：<br><img src="/20161027210622521.png" alt="这里写图片描述"><br>Visitor访问者设计模式例子代码如下：</p>
+<p><strong>实现：</strong>类 似Bridge模式。<br><strong>重构成本：</strong>中。<br>Visitor访问者设计模式是在不修改已有程序结构的前提下，通过添加额外的“访问者”来完成对已有代码功能的提升。<br> Visitor访问者设计模式的角色：<br>(1) 访问者角色（Visitor）：声明一个访问接口。接口的名称和方法的参数标识了向访问者发送请求的元素角色。这样访问者就可以通过该元素角色的特定接口直接访问它。<br>(2) 具体访问者角色（Concrete Visitor）：实现访问者角色（Visitor）接口<br>(3)元素角色（Element）：定义一个Accept操作，它以一个访问者为参数。<br>(4) 具体元素角色（Concrete Element）：实现元素角色（Element）接口。<br>(5) 对象结构角色（Object Structure）：具体元素的集合，提供一个高层的接口允许访问者角色访问它的元素。<br>Visitor访问者设计模式结构如下：<br><img src="/2018/09/28/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%8822%EF%BC%89-%E8%AE%BF%E9%97%AE%E8%80%85%E6%A8%A1%E5%BC%8F/20161027210622521.png" alt="这里写图片描述"><br>Visitor访问者设计模式例子代码如下：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">//抽象元素</span><br><span class="line">interface IElement&#123;</span><br><span class="line">	public void accept(IVisitor visitor);</span><br><span class="line">&#125;</span><br><span class="line">//具体元素</span><br><span class="line">class ElementA implements IElement&#123;</span><br><span class="line">	public void accept(IVisitor visitor)&#123;</span><br><span class="line">	visitor.visit(this);</span><br><span class="line">&#125;</span><br><span class="line">public void operationA()&#123;</span><br><span class="line">	System.out.println(“ElementA do operationA()……”);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">class ElementB implements IElement&#123;</span><br><span class="line">	public void accept(IVisitor visitor)&#123;</span><br><span class="line">	visitor.visit(this);</span><br><span class="line">&#125;</span><br><span class="line">public void operationB()&#123;</span><br><span class="line">	System.out.println(“ElementB do operationB()……”);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">class ElementC implements IElement&#123;</span><br><span class="line">	public void accept(IVisitor visitor)&#123;</span><br><span class="line">	visitor.visit(this);</span><br><span class="line">&#125;</span><br><span class="line">public void operationC()&#123;</span><br><span class="line">	System.out.println(“ElementC do operationC()……”);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">//抽象访问者</span><br><span class="line">interface IVisitor&#123;</span><br><span class="line">	public void visit(ElementA element);</span><br><span class="line">public void visit(ElementB element);</span><br><span class="line">public void visit(ElementC element);</span><br><span class="line">&#125;</span><br><span class="line">//具体访问者</span><br><span class="line">class MyVisitor implements IVisitor&#123;</span><br><span class="line">	public void visit(ElementA element)&#123;</span><br><span class="line">	element.operationA();</span><br><span class="line">&#125;</span><br><span class="line">public void visit(ElementB element)&#123;</span><br><span class="line">	element.operationB();</span><br><span class="line">&#125;</span><br><span class="line">public void visit(ElementC element)&#123;</span><br><span class="line">	element.operationC();</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">Public class VisitorDemo&#123;</span><br><span class="line">	public static void main(String[] args)&#123;</span><br><span class="line">		IElement[] list = &#123;new ElementA(), new ElementB(), new ElementC()&#125;;</span><br><span class="line">		IVisitor visitor = new MyVisitor();</span><br><span class="line">		for(int i = 0; i &lt; list.length; i++)&#123;</span><br><span class="line">	list[i].accept(visitor);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>Visitor访问者设计模式有以下两个特点：<br>(1).对元素的访问不是访问者主动发起的，而是通过元素接收访问者来访问自己。<br>(2).对元素的操作不是元素自己主动调用，而是通过访问者的访问方法来操作元素。<br>JDK中访问者模式的应用：<br>•javax.lang.model.element.Element和javax.lang.model.element.ElementVisitor<br>•javax.lang.model.type.TypeMirror和javax.lang.model.type.TypeVisitor<br>•javax.lang.model.element.AnnotationValue和javax.lang.model.element.AnnotationValueVisitor</p>
 

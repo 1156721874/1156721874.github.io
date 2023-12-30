@@ -30,19 +30,19 @@
 <meta property="og:site_name" content="南贺神社">
 <meta property="og:description" content="引言你是否遇到过两个（多个）系统间需要通过定时任务来同步某些数据？你是否在为异构系统的不同进程间相互调用、通讯的问题而苦恼、挣扎？如果是，那么恭喜你，消息服务让你可以很轻松地解决这些问题。消息服务擅长于解决多系统、异构系统间的数据交换（消息通知&#x2F;通讯）问题，你也可以把它用于系统间服务的相互调用（RPC）。本文将要介绍的RabbitMQ就是当前最主流的消息中间件之一。">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://ceaser.wang/20160802101807942.png">
-<meta property="og:image" content="https://ceaser.wang/20160802101839630.png">
-<meta property="og:image" content="https://ceaser.wang/20160802101906459.png">
-<meta property="og:image" content="https://ceaser.wang/20160802101942194.png">
-<meta property="og:image" content="https://ceaser.wang/20160802102010282.png">
-<meta property="og:image" content="https://ceaser.wang/20160802102045118.png">
-<meta property="og:image" content="https://ceaser.wang/20160802102122048.png">
+<meta property="og:image" content="https://ceaser.wang/2018/09/28/linux%E4%B8%8B%E6%90%AD%E5%BB%BARabbitMQ%E6%9C%8D%E5%8A%A1/20160802101807942.png">
+<meta property="og:image" content="https://ceaser.wang/2018/09/28/linux%E4%B8%8B%E6%90%AD%E5%BB%BARabbitMQ%E6%9C%8D%E5%8A%A1/20160802101839630.png">
+<meta property="og:image" content="https://ceaser.wang/2018/09/28/linux%E4%B8%8B%E6%90%AD%E5%BB%BARabbitMQ%E6%9C%8D%E5%8A%A1/20160802101906459.png">
+<meta property="og:image" content="https://ceaser.wang/2018/09/28/linux%E4%B8%8B%E6%90%AD%E5%BB%BARabbitMQ%E6%9C%8D%E5%8A%A1/20160802101942194.png">
+<meta property="og:image" content="https://ceaser.wang/2018/09/28/linux%E4%B8%8B%E6%90%AD%E5%BB%BARabbitMQ%E6%9C%8D%E5%8A%A1/20160802102010282.png">
+<meta property="og:image" content="https://ceaser.wang/2018/09/28/linux%E4%B8%8B%E6%90%AD%E5%BB%BARabbitMQ%E6%9C%8D%E5%8A%A1/20160802102045118.png">
+<meta property="og:image" content="https://ceaser.wang/2018/09/28/linux%E4%B8%8B%E6%90%AD%E5%BB%BARabbitMQ%E6%9C%8D%E5%8A%A1/20160802102122048.png">
 <meta property="article:published_time" content="2018-09-28T21:55:04.000Z">
-<meta property="article:modified_time" content="2023-12-30T08:31:12.938Z">
+<meta property="article:modified_time" content="2023-12-30T14:30:27.347Z">
 <meta property="article:author" content="CeaserWang">
 <meta property="article:tag" content="RabbitMQ linux">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://ceaser.wang/20160802101807942.png">
+<meta name="twitter:image" content="https://ceaser.wang/2018/09/28/linux%E4%B8%8B%E6%90%AD%E5%BB%BARabbitMQ%E6%9C%8D%E5%8A%A1/20160802101807942.png">
 
 
 <link rel="canonical" href="https://ceaser.wang/2018/09/28/linux%E4%B8%8B%E6%90%AD%E5%BB%BARabbitMQ%E6%9C%8D%E5%8A%A1/">
@@ -98,7 +98,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">208</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">217</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">209</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">221</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
         </a>
@@ -169,7 +169,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">217</span>
+          <span class="site-state-item-count">221</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -180,7 +180,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">208</span>
+        <span class="site-state-item-count">209</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -295,7 +295,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -329,22 +329,22 @@
 
 <p><strong>RabbitMQ简介</strong><br>AMQP，即Advanced Message Queuing Protocol，高级消息队列协议，是应用层协议的一个开放标准，为面向消息的中间件设计。消息中间件主要用于组件之间的解耦，消息的发送者无需知道消息使用者的存在，反之亦然。<br>AMQP的主要特征是面向消息、队列、路由（包括点对点和发布&#x2F;订阅）、可靠性、安全。<br>RabbitMQ是一个开源的AMQP实现，服务器端用Erlang语言编写，支持多种客户端，如：Python、Ruby、.NET、Java、JMS、C、PHP、ActionScript、XMPP、STOMP等，支持AJAX。用于在分布式系统中存储转发消息，在易用性、扩展性、高可用性等方面表现不俗。<br>Rabbitmq试用业务范围：<br><strong>场景1：单发送单接收</strong><br>使用场景：简单的发送与接收，没有特别的处理。<br><strong>场景2：单发送多接收</strong><br>使用场景：一个发送端，多个接收端，如分布式的任务派发。为了保证消息发送的可靠性，不丢失消息，使消息持久化了。同时为了防止接收端在处理消息时down掉，只有在消息处理完成后才发送ack消息<br><strong>场景3：Publish&#x2F;Subscribe</strong><br>使用场景：发布、订阅模式，发送端发送广播消息，多个接收端接收。<br><strong>场景4：Routing (按路线发送接收)</strong><br>使用场景：发送端按routing key发送消息，不同的接收端按不同的routing key接收消息。<br><strong>场景5：Topics (按topic发送接收)</strong><br>使用场景：发送端不只按固定的routing key发送消息，而是按字符串“匹配”发送，接收端同样如此。</p>
 <p>1:下载所需的tar.gz包<br> 1)ncurses-5.2.tar(它是一个可以使应用程序直接控制终端屏幕显示的库,在安装rabbitmq-server中会报错缺少这个库)<br> 2)simplejson-3.8.0.tar(它是 Python解析JSON的程序库。)<br> 3)otp_src_R15B01.tar(RabbitMQ是基于Erlang的，所以首先必须配置Erlang环境,otp_src_R15B01是提供该环境的包)<br> 4)rabbitmq-server-3.5.4.tar</p>
-<p>#########################搭建Erlang环境##############################<br> 2:登录到指定的一台linux服务器<br>   选择要创建一个文件夹，我选择的目录是(目录名称可随便)：<br>   &#x2F;data&#x2F;rabbitMQ<br><img src="/20160802101807942.png" alt="这里写图片描述"><br>3：进入到该目录,做以下操作<br> cd  &#x2F;data&#x2F;rabbitMQ<br> tar xvzf otp_src_R15B01.tar.gz<br> cd otp_src_R15B01<br> .&#x2F;configure</p>
-<p>最后一步执行完，可能会报一个错：<br> No curses library functions found(这是缺少ncurses-5.2.tar包)<br>把ncurses-5.2.tar放到指定路径，我这里放到的是&#x2F;data&#x2F;ncurses 下，最好和之前放同一个路径<br><img src="/20160802101839630.png" alt="这里写图片描述"><br>执行以下操作：<br>tar zxvf ncurses-5.2.tar #解压缩并且释放 文件包<br>cd ncurses-5.2    #进入解压缩的目录（注意版本）<br>.&#x2F;configure #按照你的系统环境制作安装配置文件<br>make #编译源代码并且编译NCURSES库<br>su root #切换到root用户环境<br>make install #安装编译好的NCURSES库</p>
-<p>等操作完以上命令，在重新执行搭建Erlang环境的 .&#x2F;configure 命令：<br>编译后的输出如下图<br><img src="/20160802101906459.png" alt="这里写图片描述"><br> 提示没有wxWidgets和fop，但是问题不大。继续：<br> make<br> sudo make install</p>
+<p>#########################搭建Erlang环境##############################<br> 2:登录到指定的一台linux服务器<br>   选择要创建一个文件夹，我选择的目录是(目录名称可随便)：<br>   &#x2F;data&#x2F;rabbitMQ<br><img src="/2018/09/28/linux%E4%B8%8B%E6%90%AD%E5%BB%BARabbitMQ%E6%9C%8D%E5%8A%A1/20160802101807942.png" alt="这里写图片描述"><br>3：进入到该目录,做以下操作<br> cd  &#x2F;data&#x2F;rabbitMQ<br> tar xvzf otp_src_R15B01.tar.gz<br> cd otp_src_R15B01<br> .&#x2F;configure</p>
+<p>最后一步执行完，可能会报一个错：<br> No curses library functions found(这是缺少ncurses-5.2.tar包)<br>把ncurses-5.2.tar放到指定路径，我这里放到的是&#x2F;data&#x2F;ncurses 下，最好和之前放同一个路径<br><img src="/2018/09/28/linux%E4%B8%8B%E6%90%AD%E5%BB%BARabbitMQ%E6%9C%8D%E5%8A%A1/20160802101839630.png" alt="这里写图片描述"><br>执行以下操作：<br>tar zxvf ncurses-5.2.tar #解压缩并且释放 文件包<br>cd ncurses-5.2    #进入解压缩的目录（注意版本）<br>.&#x2F;configure #按照你的系统环境制作安装配置文件<br>make #编译源代码并且编译NCURSES库<br>su root #切换到root用户环境<br>make install #安装编译好的NCURSES库</p>
+<p>等操作完以上命令，在重新执行搭建Erlang环境的 .&#x2F;configure 命令：<br>编译后的输出如下图<br><img src="/2018/09/28/linux%E4%B8%8B%E6%90%AD%E5%BB%BARabbitMQ%E6%9C%8D%E5%8A%A1/20160802101906459.png" alt="这里写图片描述"><br> 提示没有wxWidgets和fop，但是问题不大。继续：<br> make<br> sudo make install</p>
 <p>如果没报错，说明已经安装完Erlang，开始安装RabbitMQ-Server。</p>
-<p>#########################搭建simplejson环境##############################<br>安装RabbitMQ-Server之前，必须先安装simplejson<br>主要参考官方文档：<span class="exturl" data-url="aHR0cDovL3d3dy5yYWJiaXRtcS5jb20vYnVpbGQtc2VydmVyLmh0bWw=">http://www.rabbitmq.com/build-server.html<i class="fa fa-external-link-alt"></i></span><br>需要安装simplejson。从此处下载最新的版本： <span class="exturl" data-url="aHR0cDovL3B5cGkucHl0aG9uLm9yZy9weXBpL3NpbXBsZWpzb24jZG93bmxvYWRz">http://pypi.python.org/pypi/simplejson#downloads<i class="fa fa-external-link-alt"></i></span> 。我下载的版本是 simplejson-3.8.0.tar.gz<br>安装这个很简单，执行以下3个步骤即可：<br>进入到该目录：<br><img src="/20160802101942194.png" alt="这里写图片描述"><br>tar xvzf simplejson-3.8.0.tar.gz<br>cd simplejson-3.8.0<br>sudo python setup.py install</p>
+<p>#########################搭建simplejson环境##############################<br>安装RabbitMQ-Server之前，必须先安装simplejson<br>主要参考官方文档：<span class="exturl" data-url="aHR0cDovL3d3dy5yYWJiaXRtcS5jb20vYnVpbGQtc2VydmVyLmh0bWw=">http://www.rabbitmq.com/build-server.html<i class="fa fa-external-link-alt"></i></span><br>需要安装simplejson。从此处下载最新的版本： <span class="exturl" data-url="aHR0cDovL3B5cGkucHl0aG9uLm9yZy9weXBpL3NpbXBsZWpzb24jZG93bmxvYWRz">http://pypi.python.org/pypi/simplejson#downloads<i class="fa fa-external-link-alt"></i></span> 。我下载的版本是 simplejson-3.8.0.tar.gz<br>安装这个很简单，执行以下3个步骤即可：<br>进入到该目录：<br><img src="/2018/09/28/linux%E4%B8%8B%E6%90%AD%E5%BB%BARabbitMQ%E6%9C%8D%E5%8A%A1/20160802101942194.png" alt="这里写图片描述"><br>tar xvzf simplejson-3.8.0.tar.gz<br>cd simplejson-3.8.0<br>sudo python setup.py install</p>
 <p>#########################安装RabbitMQ Server环境##############################</p>
 <p>最后安装RabbitMQ Server。从此处下载源代码版本的RabbitMQ： <span class="exturl" data-url="aHR0cDovL3d3dy5yYWJiaXRtcS5jb20vc2VydmVyLmh0bWwlRTMlODAlODI=">http://www.rabbitmq.com/server.html。<i class="fa fa-external-link-alt"></i></span><br>我下载的版本是 rabbitmq-server-3.5.4.tar.gz</p>
-<p>进入该目录：<br><img src="/20160802102010282.png" alt="这里写图片描述"><br>所需要的包<br>yum install xmlto</p>
+<p>进入该目录：<br><img src="/2018/09/28/linux%E4%B8%8B%E6%90%AD%E5%BB%BARabbitMQ%E6%9C%8D%E5%8A%A1/20160802102010282.png" alt="这里写图片描述"><br>所需要的包<br>yum install xmlto</p>
 <p>tar xvzf rabbitmq-server-3.5.4.tar.gz<br> cd rabbitmq-server-3.5.4<br> make<br> TARGET_DIR&#x3D;&#x2F;usr&#x2F;local SBIN_DIR&#x3D;&#x2F;usr&#x2F;local&#x2F;sbin MAN_DIR&#x3D;&#x2F;usr&#x2F;local&#x2F;man make install</p>
 <p>安装成功。</p>
 <p>运行<br>找到sbin&#x2F;目录，默认目录在：&#x2F;usr&#x2F;local&#x2F;sbin&#x2F;下<br>运行程序：<br>rabbitmq-server –detached<br>停止程序：<br>rabbitmqctl stop</p>
 <p>安装管理插件<br>mkdir &#x2F;etc&#x2F;rabbitmq<br>cd &#x2F;usr&#x2F;local&#x2F;sbin&#x2F;<br>.&#x2F;rabbitmq-plugins enable rabbitmq_management</p>
 <p>.&#x2F;rabbitmq-server -detached</p>
 <p>重新启动RabbitMQ，输入<span class="exturl" data-url="aHR0cDovL3NlcnZlci1uYW1lOjE1NjcyLw==">http://server-name:15672<i class="fa fa-external-link-alt"></i></span> 就能够进入到监控页面。默认的用户名和密码是： guest 和 guest。<br>server-name:你指定的linux服务器ip，我的是10.1.100.67</p>
-<p>浏览器输入：<span class="exturl" data-url="aHR0cDovLzEwLjEuMTAwLjY3OjE1NjcyLw==">http://10.1.100.67:15672/<i class="fa fa-external-link-alt"></i></span> 则说明环境搭建成功<br><img src="/20160802102045118.png" alt="这里写图片描述"><br>输入默认用户名和密码：guest ，提示登陆失败<br> 翻看官方的release文档后，得知由于账号guest具有所有的操作权限，并且又是默认账号，出于安全因素的考虑，guest用户只能通过localhost登陆使用，并建议修改guest用户的密码以及新建其他账号管理使用rabbitmq(该功能是在3.3.0版本引入的)。</p>
-<p>解决方法：<br>进入&#x2F;data&#x2F;rabbitMQ&#x2F;rabbitmq-server&#x2F;rabbitmq-server-3.5.4&#x2F;ebin目录下rabbit.app中找到：loopback_users里的&lt;&lt;”guest”&gt;&gt;删除。<br> 并重启rabbitmq，则可以用guest账号登陆管理控制台。成功界面如下：<br><img src="/20160802102122048.png" alt="这里写图片描述"></p>
+<p>浏览器输入：<span class="exturl" data-url="aHR0cDovLzEwLjEuMTAwLjY3OjE1NjcyLw==">http://10.1.100.67:15672/<i class="fa fa-external-link-alt"></i></span> 则说明环境搭建成功<br><img src="/2018/09/28/linux%E4%B8%8B%E6%90%AD%E5%BB%BARabbitMQ%E6%9C%8D%E5%8A%A1/20160802102045118.png" alt="这里写图片描述"><br>输入默认用户名和密码：guest ，提示登陆失败<br> 翻看官方的release文档后，得知由于账号guest具有所有的操作权限，并且又是默认账号，出于安全因素的考虑，guest用户只能通过localhost登陆使用，并建议修改guest用户的密码以及新建其他账号管理使用rabbitmq(该功能是在3.3.0版本引入的)。</p>
+<p>解决方法：<br>进入&#x2F;data&#x2F;rabbitMQ&#x2F;rabbitmq-server&#x2F;rabbitmq-server-3.5.4&#x2F;ebin目录下rabbit.app中找到：loopback_users里的&lt;&lt;”guest”&gt;&gt;删除。<br> 并重启rabbitmq，则可以用guest账号登陆管理控制台。成功界面如下：<br><img src="/2018/09/28/linux%E4%B8%8B%E6%90%AD%E5%BB%BARabbitMQ%E6%9C%8D%E5%8A%A1/20160802102122048.png" alt="这里写图片描述"></p>
 <pre><code>             Java 代码与spring集成
 </code></pre>
 <p>1：发送者配置文件：</p>

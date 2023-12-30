@@ -30,17 +30,17 @@
 <meta property="og:site_name" content="南贺神社">
 <meta property="og:description" content="CMS收集器 CMS (concurrent mark sweep)收集器，以获取最短回收停顿时间为目标，多数应用于互联网站或者b&#x2F;s系统的服务器上。">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://ceaser.wang/cms1.png">
-<meta property="og:image" content="https://ceaser.wang/cms2.png">
-<meta property="og:image" content="https://ceaser.wang/cms3.png">
-<meta property="og:image" content="https://ceaser.wang/cms4.png">
-<meta property="og:image" content="https://ceaser.wang/cms5.png">
+<meta property="og:image" content="https://ceaser.wang/2019/05/19/jvm%E5%8E%9F%E7%90%86%EF%BC%8846%EF%BC%89CMS%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8%E6%B7%B1%E5%85%A5%E8%AE%B2%E8%A7%A3/cms1.png">
+<meta property="og:image" content="https://ceaser.wang/2019/05/19/jvm%E5%8E%9F%E7%90%86%EF%BC%8846%EF%BC%89CMS%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8%E6%B7%B1%E5%85%A5%E8%AE%B2%E8%A7%A3/cms2.png">
+<meta property="og:image" content="https://ceaser.wang/2019/05/19/jvm%E5%8E%9F%E7%90%86%EF%BC%8846%EF%BC%89CMS%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8%E6%B7%B1%E5%85%A5%E8%AE%B2%E8%A7%A3/cms3.png">
+<meta property="og:image" content="https://ceaser.wang/2019/05/19/jvm%E5%8E%9F%E7%90%86%EF%BC%8846%EF%BC%89CMS%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8%E6%B7%B1%E5%85%A5%E8%AE%B2%E8%A7%A3/cms4.png">
+<meta property="og:image" content="https://ceaser.wang/2019/05/19/jvm%E5%8E%9F%E7%90%86%EF%BC%8846%EF%BC%89CMS%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8%E6%B7%B1%E5%85%A5%E8%AE%B2%E8%A7%A3/cms5.png">
 <meta property="article:published_time" content="2019-05-19T15:16:32.000Z">
-<meta property="article:modified_time" content="2023-12-30T08:31:12.910Z">
+<meta property="article:modified_time" content="2023-12-30T14:30:27.315Z">
 <meta property="article:author" content="CeaserWang">
 <meta property="article:tag" content="CMS">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://ceaser.wang/cms1.png">
+<meta name="twitter:image" content="https://ceaser.wang/2019/05/19/jvm%E5%8E%9F%E7%90%86%EF%BC%8846%EF%BC%89CMS%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8%E6%B7%B1%E5%85%A5%E8%AE%B2%E8%A7%A3/cms1.png">
 
 
 <link rel="canonical" href="https://ceaser.wang/2019/05/19/jvm%E5%8E%9F%E7%90%86%EF%BC%8846%EF%BC%89CMS%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8%E6%B7%B1%E5%85%A5%E8%AE%B2%E8%A7%A3/">
@@ -96,7 +96,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">208</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">217</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">209</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">221</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
         </a>
@@ -168,7 +168,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">217</span>
+          <span class="site-state-item-count">221</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -179,7 +179,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">208</span>
+        <span class="site-state-item-count">209</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -294,7 +294,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -340,7 +340,7 @@
 </li>
 <li><p>并发标记阶段就是进行Gc roots tracing的过程。<br> 重新标记阶段则是为了修正并发标记期间因用户程序继续运作而导致的标记产生变动的那一部分对象的标记记录，这个阶段的停顿时间一般<br> 会比初始标记阶段稍长一些，但远比并发标记的时间短。</p>
 </li>
-<li><p>cms收集器的运作步骤哦如下图所示，在整个过程中耗时最长的并发标记和并发清除过程收集器线程都可以与用户线程一起工作，因此，从总体上看，cms收集器的内存回收过程是与用户线程一起并发执行的。<br><img src="/cms1.png" alt="cms1.png"></p>
+<li><p>cms收集器的运作步骤哦如下图所示，在整个过程中耗时最长的并发标记和并发清除过程收集器线程都可以与用户线程一起工作，因此，从总体上看，cms收集器的内存回收过程是与用户线程一起并发执行的。<br><img src="/2019/05/19/jvm%E5%8E%9F%E7%90%86%EF%BC%8846%EF%BC%89CMS%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8%E6%B7%B1%E5%85%A5%E8%AE%B2%E8%A7%A3/cms1.png" alt="cms1.png"></p>
 </li>
 <li><p>优点</p>
 </li>
@@ -368,14 +368,14 @@
 <li>phase7：concurrent reset</li>
 </ul>
 <h4 id="phase1-initial-mark"><a href="#phase1-initial-mark" class="headerlink" title="phase1 initial mark"></a>phase1 initial mark</h4><ul>
-<li>这个是cms两次stop-the-world事件的其中一次，这个阶段的目标是：标记那些直接被gc root引用或者被年轻代存活对象所引用的所有对象。<br><img src="/cms2.png" alt="cms2.png"></li>
+<li>这个是cms两次stop-the-world事件的其中一次，这个阶段的目标是：标记那些直接被gc root引用或者被年轻代存活对象所引用的所有对象。<br><img src="/2019/05/19/jvm%E5%8E%9F%E7%90%86%EF%BC%8846%EF%BC%89CMS%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8%E6%B7%B1%E5%85%A5%E8%AE%B2%E8%A7%A3/cms2.png" alt="cms2.png"></li>
 </ul>
 <h4 id="phase2：concurrent-mark"><a href="#phase2：concurrent-mark" class="headerlink" title="phase2：concurrent mark"></a>phase2：concurrent mark</h4><ul>
-<li>在这个阶段garbage collecor会遍历老年代，然后标记所存活的对象，他会根据上个阶段找到gc roots遍历查找，并发标记阶段，她会与用户的应用程序并发运行。并不是老年代所有的存活对象会被标记，因为在标记期间用户的程序可能会改变一些引用<br><img src="/cms3.png" alt="cms3.png"><br>在上面的图中，与阶段一的图进行比对，就会发现有一个对象的引用已经发生了变化。</li>
+<li>在这个阶段garbage collecor会遍历老年代，然后标记所存活的对象，他会根据上个阶段找到gc roots遍历查找，并发标记阶段，她会与用户的应用程序并发运行。并不是老年代所有的存活对象会被标记，因为在标记期间用户的程序可能会改变一些引用<br><img src="/2019/05/19/jvm%E5%8E%9F%E7%90%86%EF%BC%8846%EF%BC%89CMS%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8%E6%B7%B1%E5%85%A5%E8%AE%B2%E8%A7%A3/cms3.png" alt="cms3.png"><br>在上面的图中，与阶段一的图进行比对，就会发现有一个对象的引用已经发生了变化。</li>
 </ul>
 <h4 id="phase3：concurrent-preclean"><a href="#phase3：concurrent-preclean" class="headerlink" title="phase3：concurrent preclean"></a>phase3：concurrent preclean</h4><ul>
 <li>这也是一个并发阶段，与应用的线程并发运行，并不会stop应用的线程，在并发运行的过程中，一些对象的引用可能会发生变化，但是这种情况发生时，jvm会将包含这个对象的区域(card)标记为Dirty，这也是Card Marking</li>
-<li>在pre-clean阶段，那些能够从Dirty对象到达的对象也会被标记，这个标记做完之后，dirty card标记就会被清除了<br><img src="/cms4.png" alt="cms4.png"></li>
+<li>在pre-clean阶段，那些能够从Dirty对象到达的对象也会被标记，这个标记做完之后，dirty card标记就会被清除了<br><img src="/2019/05/19/jvm%E5%8E%9F%E7%90%86%EF%BC%8846%EF%BC%89CMS%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8%E6%B7%B1%E5%85%A5%E8%AE%B2%E8%A7%A3/cms4.png" alt="cms4.png"></li>
 </ul>
 <h4 id="phase4：concurrent-abortable-Preclean"><a href="#phase4：concurrent-abortable-Preclean" class="headerlink" title="phase4：concurrent abortable Preclean"></a>phase4：concurrent abortable Preclean</h4><ul>
 <li>这也是一个并发阶段，但是同样不会影响用户的应用线程，这个阶段就是为了尽量承担stw中最终标记阶段的工作。这个阶段持续时间依赖于很多的<br>因素，由于这个阶段是在重复做相同的工作，直接满足一些条件（比如：重复迭代的次数、完成的工作量或时钟时间等）</li>
@@ -388,7 +388,7 @@
 <li>经历过五个阶段之后，老年代所有存活对象都被标记过了，现在可以通过清楚算法去清理那些老年代不再使用的对象。</li>
 </ul>
 <h4 id="phase6：concurrent-sweep"><a href="#phase6：concurrent-sweep" class="headerlink" title="phase6：concurrent sweep"></a>phase6：concurrent sweep</h4><ul>
-<li>这里不需要stw，它是与用户的应用程序并发运行，这个阶段是：清除那些不再使用的对象，回收它们的占用空间将来使用。<br><img src="/cms5.png" alt="cms5.png"></li>
+<li>这里不需要stw，它是与用户的应用程序并发运行，这个阶段是：清除那些不再使用的对象，回收它们的占用空间将来使用。<br><img src="/2019/05/19/jvm%E5%8E%9F%E7%90%86%EF%BC%8846%EF%BC%89CMS%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8%E6%B7%B1%E5%85%A5%E8%AE%B2%E8%A7%A3/cms5.png" alt="cms5.png"></li>
 </ul>
 <h4 id="phase7：concurrent-reset"><a href="#phase7：concurrent-reset" class="headerlink" title="phase7：concurrent reset"></a>phase7：concurrent reset</h4><ul>
 <li>这个阶段也是并发执行的，它会重设cms内部的数据结构，为了下次的gc做准备。</li>

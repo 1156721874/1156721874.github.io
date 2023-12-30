@@ -30,13 +30,13 @@
 <meta property="og:site_name" content="南贺神社">
 <meta property="og:description" content="在介绍ReplayingDecoder之前 想看一下它的用法，构建一个服务端和客户端的模型：服务端：">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://ceaser.wang/20171217140403291.png">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E4%BA%8C%E5%8D%81%E4%B8%89-ReplayingDecoder%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E4%B8%8E%E7%89%B9%E6%80%A7%E8%A7%A3%E8%AF%BB%E4%BB%A5%E5%8F%8A%E5%85%B6%E4%BB%96%E7%BC%96%E8%A7%A3%E7%A0%81%E5%99%A8%E4%BB%8B%E7%BB%8D/20171217140403291.png">
 <meta property="article:published_time" content="2018-10-04T15:16:36.000Z">
-<meta property="article:modified_time" content="2023-12-30T08:31:12.954Z">
+<meta property="article:modified_time" content="2023-12-30T14:30:27.363Z">
 <meta property="article:author" content="CeaserWang">
 <meta property="article:tag" content="ReplayingDecoder">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://ceaser.wang/20171217140403291.png">
+<meta name="twitter:image" content="https://ceaser.wang/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E4%BA%8C%E5%8D%81%E4%B8%89-ReplayingDecoder%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E4%B8%8E%E7%89%B9%E6%80%A7%E8%A7%A3%E8%AF%BB%E4%BB%A5%E5%8F%8A%E5%85%B6%E4%BB%96%E7%BC%96%E8%A7%A3%E7%A0%81%E5%99%A8%E4%BB%8B%E7%BB%8D/20171217140403291.png">
 
 
 <link rel="canonical" href="https://ceaser.wang/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E4%BA%8C%E5%8D%81%E4%B8%89-ReplayingDecoder%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E4%B8%8E%E7%89%B9%E6%80%A7%E8%A7%A3%E8%AF%BB%E4%BB%A5%E5%8F%8A%E5%85%B6%E4%BB%96%E7%BC%96%E8%A7%A3%E7%A0%81%E5%99%A8%E4%BB%8B%E7%BB%8D/">
@@ -92,7 +92,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">208</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">217</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">209</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">221</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
         </a>
@@ -163,7 +163,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">217</span>
+          <span class="site-state-item-count">221</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -174,7 +174,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">208</span>
+        <span class="site-state-item-count">209</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -289,7 +289,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -349,7 +349,7 @@ The biggest difference between ReplayingDecoder and ByteToMessageDecoder is that
 ReplayingDecoder 和ByteToMessageDecoder 最大的不同就是ReplayingDecoder 允许你实现decode()和decodeLast()就像所有的字节已经接收到一样，不需要判断可用的字节，举例，下面的ByteToMessageDecoder 实现：
 
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">public class IntegerHeaderFrameDecoder extends ByteToMessageDecoder &#123;</span><br><span class="line"></span><br><span class="line">   @Override</span><br><span class="line">  protected void decode(ChannelHandlerContext ctx,</span><br><span class="line">                          ByteBuf buf, List&lt;Object&gt; out) throws Exception &#123;</span><br><span class="line"></span><br><span class="line">    if (buf.readableBytes() &lt; 4) &#123;</span><br><span class="line">       return;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    buf.markReaderIndex();</span><br><span class="line">    int length = buf.readInt();</span><br><span class="line"></span><br><span class="line">    if (buf.readableBytes() &lt; length) &#123;</span><br><span class="line">       buf.resetReaderIndex();</span><br><span class="line">       return;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    out.add(buf.readBytes(length));</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这段代码表达的意思是先读取前边4隔壁字节（即，一个int类型），然后再去读取后边个字节，如果前边四个字节无法读取，直接返回，如果可以读取前四个字节，那么紧接着读取同样长度个字节，这种方式是一种消息头，消息体的协议模型，先读取消息头，之后再去读取消息体：<br><img src="/20171217140403291.png" alt="这里写图片描述"><br>好了先说到这里，协议以后再讨论，那现在我们使用ReplayingDecoder可以简化为：</p>
+<p>这段代码表达的意思是先读取前边4隔壁字节（即，一个int类型），然后再去读取后边个字节，如果前边四个字节无法读取，直接返回，如果可以读取前四个字节，那么紧接着读取同样长度个字节，这种方式是一种消息头，消息体的协议模型，先读取消息头，之后再去读取消息体：<br><img src="/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E4%BA%8C%E5%8D%81%E4%B8%89-ReplayingDecoder%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90%E4%B8%8E%E7%89%B9%E6%80%A7%E8%A7%A3%E8%AF%BB%E4%BB%A5%E5%8F%8A%E5%85%B6%E4%BB%96%E7%BC%96%E8%A7%A3%E7%A0%81%E5%99%A8%E4%BB%8B%E7%BB%8D/20171217140403291.png" alt="这里写图片描述"><br>好了先说到这里，协议以后再讨论，那现在我们使用ReplayingDecoder可以简化为：</p>
 <p>is simplified like the following with ReplayingDecoder:</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public class IntegerHeaderFrameDecoder</span><br><span class="line">     extends ReplayingDecoder&lt;Void&gt; &#123;</span><br><span class="line"></span><br><span class="line">  protected void decode(ChannelHandlerContext ctx,</span><br><span class="line">                          ByteBuf buf) throws Exception &#123;</span><br><span class="line"></span><br><span class="line">    out.add(buf.readBytes(buf.readInt()));</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 

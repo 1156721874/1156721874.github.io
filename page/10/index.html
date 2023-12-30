@@ -85,7 +85,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">208</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">217</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">209</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">221</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
         </a>
@@ -156,7 +156,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">217</span>
+          <span class="site-state-item-count">221</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -167,7 +167,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">208</span>
+        <span class="site-state-item-count">209</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -245,6 +245,445 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8827%EF%BC%89Java%E5%AD%97%E8%8A%82%E7%A0%81%E6%96%B9%E6%B3%95%E8%A1%A8%E4%B8%8E%E5%B1%9E%E6%80%A7%E8%A1%A8%E6%B7%B1%E5%BA%A6%E5%89%96%E6%9E%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
+      <meta itemprop="name" content="CeaserWang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8827%EF%BC%89Java%E5%AD%97%E8%8A%82%E7%A0%81%E6%96%B9%E6%B3%95%E8%A1%A8%E4%B8%8E%E5%B1%9E%E6%80%A7%E8%A1%A8%E6%B7%B1%E5%BA%A6%E5%89%96%E6%9E%90/" class="post-title-link" itemprop="url">jvm原理（27）Java字节码方法表与属性表深度剖析</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-10-04 16:59:30" itemprop="dateCreated datePublished" datetime="2018-10-04T16:59:30+00:00">2018-10-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/jvm/" itemprop="url" rel="index"><span itemprop="name">jvm</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8827%EF%BC%89Java%E5%AD%97%E8%8A%82%E7%A0%81%E6%96%B9%E6%B3%95%E8%A1%A8%E4%B8%8E%E5%B1%9E%E6%80%A7%E8%A1%A8%E6%B7%B1%E5%BA%A6%E5%89%96%E6%9E%90/" class="post-meta-item leancloud_visitors" data-flag-title="jvm原理（27）Java字节码方法表与属性表深度剖析" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>上一节说到成员变量，这一节说一下方法表<br>图一：</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8827%EF%BC%89Java%E5%AD%97%E8%8A%82%E7%A0%81%E6%96%B9%E6%B3%95%E8%A1%A8%E4%B8%8E%E5%B1%9E%E6%80%A7%E8%A1%A8%E6%B7%B1%E5%BA%A6%E5%89%96%E6%9E%90/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8826%EF%BC%89%E5%AD%97%E8%8A%82%E7%A0%81%E8%AE%BF%E9%97%AE%E6%A0%87%E5%BF%97%E4%B8%8E%E5%AD%97%E6%AE%B5%E8%A1%A8%E8%AF%A6%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
+      <meta itemprop="name" content="CeaserWang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8826%EF%BC%89%E5%AD%97%E8%8A%82%E7%A0%81%E8%AE%BF%E9%97%AE%E6%A0%87%E5%BF%97%E4%B8%8E%E5%AD%97%E6%AE%B5%E8%A1%A8%E8%AF%A6%E8%A7%A3/" class="post-title-link" itemprop="url">jvm原理（26）字节码访问标志与字段表详解</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-10-04 16:50:57" itemprop="dateCreated datePublished" datetime="2018-10-04T16:50:57+00:00">2018-10-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/jvm/" itemprop="url" rel="index"><span itemprop="name">jvm</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8826%EF%BC%89%E5%AD%97%E8%8A%82%E7%A0%81%E8%AE%BF%E9%97%AE%E6%A0%87%E5%BF%97%E4%B8%8E%E5%AD%97%E6%AE%B5%E8%A1%A8%E8%AF%A6%E8%A7%A3/" class="post-meta-item leancloud_visitors" data-flag-title="jvm原理（26）字节码访问标志与字段表详解" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>先看一下java字节码的结构：<br>图1：</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8826%EF%BC%89%E5%AD%97%E8%8A%82%E7%A0%81%E8%AE%BF%E9%97%AE%E6%A0%87%E5%BF%97%E4%B8%8E%E5%AD%97%E6%AE%B5%E8%A1%A8%E8%AF%A6%E8%A7%A3/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8825%EF%BC%89Java%E5%AD%97%E8%8A%82%E7%A0%81%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%89%96%E6%9E%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
+      <meta itemprop="name" content="CeaserWang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8825%EF%BC%89Java%E5%AD%97%E8%8A%82%E7%A0%81%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%89%96%E6%9E%90/" class="post-title-link" itemprop="url">jvm原理（25）Java字节码文件结构剖析</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-10-04 16:42:44" itemprop="dateCreated datePublished" datetime="2018-10-04T16:42:44+00:00">2018-10-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/jvm/" itemprop="url" rel="index"><span itemprop="name">jvm</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8825%EF%BC%89Java%E5%AD%97%E8%8A%82%E7%A0%81%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%89%96%E6%9E%90/" class="post-meta-item leancloud_visitors" data-flag-title="jvm原理（25）Java字节码文件结构剖析" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>编写java文件：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- more --&gt;</span><br><span class="line">public class MyTest1 &#123;</span><br><span class="line">    private int a = 1;</span><br><span class="line"></span><br><span class="line">    public int getA() &#123;</span><br><span class="line">        return a;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setA(int a) &#123;</span><br><span class="line">        this.a = a;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我要要看一下java文件对应的class文件的结构，定位到工程的out\production\classes下边执行：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">javap -c com.twodragonlake.jvm.bytecode.MyTest1</span><br></pre></td></tr></table></figure>
+<p>得到字节码文件结构：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">Compiled from &quot;MyTest1.java&quot;</span><br><span class="line">public class com.twodragonlake.jvm.bytecode.MyTest1 &#123;</span><br><span class="line">  public com.twodragonlake.jvm.bytecode.MyTest1();</span><br><span class="line">    Code:</span><br><span class="line">       0: aload_0</span><br><span class="line">       1: invokespecial #1                  // Method java/lang/Object.&quot;&lt;init&gt;&quot;:()V</span><br><span class="line">       4: aload_0</span><br><span class="line">       5: iconst_1</span><br><span class="line">       6: putfield      #2                  // Field a:I</span><br><span class="line">       9: return</span><br><span class="line"></span><br><span class="line">  public int getA();</span><br><span class="line">    Code:</span><br><span class="line">       0: aload_0</span><br><span class="line">       1: getfield      #2                  // Field a:I</span><br><span class="line">       4: ireturn</span><br><span class="line"></span><br><span class="line">  public void setA(int);</span><br><span class="line">    Code:</span><br><span class="line">       0: aload_0</span><br><span class="line">       1: iload_1</span><br><span class="line">       2: putfield      #2                  // Field a:I</span><br><span class="line">       5: return</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>也可以使用 javap -verbose com&#x2F;twodragonlake&#x2F;jvm&#x2F;bytecode&#x2F;MyTest1<br>打印更多信息：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br></pre></td><td class="code"><pre><span class="line">Classfile /E:/Study/intelIde/jvm_lecture/out/production/classes/com/twodragonlake/jvm/bytecode/MyTest1.class</span><br><span class="line">  Last modified 2018-7-28; size 507 bytes</span><br><span class="line">  MD5 checksum 372d96fd3e5e97ce3e964e7f9e1e2d67</span><br><span class="line">  Compiled from &quot;MyTest1.java&quot;</span><br><span class="line">public class com.twodragonlake.jvm.bytecode.MyTest1</span><br><span class="line">  minor version: 0</span><br><span class="line">  major version: 52</span><br><span class="line">  flags: ACC_PUBLIC, ACC_SUPER</span><br><span class="line">Constant pool:</span><br><span class="line">   #1 = Methodref          #4.#20         // java/lang/Object.&quot;&lt;init&gt;&quot;:()V</span><br><span class="line">   #2 = Fieldref           #3.#21         // com/twodragonlake/jvm/bytecode/MyTest1.a:I</span><br><span class="line">   #3 = Class              #22            // com/twodragonlake/jvm/bytecode/MyTest1</span><br><span class="line">   #4 = Class              #23            // java/lang/Object</span><br><span class="line">   #5 = Utf8               a</span><br><span class="line">   #6 = Utf8               I</span><br><span class="line">   #7 = Utf8               &lt;init&gt;</span><br><span class="line">   #8 = Utf8               ()V</span><br><span class="line">   #9 = Utf8               Code</span><br><span class="line">  #10 = Utf8               LineNumberTable</span><br><span class="line">  #11 = Utf8               LocalVariableTable</span><br><span class="line">  #12 = Utf8               this</span><br><span class="line">  #13 = Utf8               Lcom/twodragonlake/jvm/bytecode/MyTest1;</span><br><span class="line">  #14 = Utf8               getA</span><br><span class="line">  #15 = Utf8               ()I</span><br><span class="line">  #16 = Utf8               setA</span><br><span class="line">  #17 = Utf8               (I)V</span><br><span class="line">  #18 = Utf8               SourceFile</span><br><span class="line">  #19 = Utf8               MyTest1.java</span><br><span class="line">  #20 = NameAndType        #7:#8          // &quot;&lt;init&gt;&quot;:()V</span><br><span class="line">  #21 = NameAndType        #5:#6          // a:I</span><br><span class="line">  #22 = Utf8               com/twodragonlake/jvm/bytecode/MyTest1</span><br><span class="line">  #23 = Utf8               java/lang/Object</span><br><span class="line">&#123;</span><br><span class="line">  public com.twodragonlake.jvm.bytecode.MyTest1();</span><br><span class="line">    descriptor: ()V</span><br><span class="line">    flags: ACC_PUBLIC</span><br><span class="line">    Code:</span><br><span class="line">      stack=2, locals=1, args_size=1</span><br><span class="line">         0: aload_0</span><br><span class="line">         1: invokespecial #1                  // Method java/lang/Object.&quot;&lt;init&gt;&quot;:()V</span><br><span class="line">         4: aload_0</span><br><span class="line">         5: iconst_1</span><br><span class="line">         6: putfield      #2                  // Field a:I</span><br><span class="line">         9: return</span><br><span class="line">      LineNumberTable:</span><br><span class="line">        line 26: 0</span><br><span class="line">        line 27: 4</span><br><span class="line">      LocalVariableTable:</span><br><span class="line">        Start  Length  Slot  Name   Signature</span><br><span class="line">            0      10     0  this   Lcom/twodragonlake/jvm/bytecode/MyTest1;</span><br><span class="line"></span><br><span class="line">  public int getA();</span><br><span class="line">    descriptor: ()I</span><br><span class="line">    flags: ACC_PUBLIC</span><br><span class="line">    Code:</span><br><span class="line">      stack=1, locals=1, args_size=1</span><br><span class="line">         0: aload_0</span><br><span class="line">         1: getfield      #2                  // Field a:I</span><br><span class="line">         4: ireturn</span><br><span class="line">      LineNumberTable:</span><br><span class="line">        line 30: 0</span><br><span class="line">      LocalVariableTable:</span><br><span class="line">        Start  Length  Slot  Name   Signature</span><br><span class="line">            0       5     0  this   Lcom/twodragonlake/jvm/bytecode/MyTest1;</span><br><span class="line"></span><br><span class="line">  public void setA(int);</span><br><span class="line">    descriptor: (I)V</span><br><span class="line">    flags: ACC_PUBLIC</span><br><span class="line">    Code:</span><br><span class="line">      stack=2, locals=2, args_size=2</span><br><span class="line">         0: aload_0</span><br><span class="line">         1: iload_1</span><br><span class="line">         2: putfield      #2                  // Field a:I</span><br><span class="line">         5: return</span><br><span class="line">      LineNumberTable:</span><br><span class="line">        line 34: 0</span><br><span class="line">        line 35: 5</span><br><span class="line">      LocalVariableTable:</span><br><span class="line">        Start  Length  Slot  Name   Signature</span><br><span class="line">            0       6     0  this   Lcom/twodragonlake/jvm/bytecode/MyTest1;</span><br><span class="line">            0       6     1     a   I</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>ok，我们也可以使用二进制文件查看器查看class文件的16进制信息（<span class="exturl" data-url="aHR0cDovL3d3dy54LXdheXMubmV0L3dpbmhleC56aXA=">winhex下载<i class="fa fa-external-link-alt"></i></span>）：<br><img src="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8825%EF%BC%89Java%E5%AD%97%E8%8A%82%E7%A0%81%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%89%96%E6%9E%90/20180728170150241.png" alt="这里写图片描述"><br>16文件查看器里边第一行的CA 就是一个字节的容量（8位bit）。<br><strong>1、javap -verbos</strong><br>使用javap -verbos 命令分析一个字节码文件时，将会分析该字节码文件的魔数、版本号、常量池、类信息、类的构造方法信息、类变量与成员变量等信息。<br><strong>2、魔数：</strong><br>所有的.class字节码文件的前4个字节都是魔数，魔数值为固定值：0xCAFEBABE  (詹姆斯.高斯林设计的，蕴意：咖啡宝贝，java的图标是咖啡，哈哈哈，因缺思厅~~~很有意思的一件事情)。<br><strong>3、版本号</strong><br>魔数之后的4个字节为版本信息，前2个字节表示minor versio（次版本号），后两个字节表示major version（主版本号）。<br>接下来分析剩下的16进制信息的含义。<br>00 00 00 34 ：版本信息，00 00 （前2个字节）代表是次版本号（minor version），00 34 （后2个字节）代表的是主版本号major version，34是16进制，转换为10进制：3*16+4&#x3D;52，52是jdk8，51是jdk7，50是jdk6，以此类推，可以通过java -version命令来验证这一点。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ java -version</span><br><span class="line">java version &quot;1.8.0_111&quot;</span><br><span class="line">Java(TM) SE Runtime Environment (build 1.8.0_111-b14)</span><br><span class="line">Java HotSpot(TM) 64-Bit Server VM (build 25.111-b14, mixed mode)</span><br></pre></td></tr></table></figure>
+<p>java version “1.8.0_111” 中1.8是主版本号，0是次版本号，111是更新版本号。<br>这个和javap反编译出来的major version是52是对应的。1.7的jdk不能运行1.8编译出来的class文件。低版本不可以兼容高版本的class文件。<br><strong>4、常量池（constant pool）：</strong><br>紧接着版本号之后的就是常量池入口，一个java类中定义的很多信息就是由常量池来维护和描述的，可以将常量池看作是Class文件的资源仓库，比如说java类中定义的方法与变量信息，都是存储在常量池中。常量池中主要存储两类常量：字面量与符号引用。字面量比如文本字符串，java中声明为final的常量等，而符号引用如类和接口的全局限定名，字段的名称和描述符，方法的名称和描述符等。<br><strong>5、常量池的总体结构：</strong><br>java类所对应的常量池主要由常量池数量与常量池数组这2部分共同构成。常量池数量紧跟在主版本号后面，占据2个字节；常量池数组则紧跟在常量池数量之后。常量池数组与一般的数组不同的是，常量池数组中不同的元素的类型、结构都是不同的；但是每一种元素的第一个数据都是一个u1类型，该字节是个标志位，占据1个字节。jvm在解析常量池时，会根据这个ul类型来获取元素的具体类型。<br>ok那么主版本号之后的2个字节是常量池数量，即 00 34 后边的 00 18 是常量池数量18对应的十进制是1*16+8&#x3D;24，所以常量池的数量书24个。<br>但是我们用javap反编译出来的Constant pool是23个，那是因为常量池中元素的个数&#x3D;常量池数 - 1 （其中0暂时不使用），目的是满足某些常量池索引值的数据在特定情况下需要表达【不引用任何一个常量池】的含义；根本原因在于，索引为0也是一个常量（保留常量），只不过他不位于常量表中，这个常量就对应null值；所以，常量池的索引从1而非0开始。<br>那么我看到的16进制文件中 00 18  后边的就是实际的一个个的元素体，每个常量元素的大小都是不一样的，那么每个元素的结构是怎样的呢？<br><img src="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8825%EF%BC%89Java%E5%AD%97%E8%8A%82%E7%A0%81%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%89%96%E6%9E%90/20180728182044938.png" alt="这里写图片描述"><br>00 18 后边是第一个常量，第一个字节是标志位：0A（十进制10），十进制10在java字节码表格中对应的是CONSTANT_Methodref_info常量，那么后边的2个字节00 04 （十进制4）就是U2（第一个index），即指向声明方法的类描述符CONSTANT_Class_info的索引项，而第二个索引（第二个index）00 14（十进制20） 指向名称及类型描述符CONSTANT_NameAndType_info的索引项，到此0A 00 04 00 14表示了第一个常量。那么我们借助反编译工具看一下4和20的索引位置时什么：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"> #1 = Methodref          #4.#20         // java/lang/Object.&quot;&lt;init&gt;&quot;:()V</span><br><span class="line"> #2 = Fieldref           #3.#21         // com/twodragonlake/jvm/bytecode/MyTest1.a:I</span><br><span class="line"> #3 = Class              #22            // com/twodragonlake/jvm/bytecode/MyTest1</span><br><span class="line"> #4 = Class              #23            // java/lang/Object</span><br><span class="line"> #5 = Utf8               a</span><br><span class="line"> #6 = Utf8               I</span><br><span class="line"> #7 = Utf8               &lt;init&gt;</span><br><span class="line"> #8 = Utf8               ()V</span><br><span class="line"> #9 = Utf8               Code</span><br><span class="line">#10 = Utf8               LineNumberTable</span><br><span class="line">#11 = Utf8               LocalVariableTable</span><br><span class="line">#12 = Utf8               this</span><br><span class="line">#13 = Utf8               Lcom/twodragonlake/jvm/bytecode/MyTest1;</span><br><span class="line">#14 = Utf8               getA</span><br><span class="line">#15 = Utf8               ()I</span><br><span class="line">#16 = Utf8               setA</span><br><span class="line">#17 = Utf8               (I)V</span><br><span class="line">#18 = Utf8               SourceFile</span><br><span class="line">#19 = Utf8               MyTest1.java</span><br><span class="line">#20 = NameAndType        #7:#8          // &quot;&lt;init&gt;&quot;:()V</span><br><span class="line">#21 = NameAndType        #5:#6          // a:I</span><br><span class="line">#22 = Utf8               com/twodragonlake/jvm/bytecode/MyTest1</span><br><span class="line">#23 = Utf8               java/lang/Object</span><br></pre></td></tr></table></figure>
+<p>4是【 #4 &#x3D; Class              #23            &#x2F;&#x2F; java&#x2F;lang&#x2F;Object】即指向声明方法的类描述符CONSTANT_Class_info的索引项；<br>4引用的是23，23对应的是 java&#x2F;lang&#x2F;Object，<br>20是【#20 &#x3D; NameAndType        #7:#8          &#x2F;&#x2F; “<code>&lt;init&gt;</code>“:()V】 指向名称及类型描述符CONSTANT_NameAndType_info的索引项；<br>20指向的是索引7和8，7是 <code>&lt;init&gt; </code>，8是()V<br>这个和表格里边是一致的。<br>tip：<br><strong>6、数据类型</strong><br>在JVM规范中，每个变量&#x2F;字段都有描述信息，描述信息主要的作用是描述字段的数据类型，方法的参数列表（包括数量、类型与顺序）与返回值。根据描述符规则，基本数据类型和代表无返回值的void类型都用一个大写字符来表示，对象类型则使用字符L加对象的全限名称来表示。为了压缩字节码文件的体积，对于基本数据类型，JVM基本数据类型，JVM都只是使用一个大写字母来表示，如下所示：B - byte, C - char,D - double,F - float,<br>I - int ,J - long S - short,Z - boolean, V - void ,L - 对象类型，如：Ljava&#x2F;lang.String;<br><strong>7、数组</strong><br>对于数组类型来说，每个维度使用一个前置的[来表示，如int[]被记录为[I, String[][]被记录为[[Ljava&#x2F;lang&#x2F;String;<br><strong>8、描述符</strong><br>用描述符描述方法时，按照先参数列表，后返回值的顺序来描述，参数列表按照参数的严格顺序放在一组（）之内，如方法：String getRealNameByIdAndNickName(int id,String name)的描述符为：(I,Ljava&#x2F;lang&#x2F;String;)Ljava&#x2F;lang&#x2F;String;</p>
+<p>接下来是第二个常量：09 00 03   00 15 ，09是标志位对用的是CONSTANT_Fieldref_info,第一个索引指向的是声明字段的类或接口描述符，CONSTANT_Class_info的索引项。<br>第二个索引：指向字段描述符CONSTANT_NameAndType_info 的索引项。<br>00 03十进制是索引3 ，3对应的是【#22            &#x2F;&#x2F; com&#x2F;twodragonlake&#x2F;jvm&#x2F;bytecode&#x2F;MyTest1】，而22对应的是<br>【#22 &#x3D; Utf8               com&#x2F;twodragonlake&#x2F;jvm&#x2F;bytecode&#x2F;MyTest1】<br>00 15十进制是21，21对应的是【 #21 &#x3D; NameAndType        #5:#6          &#x2F;&#x2F; a:I】，索引5对应的是【 #5 &#x3D; Utf8               a】<br>所用6对应的【#6 &#x3D; Utf8               I】所以第二个常量表示为：【 #3.#21         &#x2F;&#x2F; com&#x2F;twodragonlake&#x2F;jvm&#x2F;bytecode&#x2F;MyTest1.a:I】</p>
+<p>接下来是第三个常量：07 00 16：<br>00 16 十进制是22 ，07是常量CONSTANT_CLass_info，只有一个index，指向的是指定权限定名常量项的索引， 00 16 是十进制22，22是【 #22 &#x3D; Utf8               com&#x2F;twodragonlake&#x2F;jvm&#x2F;bytecode&#x2F;MyTest1】</p>
+<p>接下来是第四个常量：07 00 17 ，07是常量CONSTANT_CLass_info，只有一个index，指向的是指定权限定名常量项的索引，00 17 十进制是23，<br>23指向的是【#23 &#x3D; Utf8               java&#x2F;lang&#x2F;Object】</p>
+<p>接下来是第五个常量：01 00 01 … (后边的字节大小受00 01的约束) ，01 是常量CONSTANT_UTF8_Info,U2是length表示UTF-8编码的字符串的长度（占2个字节），<br>然后能是U1，表示bytes，长度是length的UTF-8编码的字符串长度。<br>所以00 01 是占用2个字节的表示bytes的长度， 00 01 的十进制是1，即后边的一个字节是bytes，后边的一个字节是61，61在asc码表里边是a的索引，即<br>01 00 01 61 表示字母a。就是反编译出来的第五个常量：【#5 &#x3D; Utf8               a】。</p>
+<p>第六个常量：01 00 01 ，01 是常量CONSTANT_UTF8_Info长度：00 01（十进制1），后边是1个字节是：49，49对应的十进制4*16+9&#x3D;75，75对应的是字母I，<br>所以第六个常量：【#6 &#x3D; Utf8               I】</p>
+<p>第七个常量：01 00 06 ，还是常量CONSTANT_UTF8_Info，长度00 06 是6，往后6个字节：<br><img src="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8825%EF%BC%89Java%E5%AD%97%E8%8A%82%E7%A0%81%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E5%89%96%E6%9E%90/20180729150017678.png" alt="这里写图片描述"><br>对应的是<code>&lt;init&gt;</code>,即， 【#7 &#x3D; Utf8               <code>&lt;init&gt;</code>】</p>
+<p>第八个常量01 00 03 还是是常量CONSTANT_UTF8_Info，长度00 03 是长度3，往后三个字节是：28 29 56 ，对应的是：() V,即常量：<br>【#8 &#x3D; Utf8               ()V】</p>
+<p>第九个常量：01 00 04 是是常量CONSTANT_UTF8_Info，长度00 04是4个字节，往后4个字节是：43 6F 64 65 表示：Code，即常量：<br>【#9 &#x3D; Utf8               Code】</p>
+<p>第十个常量：01 00 0F:是常量CONSTANT_UTF8_Info,长度是00 0F（十进制15），往后15个字节：4C 69 6E 65 4E 75 6D 62 65 72 54 61 62 6C 65<br>表示LineNumberTable，即常量：【#10 &#x3D; Utf8               LineNumberTable】，</p>
+<p>第十一个常量：01 00 12 是常量CONSTANT_UTF8_Info ，长度00 12 （十进制18），往后18个字节是：4C6F63616C5661726961626C655461626C65<br>对应：LocalVariableTable，即常量：【#11 &#x3D; Utf8               LocalVariableTable】</p>
+<p>第十二个常量：01 00 04 是常量CONSTANT_UTF8_Info，长度00 04 （十进制4），往后4个字节：74686973 表示字符串“this”，即常量：【#12 &#x3D; Utf8               this】</p>
+<p>第十三个常量：01 00 28 是常量CONSTANT_UTF8_Info，长度00 28（十进制40），往后40个字节：4C636F6D2F74776F647261676F6E6C616B652F6A766D2F62797465636F64652F4D7954657374313B 表示字符串Lcom&#x2F;twodragonlake&#x2F;jvm&#x2F;bytecode&#x2F;MyTest1;<br>即常量：#13 &#x3D; Utf8               Lcom&#x2F;twodragonlake&#x2F;jvm&#x2F;bytecode&#x2F;MyTest1;</p>
+<p>第十四个变量：01 00 04  常量CONSTANT_UTF8_Info，长度00 04 （十进制4），往后4个字节：67657441 表示字符串”getA”。即，常量 【#14 &#x3D; Utf8               getA】</p>
+<p>第十五个变量：01 00 03 是常量CONSTANT_UTF8_Info，长度00 03 （十进制3）往后三个字节：28 29 49 表示字符串”()I”，即，常量：【#15 &#x3D; Utf8               ()I】</p>
+<p>14号和15号常量表示了一个方法，表示一个方法：方法的名字和方法的描述法，14号常量时方法的名字，15号常量时方法的描述符（没有参数，但是有一个int的返回值）。</p>
+<p>第十六个常量: 01 00 04 常量CONSTANT_UTF8_Info，长度00 04 （十进制4），往后4个字节：73 65 74 41 表示字符串：”setA”,即常量：【#16 &#x3D; Utf8<br>       setA】<br>第十七个常量：01 00 04 常量CONSTANT_UTF8_Info，长度00 04 （十进制4），往后4个字节：28 49 29 56 表示字符串”(I)V”，即常量：【#17 &#x3D; Utf8               (I)V】</p>
+<p>16和17号常量表示了一个方法：方法名字setA，方法有一个int类型的入参，但是没有返回值。</p>
+<p>第十八个常量：01 00 0A  常量CONSTANT_UTF8_Info，长度00 0A （十进制10），往后10个字节：536F7572636546696C65 表示字符串：”SourceFile”，即，常量：【#18 &#x3D; Utf8               SourceFile】</p>
+<p>第十九个常量：01 00 0C 常量CONSTANT_UTF8_Info，长度00 0C（十进制12），往后12个字节：4D7954657374312E6A617661 表示字符串：”MyTest1.java”，即常量【#19 &#x3D; Utf8               MyTest1.java】</p>
+<p>18号和19号常量表示当前的class文件是由那个源文件编译出来的。</p>
+<p>第20个常量：0c 00 07 常量 CONSTANT_NameAndType_info，此常量拥有2个index，第一个index占2个字节：指向该字段或方法名称常量项的索引；第二个index占2个字节：指向该字段或方法描述符常量项的索引，00 07（十进制7，指向7号常量：【#7 &#x3D; Utf8               <code>&lt;init&gt;</code>】 ,第二个index：00 08 (十进制8)，指向的是8号常量：【#8 &#x3D; Utf8               ()V】，因此，20号常量：【#20 &#x3D; NameAndType        #7:#8          &#x2F;&#x2F; <code>&lt;init&gt;</code>:()V】<br>20号常量表示的是无参的构造方法。</p>
+<p>第21号常量：0C 00 05 00 06 常量 CONSTANT_NameAndType_info，第一个index：00 05（十进制5）指向5号常量：【#5 &#x3D; Utf8               a】，第二个索引00 06（十进制6）指向的的是6号常量：【#6 &#x3D; Utf8               I】,因此。21号常量：【#21 &#x3D; NameAndType        #5:#6          &#x2F;&#x2F; a:I】</p>
+<p>第22个常量：01 00 26 常量CONSTANT_UTF8_Info，长度00 26 （十进制38），往后38个字节：636F6D2F74776F647261676F6E6C616B652F6A766D2F62797465636F64652F4D795465737431 表示字符串：”com&#x2F;twodragonlake&#x2F;jvm&#x2F;bytecode&#x2F;MyTest1”，即，常量：【#22 &#x3D; Utf8               com&#x2F;twodragonlake&#x2F;jvm&#x2F;bytecode&#x2F;MyTest1】</p>
+<p>第23个常量：01 00 10 常量CONSTANT_UTF8_Info，长度00 10 （十进制10），往后16个字节：6A6176612F6C616E672F4F626A656374 表示字符串：”java&#x2F;lang&#x2F;Object”，即常量：【#23 &#x3D; Utf8               java&#x2F;lang&#x2F;Object】表示的是MyTest1的父类全量限定名。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8824%EF%BC%89%E9%80%9A%E8%BF%87JDBC%E9%A9%B1%E5%8A%A8%E5%8A%A0%E8%BD%BD%E6%B7%B1%E5%88%BB%E7%90%86%E8%A7%A3%E7%BA%BF%E7%A8%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E6%9C%BA%E5%88%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
+      <meta itemprop="name" content="CeaserWang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8824%EF%BC%89%E9%80%9A%E8%BF%87JDBC%E9%A9%B1%E5%8A%A8%E5%8A%A0%E8%BD%BD%E6%B7%B1%E5%88%BB%E7%90%86%E8%A7%A3%E7%BA%BF%E7%A8%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E6%9C%BA%E5%88%B6/" class="post-title-link" itemprop="url">jvm原理（24）通过JDBC驱动加载深刻理解线程上下文类加载器机制</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-10-04 16:39:36" itemprop="dateCreated datePublished" datetime="2018-10-04T16:39:36+00:00">2018-10-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/jvm/" itemprop="url" rel="index"><span itemprop="name">jvm</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8824%EF%BC%89%E9%80%9A%E8%BF%87JDBC%E9%A9%B1%E5%8A%A8%E5%8A%A0%E8%BD%BD%E6%B7%B1%E5%88%BB%E7%90%86%E8%A7%A3%E7%BA%BF%E7%A8%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E6%9C%BA%E5%88%B6/" class="post-meta-item leancloud_visitors" data-flag-title="jvm原理（24）通过JDBC驱动加载深刻理解线程上下文类加载器机制" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>首先写一段加载jdbc驱动的代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- more --&gt;</span><br><span class="line">public class MyTest27 &#123;</span><br><span class="line">    public static void main(String[] args) throws Exception &#123;</span><br><span class="line">        Class.forName(&quot;com.mysql.jdbc.Driver&quot;);</span><br><span class="line">        Connection connection = DriverManager.getConnection(&quot;jdbc://localhost:3306/mytestdb&quot;,&quot;username&quot;,&quot;password&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这段程序是加载jdbc驱动的惯用写法，第一行代码【 Class.forName(“com.mysql.jdbc.Driver”);】是将mysql的驱动【com.mysql.jdbc.Driver】注册到jdk的DriverManager上边去，我们跟进一下代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public static Class&lt;?&gt; forName(String className)</span><br><span class="line">            throws ClassNotFoundException &#123;</span><br><span class="line">    Class&lt;?&gt; caller = Reflection.getCallerClass();</span><br><span class="line">    return forName0(className, true, ClassLoader.getClassLoader(caller), caller);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这会引起【com.mysql.jdbc.Driver】的主动调用，因此会初始化com.mysql.jdbc.Driver：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public class Driver extends NonRegisteringDriver implements java.sql.Driver &#123;</span><br><span class="line">    //</span><br><span class="line">    // Register ourselves with the DriverManager</span><br><span class="line">    //</span><br><span class="line">    static &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            //将当前mysql的com.mysql.jdbc.Driver 注册到jdk的java.sql.DriverManager里边去</span><br><span class="line">            java.sql.DriverManager.registerDriver(new Driver());</span><br><span class="line">        &#125; catch (SQLException E) &#123;</span><br><span class="line">            throw new RuntimeException(&quot;Can&#x27;t register driver!&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    .....略.....</span><br></pre></td></tr></table></figure>
+<p>这个时候会引起java.sql.DriverManager的主动调动，导致java.sql.DriverManager初始化（赋予静态变量正确的初始值），因此这个时候java.sql.DriverManager的静态代码块会被执行，我们到java.sql.DriverManager里边看一下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public class DriverManager &#123;</span><br><span class="line">.....略....</span><br><span class="line">    /**</span><br><span class="line">     * Load the initial JDBC drivers by checking the System property</span><br><span class="line">     * jdbc.properties and then use the &#123;@code ServiceLoader&#125; mechanism</span><br><span class="line">     */</span><br><span class="line">    static &#123;</span><br><span class="line">    调用loadInitialDrivers方法，继续往里跟进。</span><br><span class="line">        loadInitialDrivers();</span><br><span class="line">        println(&quot;JDBC DriverManager initialized&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    .....略....</span><br></pre></td></tr></table></figure>
+<p>loadInitialDrivers方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line">  private static void loadInitialDrivers() &#123;</span><br><span class="line">      String drivers;</span><br><span class="line">      try &#123;</span><br><span class="line">      //寻找系统属性jdbc.drivers有没有值，jdbc.drivers是加载jdbc驱动的另一种方式，了解即可</span><br><span class="line">          drivers = AccessController.doPrivileged(new PrivilegedAction&lt;String&gt;() &#123;</span><br><span class="line">              public String run() &#123;</span><br><span class="line">                  return System.getProperty(&quot;jdbc.drivers&quot;);</span><br><span class="line">              &#125;</span><br><span class="line">          &#125;);</span><br><span class="line">      &#125; catch (Exception ex) &#123;</span><br><span class="line">          drivers = null;</span><br><span class="line">      &#125;</span><br><span class="line">      // If the driver is packaged as a Service Provider, load it.</span><br><span class="line">      // Get all the drivers through the classloader</span><br><span class="line">      // exposed as a java.sql.Driver.class service.</span><br><span class="line">      // ServiceLoader.load() replaces the sun.misc.Providers()</span><br><span class="line"></span><br><span class="line">      AccessController.doPrivileged(new PrivilegedAction&lt;Void&gt;() &#123;</span><br><span class="line">          public Void run() &#123;</span><br><span class="line">		这个地方是我们之前篇章介绍的,将所有java.sql.Driver驱动的实现全部加载。</span><br><span class="line">              ServiceLoader&lt;Driver&gt; loadedDrivers = ServiceLoader.load(Driver.class);</span><br><span class="line">              Iterator&lt;Driver&gt; driversIterator = loadedDrivers.iterator();</span><br><span class="line"></span><br><span class="line">              /* Load these drivers, so that they can be instantiated.</span><br><span class="line">               * It may be the case that the driver class may not be there</span><br><span class="line">               * i.e. there may be a packaged driver with the service class</span><br><span class="line">               * as implementation of java.sql.Driver but the actual class</span><br><span class="line">               * may be missing. In that case a java.util.ServiceConfigurationError</span><br><span class="line">               * will be thrown at runtime by the VM trying to locate</span><br><span class="line">               * and load the service.</span><br><span class="line">               *</span><br><span class="line">               * Adding a try catch block to catch those runtime errors</span><br><span class="line">               * if driver not available in classpath but it&#x27;s</span><br><span class="line">               * packaged as service and that service is there in classpath.</span><br><span class="line">               */</span><br><span class="line">              try&#123;</span><br><span class="line">                  while(driversIterator.hasNext()) &#123;</span><br><span class="line">                      driversIterator.next();</span><br><span class="line">                  &#125;</span><br><span class="line">              &#125; catch(Throwable t) &#123;</span><br><span class="line">              // Do nothing</span><br><span class="line">              &#125;</span><br><span class="line">              return null;</span><br><span class="line">          &#125;</span><br><span class="line">      &#125;);</span><br><span class="line"></span><br><span class="line">      println(&quot;DriverManager.initialize: jdbc.drivers = &quot; + drivers);</span><br><span class="line">//如果drivers 是空的，直接返回，在当前我们的程序没有配置【jdbc.drivers】在运行的时候到了这里会直接返回。</span><br><span class="line">      if (drivers == null || drivers.equals(&quot;&quot;)) &#123;</span><br><span class="line">          return;</span><br><span class="line">      &#125;</span><br><span class="line">      String[] driversList = drivers.split(&quot;:&quot;);</span><br><span class="line">      println(&quot;number of Drivers:&quot; + driversList.length);</span><br><span class="line">      for (String aDriver : driversList) &#123;</span><br><span class="line">          try &#123;</span><br><span class="line">              println(&quot;DriverManager.Initialize: loading &quot; + aDriver);</span><br><span class="line">              Class.forName(aDriver, true,</span><br><span class="line">                      ClassLoader.getSystemClassLoader());</span><br><span class="line">          &#125; catch (Exception ex) &#123;</span><br><span class="line">              println(&quot;DriverManager.Initialize: load failed: &quot; + ex);</span><br><span class="line">          &#125;</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>到了这里做了一件事就是讲jdbc驱动进行了加载（并没有初始化），接下来看一下DriverManager 的registerDriver：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">public static synchronized void registerDriver(java.sql.Driver driver,</span><br><span class="line">        DriverAction da)</span><br><span class="line">    throws SQLException &#123;</span><br><span class="line"></span><br><span class="line">    /* Register the driver if it has not already been added to our list */</span><br><span class="line">    if(driver != null) &#123;</span><br><span class="line">        registeredDrivers.addIfAbsent(new DriverInfo(driver, da));</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        // This is for compatibility with the original DriverManager</span><br><span class="line">        throw new NullPointerException();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    println(&quot;registerDriver: &quot; + driver);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>即，将driver封装成DriverInfo放到registeredDrivers里边，registeredDrivers是一个写时复制的集合：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">private final static CopyOnWriteArrayList&lt;DriverInfo&gt; registeredDrivers = new CopyOnWriteArrayList&lt;&gt;();</span><br></pre></td></tr></table></figure>
+<p>到此为止我们的com.mysql.jdbc.Driver放到了一个集合里边了。<br>我们再来看我们的程序：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Class.forName(&quot;com.mysql.jdbc.Driver&quot;);</span><br><span class="line">Connection connection = DriverManager.getConnection(&quot;jdbc://localhost:3306/mytestdb&quot;,&quot;username&quot;,&quot;password&quot;);</span><br></pre></td></tr></table></figure>
+<p>第一行是加载com.mysql.jdbc.Driver，然而第二行却没有和com.mysql.jdbc.Driver有丝毫的关系，从表面上看，如果是初学者可能会感到很迷惑，我们就进入getConnection方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public static Connection getConnection(String url,</span><br><span class="line">      String user, String password) throws SQLException &#123;</span><br><span class="line">      java.util.Properties info = new java.util.Properties();</span><br><span class="line"></span><br><span class="line">      if (user != null) &#123;</span><br><span class="line">          info.put(&quot;user&quot;, user);</span><br><span class="line">      &#125;</span><br><span class="line">      if (password != null) &#123;</span><br><span class="line">          info.put(&quot;password&quot;, password);</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      return (getConnection(url, info, Reflection.getCallerClass()));</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>前边是一些判空逻辑，之后调了重载的getConnection,注意第三个参数【Reflection.getCallerClass()】,得到调用者的类，，在我们的程序里边是【com.twodragonlake.jvm.classloader.MyTest27】：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line">  private static Connection getConnection( String url, java.util.Properties info, Class&lt;?&gt; caller) throws SQLException &#123;</span><br><span class="line">      /*</span><br><span class="line">       * When callerCl is null, we should check the application&#x27;s</span><br><span class="line">       * (which is invoking this class indirectly)</span><br><span class="line">       * classloader, so that the JDBC driver class outside rt.jar</span><br><span class="line">       * can be loaded from here.</span><br><span class="line">       */</span><br><span class="line">       //如果调用者的类加载器不是null，就用调用者的类加载器加载驱动的实现，否则使用当前线程的上下文类加载器，</span><br><span class="line">       //我们的程序得到的callerCL是系统类加载器。因此synchronized里边的if不会进入执行。</span><br><span class="line">      ClassLoader callerCL = caller != null ? caller.getClassLoader() : null;</span><br><span class="line">      synchronized(DriverManager.class) &#123;</span><br><span class="line">          // synchronize loading of the correct classloader.</span><br><span class="line">          if (callerCL == null) &#123;</span><br><span class="line">              callerCL = Thread.currentThread().getContextClassLoader();</span><br><span class="line">          &#125;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      if(url == null) &#123;</span><br><span class="line">          throw new SQLException(&quot;The url cannot be null&quot;, &quot;08001&quot;);</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      println(&quot;DriverManager.getConnection(\&quot;&quot; + url + &quot;\&quot;)&quot;);</span><br><span class="line"></span><br><span class="line">      // Walk through the loaded registeredDrivers attempting to make a connection.</span><br><span class="line">      // Remember the first exception that gets raised so we can reraise it.</span><br><span class="line">      SQLException reason = null;</span><br><span class="line">//registeredDrivers是我们刚刚分析的，将当前classPath下的com.sql.Driver实现类的集合，当前的程序有2个mysql的驱动实现类。</span><br><span class="line">      for(DriverInfo aDriver : registeredDrivers) &#123;</span><br><span class="line">          // If the caller does not have permission to load the driver then</span><br><span class="line">          // skip it.</span><br><span class="line">          //这个方法很重要，我们进去看一下，即callerCL带进去，即将系统类加载器带进去</span><br><span class="line">          if(isDriverAllowed(aDriver.driver, callerCL)) &#123;</span><br><span class="line">              try &#123;</span><br><span class="line">                  println(&quot;    trying &quot; + aDriver.driver.getClass().getName());</span><br><span class="line">                  Connection con = aDriver.driver.connect(url, info);</span><br><span class="line">                  //如果某一个连接返回的不是null，证明这个驱动就是我们要的驱动，就可以返回了。</span><br><span class="line">                  if (con != null) &#123;</span><br><span class="line">                      // Success!</span><br><span class="line">                      println(&quot;getConnection returning &quot; + aDriver.driver.getClass().getName());</span><br><span class="line">                      return (con);</span><br><span class="line">                  &#125;</span><br><span class="line">              &#125; catch (SQLException ex) &#123;</span><br><span class="line">                  if (reason == null) &#123;</span><br><span class="line">                      reason = ex;</span><br><span class="line">                  &#125;</span><br><span class="line">              &#125;</span><br><span class="line"></span><br><span class="line">          &#125; else &#123;</span><br><span class="line">              println(&quot;    skipping: &quot; + aDriver.getClass().getName());</span><br><span class="line">          &#125;</span><br><span class="line"></span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      // if we got here nobody could connect.</span><br><span class="line">      if (reason != null)    &#123;</span><br><span class="line">          println(&quot;getConnection failed: &quot; + reason);</span><br><span class="line">          throw reason;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      println(&quot;getConnection: no suitable driver found for &quot;+ url);</span><br><span class="line">      throw new SQLException(&quot;No suitable driver found for &quot;+ url, &quot;08001&quot;);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>isDriverAllowed方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"> private static boolean isDriverAllowed(Driver driver, ClassLoader classLoader) &#123;</span><br><span class="line">     boolean result = false;</span><br><span class="line">     if(driver != null) &#123;</span><br><span class="line">         Class&lt;?&gt; aClass = null;</span><br><span class="line">         try &#123;</span><br><span class="line">          //在之前分析知道，在com.mysql.jdbc.Driver初始化的时候，调用了DriverManager的注册方法，</span><br><span class="line">          //会加载java.sql.Driver的实现到DriverManager里边的registeredDrivers集合中;</span><br><span class="line">          //在这里又进行了一次加载，但是不同的是进行了初始化。</span><br><span class="line">             aClass =  Class.forName(driver.getClass().getName(), true, classLoader);</span><br><span class="line">         &#125; catch (Exception ex) &#123;</span><br><span class="line">             result = false;</span><br><span class="line">         &#125;</span><br><span class="line">//这行代码是核心，为什么要进行一次&quot;==&quot;判断呢，这主要是为了避免类加载命名空间的问题，即aClass 和 driver.getClass()是由同一个类加载器加载的，</span><br><span class="line">//不同的加载器可能出现的情况是程序里边使用线程上下文加载器设置的加载器去加载（比如设置了用户自定义的加载器），和原始的加载器命名空间不一样。</span><br><span class="line">//之前的文章介绍过，也举过例子，即便是2个名字完全一样的类，由于类加载器不一样后边使用的时候一定会出现CastException</span><br><span class="line">          result = ( aClass == driver.getClass() ) ? true : false;</span><br><span class="line">     &#125;</span><br><span class="line"></span><br><span class="line">     return result;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
     <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8823%EF%BC%89%E7%BA%BF%E7%A8%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%AE%9E%E6%88%98%E5%88%86%E6%9E%90%E4%B8%8E%E9%9A%BE%E7%82%B9%E5%89%96%E6%9E%90/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -281,7 +720,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -380,7 +819,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -479,7 +918,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -578,7 +1017,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -677,7 +1116,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -776,7 +1215,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -831,404 +1270,8 @@
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8817%EF%BC%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90%E4%B8%8E%E5%AE%9E%E4%BE%8B%E5%88%86%E6%9E%90/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
-      <meta itemprop="name" content="CeaserWang">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="南贺神社">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 南贺神社">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8817%EF%BC%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90%E4%B8%8E%E5%AE%9E%E4%BE%8B%E5%88%86%E6%9E%90/" class="post-title-link" itemprop="url">jvm原理（17）类加载器命名空间深度解析与实例分析</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2018-10-04 16:11:20" itemprop="dateCreated datePublished" datetime="2018-10-04T16:11:20+00:00">2018-10-04</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/jvm/" itemprop="url" rel="index"><span itemprop="name">jvm</span></a>
-        </span>
-    </span>
-
-  
-    <span id="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8817%EF%BC%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90%E4%B8%8E%E5%AE%9E%E4%BE%8B%E5%88%86%E6%9E%90/" class="post-meta-item leancloud_visitors" data-flag-title="jvm原理（17）类加载器命名空间深度解析与实例分析" title="Views">
-      <span class="post-meta-item-icon">
-        <i class="far fa-eye"></i>
-      </span>
-      <span class="post-meta-item-text">Views: </span>
-      <span class="leancloud-visitors-count"></span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>我们在 <span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d6cTY1Nzg3MDIvYXJ0aWNsZS9kZXRhaWxzLzc5ODI5MzQx">上一节<i class="fa fa-external-link-alt"></i></span>讲到实例基础上做一下改动：</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8817%EF%BC%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90%E4%B8%8E%E5%AE%9E%E4%BE%8B%E5%88%86%E6%9E%90/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8816%EF%BC%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%AE%9E%E6%88%98%E5%89%96%E6%9E%90%E4%B8%8E%E7%96%91%E9%9A%BE%E7%82%B9%E8%A7%A3%E6%9E%90/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
-      <meta itemprop="name" content="CeaserWang">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="南贺神社">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 南贺神社">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8816%EF%BC%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%AE%9E%E6%88%98%E5%89%96%E6%9E%90%E4%B8%8E%E7%96%91%E9%9A%BE%E7%82%B9%E8%A7%A3%E6%9E%90/" class="post-title-link" itemprop="url">jvm原理（16）类加载器实战剖析与疑难点解析</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2018-10-04 16:09:45" itemprop="dateCreated datePublished" datetime="2018-10-04T16:09:45+00:00">2018-10-04</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/jvm/" itemprop="url" rel="index"><span itemprop="name">jvm</span></a>
-        </span>
-    </span>
-
-  
-    <span id="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8816%EF%BC%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%AE%9E%E6%88%98%E5%89%96%E6%9E%90%E4%B8%8E%E7%96%91%E9%9A%BE%E7%82%B9%E8%A7%A3%E6%9E%90/" class="post-meta-item leancloud_visitors" data-flag-title="jvm原理（16）类加载器实战剖析与疑难点解析" title="Views">
-      <span class="post-meta-item-icon">
-        <i class="far fa-eye"></i>
-      </span>
-      <span class="post-meta-item-text">Views: </span>
-      <span class="leancloud-visitors-count"></span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>三大类加载器所加载的路径范围：</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8816%EF%BC%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%AE%9E%E6%88%98%E5%89%96%E6%9E%90%E4%B8%8E%E7%96%91%E9%9A%BE%E7%82%B9%E8%A7%A3%E6%9E%90/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8815%EF%BC%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E5%AE%9E%E6%88%98%E5%89%96%E6%9E%90%E4%B8%8E%E9%80%8F%E5%BD%BB%E7%90%86%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
-      <meta itemprop="name" content="CeaserWang">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="南贺神社">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 南贺神社">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8815%EF%BC%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E5%AE%9E%E6%88%98%E5%89%96%E6%9E%90%E4%B8%8E%E9%80%8F%E5%BD%BB%E7%90%86%E8%A7%A3/" class="post-title-link" itemprop="url">jvm原理（15）类加载器命名空间实战剖析与透彻理解</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2018-10-04 16:08:08" itemprop="dateCreated datePublished" datetime="2018-10-04T16:08:08+00:00">2018-10-04</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/jvm/" itemprop="url" rel="index"><span itemprop="name">jvm</span></a>
-        </span>
-    </span>
-
-  
-    <span id="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8815%EF%BC%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E5%AE%9E%E6%88%98%E5%89%96%E6%9E%90%E4%B8%8E%E9%80%8F%E5%BD%BB%E7%90%86%E8%A7%A3/" class="post-meta-item leancloud_visitors" data-flag-title="jvm原理（15）类加载器命名空间实战剖析与透彻理解" title="Views">
-      <span class="post-meta-item-icon">
-        <i class="far fa-eye"></i>
-      </span>
-      <span class="post-meta-item-text">Views: </span>
-      <span class="leancloud-visitors-count"></span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>新建类MyTest17_1：</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8815%EF%BC%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E5%AE%9E%E6%88%98%E5%89%96%E6%9E%90%E4%B8%8E%E9%80%8F%E5%BD%BB%E7%90%86%E8%A7%A3/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8814%EF%BC%89%E8%87%AA%E5%AE%9A%E4%B9%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%9C%A8%E5%A4%8D%E6%9D%82%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%83%85%E5%86%B5%E4%B8%8B%E7%9A%84%E8%BF%90%E8%A1%8C%E5%88%86%E6%9E%90/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
-      <meta itemprop="name" content="CeaserWang">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="南贺神社">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 南贺神社">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8814%EF%BC%89%E8%87%AA%E5%AE%9A%E4%B9%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%9C%A8%E5%A4%8D%E6%9D%82%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%83%85%E5%86%B5%E4%B8%8B%E7%9A%84%E8%BF%90%E8%A1%8C%E5%88%86%E6%9E%90/" class="post-title-link" itemprop="url">jvm原理（14）自定义类加载器在复杂类加载情况下的运行分析</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2018-10-04 16:05:51" itemprop="dateCreated datePublished" datetime="2018-10-04T16:05:51+00:00">2018-10-04</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/jvm/" itemprop="url" rel="index"><span itemprop="name">jvm</span></a>
-        </span>
-    </span>
-
-  
-    <span id="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8814%EF%BC%89%E8%87%AA%E5%AE%9A%E4%B9%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%9C%A8%E5%A4%8D%E6%9D%82%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%83%85%E5%86%B5%E4%B8%8B%E7%9A%84%E8%BF%90%E8%A1%8C%E5%88%86%E6%9E%90/" class="post-meta-item leancloud_visitors" data-flag-title="jvm原理（14）自定义类加载器在复杂类加载情况下的运行分析" title="Views">
-      <span class="post-meta-item-icon">
-        <i class="far fa-eye"></i>
-      </span>
-      <span class="post-meta-item-text">Views: </span>
-      <span class="leancloud-visitors-count"></span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>接着上次的<span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d6cTY1Nzg3MDIvYXJ0aWNsZS9kZXRhaWxzLzc5NjAxNzE5">事例<i class="fa fa-external-link-alt"></i></span> 我们上次加载的类都是MyTest的这样的一个类，但是如果我们要加载的类里边还有其他的一些类，那么加载器对于这种嵌套的情况是怎么工作的呢？<br>新建一个类MyCat</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8814%EF%BC%89%E8%87%AA%E5%AE%9A%E4%B9%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%9C%A8%E5%A4%8D%E6%9D%82%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%83%85%E5%86%B5%E4%B8%8B%E7%9A%84%E8%BF%90%E8%A1%8C%E5%88%86%E6%9E%90/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/9/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><span class="space">&hellip;</span><a class="page-number" href="/page/22/">22</a><a class="extend next" rel="next" href="/page/11/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/9/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><span class="space">&hellip;</span><a class="page-number" href="/page/23/">23</a><a class="extend next" rel="next" href="/page/11/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 </div>

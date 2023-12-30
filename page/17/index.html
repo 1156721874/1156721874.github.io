@@ -85,7 +85,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">208</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">217</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">209</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">221</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
         </a>
@@ -156,7 +156,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">217</span>
+          <span class="site-state-item-count">221</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -167,7 +167,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">208</span>
+        <span class="site-state-item-count">209</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -245,6 +245,393 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-ACID%E5%8F%8A%E6%80%BB%E7%BB%93%EF%BC%88%E5%85%AB%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
+      <meta itemprop="name" content="CeaserWang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-ACID%E5%8F%8A%E6%80%BB%E7%BB%93%EF%BC%88%E5%85%AB%EF%BC%89/" class="post-title-link" itemprop="url">hive原理与源码分析-ACID及总结（八）</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-10-04 11:37:00" itemprop="dateCreated datePublished" datetime="2018-10-04T11:37:00+00:00">2018-10-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/cloud/" itemprop="url" rel="index"><span itemprop="name">cloud</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-ACID%E5%8F%8A%E6%80%BB%E7%BB%93%EF%BC%88%E5%85%AB%EF%BC%89/" class="post-meta-item leancloud_visitors" data-flag-title="hive原理与源码分析-ACID及总结（八）" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><strong>ACID是什么？</strong><br>数据库事务的四个特征</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-ACID%E5%8F%8A%E6%80%BB%E7%BB%93%EF%BC%88%E5%85%AB%EF%BC%89/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E6%9C%8D%E5%8A%A1%E5%8C%96%EF%BC%9ALLAP%E3%80%81HiveServer2%E3%80%81MetaStore%EF%BC%88%E4%B8%83%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
+      <meta itemprop="name" content="CeaserWang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E6%9C%8D%E5%8A%A1%E5%8C%96%EF%BC%9ALLAP%E3%80%81HiveServer2%E3%80%81MetaStore%EF%BC%88%E4%B8%83%EF%BC%89/" class="post-title-link" itemprop="url">hive原理与源码分析-服务化：LLAP、HiveServer2、MetaStore（七）</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-10-04 11:26:36" itemprop="dateCreated datePublished" datetime="2018-10-04T11:26:36+00:00">2018-10-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/cloud/" itemprop="url" rel="index"><span itemprop="name">cloud</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E6%9C%8D%E5%8A%A1%E5%8C%96%EF%BC%9ALLAP%E3%80%81HiveServer2%E3%80%81MetaStore%EF%BC%88%E4%B8%83%EF%BC%89/" class="post-meta-item leancloud_visitors" data-flag-title="hive原理与源码分析-服务化：LLAP、HiveServer2、MetaStore（七）" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><strong>hive流程回顾</strong><br><img src="/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E6%9C%8D%E5%8A%A1%E5%8C%96%EF%BC%9ALLAP%E3%80%81HiveServer2%E3%80%81MetaStore%EF%BC%88%E4%B8%83%EF%BC%89/20170521124731490.png" alt="这里写图片描述"></p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E6%9C%8D%E5%8A%A1%E5%8C%96%EF%BC%9ALLAP%E3%80%81HiveServer2%E3%80%81MetaStore%EF%BC%88%E4%B8%83%EF%BC%89/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%89%A9%E7%90%86%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92%E4%B8%8E%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E%EF%BC%88%E5%85%AD%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
+      <meta itemprop="name" content="CeaserWang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%89%A9%E7%90%86%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92%E4%B8%8E%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E%EF%BC%88%E5%85%AD%EF%BC%89/" class="post-title-link" itemprop="url">hive原理与源码分析-物理执行计划与执行引擎（六）</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-10-04 11:21:43" itemprop="dateCreated datePublished" datetime="2018-10-04T11:21:43+00:00">2018-10-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/cloud/" itemprop="url" rel="index"><span itemprop="name">cloud</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%89%A9%E7%90%86%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92%E4%B8%8E%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E%EF%BC%88%E5%85%AD%EF%BC%89/" class="post-meta-item leancloud_visitors" data-flag-title="hive原理与源码分析-物理执行计划与执行引擎（六）" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><img src="/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%89%A9%E7%90%86%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92%E4%B8%8E%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E%EF%BC%88%E5%85%AD%EF%BC%89/20170516204226246.png" alt="这里写图片描述">  </p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%89%A9%E7%90%86%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92%E4%B8%8E%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E%EF%BC%88%E5%85%AD%EF%BC%89/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-UDxF%E3%80%81%E4%BC%98%E5%8C%96%E5%99%A8%E5%8F%8A%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E%EF%BC%88%E4%BA%94%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
+      <meta itemprop="name" content="CeaserWang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-UDxF%E3%80%81%E4%BC%98%E5%8C%96%E5%99%A8%E5%8F%8A%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E%EF%BC%88%E4%BA%94%EF%BC%89/" class="post-title-link" itemprop="url">hive原理与源码分析-UDxF、优化器及执行引擎（五）</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-10-04 11:16:24" itemprop="dateCreated datePublished" datetime="2018-10-04T11:16:24+00:00">2018-10-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
+    </span>
+
+  
+    <span id="/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-UDxF%E3%80%81%E4%BC%98%E5%8C%96%E5%99%A8%E5%8F%8A%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E%EF%BC%88%E4%BA%94%EF%BC%89/" class="post-meta-item leancloud_visitors" data-flag-title="hive原理与源码分析-UDxF、优化器及执行引擎（五）" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><strong>什么是UDF？</strong><br>UDF的全称是User-Defined-Functions<br>Hive中一共有三种UDF</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-UDxF%E3%80%81%E4%BC%98%E5%8C%96%E5%99%A8%E5%8F%8A%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E%EF%BC%88%E4%BA%94%EF%BC%89/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
     <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%AE%97%E5%AD%90Operators%E5%8F%8A%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96%E5%99%A8Optimizers%EF%BC%88%E5%9B%9B%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -281,7 +668,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -310,7 +697,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <p><img src="/20170509211147684.png" alt="这里写图片描述"></p>
+          <p><img src="/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%AE%97%E5%AD%90Operators%E5%8F%8A%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96%E5%99%A8Optimizers%EF%BC%88%E5%9B%9B%EF%BC%89/20170509211147684.png" alt="这里写图片描述"></p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E7%AE%97%E5%AD%90Operators%E5%8F%8A%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96%E5%99%A8Optimizers%EF%BC%88%E5%9B%9B%EF%BC%89/#more" rel="contents">
@@ -380,7 +767,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -479,7 +866,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -578,7 +965,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -611,105 +998,6 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-hive%E6%BA%90%E7%A0%81%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%90%86%E8%AE%BA%EF%BC%88%E4%B8%80%EF%BC%89/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/10/04/jdk8-%E6%96%B9%E6%B3%95%E5%BC%95%E7%94%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
-      <meta itemprop="name" content="CeaserWang">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="南贺神社">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 南贺神社">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2018/10/04/jdk8-%E6%96%B9%E6%B3%95%E5%BC%95%E7%94%A8/" class="post-title-link" itemprop="url">jdk8-方法引用</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2018-10-04 10:32:39" itemprop="dateCreated datePublished" datetime="2018-10-04T10:32:39+00:00">2018-10-04</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/javaBase/" itemprop="url" rel="index"><span itemprop="name">javaBase</span></a>
-        </span>
-    </span>
-
-  
-    <span id="/2018/10/04/jdk8-%E6%96%B9%E6%B3%95%E5%BC%95%E7%94%A8/" class="post-meta-item leancloud_visitors" data-flag-title="jdk8-方法引用" title="Views">
-      <span class="post-meta-item-icon">
-        <i class="far fa-eye"></i>
-      </span>
-      <span class="post-meta-item-text">Views: </span>
-      <span class="leancloud-visitors-count"></span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p><strong>方法引用的形式</strong><br>方法引用的标准形式是:类名::方法名。（注意：只需要写方法名，不需要写括号）</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2018/10/04/jdk8-%E6%96%B9%E6%B3%95%E5%BC%95%E7%94%A8/#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -776,7 +1064,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -839,7 +1127,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/10/04/jdk8%E6%96%B0%E5%8A%A0%E5%85%A5%E7%9A%84default%E6%96%B9%E6%B3%95/">
+    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/10/04/jdk8-%E6%96%B9%E6%B3%95%E5%BC%95%E7%94%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
@@ -857,7 +1145,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2018/10/04/jdk8%E6%96%B0%E5%8A%A0%E5%85%A5%E7%9A%84default%E6%96%B9%E6%B3%95/" class="post-title-link" itemprop="url">jdk8新加入的default方法</a>
+          <a href="/2018/10/04/jdk8-%E6%96%B9%E6%B3%95%E5%BC%95%E7%94%A8/" class="post-title-link" itemprop="url">jdk8-方法引用</a>
         </h2>
 
         <div class="post-meta-container">
@@ -875,7 +1163,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -888,7 +1176,7 @@
     </span>
 
   
-    <span id="/2018/10/04/jdk8%E6%96%B0%E5%8A%A0%E5%85%A5%E7%9A%84default%E6%96%B9%E6%B3%95/" class="post-meta-item leancloud_visitors" data-flag-title="jdk8新加入的default方法" title="Views">
+    <span id="/2018/10/04/jdk8-%E6%96%B9%E6%B3%95%E5%BC%95%E7%94%A8/" class="post-meta-item leancloud_visitors" data-flag-title="jdk8-方法引用" title="Views">
       <span class="post-meta-item-icon">
         <i class="far fa-eye"></i>
       </span>
@@ -904,307 +1192,10 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <p>default方法的加入是为了兼容jdk8以前的版本的需要。<br>（1）当前有两个接口MyInterface和MyInterface1，它们都有相同名字的default方法，之后实现类Myclass同时implements了MyInterface和MyInterface1，同时Myclass实现了default方法，此时Myclass调用default调的是谁的？</p>
+          <p><strong>方法引用的形式</strong><br>方法引用的标准形式是:类名::方法名。（注意：只需要写方法名，不需要写括号）</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2018/10/04/jdk8%E6%96%B0%E5%8A%A0%E5%85%A5%E7%9A%84default%E6%96%B9%E6%B3%95/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/10/04/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%EF%BC%88jdk8-%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80%E7%B1%BB%EF%BC%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
-      <meta itemprop="name" content="CeaserWang">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="南贺神社">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 南贺神社">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2018/10/04/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%EF%BC%88jdk8-%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80%E7%B1%BB%EF%BC%89/" class="post-title-link" itemprop="url">函数式编程（jdk8-常用函数式编程基础类）</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2018-10-04 10:25:22" itemprop="dateCreated datePublished" datetime="2018-10-04T10:25:22+00:00">2018-10-04</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:13" itemprop="dateModified" datetime="2023-12-30T08:31:13+00:00">2023-12-30</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/javaBase/" itemprop="url" rel="index"><span itemprop="name">javaBase</span></a>
-        </span>
-    </span>
-
-  
-    <span id="/2018/10/04/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%EF%BC%88jdk8-%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80%E7%B1%BB%EF%BC%89/" class="post-meta-item leancloud_visitors" data-flag-title="函数式编程（jdk8-常用函数式编程基础类）" title="Views">
-      <span class="post-meta-item-icon">
-        <i class="far fa-eye"></i>
-      </span>
-      <span class="post-meta-item-text">Views: </span>
-      <span class="leancloud-visitors-count"></span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>在jdk8中什么是函数式接口：<br>1、被@FunctionalInterface注解修饰的。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2018/10/04/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%EF%BC%88jdk8-%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80%E7%B1%BB%EF%BC%89/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/10/04/linux%E4%B8%8Bpython3-5-pip%E5%AE%89%E8%A3%85/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
-      <meta itemprop="name" content="CeaserWang">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="南贺神社">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 南贺神社">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2018/10/04/linux%E4%B8%8Bpython3-5-pip%E5%AE%89%E8%A3%85/" class="post-title-link" itemprop="url">linux下python3.5+pip安装</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2018-10-04 10:22:11" itemprop="dateCreated datePublished" datetime="2018-10-04T10:22:11+00:00">2018-10-04</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
-        </span>
-    </span>
-
-  
-    <span id="/2018/10/04/linux%E4%B8%8Bpython3-5-pip%E5%AE%89%E8%A3%85/" class="post-meta-item leancloud_visitors" data-flag-title="linux下python3.5+pip安装" title="Views">
-      <span class="post-meta-item-icon">
-        <i class="far fa-eye"></i>
-      </span>
-      <span class="post-meta-item-text">Views: </span>
-      <span class="leancloud-visitors-count"></span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>安装包;<br><img src="/20161201220019448.png" alt="这里写图片描述"></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2018/10/04/linux%E4%B8%8Bpython3-5-pip%E5%AE%89%E8%A3%85/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/10/04/CopyOnWriteArrayList%E5%92%8CCopyOnWriteArraySet/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
-      <meta itemprop="name" content="CeaserWang">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="南贺神社">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 南贺神社">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2018/10/04/CopyOnWriteArrayList%E5%92%8CCopyOnWriteArraySet/" class="post-title-link" itemprop="url">CopyOnWriteArrayList和CopyOnWriteArraySet</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2018-10-04 10:16:57" itemprop="dateCreated datePublished" datetime="2018-10-04T10:16:57+00:00">2018-10-04</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Thread/" itemprop="url" rel="index"><span itemprop="name">Thread</span></a>
-        </span>
-    </span>
-
-  
-    <span id="/2018/10/04/CopyOnWriteArrayList%E5%92%8CCopyOnWriteArraySet/" class="post-meta-item leancloud_visitors" data-flag-title="CopyOnWriteArrayList和CopyOnWriteArraySet" title="Views">
-      <span class="post-meta-item-icon">
-        <i class="far fa-eye"></i>
-      </span>
-      <span class="post-meta-item-text">Views: </span>
-      <span class="leancloud-visitors-count"></span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>CopyOnWriteArrayList和CopyOnWriteArraySet应用场合一般 是在读多写少的情况，比如黑名单，他们之间的区别就是list和set的区别，但是在实现上CopyOnWriteArraySet使用CopyOnWriteArrayList来实现的，就像set使用了hashmap，treeset使用treemap，下面先看CopyOnWriteArrayList的添加操作.</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2018/10/04/CopyOnWriteArrayList%E5%92%8CCopyOnWriteArraySet/#more" rel="contents">
+              <a class="btn" href="/2018/10/04/jdk8-%E6%96%B9%E6%B3%95%E5%BC%95%E7%94%A8/#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -1228,7 +1219,7 @@
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/16/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><span class="page-number current">17</span><a class="page-number" href="/page/18/">18</a><span class="space">&hellip;</span><a class="page-number" href="/page/22/">22</a><a class="extend next" rel="next" href="/page/18/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/16/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><span class="page-number current">17</span><a class="page-number" href="/page/18/">18</a><span class="space">&hellip;</span><a class="page-number" href="/page/23/">23</a><a class="extend next" rel="next" href="/page/18/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 </div>

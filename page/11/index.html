@@ -85,7 +85,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">208</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">217</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">209</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">221</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
         </a>
@@ -156,7 +156,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">217</span>
+          <span class="site-state-item-count">221</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -167,7 +167,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">208</span>
+        <span class="site-state-item-count">209</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -245,6 +245,402 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8817%EF%BC%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90%E4%B8%8E%E5%AE%9E%E4%BE%8B%E5%88%86%E6%9E%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
+      <meta itemprop="name" content="CeaserWang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8817%EF%BC%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90%E4%B8%8E%E5%AE%9E%E4%BE%8B%E5%88%86%E6%9E%90/" class="post-title-link" itemprop="url">jvm原理（17）类加载器命名空间深度解析与实例分析</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-10-04 16:11:20" itemprop="dateCreated datePublished" datetime="2018-10-04T16:11:20+00:00">2018-10-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/jvm/" itemprop="url" rel="index"><span itemprop="name">jvm</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8817%EF%BC%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90%E4%B8%8E%E5%AE%9E%E4%BE%8B%E5%88%86%E6%9E%90/" class="post-meta-item leancloud_visitors" data-flag-title="jvm原理（17）类加载器命名空间深度解析与实例分析" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>我们在 <span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d6cTY1Nzg3MDIvYXJ0aWNsZS9kZXRhaWxzLzc5ODI5MzQx">上一节<i class="fa fa-external-link-alt"></i></span>讲到实例基础上做一下改动：</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8817%EF%BC%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90%E4%B8%8E%E5%AE%9E%E4%BE%8B%E5%88%86%E6%9E%90/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8816%EF%BC%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%AE%9E%E6%88%98%E5%89%96%E6%9E%90%E4%B8%8E%E7%96%91%E9%9A%BE%E7%82%B9%E8%A7%A3%E6%9E%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
+      <meta itemprop="name" content="CeaserWang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8816%EF%BC%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%AE%9E%E6%88%98%E5%89%96%E6%9E%90%E4%B8%8E%E7%96%91%E9%9A%BE%E7%82%B9%E8%A7%A3%E6%9E%90/" class="post-title-link" itemprop="url">jvm原理（16）类加载器实战剖析与疑难点解析</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-10-04 16:09:45" itemprop="dateCreated datePublished" datetime="2018-10-04T16:09:45+00:00">2018-10-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/jvm/" itemprop="url" rel="index"><span itemprop="name">jvm</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8816%EF%BC%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%AE%9E%E6%88%98%E5%89%96%E6%9E%90%E4%B8%8E%E7%96%91%E9%9A%BE%E7%82%B9%E8%A7%A3%E6%9E%90/" class="post-meta-item leancloud_visitors" data-flag-title="jvm原理（16）类加载器实战剖析与疑难点解析" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>三大类加载器所加载的路径范围：</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8816%EF%BC%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%AE%9E%E6%88%98%E5%89%96%E6%9E%90%E4%B8%8E%E7%96%91%E9%9A%BE%E7%82%B9%E8%A7%A3%E6%9E%90/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8815%EF%BC%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E5%AE%9E%E6%88%98%E5%89%96%E6%9E%90%E4%B8%8E%E9%80%8F%E5%BD%BB%E7%90%86%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
+      <meta itemprop="name" content="CeaserWang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8815%EF%BC%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E5%AE%9E%E6%88%98%E5%89%96%E6%9E%90%E4%B8%8E%E9%80%8F%E5%BD%BB%E7%90%86%E8%A7%A3/" class="post-title-link" itemprop="url">jvm原理（15）类加载器命名空间实战剖析与透彻理解</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-10-04 16:08:08" itemprop="dateCreated datePublished" datetime="2018-10-04T16:08:08+00:00">2018-10-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/jvm/" itemprop="url" rel="index"><span itemprop="name">jvm</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8815%EF%BC%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E5%AE%9E%E6%88%98%E5%89%96%E6%9E%90%E4%B8%8E%E9%80%8F%E5%BD%BB%E7%90%86%E8%A7%A3/" class="post-meta-item leancloud_visitors" data-flag-title="jvm原理（15）类加载器命名空间实战剖析与透彻理解" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>新建类MyTest17_1：</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8815%EF%BC%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E5%AE%9E%E6%88%98%E5%89%96%E6%9E%90%E4%B8%8E%E9%80%8F%E5%BD%BB%E7%90%86%E8%A7%A3/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8814%EF%BC%89%E8%87%AA%E5%AE%9A%E4%B9%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%9C%A8%E5%A4%8D%E6%9D%82%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%83%85%E5%86%B5%E4%B8%8B%E7%9A%84%E8%BF%90%E8%A1%8C%E5%88%86%E6%9E%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
+      <meta itemprop="name" content="CeaserWang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8814%EF%BC%89%E8%87%AA%E5%AE%9A%E4%B9%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%9C%A8%E5%A4%8D%E6%9D%82%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%83%85%E5%86%B5%E4%B8%8B%E7%9A%84%E8%BF%90%E8%A1%8C%E5%88%86%E6%9E%90/" class="post-title-link" itemprop="url">jvm原理（14）自定义类加载器在复杂类加载情况下的运行分析</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-10-04 16:05:51" itemprop="dateCreated datePublished" datetime="2018-10-04T16:05:51+00:00">2018-10-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/jvm/" itemprop="url" rel="index"><span itemprop="name">jvm</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8814%EF%BC%89%E8%87%AA%E5%AE%9A%E4%B9%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%9C%A8%E5%A4%8D%E6%9D%82%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%83%85%E5%86%B5%E4%B8%8B%E7%9A%84%E8%BF%90%E8%A1%8C%E5%88%86%E6%9E%90/" class="post-meta-item leancloud_visitors" data-flag-title="jvm原理（14）自定义类加载器在复杂类加载情况下的运行分析" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>接着上次的<span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3d6cTY1Nzg3MDIvYXJ0aWNsZS9kZXRhaWxzLzc5NjAxNzE5">事例<i class="fa fa-external-link-alt"></i></span> 我们上次加载的类都是MyTest的这样的一个类，但是如果我们要加载的类里边还有其他的一些类，那么加载器对于这种嵌套的情况是怎么工作的呢？<br>新建一个类MyCat</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8814%EF%BC%89%E8%87%AA%E5%AE%9A%E4%B9%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%9C%A8%E5%A4%8D%E6%9D%82%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%83%85%E5%86%B5%E4%B8%8B%E7%9A%84%E8%BF%90%E8%A1%8C%E5%88%86%E6%9E%90/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
     <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8813%EF%BC%89%E7%B1%BB%E7%9A%84%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E4%B8%8E%E5%8D%B8%E8%BD%BD%E8%AF%A6%E8%A7%A3%E5%8F%8Ajvisualvm%E4%BD%BF%E7%94%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -281,7 +677,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -380,7 +776,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -479,7 +875,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -578,7 +974,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -673,7 +1069,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -772,7 +1168,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -808,7 +1204,7 @@
 
 <p>可以看到最后输出的是null。<br>这行代码： ClassLoader classLoader &#x3D; ClassLoader.getSystemClassLoader();得到系统类加载器，看一下doc说明：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line">     * Returns the system class loader for delegation.  This is the default</span><br><span class="line">     * delegation parent for new &lt;tt&gt;ClassLoader&lt;/tt&gt; instances, and is</span><br><span class="line">     * typically the class loader used to start the application.</span><br><span class="line">     *返回一个针对委托的系统类加载器，并且他是默认新建类加载器实例的委托双亲（即自定义类加载器的父级，见下图），它是一个典型的启动应用的类加载器。</span><br><span class="line">     * &lt;p&gt; This method is first invoked early in the runtime&#x27;s startup</span><br><span class="line">     * sequence, at which point it creates the system class loader and sets it</span><br><span class="line">     * as the context class loader of the invoking &lt;tt&gt;Thread&lt;/tt&gt;.</span><br><span class="line">     *此方法在运行期的早期就会被调用，在这个时间点创建系统类的加载器，并且设定其为调用线程的上下文的一个类加载器。</span><br><span class="line">     * &lt;p&gt; The default system class loader is an implementation-dependent</span><br><span class="line">     * instance of this class.</span><br><span class="line">     *默认的系统类加载器与这个类实现相关的实例</span><br><span class="line">     * &lt;p&gt; If the system property &quot;&lt;tt&gt;java.system.class.loader&lt;/tt&gt;&quot; is defined</span><br><span class="line">     * when this method is first invoked then the value of that property is</span><br><span class="line">     * taken to be the name of a class that will be returned as the system</span><br><span class="line">     * class loader.  The class is loaded using the default system class loader</span><br><span class="line">     * and must define a public constructor that takes a single parameter of</span><br><span class="line">     * type &lt;tt&gt;ClassLoader&lt;/tt&gt; which is used as the delegation parent.  An</span><br><span class="line">     * instance is then created using this constructor with the default system</span><br><span class="line">     * class loader as the parameter.  The resulting class loader is defined</span><br><span class="line">     * to be the system class loader.</span><br><span class="line">     * 如果设定了java.system.class.loader那么这个方法返回的就是java.system.class.loader设定的类加载器。这个类被系统类加载器加载，并且</span><br><span class="line">     * 定义一个公共的构造方法，接受一个ClassLoader参数用作为委托的双亲，用默认系统类类加载器作为构造器的参数，就会创造一个实例 ，所得到的就是系统类加载器</span><br><span class="line">     */</span><br><span class="line">     //返回系统类加载器</span><br><span class="line">         @CallerSensitive</span><br><span class="line">    public static ClassLoader getSystemClassLoader() &#123;</span><br><span class="line">        initSystemClassLoader();</span><br><span class="line">        if (scl == null) &#123;</span><br><span class="line">            return null;</span><br><span class="line">        &#125;</span><br><span class="line">        SecurityManager sm = System.getSecurityManager();</span><br><span class="line">        if (sm != null) &#123;</span><br><span class="line">            checkClassLoaderPermission(scl, Reflection.getCallerClass());</span><br><span class="line">        &#125;</span><br><span class="line">        return scl;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<p><img src="/201803122022319.png" alt="这里写图片描述"></p>
+<p><img src="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%888%EF%BC%89%E4%B8%8D%E5%90%8C%E7%9A%84%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E4%B8%8E%E5%8A%A0%E8%BD%BD%E4%B8%8E%E5%8A%A0%E8%BD%BD%E5%8A%A8%E4%BD%9C%E5%88%86%E6%9E%90/201803122022319.png" alt="这里写图片描述"></p>
 <p>getParent方法：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line">     * Returns the parent class loader for delegation. Some implementations may</span><br><span class="line">     * use &lt;tt&gt;null&lt;/tt&gt; to represent the bootstrap class loader. This method</span><br><span class="line">     * will return &lt;tt&gt;null&lt;/tt&gt; in such implementations if this class loader&#x27;s</span><br><span class="line">     * parent is the bootstrap class loader.</span><br><span class="line">     * 返回父加载器用于委托，有些实现返回null用来表示根类加载器，如果一个类的父加载器是根加载器，那么这个方法将会返回null</span><br><span class="line">     */</span><br><span class="line">      public final ClassLoader getParent() &#123;</span><br><span class="line">        if (parent == null)</span><br><span class="line">            return null;</span><br><span class="line">        SecurityManager sm = System.getSecurityManager();</span><br><span class="line">        if (sm != null) &#123;</span><br><span class="line">            // Check access to the parent class loader</span><br><span class="line">            // If the caller&#x27;s class loader is same as this class loader,</span><br><span class="line">            // permission check is performed.</span><br><span class="line">            checkClassLoaderPermission(parent, Reflection.getCallerClass());</span><br><span class="line">        &#125;</span><br><span class="line">        return parent;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 <p>parent 变量是ClassLoader的成员变量：</p>
@@ -839,404 +1235,8 @@
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%887%EF%BC%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E4%B8%8E%E7%B1%BB%E5%88%9D%E5%A7%8B%E5%8C%96%E6%B7%B1%E5%BA%A6%E5%89%96%E6%9E%90/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
-      <meta itemprop="name" content="CeaserWang">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="南贺神社">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 南贺神社">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%887%EF%BC%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E4%B8%8E%E7%B1%BB%E5%88%9D%E5%A7%8B%E5%8C%96%E6%B7%B1%E5%BA%A6%E5%89%96%E6%9E%90/" class="post-title-link" itemprop="url">jvm原理（7）类加载器与类初始化深度剖析</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2018-10-04 15:53:02" itemprop="dateCreated datePublished" datetime="2018-10-04T15:53:02+00:00">2018-10-04</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/jvm/" itemprop="url" rel="index"><span itemprop="name">jvm</span></a>
-        </span>
-    </span>
-
-  
-    <span id="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%887%EF%BC%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E4%B8%8E%E7%B1%BB%E5%88%9D%E5%A7%8B%E5%8C%96%E6%B7%B1%E5%BA%A6%E5%89%96%E6%9E%90/" class="post-meta-item leancloud_visitors" data-flag-title="jvm原理（7）类加载器与类初始化深度剖析" title="Views">
-      <span class="post-meta-item-icon">
-        <i class="far fa-eye"></i>
-      </span>
-      <span class="post-meta-item-text">Views: </span>
-      <span class="leancloud-visitors-count"></span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p><strong>exampleA</strong>：<br><img src="/20180303154639636.png" alt="这里写图片描述"></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%887%EF%BC%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E4%B8%8E%E7%B1%BB%E5%88%9D%E5%A7%8B%E5%8C%96%E6%B7%B1%E5%BA%A6%E5%89%96%E6%9E%90/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%886%EF%BC%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%89%98%E6%9C%BA%E5%88%B6%E8%AF%A6%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
-      <meta itemprop="name" content="CeaserWang">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="南贺神社">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 南贺神社">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%886%EF%BC%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%89%98%E6%9C%BA%E5%88%B6%E8%AF%A6%E8%A7%A3/" class="post-title-link" itemprop="url">jvm原理（6）类加载器双亲委托机制详解</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2018-10-04 15:48:28" itemprop="dateCreated datePublished" datetime="2018-10-04T15:48:28+00:00">2018-10-04</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/jvm/" itemprop="url" rel="index"><span itemprop="name">jvm</span></a>
-        </span>
-    </span>
-
-  
-    <span id="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%886%EF%BC%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%89%98%E6%9C%BA%E5%88%B6%E8%AF%A6%E8%A7%A3/" class="post-meta-item leancloud_visitors" data-flag-title="jvm原理（6）类加载器双亲委托机制详解" title="Views">
-      <span class="post-meta-item-icon">
-        <i class="far fa-eye"></i>
-      </span>
-      <span class="post-meta-item-text">Views: </span>
-      <span class="leancloud-visitors-count"></span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>类加载器层级：<br><img src="/20180227223057487.png" alt="这里写图片描述"></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%886%EF%BC%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%89%98%E6%9C%BA%E5%88%B6%E8%AF%A6%E8%A7%A3/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%885%EF%BC%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90%E5%8F%8A%E9%87%8D%E8%A6%81%E7%89%B9%E6%80%A7%E5%89%96%E6%9E%90/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
-      <meta itemprop="name" content="CeaserWang">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="南贺神社">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 南贺神社">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%885%EF%BC%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90%E5%8F%8A%E9%87%8D%E8%A6%81%E7%89%B9%E6%80%A7%E5%89%96%E6%9E%90/" class="post-title-link" itemprop="url">jvm原理（5）类加载器深入解析及重要特性剖析</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2018-10-04 15:46:12" itemprop="dateCreated datePublished" datetime="2018-10-04T15:46:12+00:00">2018-10-04</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/jvm/" itemprop="url" rel="index"><span itemprop="name">jvm</span></a>
-        </span>
-    </span>
-
-  
-    <span id="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%885%EF%BC%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90%E5%8F%8A%E9%87%8D%E8%A6%81%E7%89%B9%E6%80%A7%E5%89%96%E6%9E%90/" class="post-meta-item leancloud_visitors" data-flag-title="jvm原理（5）类加载器深入解析及重要特性剖析" title="Views">
-      <span class="post-meta-item-icon">
-        <i class="far fa-eye"></i>
-      </span>
-      <span class="post-meta-item-text">Views: </span>
-      <span class="leancloud-visitors-count"></span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>类进入内存的过程：<br><img src="/20180227213145481.png" alt="这里写图片描述"></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%885%EF%BC%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90%E5%8F%8A%E9%87%8D%E8%A6%81%E7%89%B9%E6%80%A7%E5%89%96%E6%9E%90/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%884%EF%BC%89%E6%8E%A5%E5%8F%A3%E5%88%9D%E5%A7%8B%E5%8C%96%E8%A7%84%E5%88%99%E4%B8%8E%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%87%86%E5%A4%87%E9%98%B6%E6%AE%B5%E5%92%8C%E5%88%9D%E5%A7%8B%E5%8C%96%E9%98%B6%E6%AE%B5%E7%9A%84%E9%87%8D%E8%A6%81%E6%84%8F%E4%B9%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
-      <meta itemprop="name" content="CeaserWang">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="南贺神社">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 南贺神社">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%884%EF%BC%89%E6%8E%A5%E5%8F%A3%E5%88%9D%E5%A7%8B%E5%8C%96%E8%A7%84%E5%88%99%E4%B8%8E%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%87%86%E5%A4%87%E9%98%B6%E6%AE%B5%E5%92%8C%E5%88%9D%E5%A7%8B%E5%8C%96%E9%98%B6%E6%AE%B5%E7%9A%84%E9%87%8D%E8%A6%81%E6%84%8F%E4%B9%89/" class="post-title-link" itemprop="url">jvm原理（4）接口初始化规则与类加载器准备阶段和初始化阶段的重要意义</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2018-10-04 15:42:51" itemprop="dateCreated datePublished" datetime="2018-10-04T15:42:51+00:00">2018-10-04</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/jvm/" itemprop="url" rel="index"><span itemprop="name">jvm</span></a>
-        </span>
-    </span>
-
-  
-    <span id="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%884%EF%BC%89%E6%8E%A5%E5%8F%A3%E5%88%9D%E5%A7%8B%E5%8C%96%E8%A7%84%E5%88%99%E4%B8%8E%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%87%86%E5%A4%87%E9%98%B6%E6%AE%B5%E5%92%8C%E5%88%9D%E5%A7%8B%E5%8C%96%E9%98%B6%E6%AE%B5%E7%9A%84%E9%87%8D%E8%A6%81%E6%84%8F%E4%B9%89/" class="post-meta-item leancloud_visitors" data-flag-title="jvm原理（4）接口初始化规则与类加载器准备阶段和初始化阶段的重要意义" title="Views">
-      <span class="post-meta-item-icon">
-        <i class="far fa-eye"></i>
-      </span>
-      <span class="post-meta-item-text">Views: </span>
-      <span class="leancloud-visitors-count"></span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>先看一段代码：</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%884%EF%BC%89%E6%8E%A5%E5%8F%A3%E5%88%9D%E5%A7%8B%E5%8C%96%E8%A7%84%E5%88%99%E4%B8%8E%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%87%86%E5%A4%87%E9%98%B6%E6%AE%B5%E5%92%8C%E5%88%9D%E5%A7%8B%E5%8C%96%E9%98%B6%E6%AE%B5%E7%9A%84%E9%87%8D%E8%A6%81%E6%84%8F%E4%B9%89/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/10/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><span class="page-number current">11</span><a class="page-number" href="/page/12/">12</a><span class="space">&hellip;</span><a class="page-number" href="/page/22/">22</a><a class="extend next" rel="next" href="/page/12/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/10/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><span class="page-number current">11</span><a class="page-number" href="/page/12/">12</a><span class="space">&hellip;</span><a class="page-number" href="/page/23/">23</a><a class="extend next" rel="next" href="/page/12/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 </div>

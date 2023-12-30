@@ -30,18 +30,18 @@
 <meta property="og:site_name" content="南贺神社">
 <meta property="og:description" content="ACID是什么？数据库事务的四个特征">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://ceaser.wang/20170529130405614.png">
-<meta property="og:image" content="https://ceaser.wang/20170529131048959.png">
-<meta property="og:image" content="https://ceaser.wang/20170529131539090.png">
-<meta property="og:image" content="https://ceaser.wang/20170529141813052.png">
-<meta property="og:image" content="https://ceaser.wang/20170529141959387.png">
-<meta property="og:image" content="https://ceaser.wang/20170529142929705.png">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-ACID%E5%8F%8A%E6%80%BB%E7%BB%93%EF%BC%88%E5%85%AB%EF%BC%89/20170529130405614.png">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-ACID%E5%8F%8A%E6%80%BB%E7%BB%93%EF%BC%88%E5%85%AB%EF%BC%89/20170529131048959.png">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-ACID%E5%8F%8A%E6%80%BB%E7%BB%93%EF%BC%88%E5%85%AB%EF%BC%89/20170529131539090.png">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-ACID%E5%8F%8A%E6%80%BB%E7%BB%93%EF%BC%88%E5%85%AB%EF%BC%89/20170529141813052.png">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-ACID%E5%8F%8A%E6%80%BB%E7%BB%93%EF%BC%88%E5%85%AB%EF%BC%89/20170529141959387.png">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-ACID%E5%8F%8A%E6%80%BB%E7%BB%93%EF%BC%88%E5%85%AB%EF%BC%89/20170529142929705.png">
 <meta property="article:published_time" content="2018-10-04T11:37:00.000Z">
-<meta property="article:modified_time" content="2023-12-30T08:31:12.770Z">
+<meta property="article:modified_time" content="2023-12-30T14:30:27.179Z">
 <meta property="article:author" content="CeaserWang">
 <meta property="article:tag" content="hive">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://ceaser.wang/20170529130405614.png">
+<meta name="twitter:image" content="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-ACID%E5%8F%8A%E6%80%BB%E7%BB%93%EF%BC%88%E5%85%AB%EF%BC%89/20170529130405614.png">
 
 
 <link rel="canonical" href="https://ceaser.wang/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-ACID%E5%8F%8A%E6%80%BB%E7%BB%93%EF%BC%88%E5%85%AB%EF%BC%89/">
@@ -97,7 +97,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">208</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">217</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">209</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">221</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
         </a>
@@ -168,7 +168,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">217</span>
+          <span class="site-state-item-count">221</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -179,7 +179,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">208</span>
+        <span class="site-state-item-count">209</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -294,7 +294,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -330,24 +330,24 @@
 <p><strong>ACID限制</strong><br>不支持BEGIN，COMMIT和ROLLBACK，只支持单条语句的ACID (Auto-Commit)<br>目前只支持Orc File Format<br>只支持分桶的表Bucketed<br>不支持从非ACID的会话读写ACID表(DbTxnManager)<br>只支持快照级别隔离<br>不兼容之前的ZooKeeperLockManager</p>
 <p>虽然有很多限制，但是还是也有他的强项，比如流式API<br><strong>Streaming APIs</strong><br><span class="exturl" data-url="aHR0cHM6Ly9jd2lraS5hcGFjaGUub3JnL2NvbmZsdWVuY2UvZGlzcGxheS9IaXZlL1N0cmVhbWluZytEYXRhK0luZ2VzdA==">https://cwiki.apache.org/confluence/display/Hive/Streaming+Data+Ingest<i class="fa fa-external-link-alt"></i></span> (Hive 0.14)<br><span class="exturl" data-url="aHR0cHM6Ly9jd2lraS5hcGFjaGUub3JnL2NvbmZsdWVuY2UvZGlzcGxheS9IaXZlL0hDYXRhbG9nK1N0cmVhbWluZytNdXRhdGlvbitBUEk=">https://cwiki.apache.org/confluence/display/Hive/HCatalog+Streaming+Mutation+API<i class="fa fa-external-link-alt"></i></span> (Hive 2.0.0)</p>
 <p><strong>新的语法</strong><br>INSERT INTO tbl VALUES(1, ‘fred’, …)<br>UPDATE tbl SET (x&#x3D;5, …) WHERE …<br>DELETE FROM tbl WHERE …<br>支持分区表与非分区表（回忆PPR, PPD优化器）</p>
-<p><strong>一些限制</strong><br>目前只支持ORCFile<br>    <span class="exturl" data-url="aHR0cHM6Ly93d3cuY29kYXRsYXMuY29tL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvbWFzdGVyL3FsL3NyYy9qYXZhL29yZy9hcGFjaGUvaGFkb29wL2hpdmUvcWwvaW8vQWNpZElucHV0Rm9ybWF0LmphdmE/bGluZT0xMDg=">https://www.codatlas.com/github.com/apache/hive/master/ql/src/java/org/apache/hadoop/hive/ql/io/AcidInputFormat.java?line=108<i class="fa fa-external-link-alt"></i></span> 源码告诉你为什么<br>    要支持文件的事物，除了os提供之外，就是hive自己实现，比如：OrcInputFormat<br>    <img src="/20170529130405614.png" alt="这里写图片描述"><br>表必须是Bucket表<br>    可以只有一个Bucket，但性能会比单机还差<br>表上必须有transactional&#x3D;true的标记<br>    TBLPROPERTIES(‘transactional’ &#x3D;‘true)</p>
+<p><strong>一些限制</strong><br>目前只支持ORCFile<br>    <span class="exturl" data-url="aHR0cHM6Ly93d3cuY29kYXRsYXMuY29tL2dpdGh1Yi5jb20vYXBhY2hlL2hpdmUvbWFzdGVyL3FsL3NyYy9qYXZhL29yZy9hcGFjaGUvaGFkb29wL2hpdmUvcWwvaW8vQWNpZElucHV0Rm9ybWF0LmphdmE/bGluZT0xMDg=">https://www.codatlas.com/github.com/apache/hive/master/ql/src/java/org/apache/hadoop/hive/ql/io/AcidInputFormat.java?line=108<i class="fa fa-external-link-alt"></i></span> 源码告诉你为什么<br>    要支持文件的事物，除了os提供之外，就是hive自己实现，比如：OrcInputFormat<br>    <img src="/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-ACID%E5%8F%8A%E6%80%BB%E7%BB%93%EF%BC%88%E5%85%AB%EF%BC%89/20170529130405614.png" alt="这里写图片描述"><br>表必须是Bucket表<br>    可以只有一个Bucket，但性能会比单机还差<br>表上必须有transactional&#x3D;true的标记<br>    TBLPROPERTIES(‘transactional’ &#x3D;‘true)</p>
 <p><strong>ACID设计</strong><br>HDFS是一个Write-once, Read-many-times的文件系统，不支持文件修改（In-place Update)<br>    把操作变成增量文件（Delta Files)<br>    在读取的时间，合并增量文件(Stitched Together)<br>写的时候需要全局唯一的事务ID<br>    由MetaStore生成<br>读的时候只读已经提交过的结果<br>    快照一致性、无锁<br>    查询开始时候向查询提供一份快照</p>
 <p><strong>Bucket和Partition的重要区别</strong><br>Bucket是一个文件<br>Partition是一组文件<br>事务ACID必须基于Bucket + OrcFile<br>从理论上，以后可以支持多种文件的事务，但目前还不支持</p>
-<p><strong>文件合并</strong><br><img src="/20170529131048959.png" alt="这里写图片描述"><br>读的时候对原始文件和增量文件进行合并</p>
+<p><strong>文件合并</strong><br><img src="/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-ACID%E5%8F%8A%E6%80%BB%E7%BB%93%EF%BC%88%E5%85%AB%EF%BC%89/20170529131048959.png" alt="这里写图片描述"><br>读的时候对原始文件和增量文件进行合并</p>
 <p><strong>ACID增量在HDFS上的存储</strong><br>分区路径（Storage Descriptor）保持不变<br>    $warehouse&#x2F;$db&#x2F;$tbl&#x2F;$part<br>事务生成的bucket文件<br>    基础文件Base Files: $part&#x2F;base_$tid&#x2F;bucket_*<br>    增量文件Delta Files: $part&#x2F;delta_$tid_$tid&#x2F;bucket_*</p>
 <p><strong>InputFormat&#x2F;OutputFormat</strong><br>AcidInputFormat &#x2F; AcidOutputFormat<br>    全局唯一键事务、Bucket、行<br>AcidReader支持事务的版本号<br>目前只有Orc支持</p>
-<p><strong>文件分发</strong><br>对于MapReduce读取文件（TableScan只在Map）<br>读取Splits同时读取Delta<br>Key Ranges<br>Indexes<br><img src="/20170529131539090.png" alt="这里写图片描述">  </p>
+<p><strong>文件分发</strong><br>对于MapReduce读取文件（TableScan只在Map）<br>读取Splits同时读取Delta<br>Key Ranges<br>Indexes<br><img src="/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-ACID%E5%8F%8A%E6%80%BB%E7%BB%93%EF%BC%88%E5%85%AB%EF%BC%89/20170529131539090.png" alt="这里写图片描述">  </p>
 <p>Delta会读到内存，有益处的风险，Delta一般 不会超过10个。</p>
 <p><strong>事务管理器Transaction Manager</strong><br>Hive 0.14以前有两种表级的事务管理器，DML来了，表锁住，查询暂停，两种实现<br>    In Memory – Not Durable 即放在内存里边，断电丢失<br>    Zoo Keeper – 额外组件的安装，配置复杂<br>锁必须与事务相结合，事务提交时释放锁<br>MetaStore可以做ACID，因为MetaStore底层是关系型数据库中心结点<br>使用MetaStore DB(MySQL)生成全局唯一递增的事务Id</p>
 <p><strong>事务模型Transaction Model</strong><br>互联网新技术在线教育领航者<br>事务模型Transaction Model<br>Hive 0.14开始，事务auto-commit，语句级<br>    不支持BEGIN／COMMIT／ROLLBACK<br>快照隔离<br>    整个查询执行期间，数据是一致的<br>SHOW TRANSACTIONS语句</p>
 <p><strong>锁模型Locking Model</strong><br>三种类型的锁<br>    Shared<br>    Semi-Shared (能与Shared共存，不能与Semi-Shared共存）<br>    Exclusive<br>不同操作需要不同类型的锁<br>    SELECT, INSERT – shared<br>    UPDATE, DELETE – semi-shared<br>    DROP, INSERT OVERWRITE - exclusive</p>
 <p><strong>Compactor</strong><br>每一个Transaction(或者Streaming中的一个Batch)创建一个增量文件（Delta File)<br>想象一会，会有很多Delta File，回忆一下会对Namenode造成什么影响<br>需要一些方式去合并<br>    Minor Compaction: 把很多delta合并成一个delta<br>    Major Compaction: 把很多delta合并成Base</p>
-<p><strong>Minor Compaction</strong><br>当有10个（可配置）以上的增量文件时<br>结果：1个Base + 1个Delta<br><img src="/20170529141813052.png" alt="这里写图片描述">  </p>
-<p><strong>Major Compaction</strong><br>当Delta达到基表的10%文件大小（可配置）时运行<br>结果只有一个基表<br><img src="/20170529141959387.png" alt="这里写图片描述"></p>
+<p><strong>Minor Compaction</strong><br>当有10个（可配置）以上的增量文件时<br>结果：1个Base + 1个Delta<br><img src="/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-ACID%E5%8F%8A%E6%80%BB%E7%BB%93%EF%BC%88%E5%85%AB%EF%BC%89/20170529141813052.png" alt="这里写图片描述">  </p>
+<p><strong>Major Compaction</strong><br>当Delta达到基表的10%文件大小（可配置）时运行<br>结果只有一个基表<br><img src="/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-ACID%E5%8F%8A%E6%80%BB%E7%BB%93%EF%BC%88%E5%85%AB%EF%BC%89/20170529141959387.png" alt="这里写图片描述"></p>
 <p><strong>Compactor如何执行？</strong><br>MetaStore定期执行<br>    不需要用户手工调度<br>    ALTER TABLE COMPACT语句<br>无锁，可与Query&#x2F;DML同时执行<br>    在一边执行，然后原子性替换<br>SHOW COMPACTIONS</p>
 <p><strong>流式写入</strong><br>数据流式地流入Hive<br>没有流式功能的话，通常需要小时调度<br>hive.hcatlog.streaming接口<br>    用户实时看到数据，可实时查询<br>Flume&#x2F;Storm&#x2F;Kafka</p>
 <p><strong>参考代码及实现</strong><br><span class="exturl" data-url="aHR0cHM6Ly9pc3N1ZXMuYXBhY2hlLm9yZy9qaXJhL2Jyb3dzZS9ISVZFLTUzMTc=">https://issues.apache.org/jira/browse/HIVE-5317<i class="fa fa-external-link-alt"></i></span></p>
-<p><strong>Hive再看</strong><br><img src="/20170529142929705.png" alt="这里写图片描述">  </p>
+<p><strong>Hive再看</strong><br><img src="/2018/10/04/hive%E5%8E%9F%E7%90%86%E4%B8%8E%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-ACID%E5%8F%8A%E6%80%BB%E7%BB%93%EF%BC%88%E5%85%AB%EF%BC%89/20170529142929705.png" alt="这里写图片描述">  </p>
 <p><strong>复习及总结</strong><br>Hive是什么？<br>Driver做什么用的？<br>逻辑优化器？<br>物理优化器？<br>四种执行引擎？<br>查看执行计划？<br>JOIN／Group By倾斜怎么办？<br>HiveServer 2&#x2F; MetaStore&#x2F; LLAP<br>ACID</p>
 <p><strong>Hive Join优化</strong><br><span class="exturl" data-url="aHR0cHM6Ly9jd2lraS5hcGFjaGUub3JnL2NvbmZsdWVuY2UvZGlzcGxheS9IaXZlL0xhbmd1YWdlTWFudWFsK0pvaW5PcHRpbWl6YXRpb24=">https://cwiki.apache.org/confluence/display/Hive/LanguageManual+JoinOptimization<i class="fa fa-external-link-alt"></i></span><br>对抗倾斜</p>
 <p>Hive CBO<br><span class="exturl" data-url="aHR0cHM6Ly9jd2lraS5hcGFjaGUub3JnL2NvbmZsdWVuY2UvZGlzcGxheS9IaXZlL0Nvc3QtYmFzZWQrb3B0aW1pemF0aW9uK2luK0hpdmU=">https://cwiki.apache.org/confluence/display/Hive/Cost-based+optimization+in+Hive<i class="fa fa-external-link-alt"></i></span><br>自定义优化器</p>

@@ -23,30 +23,28 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"ceaser.wang","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.12.1","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="threadLocal内存溢出分析">
+    <meta name="description" content="gcc常用选项 x86平台 windos应用程序:建立工程-编辑-编译(vc6.0)-运行 ubuntu应用程序:编辑-编译(gcc)-运行   arm裸机：编辑-编译(arm-linux-gcc)-烧写-运行 hello.c —预处理—&gt; hello.i —编译—&gt; hello.s —汇编—&gt; hello.o —连接—&gt; hello    gcc常用编译选项gcc和arm">
 <meta property="og:type" content="article">
-<meta property="og:title" content="jvm原理（49）ThreadLocal内存泄露问题本质分析与推导">
-<meta property="og:url" content="https://ceaser.wang/2020/03/31/jvm%E5%8E%9F%E7%90%86%EF%BC%8849%EF%BC%89ThreadLocal%E5%86%85%E5%AD%98%E6%B3%84%E9%9C%B2%E9%97%AE%E9%A2%98%E6%9C%AC%E8%B4%A8%E5%88%86%E6%9E%90%E4%B8%8E%E6%8E%A8%E5%AF%BC/index.html">
+<meta property="og:title" content="gcc编译器和makeFile详解">
+<meta property="og:url" content="https://ceaser.wang/2023/11/19/embed/gcc_makeFile/index.html">
 <meta property="og:site_name" content="南贺神社">
-<meta property="og:description" content="threadLocal内存溢出分析">
+<meta property="og:description" content="gcc常用选项 x86平台 windos应用程序:建立工程-编辑-编译(vc6.0)-运行 ubuntu应用程序:编辑-编译(gcc)-运行   arm裸机：编辑-编译(arm-linux-gcc)-烧写-运行 hello.c —预处理—&gt; hello.i —编译—&gt; hello.s —汇编—&gt; hello.o —连接—&gt; hello    gcc常用编译选项gcc和arm">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://ceaser.wang/threadlocal-stack-heap.png">
-<meta property="article:published_time" content="2020-03-31T21:37:13.000Z">
-<meta property="article:modified_time" content="2023-12-30T08:31:12.918Z">
+<meta property="article:published_time" content="2023-11-19T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-12-30T14:30:27.139Z">
 <meta property="article:author" content="CeaserWang">
-<meta property="article:tag" content="ThreadLocal、存泄露">
+<meta property="article:tag" content="embed">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://ceaser.wang/threadlocal-stack-heap.png">
 
 
-<link rel="canonical" href="https://ceaser.wang/2020/03/31/jvm%E5%8E%9F%E7%90%86%EF%BC%8849%EF%BC%89ThreadLocal%E5%86%85%E5%AD%98%E6%B3%84%E9%9C%B2%E9%97%AE%E9%A2%98%E6%9C%AC%E8%B4%A8%E5%88%86%E6%9E%90%E4%B8%8E%E6%8E%A8%E5%AF%BC/">
+<link rel="canonical" href="https://ceaser.wang/2023/11/19/embed/gcc_makeFile/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://ceaser.wang/2020/03/31/jvm%E5%8E%9F%E7%90%86%EF%BC%8849%EF%BC%89ThreadLocal%E5%86%85%E5%AD%98%E6%B3%84%E9%9C%B2%E9%97%AE%E9%A2%98%E6%9C%AC%E8%B4%A8%E5%88%86%E6%9E%90%E4%B8%8E%E6%8E%A8%E5%AF%BC/","path":"2020/03/31/jvm原理（49）ThreadLocal内存泄露问题本质分析与推导/","title":"jvm原理（49）ThreadLocal内存泄露问题本质分析与推导"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://ceaser.wang/2023/11/19/embed/gcc_makeFile/","path":"2023/11/19/embed/gcc_makeFile/","title":"gcc编译器和makeFile详解"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>jvm原理（49）ThreadLocal内存泄露问题本质分析与推导 | 南贺神社</title>
+<title>gcc编译器和makeFile详解 | 南贺神社</title>
   
 
 
@@ -92,7 +90,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">208</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">217</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">209</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">221</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
         </a>
@@ -149,7 +147,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#threadLocal%E5%86%85%E5%AD%98%E6%BA%A2%E5%87%BA%E5%88%86%E6%9E%90"><span class="nav-number">1.</span> <span class="nav-text">threadLocal内存溢出分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%98%B2%E6%AD%A2%E5%86%85%E5%AD%98%E6%B3%84%E9%9C%B2"><span class="nav-number">2.</span> <span class="nav-text">防止内存泄露</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#gcc%E5%B8%B8%E7%94%A8%E9%80%89%E9%A1%B9"><span class="nav-number">1.</span> <span class="nav-text">gcc常用选项</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#gcc%E5%B8%B8%E7%94%A8%E7%BC%96%E8%AF%91%E9%80%89%E9%A1%B9"><span class="nav-number">2.</span> <span class="nav-text">gcc常用编译选项</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#gcc%E7%9A%84%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95%EF%BC%9A"><span class="nav-number">2.0.1.</span> <span class="nav-text">gcc的使用方法：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B9%E5%BC%8F1%EF%BC%9A"><span class="nav-number">2.0.1.1.</span> <span class="nav-text">方式1：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B9%E5%BC%8F2%EF%BC%9A"><span class="nav-number">2.0.1.2.</span> <span class="nav-text">方式2：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B9%E5%BC%8F3%EF%BC%9A"><span class="nav-number">2.0.1.3.</span> <span class="nav-text">方式3：</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#makeFile"><span class="nav-number">3.</span> <span class="nav-text">makeFile</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Makefile%E7%9A%84%E5%BC%95%E5%85%A5%E5%8F%8A%E8%A7%84%E5%88%99"><span class="nav-number">3.1.</span> <span class="nav-text">Makefile的引入及规则</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#C%E8%AF%AD%E8%A8%80%E5%A4%8D%E4%B9%A0"><span class="nav-number">4.</span> <span class="nav-text">C语言复习</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Makefile%E7%9A%84%E8%AF%AD%E6%B3%95"><span class="nav-number">4.1.</span> <span class="nav-text">Makefile的语法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Makefile%E5%87%BD%E6%95%B0"><span class="nav-number">4.2.</span> <span class="nav-text">Makefile函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Makefile%E5%AE%9E%E4%BE%8B"><span class="nav-number">4.3.</span> <span class="nav-text">Makefile实例</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -164,7 +162,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">217</span>
+          <span class="site-state-item-count">221</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -175,7 +173,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">208</span>
+        <span class="site-state-item-count">209</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -254,7 +252,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2020/03/31/jvm%E5%8E%9F%E7%90%86%EF%BC%8849%EF%BC%89ThreadLocal%E5%86%85%E5%AD%98%E6%B3%84%E9%9C%B2%E9%97%AE%E9%A2%98%E6%9C%AC%E8%B4%A8%E5%88%86%E6%9E%90%E4%B8%8E%E6%8E%A8%E5%AF%BC/">
+    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2023/11/19/embed/gcc_makeFile/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
@@ -267,12 +265,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="jvm原理（49）ThreadLocal内存泄露问题本质分析与推导 | 南贺神社">
+      <meta itemprop="name" content="gcc编译器和makeFile详解 | 南贺神社">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          jvm原理（49）ThreadLocal内存泄露问题本质分析与推导
+          gcc编译器和makeFile详解
         </h1>
 
         <div class="post-meta-container">
@@ -283,14 +281,14 @@
       </span>
       <span class="post-meta-item-text">Posted on</span>
 
-      <time title="Created: 2020-03-31 21:37:13" itemprop="dateCreated datePublished" datetime="2020-03-31T21:37:13+00:00">2020-03-31</time>
+      <time title="Created: 2023-11-19 16:00:00" itemprop="dateCreated datePublished" datetime="2023-11-19T16:00:00+00:00">2023-11-19</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -298,12 +296,12 @@
       </span>
       <span class="post-meta-item-text">In</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/jvm/" itemprop="url" rel="index"><span itemprop="name">jvm</span></a>
+          <a href="/categories/embed/" itemprop="url" rel="index"><span itemprop="name">embed</span></a>
         </span>
     </span>
 
   
-    <span id="/2020/03/31/jvm%E5%8E%9F%E7%90%86%EF%BC%8849%EF%BC%89ThreadLocal%E5%86%85%E5%AD%98%E6%B3%84%E9%9C%B2%E9%97%AE%E9%A2%98%E6%9C%AC%E8%B4%A8%E5%88%86%E6%9E%90%E4%B8%8E%E6%8E%A8%E5%AF%BC/" class="post-meta-item leancloud_visitors" data-flag-title="jvm原理（49）ThreadLocal内存泄露问题本质分析与推导" title="Views">
+    <span id="/2023/11/19/embed/gcc_makeFile/" class="post-meta-item leancloud_visitors" data-flag-title="gcc编译器和makeFile详解" title="Views">
       <span class="post-meta-item-icon">
         <i class="far fa-eye"></i>
       </span>
@@ -319,13 +317,52 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h3 id="threadLocal内存溢出分析"><a href="#threadLocal内存溢出分析" class="headerlink" title="threadLocal内存溢出分析"></a>threadLocal内存溢出分析</h3><p><img src="/threadlocal-stack-heap.png" alt="threadlocal-stack-heap.png"></p>
-<span id="more"></span>
-<p>我们使用ThreadLocal的方式一般是static的。<br>public static ThreadLocal<String> threadlocal &#x3D; new ThreadLocal();</p>
-<p>假设：<br>entry的key指向的threadlocal的引用是强引用，那么如果栈里边的threadlocal &#x3D; null;，此时由于key指向ThreadLocal的对象是强引用，无法回收，此时出现内存泄露。</p>
-<p>那么如果将key指向ThreadLocal的对象改成弱引用，那么threadlocal &#x3D; null;的时候，现在只有key指向ThreadLocal，而且是弱引用，那么下次gc，ThreadLocal会被回收掉。</p>
-<p>还有一种情况是是key指向的ThreadLocal被置成null，key指向null，那么value还没有被回收，这种情况也是内存泄露，对于这种情况ThreadLocal的实现里边做了规避。即在get和set方法里边调用了expungeStaleEntry()方法。</p>
-<h3 id="防止内存泄露"><a href="#防止内存泄露" class="headerlink" title="防止内存泄露"></a>防止内存泄露</h3><p>使用完毕之后调用一下set和get，或者remove方法，清除key为null的entry。</p>
+        <h1 id="gcc常用选项"><a href="#gcc常用选项" class="headerlink" title="gcc常用选项"></a>gcc常用选项</h1><ul>
+<li>x86平台<ul>
+<li>windos应用程序:建立工程-编辑-编译(vc6.0)-运行</li>
+<li>ubuntu应用程序:编辑-编译(gcc)-运行</li>
+</ul>
+</li>
+<li>arm裸机：编辑-编译(arm-linux-gcc)-烧写-运行<ul>
+<li>hello.c —预处理—&gt; hello.i —编译—&gt; hello.s —汇编—&gt; hello.o —连接—&gt; hello</li>
+</ul>
+</li>
+</ul>
+<h1 id="gcc常用编译选项"><a href="#gcc常用编译选项" class="headerlink" title="gcc常用编译选项"></a>gcc常用编译选项</h1><p>gcc和arm-linux-gcc的常用选项</p>
+<h3 id="gcc的使用方法："><a href="#gcc的使用方法：" class="headerlink" title="gcc的使用方法："></a>gcc的使用方法：</h3><p>gcc  [选项]   文件名</p>
+<p>gcc常用选项：<br>  -v：查看gcc编译器的版本，显示gcc执行时的详细过程<br>  -o <file>                Place the output into <file><br>                           指定输出文件名为file，这个名称不能跟源文件名同名<br>  -E                       Preprocess only; do not compile, assemble or link<br>                           只预处理，不会编译、汇编、链接<br>  -S                       Compile only; do not assemble or link<br>                           只编译，不会汇编、链接<br>  -c                       Compile and assemble, but do not link<br>                           编译和汇编，不会链接<br>&#x2F;&#x2F;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;<br>gcc  -v：查看gcc编译器的版本</p>
+<h4 id="方式1："><a href="#方式1：" class="headerlink" title="方式1："></a>方式1：</h4><p>gcc hello.c  输出一个a.out，然后.&#x2F;a.out来执行该应用程序。</p>
+<p>gcc -o hello hello.c  输出hello，然后.&#x2F;hello来执行该应用程序。</p>
+<h4 id="方式2："><a href="#方式2：" class="headerlink" title="方式2："></a>方式2：</h4><p>gcc -E -o hello.i hello.c<br>gcc -S -o hello.s hello.i<br>gcc -c -o hello.o hello.s<br>gcc -o hello hello.o</p>
+<p>.o:object file(OBJ文件)<br>小结：<br>1）输入文件的后缀名和选项共同决定gcc到底执行那些操作。<br>2）在编译过程中，除非使用了-E、-S、-c选项(或者编译出错阻止了完整的编译过程)<br>   否则最后的步骤都是链接。</p>
+<h4 id="方式3："><a href="#方式3：" class="headerlink" title="方式3："></a>方式3：</h4><p>gcc -c -o hello.o hello.c<br>gcc -o hello hello.o</p>
+<p>gcc会对.c文件默认进行预处理操作，-c再来指明了编译、汇编，从而得到.o文件<br>再通过gcc -o hello hello.o将.o文件进行链接，得到可执行应用程序。</p>
+<p>链接就是将汇编生成的OBJ文件、系统库的OBJ文件、库文件链接起来，<br>最终生成可以在特定平台运行的可执行程序。</p>
+<p>crt1.o、crti.o、crtbegin.o、crtend.o、crtn.o是gcc加入的系统标准启动文件，<br>对于一般应用程序，这些启动是必需的。</p>
+<p>-lc：链接libc库文件，其中libc库文件中就实现了printf等函数。</p>
+<p>gcc -v -nostdlib -o hello hello.o会提示因为没有链接系统标准启动文件和标准库文件，而链接失败。<br>这个-nostdlib选项常用于裸机&#x2F;bootloader、linux内核等程序，因为它们不需要启动文件、标准库文件。</p>
+<p>一般应用程序才需要系统标准启动文件和标准库文件。<br>裸机&#x2F;bootloader、linux内核等程序不需要启动文件、标准库文件。</p>
+<p>动态链接使用动态链接库进行链接，生成的程序在执行的时候需要加载所需的动态库才能运行。<br>动态链接生成的程序体积较小，但是必须依赖所需的动态库，否则无法执行。</p>
+<p>静态链接使用静态库进行链接，生成的程序包含程序运行所需要的全部库，可以直接运行，<br>不过静态链接生成的程序体积较大。</p>
+<p>gcc -c -o hello.o hello.c<br>gcc -o hello_shared  hello.o<br>gcc -static -o hello_static hello.o</p>
+<h1 id="makeFile"><a href="#makeFile" class="headerlink" title="makeFile"></a>makeFile</h1><h2 id="Makefile的引入及规则"><a href="#Makefile的引入及规则" class="headerlink" title="Makefile的引入及规则"></a>Makefile的引入及规则</h2><p>使用keil, mdk, avr等工具开发程序时点点鼠标就可以编译了，<br>它的内部机制是什么？它怎么组织管理程序？怎么决定编译哪一个文件？</p>
+<p>gcc -o test a.c b.c<br>&#x2F;&#x2F; 简单,<br>&#x2F;&#x2F; 但是会对所有文件都处理一次,<br>&#x2F;&#x2F; 文件多时如果只修改其中一个文件会导致效率低</p>
+<p>Makefile的核心—规则 :</p>
+<p>目标 : 依赖1 依赖2 …<br>[TAB]命令</p>
+<p>当”目标文件”不存在,<br>或<br>某个依赖文件比目标文件”新”,<br>则: 执行”命令”</p>
+<h1 id="C语言复习"><a href="#C语言复习" class="headerlink" title="C语言复习"></a>C语言复习</h1><h2 id="Makefile的语法"><a href="#Makefile的语法" class="headerlink" title="Makefile的语法"></a>Makefile的语法</h2><p>a. 通配符: %.o<br>   $@ 表示目标<br>   $&lt; 表示第1个依赖文件<br>   $^ 表示所有依赖文件</p>
+<p>b. 假想目标: .PHONY</p>
+<p>c. 即时变量、延时变量, export<br>简单变量(即时变量) :<br>A :&#x3D; xxx   # A的值即刻确定，在定义时即确定<br>B &#x3D; xxx    # B的值使用到时才确定</p>
+<p>:&#x3D;   # 即时变量<br>&#x3D;    # 延时变量<br>?&#x3D;   # 延时变量, 如果是第1次定义才起效, 如果在前面该变量已定义则忽略这句<br>+&#x3D;   # 附加, 它是即时变量还是延时变量取决于前面的定义</p>
+<p>参考文档:<br>a. 百度搜 “gnu make 于凤昌”<br>b. 官方文档: <span class="exturl" data-url="aHR0cDovL3d3dy5nbnUub3JnL3NvZnR3YXJlL21ha2UvbWFudWFsLw==">http://www.gnu.org/software/make/manual/<i class="fa fa-external-link-alt"></i></span></p>
+<p>如果想深入, 可以学习这视频:<br>第3期视频项目1, 第1课第4节_数码相框_编写通用的Makefile_P</p>
+<h2 id="Makefile函数"><a href="#Makefile函数" class="headerlink" title="Makefile函数"></a>Makefile函数</h2><p>a. $(foreach var,list,text)<br>b. $(filter pattern…,text)      # 在text中取出符合patten格式的值<br>   $(filter-out pattern…,text)  # 在text中取出不符合patten格式的值</p>
+<p>c. $(wildcard pattern)            # pattern定义了文件名的格式,<br>                                  # wildcard取出其中存在的文件<br>d. $(patsubst pattern,replacement,$(var))  # 从列表中取出每一个值<br>                                           # 如果符合pattern<br>                                           # 则替换为replacement</p>
+<h2 id="Makefile实例"><a href="#Makefile实例" class="headerlink" title="Makefile实例"></a>Makefile实例</h2><p>a. 改进: 支持头文件依赖<br><span class="exturl" data-url="aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXExNDUyMDA4L2FydGljbGUvZGV0YWlscy81MDg1NTgxMA==">http://blog.csdn.net/qq1452008/article/details/50855810<i class="fa fa-external-link-alt"></i></span></p>
+<p>gcc -M c.c &#x2F;&#x2F; 打印出依赖</p>
+<p>gcc -M -MF c.d c.c  &#x2F;&#x2F; 把依赖写入文件c.d</p>
+<p>gcc -c -o c.o c.c -MD -MF c.d  &#x2F;&#x2F; 编译c.o, 把依赖写入文件c.d</p>
+<p>b. 添加CFLAGS<br>c. 分析裸板Makefile</p>
 
     </div>
 
@@ -343,7 +380,7 @@
   </li>
   <li class="post-copyright-link">
       <strong>Post link: </strong>
-      <a href="https://ceaser.wang/2020/03/31/jvm%E5%8E%9F%E7%90%86%EF%BC%8849%EF%BC%89ThreadLocal%E5%86%85%E5%AD%98%E6%B3%84%E9%9C%B2%E9%97%AE%E9%A2%98%E6%9C%AC%E8%B4%A8%E5%88%86%E6%9E%90%E4%B8%8E%E6%8E%A8%E5%AF%BC/" title="jvm原理（49）ThreadLocal内存泄露问题本质分析与推导">https://ceaser.wang/2020/03/31/jvm原理（49）ThreadLocal内存泄露问题本质分析与推导/</a>
+      <a href="https://ceaser.wang/2023/11/19/embed/gcc_makeFile/" title="gcc编译器和makeFile详解">https://ceaser.wang/2023/11/19/embed/gcc_makeFile/</a>
   </li>
   <li class="post-copyright-license">
     <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
@@ -352,20 +389,20 @@
 </div>
 
           <div class="post-tags">
-              <a href="/tags/ThreadLocal%E3%80%81%E5%AD%98%E6%B3%84%E9%9C%B2/" rel="tag"><i class="fa fa-tag"></i> ThreadLocal、存泄露</a>
+              <a href="/tags/embed/" rel="tag"><i class="fa fa-tag"></i> embed</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2020/03/08/jvm%E5%8E%9F%E7%90%86%EF%BC%8848%EF%BC%89%E5%BC%BA%E5%BC%95%E7%94%A8-%E8%BD%AF%E5%BC%95%E7%94%A8-%E5%BC%B1%E5%BC%95%E7%94%A8-%E8%99%9A%E5%BC%95%E7%94%A8-ThreadLocal/" rel="prev" title="jvm原理（48）强引用-软引用-弱引用-虚引用-ThreadLocal">
-                  <i class="fa fa-chevron-left"></i> jvm原理（48）强引用-软引用-弱引用-虚引用-ThreadLocal
+                <a href="/2023/05/01/embed/diyigearmluobanchengxu/" rel="prev" title="第1个ARM裸板程序及引申">
+                  <i class="fa fa-chevron-left"></i> 第1个ARM裸板程序及引申
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2020/04/08/jvm%E5%8E%9F%E7%90%86%EF%BC%8850%EF%BC%89jvm%E9%94%81/" rel="next" title="jvm原理（50）jvm锁">
-                  jvm原理（50）jvm锁 <i class="fa fa-chevron-right"></i>
+                <a href="/2023/12/30/life/aigc/" rel="next" title="">
+                   <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
           </div>

@@ -30,10 +30,10 @@
 <meta property="og:site_name" content="南贺神社">
 <meta property="og:description" content="JVM内存区域分了如下几个区域： 虚拟机栈(Stack Frame)">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://ceaser.wang/2018101301.png">
-<meta property="og:image" content="https://ceaser.wang/2018101302.png">
+<meta property="og:image" content="https://ceaser.wang/2018/10/13/jvm%E5%8E%9F%E7%90%86%EF%BC%8837%EF%BC%89JVM%E5%86%85%E5%AD%98%E7%A9%BA%E9%97%B4%E5%88%92%E5%88%86%E4%B8%8E%E4%BD%9C%E7%94%A8%E8%AF%A6%E8%A7%A3/2018101301.png">
+<meta property="og:image" content="https://ceaser.wang/2018/10/13/jvm%E5%8E%9F%E7%90%86%EF%BC%8837%EF%BC%89JVM%E5%86%85%E5%AD%98%E7%A9%BA%E9%97%B4%E5%88%92%E5%88%86%E4%B8%8E%E4%BD%9C%E7%94%A8%E8%AF%A6%E8%A7%A3/2018101302.png">
 <meta property="article:published_time" content="2018-10-13T20:05:21.000Z">
-<meta property="article:modified_time" content="2023-12-30T08:31:12.886Z">
+<meta property="article:modified_time" content="2023-12-30T14:30:27.291Z">
 <meta property="article:author" content="CeaserWang">
 <meta property="article:tag" content="jvm内存划分">
 <meta property="article:tag" content="虚拟机栈">
@@ -43,7 +43,7 @@
 <meta property="article:tag" content="运行时的常量池">
 <meta property="article:tag" content="直接内存">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://ceaser.wang/2018101301.png">
+<meta name="twitter:image" content="https://ceaser.wang/2018/10/13/jvm%E5%8E%9F%E7%90%86%EF%BC%8837%EF%BC%89JVM%E5%86%85%E5%AD%98%E7%A9%BA%E9%97%B4%E5%88%92%E5%88%86%E4%B8%8E%E4%BD%9C%E7%94%A8%E8%AF%A6%E8%A7%A3/2018101301.png">
 
 
 <link rel="canonical" href="https://ceaser.wang/2018/10/13/jvm%E5%8E%9F%E7%90%86%EF%BC%8837%EF%BC%89JVM%E5%86%85%E5%AD%98%E7%A9%BA%E9%97%B4%E5%88%92%E5%88%86%E4%B8%8E%E4%BD%9C%E7%94%A8%E8%AF%A6%E8%A7%A3/">
@@ -99,7 +99,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">208</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">217</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">209</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">221</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
         </a>
@@ -171,7 +171,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">217</span>
+          <span class="site-state-item-count">221</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -182,7 +182,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">208</span>
+        <span class="site-state-item-count">209</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -297,7 +297,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -331,7 +331,7 @@
 <p>在执行一个方法的时候，会有一个栈帧，用来存储，方法里边的操作数的出栈入栈，当java文件编译完成的时候，max_stack(栈最大的深度),max_local(最大局部变量表有多少个元素)等都是确定的。</p>
 <h1 id="程序计数器-Program-Counter"><a href="#程序计数器-Program-Counter" class="headerlink" title="程序计数器(Program Counter)"></a>程序计数器(Program Counter)</h1><p>记录方法执行的位置，线程切换回来之后继续从这个位置执行。</p>
 <h1 id="本地方法栈"><a href="#本地方法栈" class="headerlink" title="本地方法栈"></a>本地方法栈</h1><p>主要执行本地方法，native 方法</p>
-<h1 id="堆-Heap"><a href="#堆-Heap" class="headerlink" title="堆(Heap)"></a>堆(Heap)</h1><p>所有进程共享的。<br>我们子啊操作对象的时候，是使用引用的方式去操作对象的，引用放在栈帧里边，对象放在堆里边。<br>那么引用指向的对象在对里边存储有一下2种方式：<br><img src="/2018101301.png" alt="都是指针"><br><img src="/2018101302.png" alt="一半是对象数据，一半类型指针"></p>
+<h1 id="堆-Heap"><a href="#堆-Heap" class="headerlink" title="堆(Heap)"></a>堆(Heap)</h1><p>所有进程共享的。<br>我们子啊操作对象的时候，是使用引用的方式去操作对象的，引用放在栈帧里边，对象放在堆里边。<br>那么引用指向的对象在对里边存储有一下2种方式：<br><img src="/2018/10/13/jvm%E5%8E%9F%E7%90%86%EF%BC%8837%EF%BC%89JVM%E5%86%85%E5%AD%98%E7%A9%BA%E9%97%B4%E5%88%92%E5%88%86%E4%B8%8E%E4%BD%9C%E7%94%A8%E8%AF%A6%E8%A7%A3/2018101301.png" alt="都是指针"><br><img src="/2018/10/13/jvm%E5%8E%9F%E7%90%86%EF%BC%8837%EF%BC%89JVM%E5%86%85%E5%AD%98%E7%A9%BA%E9%97%B4%E5%88%92%E5%88%86%E4%B8%8E%E4%BD%9C%E7%94%A8%E8%AF%A6%E8%A7%A3/2018101302.png" alt="一半是对象数据，一半类型指针"></p>
 <h2 id="都是指针"><a href="#都是指针" class="headerlink" title="都是指针"></a>都是指针</h2><p>栈指向堆里边的那块区域分成2部分，每一部分都是存储的一个指针。一个指针指向实际的对象数据，另一个指向<br>元数据区的class数据。</p>
 <h2 id="一半是对象数据，一半类型指针"><a href="#一半是对象数据，一半类型指针" class="headerlink" title="一半是对象数据，一半类型指针"></a>一半是对象数据，一半类型指针</h2><p>栈指向堆里边的那块区域分成2部分，一部分直接就是存储的对象数据。另一部分是一个指针，指向元数据区的类，也就是class数据。</p>
 <p>和堆相关的是垃圾收集器，垃圾收集器目前最常用的收集算法是分代收集算法，所以堆空间也会根据这一点进行划分：新生代，老年代。<br>Eden空间、From Survivor空间、To survivor空间，java的堆空间既可以是连续存放的，也可以是不连续存放的，大部分情况是不连续的。</p>

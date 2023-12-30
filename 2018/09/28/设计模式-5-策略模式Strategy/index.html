@@ -30,13 +30,13 @@
 <meta property="og:site_name" content="南贺神社">
 <meta property="og:description" content="思想：定 义一系列的算法,把它们一个个封装起来, 并 且使它们可相互替换。本模式使得算法可独立于使用它的客户而变化。场景：该 模式实际上也可以理解为一种Bridge模式的变种。只是它突出的是，一般当我们把一个类或者一组 类的一些代码独立成一个Strategy类的时候，我们可能会为同样接口的这些算法定义多个接口一 致，但是实现方法不同的版本，并在需要的时候灵活的替换这些算法。">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://ceaser.wang/20151011142912495.png">
+<meta property="og:image" content="https://ceaser.wang/2018/09/28/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-5-%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8FStrategy/20151011142912495.png">
 <meta property="article:published_time" content="2018-09-28T20:28:00.000Z">
-<meta property="article:modified_time" content="2023-12-30T08:31:13.018Z">
+<meta property="article:modified_time" content="2023-12-30T14:30:27.423Z">
 <meta property="article:author" content="CeaserWang">
 <meta property="article:tag" content="DesignPatterns">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://ceaser.wang/20151011142912495.png">
+<meta name="twitter:image" content="https://ceaser.wang/2018/09/28/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-5-%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8FStrategy/20151011142912495.png">
 
 
 <link rel="canonical" href="https://ceaser.wang/2018/09/28/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-5-%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8FStrategy/">
@@ -92,7 +92,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">208</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">217</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">209</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">221</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
         </a>
@@ -163,7 +163,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">217</span>
+          <span class="site-state-item-count">221</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -174,7 +174,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">208</span>
+        <span class="site-state-item-count">209</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -289,7 +289,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:13" itemprop="dateModified" datetime="2023-12-30T08:31:13+00:00">2023-12-30</time>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -318,7 +318,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <p><img src="/20151011142912495.png" alt="这里写图片描述"><br><strong>思想：</strong>定 义一系列的算法,把它们一个个封装起来, 并 且使它们可相互替换。本模式使得算法可独立于使用它的客户而变化。<br><strong>场景：</strong>该 模式实际上也可以理解为一种Bridge模式的变种。只是它突出的是，一般当我们把一个类或者一组 类的一些代码独立成一个Strategy类的时候，我们可能会为同样接口的这些算法定义多个接口一 致，但是实现方法不同的版本，并在需要的时候灵活的替换这些算法。</p>
+        <p><img src="/2018/09/28/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-5-%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8FStrategy/20151011142912495.png" alt="这里写图片描述"><br><strong>思想：</strong>定 义一系列的算法,把它们一个个封装起来, 并 且使它们可相互替换。本模式使得算法可独立于使用它的客户而变化。<br><strong>场景：</strong>该 模式实际上也可以理解为一种Bridge模式的变种。只是它突出的是，一般当我们把一个类或者一组 类的一些代码独立成一个Strategy类的时候，我们可能会为同样接口的这些算法定义多个接口一 致，但是实现方法不同的版本，并在需要的时候灵活的替换这些算法。</p>
 <span id="more"></span>
 <p><strong>实现：</strong>实 现方式同Bridge模式。<br><strong>重构成本：</strong>中。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">//文本替换策略</span><br><span class="line">abstract class TextStrategy &#123;</span><br><span class="line">    protected String text;</span><br><span class="line"></span><br><span class="line">    public TextStrategy(String text) &#123;</span><br><span class="line">        this.text = text;</span><br><span class="line">    &#125;</span><br><span class="line">    public abstract String replace();</span><br><span class="line">&#125;  </span><br><span class="line">//替换算法1：将文本中&quot;@r@n&quot;替换为&quot;@n&quot;</span><br><span class="line">class StrategyOne extends TextStrategy &#123;</span><br><span class="line">    public StrategyOne(String text) &#123;</span><br><span class="line">        super(text);</span><br><span class="line">    &#125;</span><br><span class="line">    public String replace() &#123;</span><br><span class="line">        System.out.println(“StrategyOne:”);</span><br><span class="line">        String result = text.replaceAll(&quot;@r@n&quot;, &quot;@n&quot;));</span><br><span class="line">        return result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;  </span><br><span class="line">//替换算法2：将文本中&quot;@n&quot;替换为&quot;@r@n&quot;</span><br><span class="line">class StrategyTwo extends TextStrategy &#123;</span><br><span class="line">    public StrategyTwo(String text) &#123;</span><br><span class="line">        super(text);</span><br><span class="line">    &#125;</span><br><span class="line">    public String replace() &#123;</span><br><span class="line">        System.out.println(“StrategyTwo:”);</span><br><span class="line">        String result = text.replaceAll(“@n&quot;, &quot;@r@n&quot;));</span><br><span class="line">        return result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;  </span><br><span class="line">public class TextCharChange &#123;</span><br><span class="line">    public static void replace(TextStrategy strategy) &#123;</span><br><span class="line">        strategy.replace();</span><br><span class="line">    &#125;</span><br><span class="line">public static void main(String[] args)&#123;</span><br><span class="line">	String testText1 = &quot;This is a test text!!@n Oh! Line Return!!@n&quot;;</span><br><span class="line">        String testText2 = This is a test text!!@r@n Oh! Line Return@r@n&quot;;</span><br><span class="line">TextCharChange.replace(new StrategyOne(testText2));</span><br><span class="line">    TextCharChange.replace(new StrategyTwo(testText1));</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>

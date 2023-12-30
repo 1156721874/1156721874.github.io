@@ -30,32 +30,32 @@
 <meta property="og:site_name" content="南贺神社">
 <meta property="og:description" content="内存区域的回顾垃圾收集器和java的内存分布有着紧密的联系，因此我们要对jvm的内存布局回顾一下，jvm的内存布局大致分为如下：">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://ceaser.wang/memarea.png">
-<meta property="og:image" content="https://ceaser.wang/memarea1.png">
-<meta property="og:image" content="https://ceaser.wang/countreference.png">
-<meta property="og:image" content="https://ceaser.wang/runtimeStack-Heap.png">
-<meta property="og:image" content="https://ceaser.wang/runtimeStack-Heap1.png">
-<meta property="og:image" content="https://ceaser.wang/runtimeStack-Heap2.png">
-<meta property="og:image" content="https://ceaser.wang/runtimeStack-Heap3.png">
-<meta property="og:image" content="https://ceaser.wang/runtimeStack-Heap4.png">
-<meta property="og:image" content="https://ceaser.wang/coping1.png">
-<meta property="og:image" content="https://ceaser.wang/coping2.png">
-<meta property="og:image" content="https://ceaser.wang/coping3.png">
-<meta property="og:image" content="https://ceaser.wang/coping4.png">
-<meta property="og:image" content="https://ceaser.wang/coping5.png">
-<meta property="og:image" content="https://ceaser.wang/mark-compact1.png">
-<meta property="og:image" content="https://ceaser.wang/choice.png">
-<meta property="og:image" content="https://ceaser.wang/choice1.png">
-<meta property="og:image" content="https://ceaser.wang/memstruct.png">
-<meta property="og:image" content="https://ceaser.wang/Recycling_algorithm.png">
-<meta property="og:image" content="https://ceaser.wang/serial.png">
-<meta property="og:image" content="https://ceaser.wang/parallel_old.png">
+<meta property="og:image" content="https://ceaser.wang/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/memarea.png">
+<meta property="og:image" content="https://ceaser.wang/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/memarea1.png">
+<meta property="og:image" content="https://ceaser.wang/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/countreference.png">
+<meta property="og:image" content="https://ceaser.wang/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/runtimeStack-Heap.png">
+<meta property="og:image" content="https://ceaser.wang/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/runtimeStack-Heap1.png">
+<meta property="og:image" content="https://ceaser.wang/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/runtimeStack-Heap2.png">
+<meta property="og:image" content="https://ceaser.wang/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/runtimeStack-Heap3.png">
+<meta property="og:image" content="https://ceaser.wang/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/runtimeStack-Heap4.png">
+<meta property="og:image" content="https://ceaser.wang/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/coping1.png">
+<meta property="og:image" content="https://ceaser.wang/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/coping2.png">
+<meta property="og:image" content="https://ceaser.wang/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/coping3.png">
+<meta property="og:image" content="https://ceaser.wang/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/coping4.png">
+<meta property="og:image" content="https://ceaser.wang/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/coping5.png">
+<meta property="og:image" content="https://ceaser.wang/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/mark-compact1.png">
+<meta property="og:image" content="https://ceaser.wang/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/choice.png">
+<meta property="og:image" content="https://ceaser.wang/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/choice1.png">
+<meta property="og:image" content="https://ceaser.wang/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/memstruct.png">
+<meta property="og:image" content="https://ceaser.wang/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/Recycling_algorithm.png">
+<meta property="og:image" content="https://ceaser.wang/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/serial.png">
+<meta property="og:image" content="https://ceaser.wang/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/parallel_old.png">
 <meta property="article:published_time" content="2019-05-01T18:34:12.000Z">
-<meta property="article:modified_time" content="2023-12-30T08:31:12.894Z">
+<meta property="article:modified_time" content="2023-12-30T14:30:27.299Z">
 <meta property="article:author" content="CeaserWang">
 <meta property="article:tag" content="垃圾收集器">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://ceaser.wang/memarea.png">
+<meta name="twitter:image" content="https://ceaser.wang/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/memarea.png">
 
 
 <link rel="canonical" href="https://ceaser.wang/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/">
@@ -111,7 +111,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">208</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">217</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">209</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">221</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
         </a>
@@ -183,7 +183,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">217</span>
+          <span class="site-state-item-count">221</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -194,7 +194,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">208</span>
+        <span class="site-state-item-count">209</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -309,7 +309,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -340,7 +340,7 @@
     <div class="post-body" itemprop="articleBody">
         <h3 id="内存区域的回顾"><a href="#内存区域的回顾" class="headerlink" title="内存区域的回顾"></a>内存区域的回顾</h3><p>垃圾收集器和java的内存分布有着紧密的联系，因此我们要对jvm的内存布局回顾一下，jvm的内存布局大致分为如下：</p>
 <span id="more"></span>
-<p><img src="/memarea.png" alt="memarea"><br><img src="/memarea1.png" alt="memarea1"></p>
+<p><img src="/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/memarea.png" alt="memarea"><br><img src="/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/memarea1.png" alt="memarea1"></p>
 <p>JVM运行时数据区域-例子</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public void method()&#123;</span><br><span class="line">  Object obj = new Object();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -351,7 +351,7 @@
 </ul>
 <h3 id="垃圾判断算法"><a href="#垃圾判断算法" class="headerlink" title="垃圾判断算法"></a>垃圾判断算法</h3><h4 id="引用计数算法（Reference-Counting）"><a href="#引用计数算法（Reference-Counting）" class="headerlink" title="引用计数算法（Reference Counting）"></a>引用计数算法（Reference Counting）</h4><ul>
 <li>给对象添加一个引用计数器，当有一个地方引用它，计数器加1，当引用失效，计数器减一，任何时刻计数器为0的对象就是不可能再被使用的。</li>
-<li>引用计数器算法无法解决对象循环引用的问题。<br><img src="/countreference.png" alt="countreference"><br>上图所示，A引用B，B引用A，但是外界引用都断了，不存在对“环”的引用，但是他们的引用计数器都是1，引用计数算法就不会对他们进行回收，会一直在内存中。</li>
+<li>引用计数器算法无法解决对象循环引用的问题。<br><img src="/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/countreference.png" alt="countreference"><br>上图所示，A引用B，B引用A，但是外界引用都断了，不存在对“环”的引用，但是他们的引用计数器都是1，引用计数算法就不会对他们进行回收，会一直在内存中。</li>
 </ul>
 <h4 id="根搜索算法（Root-Tracing）"><a href="#根搜索算法（Root-Tracing）" class="headerlink" title="根搜索算法（Root Tracing）"></a>根搜索算法（Root Tracing）</h4><ul>
 <li><p>在实际的生产语言中（java、C#等）都是使用根搜索算法判定对象是否存活</p>
@@ -390,7 +390,7 @@
 <li><p>缺点</p>
 <ul>
 <li>效率问题，标记和清理两个过程效率都不高</li>
-<li>空间问题，标记清理之后会产生大量不连续的内存碎片，空间碎片太多可能会导致后续使用中无法找到足够的连续内存而提前<br>触发另一次的垃圾搜索集动作。<br><img src="/runtimeStack-Heap.png" alt="runtimeStack-Heap.png"><br><img src="/runtimeStack-Heap1.png" alt="runtimeStack-Heap1.png"><br><img src="/runtimeStack-Heap2.png" alt="runtimeStack-Heap2.png"><br><img src="/runtimeStack-Heap3.png" alt="runtimeStack-Heap3.png"><br><img src="/runtimeStack-Heap4.png" alt="runtimeStack-Heap4.png"><br>最后阴影部分被回收掉，F、J、M不能被root trace到，因此也会被回收。</li>
+<li>空间问题，标记清理之后会产生大量不连续的内存碎片，空间碎片太多可能会导致后续使用中无法找到足够的连续内存而提前<br>触发另一次的垃圾搜索集动作。<br><img src="/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/runtimeStack-Heap.png" alt="runtimeStack-Heap.png"><br><img src="/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/runtimeStack-Heap1.png" alt="runtimeStack-Heap1.png"><br><img src="/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/runtimeStack-Heap2.png" alt="runtimeStack-Heap2.png"><br><img src="/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/runtimeStack-Heap3.png" alt="runtimeStack-Heap3.png"><br><img src="/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/runtimeStack-Heap4.png" alt="runtimeStack-Heap4.png"><br>最后阴影部分被回收掉，F、J、M不能被root trace到，因此也会被回收。</li>
 </ul>
 </li>
 <li><p>效率不高，需要扫描所有对象，堆越大，GC越大。碎片越严重。</p>
@@ -405,7 +405,7 @@
 <li>将内存分为一块较大的eden空间和快较少的survival空间，每次使用eden和其中一块survivor，当回收时将eden和survivor还存活的对象一次性<br>拷贝到另外一块survival空间上，然后清理掉eden和用过的survivor：</li>
 <li>Oracle Hotspot虚拟机默认eden和survivor的大小比例是8:1，也就是每次只有10% 的内存是”浪费”的。</li>
 <li>复制收集算法在对象存活率高的时候，效率有所下降。</li>
-<li>如果不想浪费50%的空间，就需要有额外的空间进行分配担保用于应付半区内存中所有对象都有100%存活的极端情况，所以在老年代一般不能直接选用这种算法。<br><img src="/coping1.png" alt="coping1.png"><br><img src="/coping2.png" alt="coping2.png"><br><img src="/coping3.png" alt="coping3.png"><br><img src="/coping4.png" alt="coping4.png"><br><img src="/coping5.png" alt="coping5.png"></li>
+<li>如果不想浪费50%的空间，就需要有额外的空间进行分配担保用于应付半区内存中所有对象都有100%存活的极端情况，所以在老年代一般不能直接选用这种算法。<br><img src="/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/coping1.png" alt="coping1.png"><br><img src="/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/coping2.png" alt="coping2.png"><br><img src="/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/coping3.png" alt="coping3.png"><br><img src="/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/coping4.png" alt="coping4.png"><br><img src="/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/coping5.png" alt="coping5.png"></li>
 <li>只需要扫描存活的对象，效率更高</li>
 <li>不会产生碎片</li>
 <li>需要浪费额外的内存作为复制区</li>
@@ -413,7 +413,7 @@
 <li>根据IBM的专门研究，98%的java对象只会存活一个GC周期，对这些对象很适合用复制算法。而且不用1:1的划分工作区和复制区的空间</li>
 </ul>
 <h4 id="标记整理算法-Mark-Compact"><a href="#标记整理算法-Mark-Compact" class="headerlink" title="标记整理算法(Mark-Compact)"></a>标记整理算法(Mark-Compact)</h4><ul>
-<li>标记过程仍然一样，但后续步骤不是进行直接清理，而是令所有存活的对象一端移动，然后直接清理掉这端边界以外的内存。<br><img src="/mark-compact1.png" alt="mark-compact1.png"></li>
+<li>标记过程仍然一样，但后续步骤不是进行直接清理，而是令所有存活的对象一端移动，然后直接清理掉这端边界以外的内存。<br><img src="/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/mark-compact1.png" alt="mark-compact1.png"></li>
 <li>没有内存碎片</li>
 <li>比Mark-Sweep耗费更多的时间进行compact</li>
 </ul>
@@ -421,9 +421,9 @@
 <li>当前商业虚拟机的垃圾收集都是采用“分代收集”算法根据对象不同存活周期将内存划分为几块</li>
 <li>一般是把java堆分作新生代和老年代，这样就可以根据各个年代的特点采用最适当的收集算法，譬如新生代每次GC都有大批量对象死去，<br>只有少量存活，那就选用复制算法只需要付出少量存活对象的复制成本就可以完成收集。</li>
 </ul>
-<p>综合前面几种GC算法的优缺点，针对不同生命周期的对象采用不同的GC算法。<br><img src="/choice.png" alt="choice.png"></p>
+<p>综合前面几种GC算法的优缺点，针对不同生命周期的对象采用不同的GC算法。<br><img src="/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/choice.png" alt="choice.png"></p>
 <ul>
-<li><p>Hotspot JVM 6(jdk8之前)中共划分为三个代：年轻代(Ypung Generation)\老年代(Old Generation)和永久代(Permanent Generation)<br><img src="/choice1.png" alt="choice1.png"></p>
+<li><p>Hotspot JVM 6(jdk8之前)中共划分为三个代：年轻代(Ypung Generation)\老年代(Old Generation)和永久代(Permanent Generation)<br><img src="/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/choice1.png" alt="choice1.png"></p>
 </li>
 <li><p>年轻代</p>
 <ul>
@@ -444,7 +444,7 @@
 <li>比不属于堆(Heap)但是GC也会涉及到这个区域</li>
 <li>存放了每个Class的结构信息，包括常量池、字段描述、方法描述、与垃圾收集要收集的对象关系不大。</li>
 </ul>
-<p><img src="/memstruct.png" alt="memstruct.png"></p>
+<p><img src="/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/memstruct.png" alt="memstruct.png"></p>
 </li>
 </ul>
 <h3 id="内存分配"><a href="#内存分配" class="headerlink" title="内存分配"></a>内存分配</h3><ol>
@@ -468,7 +468,7 @@
 </ul>
 </li>
 </ul>
-<p>###垃圾收集算法<br><img src="/Recycling_algorithm.png" alt="Recycling_algorithm.png"></p>
+<p>###垃圾收集算法<br><img src="/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/Recycling_algorithm.png" alt="Recycling_algorithm.png"></p>
 <h3 id="GC的时机"><a href="#GC的时机" class="headerlink" title="GC的时机"></a>GC的时机</h3><ul>
 <li>在分代模型的基础上，GC从时机上分为两种：scavenge GC和Full GC</li>
 <li>Scavenge GC(Minor GC)<ul>
@@ -502,7 +502,7 @@
 <li>new和Old Generation都可以使用</li>
 <li>在新生代，采用复制算法；在老年代，采用Mark-comopact算法</li>
 <li>因为是单线程GC，没有多线程切换的额外开销，简单实用</li>
-<li>Hotspot Client模式缺省的收集器<br><img src="/serial.png" alt="serial.png"></li>
+<li>Hotspot Client模式缺省的收集器<br><img src="/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/serial.png" alt="serial.png"></li>
 </ul>
 <h4 id="ParNew收集器"><a href="#ParNew收集器" class="headerlink" title="ParNew收集器"></a>ParNew收集器</h4><ul>
 <li>ParNew收集器就是Serial的多线程版本，除了使用多个收集器线程外，其余行为包括算法、stw、对象分配规则、回收策略等都与serial收集器一模一样。</li>
@@ -524,7 +524,7 @@
 <li>在、具名 1.6才出现Parallel Old</li>
 <li>采用多线程，Mark-compact算法</li>
 <li>更注重吞吐量</li>
-<li>Parallel Scavenge + Parallel Old &#x3D; 高吞吐量，但GC停顿可能不理想。<br><img src="/parallel_old.png" alt="parallel_old.png"></li>
+<li>Parallel Scavenge + Parallel Old &#x3D; 高吞吐量，但GC停顿可能不理想。<br><img src="/2019/05/01/jvm%E5%8E%9F%E7%90%86%EF%BC%8842%EF%BC%89JVM%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E9%87%8D%E8%A6%81%E7%90%86%E8%AE%BA%E5%89%96%E6%9E%90%E4%BB%A5%E5%8F%8A%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90%E4%B8%8E%E6%BC%94%E7%A4%BA/parallel_old.png" alt="parallel_old.png"></li>
 </ul>
 <h4 id="CMS收集器-Concurrent-Mark-Sweep"><a href="#CMS收集器-Concurrent-Mark-Sweep" class="headerlink" title="CMS收集器(Concurrent Mark Sweep)"></a>CMS收集器(Concurrent Mark Sweep)</h4><ul>
 <li><p>CMS是一种以最短停顿时间为目标的收集器，使用CMS并不能达到GC效率最高(总体GC时间最小)，但它能尽可能降低GC时<br>服务的停顿时间，CMS收集器使用的是标记-清除算法</p>

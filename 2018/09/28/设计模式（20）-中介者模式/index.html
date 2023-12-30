@@ -30,13 +30,13 @@
 <meta property="og:site_name" content="南贺神社">
 <meta property="og:description" content="Mediator思想：用一个中介对象来封装一系列的对象交互。中介者使各对象不需要显式地相互引用，从而使其耦合松散，而且可以独立地改变它们之间的交互。">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://ceaser.wang/20161027202246524.png">
+<meta property="og:image" content="https://ceaser.wang/2018/09/28/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%8820%EF%BC%89-%E4%B8%AD%E4%BB%8B%E8%80%85%E6%A8%A1%E5%BC%8F/20161027202246524.png">
 <meta property="article:published_time" content="2018-09-28T21:42:12.000Z">
-<meta property="article:modified_time" content="2023-12-30T08:31:13.018Z">
+<meta property="article:modified_time" content="2023-12-30T14:30:27.427Z">
 <meta property="article:author" content="CeaserWang">
 <meta property="article:tag" content="DesignPatterns">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://ceaser.wang/20161027202246524.png">
+<meta name="twitter:image" content="https://ceaser.wang/2018/09/28/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%8820%EF%BC%89-%E4%B8%AD%E4%BB%8B%E8%80%85%E6%A8%A1%E5%BC%8F/20161027202246524.png">
 
 
 <link rel="canonical" href="https://ceaser.wang/2018/09/28/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%8820%EF%BC%89-%E4%B8%AD%E4%BB%8B%E8%80%85%E6%A8%A1%E5%BC%8F/">
@@ -92,7 +92,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">208</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">217</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">209</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">221</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
         </a>
@@ -163,7 +163,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">217</span>
+          <span class="site-state-item-count">221</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -174,7 +174,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">208</span>
+        <span class="site-state-item-count">209</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -289,7 +289,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:13" itemprop="dateModified" datetime="2023-12-30T08:31:13+00:00">2023-12-30</time>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -321,7 +321,7 @@
         <p>Mediator<br><strong>思想：</strong>用一个中介对象来封装一系列的对象交互。中介者使各对象不需要显式地相互引用，从而使其耦合松散，而且可以独立地改变它们之间的交互。</p>
 <span id="more"></span>
 <p><strong>场景：</strong>该模式主要用来进行降低一组相互关联调用的对象间的耦合度。如果您发现您的系统的某部分的一组对象间调用极其频繁的坏味道的话，可能您 需要考虑使用该模式来进行一些解耦，否则，这些对象中的任何一个的修改，都将可能导致其他对象许多地方的修改，可维护性就降低了。<br><strong>实现：</strong>定义一个专门的中介对象来封装和传递一组对象间的调用。<br><strong>重构成本：中。</strong></p>
-<p>Mediator中介者设计模式是通过一个中介对象封装一系列关于对象交互行为.<br>Mediator中介者设计模式中的角色如下：<br>(1).中介者（Mediator）：抽象定义了“同事”（colleagues，稍后有定义）们通信的接口。<br>(2).具体中介者（Concrete Mediator）：实现了“同事”间的通信接口。<br>(3).同事（Colleague）：参与通信的实体抽象。<br>(4).具体同事（Concrete Colleague）：实现的参与通信的实体。<br>Mediator中介者设计模式结构如下：<br><img src="/20161027202246524.png" alt="这里写图片描述"></p>
+<p>Mediator中介者设计模式是通过一个中介对象封装一系列关于对象交互行为.<br>Mediator中介者设计模式中的角色如下：<br>(1).中介者（Mediator）：抽象定义了“同事”（colleagues，稍后有定义）们通信的接口。<br>(2).具体中介者（Concrete Mediator）：实现了“同事”间的通信接口。<br>(3).同事（Colleague）：参与通信的实体抽象。<br>(4).具体同事（Concrete Colleague）：实现的参与通信的实体。<br>Mediator中介者设计模式结构如下：<br><img src="/2018/09/28/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%8820%EF%BC%89-%E4%B8%AD%E4%BB%8B%E8%80%85%E6%A8%A1%E5%BC%8F/20161027202246524.png" alt="这里写图片描述"></p>
 <p>以私信聊天为例来简单演示Mediator中介者设计模式，例子代码如下：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line">//中介者</span><br><span class="line">interface Mediator&#123;</span><br><span class="line">	public void send(String msg, Person person);</span><br><span class="line">&#125;</span><br><span class="line">//具体中介者</span><br><span class="line">class ConcreteMediator implements Mediator&#123;</span><br><span class="line">	//中介者所联系的交互对象</span><br><span class="line">	private PersonA personA;</span><br><span class="line">	private PersonA personB;</span><br><span class="line">	public void setPersonA(PersonA  personA)&#123;</span><br><span class="line">	this.personA = personA;</span><br><span class="line">&#125;</span><br><span class="line">Public void setPersonB(PersonB personB)&#123;</span><br><span class="line">	this.personB = personB;</span><br><span class="line">&#125;</span><br><span class="line">public void send(String msg, Person person)&#123;</span><br><span class="line">	if(person.equals(personA))&#123;</span><br><span class="line">	personA.greeting(msg);</span><br><span class="line">&#125;else&#123;</span><br><span class="line">	personB.greeting(msg);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">//抽象同事</span><br><span class="line">abstract class Person&#123;</span><br><span class="line">	//同事和中介者打交道</span><br><span class="line">	protected Mediator mediator;</span><br><span class="line">	public Person(Mediator mediator)&#123;</span><br><span class="line">	this.mediator = mediator;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">//具体同事</span><br><span class="line">class PersonA extends Person&#123;</span><br><span class="line">	public PersonA(Mediator mediator)&#123;</span><br><span class="line">	super(mediator);</span><br><span class="line">&#125;</span><br><span class="line">public void send(String msg)&#123;</span><br><span class="line">	mediator.send(msg, this);</span><br><span class="line">&#125;</span><br><span class="line">public void greeting(string msg)&#123;</span><br><span class="line">	System.out.println(“PersonA: ” + msg);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">class PersonB extends Person&#123;</span><br><span class="line">	public PersonB(Mediator mediator)&#123;</span><br><span class="line">	super(mediator);</span><br><span class="line">&#125;</span><br><span class="line">public void send(String msg)&#123;</span><br><span class="line">	mediator.send(msg, this);</span><br><span class="line">&#125;</span><br><span class="line">public void greeting(string msg)&#123;</span><br><span class="line">	System.out.println(“PersonB: ” + msg);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">public class MediatorDemo&#123;</span><br><span class="line">	public static void main(String[] args)&#123;</span><br><span class="line">		//创建中介</span><br><span class="line">		Mediator mediator = new ConcreteMediator();</span><br><span class="line">//创建同事，并为同事设置中介</span><br><span class="line">Person personA = new PersonA(mediator);</span><br><span class="line">Person personB = new PersonB(mediator);</span><br><span class="line"></span><br><span class="line">//向中介设置同事</span><br><span class="line">mediator.setPersonA(personA);</span><br><span class="line">mediator.setPersonB(personB);</span><br><span class="line"></span><br><span class="line">//开始聊天</span><br><span class="line">personA.send(“Hi, B!”);</span><br><span class="line">personB.send(“Hello, A!”);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>在对象之间的交互操作非常多的情况下;每个对象的行为操作都可能依赖很多其他对象,修改一个对象的行为的同时可能会影响到很多其他对象的行为,如果使用Mediator模式,可以使各个对象间的耦合松散,只需关心和 Mediator的关系,使多对多的关系变成了一对多的关系,在降低系统复杂性的同时提高可修改扩展性.</p>

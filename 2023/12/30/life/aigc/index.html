@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.2.0">
+
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ceaser.wang","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.12.1","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="本文旨在整理一份可供参考和学习的专业ChatGPT相关资料，包括ChatGPT相关论文、Github项目、以及当前市场上出现的ChatGPT相关产品等。 本文将持续不断更新，只涵盖最专业的内容。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="南贺神社">
+<meta property="og:url" content="https://ceaser.wang/2023/12/30/life/aigc/index.html">
+<meta property="og:site_name" content="南贺神社">
+<meta property="og:description" content="本文旨在整理一份可供参考和学习的专业ChatGPT相关资料，包括ChatGPT相关论文、Github项目、以及当前市场上出现的ChatGPT相关产品等。 本文将持续不断更新，只涵盖最专业的内容。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-12-30T14:30:27.347Z">
+<meta property="article:modified_time" content="2023-12-30T14:30:27.347Z">
+<meta property="article:author" content="CeaserWang">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://ceaser.wang/2023/12/30/life/aigc/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://ceaser.wang/2023/12/30/life/aigc/","path":"2023/12/30/life/aigc/","title":""}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title> | 南贺神社</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">南贺神社</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">你写程序有写诗一样的感觉吗?</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">209</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">221</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%AD%A6%E4%B9%A0%E8%AF%BE%E7%A8%8B%E6%88%96%E6%95%99%E7%A8%8B"><span class="nav-number">1.</span> <span class="nav-text">大模型学习课程或教程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%A7%E6%A8%A1%E5%9E%8B%E9%A1%B9%E7%9B%AE"><span class="nav-number">2.</span> <span class="nav-text">大模型项目</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ChatGPT%E7%9B%B8%E5%85%B3%E5%A4%A7%E6%A8%A1%E5%9E%8B%E8%AE%BA%E6%96%87%E5%90%88%E9%9B%86"><span class="nav-number">3.</span> <span class="nav-text">ChatGPT相关大模型论文合集</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#OpenAI%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%E9%9B%86%E9%94%A6"><span class="nav-number">4.</span> <span class="nav-text">OpenAI参考资料集锦</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ChatGPT%E7%9B%B8%E5%85%B3Github%E9%A1%B9%E7%9B%AE"><span class="nav-number">5.</span> <span class="nav-text">ChatGPT相关Github项目</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B1%BBChatGPT%E6%A8%A1%E5%9E%8B%E7%9B%B8%E5%85%B3Github%E9%A1%B9%E7%9B%AE"><span class="nav-number">5.1.</span> <span class="nav-text">类ChatGPT模型相关Github项目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ChatGPT%E4%BA%A7%E5%93%81%E7%9B%B8%E5%85%B3Github%E9%A1%B9%E7%9B%AE"><span class="nav-number">5.2.</span> <span class="nav-text">ChatGPT产品相关Github项目</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ChatGPT%E7%9B%B8%E5%85%B3%E6%8A%95%E7%A0%94%E6%8A%A5%E5%91%8A"><span class="nav-number">6.</span> <span class="nav-text">ChatGPT相关投研报告</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ChatGPT%E7%9B%B8%E5%85%B3%E4%BA%A7%E5%93%81"><span class="nav-number">7.</span> <span class="nav-text">ChatGPT相关产品</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B1%BBChatGPT%E4%BA%A7%E5%93%81"><span class="nav-number">7.1.</span> <span class="nav-text">类ChatGPT产品</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ChatGPT%E9%9D%9E%E5%AE%98%E6%96%B9%E4%BA%A7%E5%93%81"><span class="nav-number">7.2.</span> <span class="nav-text">ChatGPT非官方产品</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B1%BBChatGPT-AI%E5%B7%A5%E5%85%B7"><span class="nav-number">7.3.</span> <span class="nav-text">类ChatGPT AI工具</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E6%A8%A1%E6%80%81%E4%BA%A7%E5%93%81"><span class="nav-number">7.4.</span> <span class="nav-text">多模态产品</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="CeaserWang"
+      src="/../0xcc/index/Uchiha.jpg">
+  <p class="site-author-name" itemprop="name">CeaserWang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">221</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">209</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tLzExNTY3MjE4NzQ=" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;1156721874"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="bWFpbHRvOmNlYXNlcndhbmdAb3V0bG9vay5jb20=" title="E-Mail → mailto:ceaserwang@outlook.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</span>
+      </span>
+  </div>
+  <div class="cc-license site-overview-item animated" itemprop="license">
+    <span class="exturl cc-opacity" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-user-friends fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly90d29kcmFnb25sYWtlLmNvbQ==" title="https:&#x2F;&#x2F;twodragonlake.com">TwoDragonLake</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9yb290Y2x1c3Rlci5naXRodWIuaW8=" title="https:&#x2F;&#x2F;rootcluster.github.io">RootCluster</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9tdXNlZmxvdy5pbw==" title="https:&#x2F;&#x2F;museflow.io">MuseFlow</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9pbmNvZGVyLm9yZw==" title="https:&#x2F;&#x2F;incoder.org">BladeCode</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9rYWlmYS5kZXY=" title="https:&#x2F;&#x2F;kaifa.dev">Alyenc</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmRhemhpZGF5b25nLmNu" title="https:&#x2F;&#x2F;blog.dazhidayong.cn">Killua</span>
+        </li>
+        <li class="links-of-blogroll-item">
+          <span class="exturl" data-url="aHR0cHM6Ly93d3cuY3lsb25nLmNvbQ==" title="https:&#x2F;&#x2F;www.cylong.com">Cylong</span>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2023/12/30/life/aigc/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
+      <meta itemprop="name" content="CeaserWang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2023-12-30 14:30:27" itemprop="dateCreated datePublished" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
+    </span>
+
+  
+    <span id="/2023/12/30/life/aigc/" class="post-meta-item leancloud_visitors" data-flag-title="" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>本文旨在整理一份可供参考和学习的专业ChatGPT相关资料，包括ChatGPT相关论文、Github项目、以及当前市场上出现的ChatGPT相关产品等。</p>
+<p>本文将持续不断更新，只涵盖最专业的内容。</p>
+<span id="more"></span>
+<h2 id="大模型学习课程或教程"><a href="#大模型学习课程或教程" class="headerlink" title="大模型学习课程或教程"></a><strong>大模型学习课程或教程</strong></h2><p>| <strong>名称</strong> | <strong>介绍</strong> | <strong>课程或教程地址</strong> | <strong>发布或发表时间</strong> |</p>
+<p>| — | — | — | — |</p>
+<p>| The Transformer Family Version 2.0 | 大模型家族详细介绍 | <span class="exturl" data-url="aHR0cHM6Ly9saWxpYW53ZW5nLmdpdGh1Yi5pby9wb3N0cy8yMDIzLTAxLTI3LXRoZS10cmFuc2Zvcm1lci1mYW1pbHktdjIv">The Transformer Family Version 2.0 &amp;#124; Lil’Log (lilianweng.github.io)<i class="fa fa-external-link-alt"></i></span> | 2023-01-27 |</p>
+<p>| TensorFlow学习教程 | Google官方TensorFlow学习教程，可以直接通过Google colab实验室运行教程中的代码 | <span class="exturl" data-url="aHR0cHM6Ly93d3cudGVuc29yZmxvdy5vcmcvdHV0b3JpYWxzL3F1aWNrc3RhcnQvYmVnaW5uZXI/aGw9emgtY24=">初学者的 TensorFlow 2.0 教程  &amp;#124;  TensorFlow Core<i class="fa fa-external-link-alt"></i></span> | 2022-09-21 |</p>
+<p>| 斯坦福大模型课程CS324 | CS324提供了关于大型语言模型建模、理论、伦理和系统方面的基础知识，并且提供了亲自体验构建大模型的机会。 | <span class="exturl" data-url="aHR0cHM6Ly9zdGFuZm9yZC1jczMyNC5naXRodWIuaW8vd2ludGVyMjAyMi8=">Home &amp;#124; CS324 (stanford-cs324.github.io)<i class="fa fa-external-link-alt"></i></span> | 2021-12-24 |</p>
+<p>| 伯克利STAT 157深度学习课程 | 这个课程提供了深度学习的实用介绍，包括理论动机以及如何在实践中实现。 | <span class="exturl" data-url="aHR0cDovL2NvdXJzZXMuZDJsLmFpL2JlcmtlbGV5LXN0YXQtMTU3L3N5bGxhYnVzLmh0bWw=">Syllabus — STAT 157, Spring 19 documentation (d2l.ai)<i class="fa fa-external-link-alt"></i></span> | 2019-02 |</p>
+<p>| The Illustrated Transformer | “Transformer”概念通俗易懂介绍 | <span class="exturl" data-url="aHR0cHM6Ly9qYWxhbW1hci5naXRodWIuaW8vaWxsdXN0cmF0ZWQtdHJhbnNmb3JtZXIv">The Illustrated Transformer – Jay Alammar – Visualizing machine learning one concept at a time. (jalammar.github.io)<i class="fa fa-external-link-alt"></i></span> | 2018-06-27 |</p>
+<h2 id="大模型项目"><a href="#大模型项目" class="headerlink" title="大模型项目"></a><strong>大模型项目</strong></h2><p>| <strong>模型名称</strong> | <strong>介绍</strong> | <strong>介绍地址</strong> | <strong>发布时间</strong> |</p>
+<p>| — | — | — | — |</p>
+<p>| Vicuna-13B | 一个开源的聊天机器人，通过在从ShareGPT收集的用户共享对话上进行LLaMA微调来训练。使用GPT-4作为评判标准的初步评估显示，Vicuna-13B在超过90％<em>的情况下实现了OpenAI ChatGPT和Google Bard的质量，并且在超过90％</em> 的情况下优于其他模型（如LLaMA和Stanford Alpaca）。训练Vicuna-13B的成本约为300美元。训练和服务<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2xtLXN5cy9GYXN0Q2hhdA==">代码<i class="fa fa-external-link-alt"></i></span>以及在线演示可供非商业用途公开使用。 | <span class="exturl" data-url="aHR0cHM6Ly92aWN1bmEubG1zeXMub3JnLw==">Vicuna: An Open-Source Chatbot Impressing GPT-4 with 90%* ChatGPT Quality &amp;#124; by the Team with members from UC Berkeley, CMU, Stanford, and UC San Diego (lmsys.org)<i class="fa fa-external-link-alt"></i></span> | 2023-03-19 |</p>
+<p>| LangChain | 一个用于开发由语言模型驱动的应用程序的框架 | <span class="exturl" data-url="aHR0cHM6Ly9kb2NzLmxhbmdjaGFpbi5jb20vZG9jcw==">https://docs.langchain.com/docs<i class="fa fa-external-link-alt"></i></span></p>
+<p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2h3Y2hhc2UxNy9sYW5nY2hhaW4=">https://github.com/hwchase17/langchain<i class="fa fa-external-link-alt"></i></span> | 2023-03-24 |</p>
+<p>| LMFlow | 一个可扩展、方便、高效的工具箱，用于微调大型机器学习模型，旨在用户友好、快速可靠，并且对整个社区开放。 | <span class="exturl" data-url="aHR0cHM6Ly9sbWZsb3cuY29tLw==">https://lmflow.com/<i class="fa fa-external-link-alt"></i></span> | 2023-03-27 |</p>
+<p>| Chatbot Arena | 一个基于大型语言模型（LLMs）的基准平台，在发布博客文章中，给出了一个基于Elo评分系统的排行榜 | <span class="exturl" data-url="aHR0cHM6Ly9sbXN5cy5vcmcvYmxvZy8yMDIzLTA1LTAzLWFyZW5hLw==">https://lmsys.org/blog/2023-05-03-arena/<i class="fa fa-external-link-alt"></i></span> | 2023-05-03 |</p>
+<p>| ImageBind | 第一个能够同时绑定六种模态数据的AI模型，无需明确监督。通过识别这些模态之间的关系——图像和视频、音频、文本、深度、热量和惯性测量单元（IMUs）——这一突破有助于推进人工智能，使机器能够更好地分析许多不同形式的信息。 | <span class="exturl" data-url="aHR0cHM6Ly9pbWFnZWJpbmQubWV0YWRlbW9sYWIuY29tLw==">https://imagebind.metademolab.com/<i class="fa fa-external-link-alt"></i></span> | 2023-05-09 |</p>
+<h2 id="ChatGPT相关大模型论文合集"><a href="#ChatGPT相关大模型论文合集" class="headerlink" title="ChatGPT相关大模型论文合集"></a>ChatGPT相关大模型论文合集</h2><p>| <strong>论文分类</strong> | <strong>名称</strong> | <strong>论文链接</strong> | <strong>发表时间</strong></p>
+<p><strong>【时间为预印网站最新时间】</strong> |</p>
+<p>| — | — | — | — |</p>
+<p>| Transformer | Transformer 论文 | <span class="exturl" data-url="aHR0cHM6Ly9hcnhpdi5vcmcvcGRmLzE3MDYuMDM3NjI=">Attention Is All You Need<i class="fa fa-external-link-alt"></i></span> | 2017-12-05 |</p>
+<p>|  | Transformer 模型介绍和分类 | <span class="exturl" data-url="aHR0cHM6Ly9hcnhpdi5vcmcvcGRmLzIzMDIuMDc3MzA=">Transformer models: an introduction and catalog<i class="fa fa-external-link-alt"></i></span> | 2023-02-16 |</p>
+<p>| OpenAI | DALL E 论文 | <span class="exturl" data-url="aHR0cHM6Ly9hcnhpdi5vcmcvcGRmLzIxMDIuMTIwOTI=">Zero-Shot Text-to-Image Generation<i class="fa fa-external-link-alt"></i></span> | 2021-02-26 |</p>
+<p>|  | DALL E 2论文 | <span class="exturl" data-url="aHR0cHM6Ly9jZG4ub3BlbmFpLmNvbS9wYXBlcnMvZGFsbC1lLTIucGRm">Hierarchical Text-Conditional Image Generation with CLIP Latents<i class="fa fa-external-link-alt"></i></span> | 2022-04-12 |</p>
+<p>|  | Codex 论文 | <span class="exturl" data-url="aHR0cHM6Ly9hcnhpdi5vcmcvcGRmLzIxMDcuMDMzNzQ=">Evaluating Large Language Models Trained on Code<i class="fa fa-external-link-alt"></i></span> | 2021-07-14 |</p>
+<p>|  | GPT-1 | <span class="exturl" data-url="aHR0cHM6Ly9jZG4ub3BlbmFpLmNvbS9yZXNlYXJjaC1jb3ZlcnMvbGFuZ3VhZ2UtdW5zdXBlcnZpc2VkL2xhbmd1YWdlX3VuZGVyc3RhbmRpbmdfcGFwZXIucGRm">Improving Language Understanding by Generative Pre-Training<i class="fa fa-external-link-alt"></i></span> | 2018-06 |</p>
+<p>|  | GPT-2 | <span class="exturl" data-url="aHR0cHM6Ly9jZG4ub3BlbmFpLmNvbS9iZXR0ZXItbGFuZ3VhZ2UtbW9kZWxzL2xhbmd1YWdlX21vZGVsc19hcmVfdW5zdXBlcnZpc2VkX211bHRpdGFza19sZWFybmVycy5wZGY=">Language Models are Unsupervised Multitask Learners<i class="fa fa-external-link-alt"></i></span> | 2019-02 |</p>
+<p>|  | GPT-3 | <span class="exturl" data-url="aHR0cHM6Ly9hcnhpdi5vcmcvYWJzLzIwMDUuMTQxNjU=">Language Models are Few-Shot Learners<i class="fa fa-external-link-alt"></i></span> | 2020-07-22 |</p>
+<p>|  | InstructGPT | <span class="exturl" data-url="aHR0cHM6Ly9hcnhpdi5vcmcvcGRmLzIyMDMuMDIxNTUucGRm">Training language models to follow instructions with human feedback<i class="fa fa-external-link-alt"></i></span> | 2022-03-04 |</p>
+<p>|  | GPT-4 | <span class="exturl" data-url="aHR0cHM6Ly9hcnhpdi5vcmcvcGRmLzIzMDMuMDg3NzQ=">GPT-4 Technical Report<i class="fa fa-external-link-alt"></i></span> | 2023-03-27 |</p>
+<p>|  | GPT对美国劳动力市场影响研究论文 | <span class="exturl" data-url="aHR0cHM6Ly9hcnhpdi5vcmcvYWJzLzIzMDMuMTAxMzA=">[2303.10130] GPTs are GPTs: An Early Look at the Labor Market Impact Potential of Large Language Models (arxiv.org)<i class="fa fa-external-link-alt"></i></span> | 2023-03-23 |</p>
+<p>|  | 语言模型可以解释语言模型中的神经元 | <span class="exturl" data-url="aHR0cHM6Ly9vcGVuYWlwdWJsaWMuYmxvYi5jb3JlLndpbmRvd3MubmV0L25ldXJvbi1leHBsYWluZXIvcGFwZXIvaW5kZXguaHRtbA==">Language models can explain neurons in language models (windows.net)<i class="fa fa-external-link-alt"></i></span> | 2023-05-09 |</p>
+<p>| 开源GPT替代模型 | BLOOM：1760亿参数的仅解码器Transformer语言模型 | <span class="exturl" data-url="aHR0cHM6Ly9hcnhpdi5vcmcvcGRmLzIyMTEuMDUxMDA=">BLOOM: A 176B-Parameter Open-Access Multilingual Language Model<i class="fa fa-external-link-alt"></i></span> | 2023-03-13 |</p>
+<p>|  | 开放预训练Transformer语言模型 | <span class="exturl" data-url="aHR0cHM6Ly9hcnhpdi5vcmcvcGRmLzIyMDUuMDEwNjg=">OPT: Open Pre-trained Transformer Language Models<i class="fa fa-external-link-alt"></i></span> | 2022-06-21 |</p>
+<p>| Chain of Thought | Chain of Thought论文 | <span class="exturl" data-url="aHR0cHM6Ly9hcnhpdi5vcmcvcGRmLzIyMDEuMTE5MDM=">Chain-of-Thought Prompting Elicits Reasoning in Large Language Models<i class="fa fa-external-link-alt"></i></span> | 2023-01-10 |</p>
+<p>|  | 语言模型中的多模态思维链推理 | <span class="exturl" data-url="aHR0cHM6Ly9hcnhpdi5vcmcvcGRmLzIzMDIuMDA5MjM=">Multimodal Chain-of-Thought Reasoning in Language Models<i class="fa fa-external-link-alt"></i></span> | 2023-02-16 |</p>
+<p>| ViLT | ViLT论文 | <span class="exturl" data-url="aHR0cHM6Ly9hcnhpdi5vcmcvcGRmLzIxMDIuMDMzMzQ=">ViLT: Vision-and-Language Transformer Without Convolution or Region Supervision<i class="fa fa-external-link-alt"></i></span> | 2021-06-10 |</p>
+<p>| HELM | HELM全面语言模型评测论文 | <span class="exturl" data-url="aHR0cHM6Ly9hcnhpdi5vcmcvcGRmLzIyMTEuMDkxMTA=">Holistic Evaluation of Language Models<i class="fa fa-external-link-alt"></i></span> | 2022-11-16 |</p>
+<p>| GPT模型分析 | 复旦大学GPT模型对比分析 | <span class="exturl" data-url="aHR0cHM6Ly9hcnhpdi5vcmcvcGRmLzIzMDMuMTA0MjA=">A Comprehensive Capability Analysis of GPT-3 and GPT-3.5 Series Models<i class="fa fa-external-link-alt"></i></span> | 2023-03-18 |</p>
+<p>|  | 微软研究院GPT-4早期实验 | <span class="exturl" data-url="aHR0cHM6Ly9hcnhpdi5vcmcvcGRmLzIzMDMuMTI3MTI=">Sparks of Artificial General Intelligence: Early experiments with GPT-4<i class="fa fa-external-link-alt"></i></span> | 2023-03-27 |</p>
+<p>|  | AIGC完整调查，ChatGPT从GPT-4到GPT-5是你所需要的全部吗？ | <span class="exturl" data-url="aHR0cHM6Ly9hcnhpdi5vcmcvcGRmLzIzMDMuMTE3MTc=">A Complete Survey on Generative AI (AIGC): Is ChatGPT from GPT-4 to GPT-5 All You Need?<i class="fa fa-external-link-alt"></i></span> | 2023-03-21 |</p>
+<p>| Anthropic | Anthropic LLM论文 | <span class="exturl" data-url="aHR0cHM6Ly9hcnhpdi5vcmcvcGRmLzIyMDQuMDU4NjI=">Training a Helpful and Harmless Assistant with Reinforcement Learning from Human Feedback<i class="fa fa-external-link-alt"></i></span> | 2022-04-12 |</p>
+<p>| LaMda | LaMda模型论文 | <span class="exturl" data-url="aHR0cHM6Ly9hcnhpdi5vcmcvYWJzLzIyMDEuMDgyMzk=">LaMDA: Language Models for Dialog Applications<i class="fa fa-external-link-alt"></i></span> | 2022-02-10 |</p>
+<p>| GLM | GLM论文 | <span class="exturl" data-url="aHR0cHM6Ly9hcnhpdi5vcmcvcGRmLzIxMDMuMTAzNjA=">GLM: General Language Model Pretraining with Autoregressive Blank Infilling<i class="fa fa-external-link-alt"></i></span> | 2022-03-17 |</p>
+<p>|  | GLM-130B | <span class="exturl" data-url="aHR0cHM6Ly9hcnhpdi5vcmcvcGRmLzIyMTAuMDI0MTQ=">GLM-130B: An Open Bilingual Pre-trained Model<i class="fa fa-external-link-alt"></i></span> | 2022-10-05 |</p>
+<p>| Toolformer | Toolformer模型论文 | <span class="exturl" data-url="aHR0cHM6Ly9hcnhpdi5vcmcvcGRmLzIzMDIuMDQ3NjE=">Toolformer: Language Models Can Teach Themselves to Use Tools<i class="fa fa-external-link-alt"></i></span> | 2023-02-09 |</p>
+<p>| GPT-4应用分析 | GPT-4在医学挑战问题上的能力 | <span class="exturl" data-url="aHR0cHM6Ly9hcnhpdi5vcmcvcGRmLzIzMDMuMTMzNzU=">Capabilities of GPT-4 on Medical Challenge Problems<i class="fa fa-external-link-alt"></i></span> | 2023-03-20 |</p>
+<p>|  | 人工缪斯：生成式人工智能聊天机器人已经达到了与人类相当的创造力水平 | <span class="exturl" data-url="aHR0cHM6Ly9hcnhpdi5vcmcvcGRmLzIzMDMuMTIwMDM=">Artificial muses: Generative Artificial Intelligence Chatbots Have Risen to Human-Level Creativity<i class="fa fa-external-link-alt"></i></span> | 2023-03-21 |</p>
+<p>|  | 心灵与机器相遇：揭开GPT-4的认知心理学 | <span class="exturl" data-url="aHR0cHM6Ly9hcnhpdi5vcmcvcGRmLzIzMDMuMTE0MzY=">Mind meets machine: Unravelling GPT-4’s cognitive psychology<i class="fa fa-external-link-alt"></i></span> | 2023-03-20 |</p>
+<p>| CodeGeeX | CodeGeeX，一个具有130亿参数的多语言代码生成模型。截至2022年6月，CodeGeeX已经在23种编程语言的8500亿个标记上进行了预训练。广泛的实验表明，在HumanEval-X上，CodeGeeX在代码生成和翻译任务方面都优于规模相似的多语言代码模型。 | <span class="exturl" data-url="aHR0cHM6Ly9hcnhpdi5vcmcvcGRmLzIzMDMuMTc1Njg=">CodeGeeX: A Pre-Trained Model for Code Generation with Multilingual Evaluations on HumanEval-X<i class="fa fa-external-link-alt"></i></span> | 2023-03-30 |</p>
+<p>| BloombergGPT | 基于广泛的金融数据进行训练的500亿参数语言模型，拥有一个3630亿令牌数据集，基于彭博社广泛的数据来源，可能是迄今为止最大规模的特定领域数据集，并增加了来自通用目标数据集的3450亿令牌。通过标准LLM基准测试、开放式金融基准测试以及一套最能反映彭博社预期使用方式的内部基准测试验证了BloombergGPT。通过混合数据集训练得到了一个性能优异且不损失通用LLM基准表现水平但在金融任务上超越现有模型很多倍的模型。 | <span class="exturl" data-url="aHR0cHM6Ly9hcnhpdi5vcmcvcGRmLzIzMDMuMTc1NjQ=">BloombergGPT: A Large Language Model for Finance<i class="fa fa-external-link-alt"></i></span> | 2023-03-30 |</p>
+<p>| HuggingGPT | HuggingGPT是一个协作系统，由LLM作为控制器和许多专家模型作为协作执行者（来自HuggingFace Hub）组成。系统工作流程包括四个阶段：</p>
+<ol>
+<li></li>
+</ol>
+<p>任务规划：使用ChatGPT分析用户请求以理解其意图，并将其分解为可能可解决的任务。</p>
+<ol start="2">
+<li></li>
+</ol>
+<p>模型选择：为了解决计划中的任务，ChatGPT基于它们的描述选择托管在Hugging Face上的专家模型。</p>
+<ol start="3">
+<li></li>
+</ol>
+<p>任务执行：调用并执行每个选定的模型，并将结果返回给ChatGPT。</p>
+<ol start="4">
+<li></li>
+</ol>
+<p>响应生成：最后，使用ChatGPT集成所有模型的预测，并生成响应。 | <span class="exturl" data-url="aHR0cHM6Ly9hcnhpdi5vcmcvcGRmLzIzMDMuMTc1ODAucGRm">HuggingGPT: Solving AI Tasks with ChatGPT and its Friends in Hugging Face<i class="fa fa-external-link-alt"></i></span> | 2023-04-01 |</p>
+<p>| ImageBind | 一种学习跨越六种不同模态的联合嵌入的方法——图像、文本、音频、深度、热和IMU数据。ImageBind可以利用最近大规模视觉语言模型，并通过使用它们与图像自然匹配来扩展其零样本能力到新的模态上。 | <span class="exturl" data-url="aHR0cHM6Ly9hcnhpdi5vcmcvcGRmLzIzMDUuMDU2NjU=">https://arxiv.org/pdf/2305.05665<i class="fa fa-external-link-alt"></i></span> | 2023-05-09 |</p>
+<h2 id="OpenAI参考资料集锦"><a href="#OpenAI参考资料集锦" class="headerlink" title="OpenAI参考资料集锦"></a>OpenAI参考资料集锦</h2><p>| <strong>功能</strong> | <strong>地址</strong> |</p>
+<p>| — | — |</p>
+<p>| OpenAI 官方Prompt调试 | <span class="exturl" data-url="aHR0cHM6Ly9wbGF0Zm9ybS5vcGVuYWkuY29tL3BsYXlncm91bmQ/bW9kZT1jaGF0">https://platform.openai.com/playground?mode=chat<i class="fa fa-external-link-alt"></i></span> |</p>
+<p>| OpenAI 官方文档 | <span class="exturl" data-url="aHR0cHM6Ly9wbGF0Zm9ybS5vcGVuYWkuY29tL2RvY3MvaW50cm9kdWN0aW9u">https://platform.openai.com/docs/introduction<i class="fa fa-external-link-alt"></i></span> |</p>
+<p>| OpenAI API文档 | <span class="exturl" data-url="aHR0cHM6Ly9wbGF0Zm9ybS5vcGVuYWkuY29tL2RvY3MvYXBpLXJlZmVyZW5jZQ==">https://platform.openai.com/docs/api-reference<i class="fa fa-external-link-alt"></i></span> |</p>
+<p>| OpenAI 官方Prompts示例 | <span class="exturl" data-url="aHR0cHM6Ly9wbGF0Zm9ybS5vcGVuYWkuY29tL2V4YW1wbGVz">https://platform.openai.com/examples<i class="fa fa-external-link-alt"></i></span> |</p>
+<p>| OpenAI 官方论文合集 | <span class="exturl" data-url="aHR0cHM6Ly9vcGVuYWkuY29tL3Jlc2VhcmNo">https://openai.com/research<i class="fa fa-external-link-alt"></i></span> |</p>
+<p>| OpenAI 产品介绍 | <span class="exturl" data-url="aHR0cHM6Ly9vcGVuYWkuY29tL3Byb2R1Y3Q=">https://openai.com/product<i class="fa fa-external-link-alt"></i></span> |</p>
+<p>| OpenAI 模型使用价格说明 | <span class="exturl" data-url="aHR0cHM6Ly9vcGVuYWkuY29tL3ByaWNpbmc=">https://openai.com/pricing<i class="fa fa-external-link-alt"></i></span> |</p>
+<p>| OpenAI 插件API说明 | <span class="exturl" data-url="aHR0cHM6Ly9wbGF0Zm9ybS5vcGVuYWkuY29tL2RvY3MvcGx1Z2lucy9pbnRyb2R1Y3Rpb24=">https://platform.openai.com/docs/plugins/introduction<i class="fa fa-external-link-alt"></i></span> |</p>
+<h2 id="ChatGPT相关Github项目"><a href="#ChatGPT相关Github项目" class="headerlink" title="ChatGPT相关Github项目"></a>ChatGPT相关Github项目</h2><h3 id="类ChatGPT模型相关Github项目"><a href="#类ChatGPT模型相关Github项目" class="headerlink" title="类ChatGPT模型相关Github项目"></a>类ChatGPT模型相关Github项目</h3><p>| <strong>模型名称</strong> | <strong>简介</strong> | <strong>项目地址</strong> | <strong>发布时间</strong> |</p>
+<p>| — | — | — | — |</p>
+<p>| GLM | 清华知识工程和数据挖掘组开源的一个通用语言模型，使用自回归填空目标进行预训练，并可以在各种自然语言理解和生成任务上进行微调。 | <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL1RIVURNL0dMTQ==">https://github.com/THUDM/GLM<i class="fa fa-external-link-alt"></i></span> | 2022-03-17 |</p>
+<p>| GLM-130B | 清华知识工程和数据挖掘组开源的一个开放的双语（英文和中文）双向稠密模型，具有1300亿个参数，使用通用语言模型（GLM）算法进行预训练。 | <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL1RIVURNL0dMTS0xMzBC">https://github.com/THUDM/GLM-130B<i class="fa fa-external-link-alt"></i></span> | 2022-10-05 |</p>
+<p>| ChatGLM-6B | 清华知识工程和数据挖掘组开源的、支持中英双语的对话语言模型，基于 General Language Model (GLM) 架构，具有 62 亿参数。结合模型量化技术，用户可以在消费级的显卡上进行本地部署（INT4 量化级别下最低只需 6GB 显存）。 | <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL1RIVURNL0NoYXRHTE0tNkI=">https://github.com/THUDM/ChatGLM-6B<i class="fa fa-external-link-alt"></i></span> | 2023-03 |</p>
+<p>| LLaMA | Facebook开源的用于加载LLaMA（arXiv）模型并运行推理的代码。 | <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2ZhY2Vib29rcmVzZWFyY2gvbGxhbWE=">https://github.com/facebookresearch/llama<i class="fa fa-external-link-alt"></i></span> | 2023-02 |</p>
+<p>| Alpaca | 斯坦福开源的Alpaca 7B模型，一个在52K个指令跟随演示中从LLaMA 7B模型微调而来的模型。在对单轮指令跟随的初步评估中，Alpaca表现出与OpenAI的text-davinci-003相似的定性特征，同时其体积小、易于复制且成本低廉。 | <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3RhdHN1LWxhYi9zdGFuZm9yZF9hbHBhY2E=">https://github.com/tatsu-lab/stanford_alpaca<i class="fa fa-external-link-alt"></i></span> | 2023-03-13 |</p>
+<p>| OpenAI Evals | OpenAI开源的ChatGPT相关模型的评测工具 | <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL29wZW5haS9ldmFscw==">https://github.com/openai/evals<i class="fa fa-external-link-alt"></i></span> | 2023-03 |</p>
+<p>| Visual ChatGPT | 微软开源的视觉ChatGPT，连接了ChatGPT和一系列视觉基础模型，使得在聊天过程中可以发送和接收图片。 | <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL21pY3Jvc29mdC92aXN1YWwtY2hhdGdwdA==">GitHub - microsoft&#x2F;visual-chatgpt: Official repo for the paper: Visual ChatGPT: Talking, Drawing and Editing with Visual Foundation Models<i class="fa fa-external-link-alt"></i></span> | 2023-03-08 |</p>
+<p>| Dolly | Databricks的Dolly是一个大型语言模型，它在Databricks机器学习平台上进行了训练。研究表明，当这个两年前的开源模型（GPT-J）仅经过30分钟的精细调整，并针对50,000条记录（斯坦福Alpaca）进行专注语料库训练时，其展现出惊人高质量的指令跟随行为，而这种行为并不是基于该模型构建的基础模型所具有的特征。我们认为这一发现非常重要，因为它证明了创造强大人工智能技术的能力比以前意识到的要容易得多。 | <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2RhdGFicmlja3NsYWJzL2RvbGx5">https://github.com/databrickslabs/dolly<i class="fa fa-external-link-alt"></i></span> | 2023-03-24 |</p>
+<p>| gpt4all | gpt4all：一个聊天机器人，它是在包括代码、故事和对话等大量干净的助手数据集上进行训练的。 | <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL25vbWljLWFpL2dwdDRhbGw=">https://github.com/nomic-ai/gpt4all<i class="fa fa-external-link-alt"></i></span> | 2023-03 |</p>
+<p>| CodeGeeX | CodeGeeX是一个具有130亿参数的多编程语言代码生成预训练模型。CodeGeeX采用华为MindSpore框架实现，在鹏城实验室“鹏城云脑II”中的192个节点（共1536个国产昇腾910 AI处理器）上训练而成。截至2022年6月22日，CodeGeeX历时两个月在20多种编程语言的代码语料库（&gt;8500亿Token）上预训练得到。CodeGeeX有以下特点：</p>
+<p>●</p>
+<p>高精度代码生成：支持生成Python、C++、Java、JavaScript和Go等多种主流编程语言的代码，在HumanEval-X代码生成任务上取得47%~60%求解率，较其他开源基线模型有更佳的平均性能。</p>
+<p>●</p>
+<p>跨语言代码翻译：支持代码片段在不同编程语言间进行自动翻译转换，翻译结果正确率高，在HumanEval-X代码翻译任务上超越了其它基线模型。</p>
+<p>●</p>
+<p>自动编程插件：CodeGeeX插件现已上架VSCode插件市场（完全免费），用户可以通过其强大的少样本生成能力，自定义代码生成风格和能力，更好辅助代码编写。</p>
+<p>●</p>
+<p>模型跨平台开源: 所有代码和模型权重开源开放，用作研究用途。CodeGeeX同时支持昇腾和英伟达平台，可在单张昇腾910或英伟达V100&#x2F;A100上实现推理。 | <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL1RIVURNL0NvZGVHZWVY">https://github.com/THUDM/CodeGeeX<i class="fa fa-external-link-alt"></i></span> | 2023-03-30 |</p>
+<p>| LMFlow | 一个可扩展、方便和高效的工具箱，用于微调大型机器学习模型，旨在用户友好、快速可靠，并且对整个社区开放。 | <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL09wdGltYWxTY2FsZS9MTUZsb3c=">https://github.com/OptimalScale/LMFlow<i class="fa fa-external-link-alt"></i></span> | 2023-04-02 |</p>
+<p>| DeepSpeed-Chat | DeepSpeed Chat: 一键式RLHF训练，可以让类ChatGPT千亿大模型提速省钱15倍 | <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL21pY3Jvc29mdC9EZWVwU3BlZWQvdHJlZS9tYXN0ZXIvYmxvZ3MvZGVlcHNwZWVkLWNoYXQvY2hpbmVzZQ==">https://github.com/microsoft/DeepSpeed/tree/master/blogs/deepspeed-chat/chinese<i class="fa fa-external-link-alt"></i></span> | 2023-04-12 |</p>
+<p>| AutoGPT | Auto-GPT是一个实验性的开源应用程序，展示了GPT-4语言模型的能力。这个程序由GPT-4驱动，将LLM“思想”链接在一起，以自主地实现您设定的任何目标。作为GPT-4完全自主运行的首批示例之一，Auto-GPT推动了人工智能可能性的界限。 | <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL1RvcmFudHVsaW5vL0F1dG8tR1BU">https://github.com/Torantulino/Auto-GPT<i class="fa fa-external-link-alt"></i></span> | 2023-04-12 |</p>
+<p>| MiniGPT-4 | MiniGPT-4：使用先进的大型语言模型增强视觉语言理解 | <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL1Zpc2lvbi1DQUlSL01pbmlHUFQtNA==">https://github.com/Vision-CAIR/MiniGPT-4<i class="fa fa-external-link-alt"></i></span> | 2023-04-17 |</p>
+<p>| StableLM | Stability AI发布了一个新的开源语言模型——StableLM。该模型的Alpha版本可用于30亿和70亿个参数，随后还将推出150亿到650亿个参数的模型。 | <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL1N0YWJpbGl0eS1BSS9TdGFibGVMTQ==">https://github.com/Stability-AI/StableLM<i class="fa fa-external-link-alt"></i></span> | 2023-04-19 |</p>
+<p>| ImageBind | ImageBind学习了六种不同模态的联合嵌入——图像、文本、音频、深度、热成像和IMU数据。它使得新颖的应用程序“开箱即用”，包括跨模态检索，使用算术组合模态，跨模态检测和生成等。 | <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2ZhY2Vib29rcmVzZWFyY2gvSW1hZ2VCaW5k">https://github.com/facebookresearch/ImageBind<i class="fa fa-external-link-alt"></i></span> | 2023-05-09 |</p>
+<h3 id="ChatGPT产品相关Github项目"><a href="#ChatGPT产品相关Github项目" class="headerlink" title="ChatGPT产品相关Github项目"></a>ChatGPT产品相关Github项目</h3><p>| <strong>产品名称</strong> | <strong>简介</strong> | <strong>项目地址</strong> |</p>
+<p>| — | — | — |</p>
+<p>| OpenAI-translator | 基于 ChatGPT API 的划词翻译浏览器插件和跨平台桌面端应用 | <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3lldG9uZS9vcGVuYWktdHJhbnNsYXRvcg==">https://github.com/yetone/openai-translator<i class="fa fa-external-link-alt"></i></span> |</p>
+<p>| sql-translator | 一款基于人工智能的可以将自然语言转换为SQL的开源项目。 | <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3dob2lza2F0cmluL3NxbC10cmFuc2xhdG9y">https://github.com/whoiskatrin/sql-translator<i class="fa fa-external-link-alt"></i></span> |</p>
+<p>| ChatGPT | 一款封装了ChatGPT网页的桌面版ChatGPT应用。 | <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2xlbmN4L0NoYXRHUFQ=">https://github.com/lencx/ChatGPT<i class="fa fa-external-link-alt"></i></span> |</p>
+<p>| Chatgpt-web | 一款基于Express 和 Vue3 搭建的 ChatGPT 演示网页，可自定义配置OpenAI的API-key来搭建自己的私人ChatGPT。 | <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0NoYW56aGFveXUvY2hhdGdwdC13ZWI=">https://github.com/Chanzhaoyu/chatgpt-web<i class="fa fa-external-link-alt"></i></span> |</p>
+<p>| Chatbox | 跨平台桌面应用程序，用于ChatGPT API（OpenAI API），同时也是一个Prompts调试和管理工具。 | <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL0Jpbi1IdWFuZy9jaGF0Ym94">GitHub - Bin-Huang&#x2F;chatbox: A cross-platform desktop application for ChatGPT API (OpenAI API), also a prompt debugging and management tool.<i class="fa fa-external-link-alt"></i></span> |</p>
+<h2 id="ChatGPT相关投研报告"><a href="#ChatGPT相关投研报告" class="headerlink" title="ChatGPT相关投研报告"></a>ChatGPT相关投研报告</h2><p>| <strong>机构名称</strong> | <strong>报告题目</strong> | <strong>报告地址</strong> | <strong>发表时间</strong> |</p>
+<p>| — | — | — | — |</p>
+<p>| 国泰君安 | ChatGPT研究框架 | <span class="exturl" data-url="aHR0cDovL3d3dy5ldmluY2hpbmEuY29tL3VwbG9hZGZpbGUvZmlsZS8yMDIzMDMxNS8yMDIzMDMxNTA5NDAyNDA3NTM5LnBkZg==">http://www.evinchina.com/uploadfile/file/20230315/2023031509402407539.pdf<i class="fa fa-external-link-alt"></i></span> | 2023-03-15 |</p>
+<p>| 华福证券 | AIGC&amp;ChatGPT发展报告 | <span class="exturl" data-url="aHR0cHM6Ly9maWxlLmRpZ2l0YWxpbmcuY29tL2VJbWcvdWltYWdlcy8yMDIzMDMxNS8xNjc4ODUwODkxMzg0MjIxLnBkZg==">https://file.digitaling.com/eImg/uimages/20230315/1678850891384221.pdf<i class="fa fa-external-link-alt"></i></span> | 2023-03-15 |</p>
+<p>| 民生证券 | ChatGPT在金融应用前景 | <span class="exturl" data-url="aHR0cHM6Ly9wZGYuZGZjZncuY29tL3BkZi9IM19BUDIwMjMwMjE0MTU4MzEzMDkxMl8xLnBkZj8xNjc2MzgwOTYxMDAwLnBkZg==">https://pdf.dfcfw.com/pdf/H3_AP202302141583130912_1.pdf?1676380961000.pdf<i class="fa fa-external-link-alt"></i></span> | 2023-02-14 |</p>
+<p>| 民生证券 | ChatGPT 系列报告：为人形机器人注入“灵魂 | <span class="exturl" data-url="aHR0cHM6Ly9maWxlLml5YW5iYW8uY29tL3BkZi84YmE2ZC1hZTAwNzk5Zi01OGE3LTRlZDEtOWFlYi1kOTk2ZjliMTI5YzIucGRm">https://file.iyanbao.com/pdf/8ba6d-ae00799f-58a7-4ed1-9aeb-d996f9b129c2.pdf<i class="fa fa-external-link-alt"></i></span> | 2023-02-14 |</p>
+<p>| 德邦证券 | ChatGPT 热度加速 AI 算力投资，光通信产业链或将持续受益 | <span class="exturl" data-url="aHR0cHM6Ly9wZGYuZGZjZncuY29tL3BkZi9IM19BUDIwMjMwMjEwMTU4Mjk5MjE2M18xLnBkZj8xNjc2MDI1ODIyMDAwLnBkZg==">https://pdf.dfcfw.com/pdf/H3_AP202302101582992163_1.pdf?1676025822000.pdf<i class="fa fa-external-link-alt"></i></span> | 2023-02-10 |</p>
+<p>| 招银国际 | ChatGPT 跨行业专题报告 | <span class="exturl" data-url="aHR0cDovL3BnLmpyai5jb20uY24vYWNjL1Jlcy9DTl9SRVMvSU5EVVMvMjAyMy8yLzEwL2VjNzEyYWZhLTg5N2ItNGQ3MS05ZjFiLTAyNGIzMjk3ZDRlYS5wZGY=">http://pg.jrj.com.cn/acc/Res/CN_RES&#x2F;INDUS&#x2F;2023&#x2F;2&#x2F;10&#x2F;ec712afa-897b-4d71-9f1b-024b3297d4ea.pdf<i class="fa fa-external-link-alt"></i></span> | 2023-02-10 |</p>
+<p>| 银河证券 | ChatGPT 开启 AI 新纪元，AIGC 投资框架梳理 | <span class="exturl" data-url="aHR0cDovL3BnLmpyai5jb20uY24vYWNjL1Jlcy9DTl9SRVMvSU5EVVMvMjAyMy8yLzE3L2YwOWFkYzcxLTkzNmMtNDAyOS1hOGI3LWUyOTAyZGZiYjZlNy5wZGY=">http://pg.jrj.com.cn/acc/Res/CN_RES&#x2F;INDUS&#x2F;2023&#x2F;2&#x2F;17&#x2F;f09adc71-936c-4029-a8b7-e2902dfbb6e7.pdf<i class="fa fa-external-link-alt"></i></span> | 2023-02-17 |</p>
+<p>| 浦银国际 | 序幕揭开：ChatGPT 将 AIGC 推向“平民化”时代 | <span class="exturl" data-url="aHR0cDovL3d3dy5zcGRiaS5jb20vZ2V0ZmlsZS9pbmRleC9hY3Rpb24vaW1hZ2VzL25hbWUvNjNlY2JhOTFjMjQ4Zi5wZGY=">http://www.spdbi.com/getfile/index/action/images/name/63ecba91c248f.pdf<i class="fa fa-external-link-alt"></i></span> | 2023-02-14 |</p>
+<p>| 长城证券 | ChatGPT 概念发酵，建议关注泛 AI产业链 | <span class="exturl" data-url="aHR0cDovL3d3dy5jZ3dzLmNvbS9jY3pxL2dnZHQvY2N5ai8yMDIzMDIvUDAyMDIzMDIyMjMwODUyNjc3MDE1Ni5wZGY=">http://www.cgws.com/cczq/ggdt/ccyj/202302/P020230222308526770156.pdf<i class="fa fa-external-link-alt"></i></span> | 2023-02-22 |</p>
+<p>| 华龙证券 | 当下最成功的 C 端人工智能应用——ChatGTP点评报告 | <span class="exturl" data-url="aHR0cDovL3d3dy5obHpxZ3MuY29tL3VwbG9hZC8yMDIzMDIyMS8yMDIzMDIyMTE2NzY5NjkwNjAzMzAucGRm">http://www.hlzqgs.com/upload/20230221/202302211676969060330.pdf<i class="fa fa-external-link-alt"></i></span> | 2023-02-21 |</p>
+<p>| 偉祿亞太證券 | 人工智能:AIGC、ChatGPT | <span class="exturl" data-url="aHR0cHM6Ly93d3cucmVhbG9yZGFwc2VjLmNvbS93cC1jb250ZW50L3VwbG9hZHMvMjAyMy8wMi8lRTclQTAlOTQlRTclQTklQjYlRTUlQTAlQjElRTUlOTElOEEtQ2hhdEdQVC0lRTQlQkElQkElRTUlQjclQTUlRTYlOTklQkElRTYlODUlQTctU0MucGRm">https://www.realordapsec.com/wp-content/uploads/2023/02/%E7%A0%94%E7%A9%B6%E5%A0%B1%E5%91%8A-ChatGPT-%E4%BA%BA%E5%B7%A5%E6%99%BA%E6%85%A7-SC.pdf<i class="fa fa-external-link-alt"></i></span> | 2023-02-17 |</p>
+<h2 id="ChatGPT相关产品"><a href="#ChatGPT相关产品" class="headerlink" title="ChatGPT相关产品"></a>ChatGPT相关产品</h2><h3 id="类ChatGPT产品"><a href="#类ChatGPT产品" class="headerlink" title="类ChatGPT产品"></a>类ChatGPT产品</h3><p>| <strong>产品名称</strong> | <strong>产品介绍</strong> | <strong>官网地址</strong> |</p>
+<p>| — | — | — |</p>
+<p>| 文心一言 | 百度发布的一款类似于ChatGPT的产品。 | <span class="exturl" data-url="aHR0cHM6Ly95aXlhbi5iYWlkdS5jb20vd2VsY29tZQ==">https://yiyan.baidu.com/welcome<i class="fa fa-external-link-alt"></i></span> |</p>
+<p>| New Bing | 微软发布的基于GPT-4的类似于ChatGPT的产品。 | <span class="exturl" data-url="aHR0cHM6Ly93d3cuYmluZy5jb20vbmV3">https://www.bing.com/new<i class="fa fa-external-link-alt"></i></span> |</p>
+<p>| 通义千问 | 达摩院发布的一款大语言模型产品 | <span class="exturl" data-url="aHR0cHM6Ly90b25neWkuYWxpeXVuLmNvbS8=">https://tongyi.aliyun.com/<i class="fa fa-external-link-alt"></i></span> |</p>
+<p>| open-assistant | 开放助手（简称OA）是一个基于聊天的开源助手。该项目的愿景是创建一个可以在单个高端消费级GPU上运行的大型语言模型。通过一些修改，Open Assistant也应该能够轻松地与其他第三方应用程序进行接口，并从数据库和互联网中检索信息。 | <span class="exturl" data-url="aHR0cHM6Ly9vcGVuLWFzc2lzdGFudC5pby8=">https://open-assistant.io/<i class="fa fa-external-link-alt"></i></span> |</p>
+<h3 id="ChatGPT非官方产品"><a href="#ChatGPT非官方产品" class="headerlink" title="ChatGPT非官方产品"></a>ChatGPT非官方产品</h3><p>| <strong>产品名称</strong> | <strong>产品介绍</strong> | <strong>官网地址</strong> |</p>
+<p>| — | — | — |</p>
+<p>| Poe | 一款集成了ChatGPT、GPT-4、Claude、Claude+、Sage、Dragonfly的聊天机器人hub | <span class="exturl" data-url="aHR0cHM6Ly9wb2UuY29tLw==">https://poe.com/<i class="fa fa-external-link-alt"></i></span> |</p>
+<h3 id="类ChatGPT-AI工具"><a href="#类ChatGPT-AI工具" class="headerlink" title="类ChatGPT AI工具"></a>类ChatGPT AI工具</h3><p>| <strong>产品工具名称</strong> | <strong>介绍</strong> | <strong>官网地址</strong> |</p>
+<p>| — | — | — |</p>
+<p>| BloopAI | 一款使用GPT-4和语义代码搜索来理解代码库的AI软件 | <span class="exturl" data-url="aHR0cHM6Ly9ibG9vcC5haS8=">https://bloop.ai/<i class="fa fa-external-link-alt"></i></span> |</p>
+<p>| Cursor | 一款基于GPT-4开发的进行辅助编程的软件。 | <span class="exturl" data-url="aHR0cHM6Ly93d3cuY3Vyc29yLnNvLw==">Cursor &amp;#124; Build Fast<i class="fa fa-external-link-alt"></i></span> |</p>
+<p>| OpenL | 一款基于OpenAI的翻译工具网站。支持15种常见语言，另外还提供了writer功能，可修正语法和润色文章。免费用户有20个额度 | <span class="exturl" data-url="aHR0cHM6Ly9vcGVubC5pby8=">https://openl.io<i class="fa fa-external-link-alt"></i></span> |</p>
+<p>| Browse AI | 一款预构建的网络爬虫机器人，可以在2分钟内构建机器人，无需写代码，帮你爬取需要的任何资源。 | <span class="exturl" data-url="aHR0cHM6Ly93d3cuYnJvd3NlLmFpLw==">https://www.browse.ai/<i class="fa fa-external-link-alt"></i></span> |</p>
+<p>| Hypotenuse AI | 一款基于AI的写作助手。 | <span class="exturl" data-url="aHR0cHM6Ly93d3cuaHlwb3RlbnVzZS5haS8=">https://www.hypotenuse.ai/<i class="fa fa-external-link-alt"></i></span> |</p>
+<p>| There’s an ai for that | 一个收集了能完成很多任务的AI工具集合网站。 | <span class="exturl" data-url="aHR0cHM6Ly90aGVyZXNhbmFpZm9ydGhhdC5jb20v">https://theresanaiforthat.com/<i class="fa fa-external-link-alt"></i></span> |</p>
+<p>| Durable AI Website Builder | 基于AI在30秒内构建一个网站。 | <span class="exturl" data-url="aHR0cHM6Ly9kdXJhYmxlLmNvL2FpLXdlYnNpdGUtYnVpbGRlcg==">https://durable.co/ai-website-builder<i class="fa fa-external-link-alt"></i></span> |</p>
+<p>| Delv AI | 一款基于GPT-3的可以帮助从任何文本中进行总结的工具。 | <span class="exturl" data-url="aHR0cHM6Ly93d3cuZGVsdi5haS8=">https://www.delv.ai/<i class="fa fa-external-link-alt"></i></span> |</p>
+<p>| Perplexity AI | 一款旨在于替代Google的人工智能搜索引擎。 | <span class="exturl" data-url="aHR0cHM6Ly93d3cucGVycGxleGl0eS5haS8=">https://www.perplexity.ai/<i class="fa fa-external-link-alt"></i></span> |</p>
+<p>| ChatPDF | ChatPDF是与任何PDF快速、简便地聊天的方式，免费且无需登录。 | <span class="exturl" data-url="aHR0cHM6Ly93d3cuY2hhdHBkZi5jb20v">https://www.chatpdf.com/<i class="fa fa-external-link-alt"></i></span> |</p>
+<p>| ChatExcel | 通过文字聊天实现Excel的交互控制的AI辅助工具 | <span class="exturl" data-url="aHR0cHM6Ly9jaGF0ZXhjZWwuY29tLw==">https://chatexcel.com/<i class="fa fa-external-link-alt"></i></span> |</p>
+<p>| ChatDoc | 一个基于ChatGPT的文件阅读助手，可以快速从PDF中提取、定位和总结信息。 | <span class="exturl" data-url="aHR0cHM6Ly9jaGF0ZG9jLmNvbS8=">ChatDOC - Chat with your documents<i class="fa fa-external-link-alt"></i></span> |</p>
+<p>| Humata | 一个基于ChatGPT的文件理解助手 | <span class="exturl" data-url="aHR0cHM6Ly93d3cuaHVtYXRhLmFpLw==">https://www.humata.ai/<i class="fa fa-external-link-alt"></i></span> |</p>
+<p>| LLamaChat | LlamaChat允许您与在Mac本地运行的LLaMa、Alpaca和GPT4All模型进行聊天。可直接下载LLama、Alpaca和GPT4All模型后直接进行使用。 | <span class="exturl" data-url="aHR0cHM6Ly9sbGFtYWNoYXQuYXBwLw==">https://llamachat.app/<i class="fa fa-external-link-alt"></i></span> |</p>
+<h3 id="多模态产品"><a href="#多模态产品" class="headerlink" title="多模态产品"></a><strong>多模态产品</strong></h3><p>| <strong>产品名称</strong> | <strong>介绍</strong> | <strong>官网地址</strong> |</p>
+<p>| — | — | — |</p>
+<p>| Midjourney | AI绘画创作工具 | <span class="exturl" data-url="aHR0cHM6Ly93d3cubWlkam91cm5leS5jb20v">https://www.midjourney.com/<i class="fa fa-external-link-alt"></i></span> |</p>
+<p>| Stable Diffusion | 一种潜在的文本到图像扩散模型，能够生成逼真的照片，只需输入任何文本即可。它培养了自主创作的自由，产生了令人惊叹的图像，并使数十亿人能够在几秒钟内创造出令人惊叹的艺术作品。 | <span class="exturl" data-url="aHR0cHM6Ly9zdGFibGVkaWZmdXNpb253ZWIuY29tLw==">https://stablediffusionweb.com/<i class="fa fa-external-link-alt"></i></span> |</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>CeaserWang
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://ceaser.wang/2023/12/30/life/aigc/" title="">https://ceaser.wang/2023/12/30/life/aigc/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC8="><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</span> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/11/19/embed/gcc_makeFile/" rel="prev" title="gcc编译器和makeFile详解">
+                  <i class="fa fa-chevron-left"></i> gcc编译器和makeFile详解
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/12/30/life/2023_end_desc/" rel="next" title="2023 year-end review">
+                  2023 year-end review <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CeaserWang</span>
+</div>
+  <div class="powered-by">Powered by <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZy9tdXNlLw==">NexT.Muse</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.0.6/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.1.1/mermaid.min.js","integrity":"sha256-8L3O8tirFUa8Va4NSTAyIbHJeLd6OnlcxgupV9F77e0="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"ryAR9bttS7fex1FPEPAylmmJ-gzGzoHsz","app_key":"dYqygoN4Y01Bl38OdRoCHUYn","server_url":null,"security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+
+</body>
+</html>

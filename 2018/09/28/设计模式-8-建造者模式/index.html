@@ -30,13 +30,13 @@
 <meta property="og:site_name" content="南贺神社">
 <meta property="og:description" content="思想：将一个类的创建过程和他的主体部分分离。场景：该模式的典型的应用场景是：一个类的创建过程可能比较复杂，或者创建过程中的某些阶段可能会容易变化；或者多个类的创建过程比较类似， 但是主体不同。">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://ceaser.wang/20151031101846683.png">
+<meta property="og:image" content="https://ceaser.wang/2018-09-28/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-8-%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/20151031101846683.png">
 <meta property="article:published_time" content="2018-09-28T20:40:44.000Z">
-<meta property="article:modified_time" content="2023-12-30T08:31:13.018Z">
+<meta property="article:modified_time" content="2023-12-30T14:30:27.423Z">
 <meta property="article:author" content="CeaserWang">
 <meta property="article:tag" content="DesignPatterns">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://ceaser.wang/20151031101846683.png">
+<meta name="twitter:image" content="https://ceaser.wang/2018-09-28/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-8-%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/20151031101846683.png">
 
 
 <link rel="canonical" href="https://ceaser.wang/2018/09/28/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-8-%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/">
@@ -92,7 +92,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">208</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">217</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">209</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">221</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
         </a>
@@ -163,7 +163,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">217</span>
+          <span class="site-state-item-count">221</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -174,7 +174,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">208</span>
+        <span class="site-state-item-count">209</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -289,7 +289,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:13" itemprop="dateModified" datetime="2023-12-30T08:31:13+00:00">2023-12-30</time>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -321,7 +321,7 @@
         <p>思想：将一个类的创建过程和他的主体部分分离。<br>场景：该模式的典型的应用场景是：一个类的创建过程可能比较复杂，或者创建过程中的某些阶段可能会容易变化；或者多个类的创建过程比较类似， 但是主体不同。</p>
 <span id="more"></span>
 <p>实现：在 以上提到的两种场景中，我们就可以取出一个类的创建过程的代码，定义一个专门的Builder类， 而在原来创建类对象实例的地方，将这个Builder类的实例作为参数传入。还有第二个重点，就是Builder类 可以将将整个创建过程分为几个阶段，每个阶段不必在类中直接实现，而可以通过继承体系在子类中实现，或者通过子类的方法过载来修改创建过程中的某个阶段， 但是重用其他的阶段。可以发现，该模式将一个对象的复杂创建过程重用到非常高的层次。这正是它的意义所在。<br>重构成本：低。该模式的重构成本我觉得是非常低的，因为一般来讲，创建过程的代码本来也就应该在原来的类的构造函数中，把它Extract出 来就好了。如果发现多个类的创建过程有比较多的代码重复或类似，那么就可以重用这些提取出来的Builder类 或者Builder类中的某些阶段。</p>
-<p>Builder建造者模式将一个复杂对象的构建与它的表示分离，使得同样的构建过程可以创建不同的表示。Builder模式是一步一步创建一个复杂的对象，它允许用户可以只通过指定复杂对象的类型和内容就可以构建它们，用户不需要了解所构建对象的内部具体构建细节，Builder建造设计模式的目的是为了将构造复杂对象的过程和它的部件解耦。<br>Builder建造者设计模式中有两个重要角色：Director指导者和Builder建造者。Director指导者相当于设计师或架构师，拥有整个产品各个部件之间关系的构建蓝图。Builder建造者是部件的具体创建者，Builder建造者根据Director指导者的指示创建产品的各个部件，最终由Director构建出完整产品。Builder建造者设计模式的UML图如下：<img src="/20151031101846683.png" alt="这里写图片描述"><br>用一个类表示包装食品外面显示的营养成分，其中每份含量和每罐含量是必须的，卡洛里，脂肪，纳和碳水化合物是可选参数。<br>大家一般习惯使用重载构造方法来解决该问题，代码如下：</p>
+<p>Builder建造者模式将一个复杂对象的构建与它的表示分离，使得同样的构建过程可以创建不同的表示。Builder模式是一步一步创建一个复杂的对象，它允许用户可以只通过指定复杂对象的类型和内容就可以构建它们，用户不需要了解所构建对象的内部具体构建细节，Builder建造设计模式的目的是为了将构造复杂对象的过程和它的部件解耦。<br>Builder建造者设计模式中有两个重要角色：Director指导者和Builder建造者。Director指导者相当于设计师或架构师，拥有整个产品各个部件之间关系的构建蓝图。Builder建造者是部件的具体创建者，Builder建造者根据Director指导者的指示创建产品的各个部件，最终由Director构建出完整产品。Builder建造者设计模式的UML图如下：<img src="/2018-09-28/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-8-%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/20151031101846683.png" alt="这里写图片描述"><br>用一个类表示包装食品外面显示的营养成分，其中每份含量和每罐含量是必须的，卡洛里，脂肪，纳和碳水化合物是可选参数。<br>大家一般习惯使用重载构造方法来解决该问题，代码如下：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">public class NutritionFacts&#123;</span><br><span class="line">	//必须参数</span><br><span class="line">	private final int servingSize;</span><br><span class="line">	private final int servings;</span><br><span class="line">	//可选参数</span><br><span class="line">	private final int calories;</span><br><span class="line">	private final int fat;</span><br><span class="line">	private final int sodium;</span><br><span class="line">	private final int carbohydrate;</span><br><span class="line">	public NutritionFacts(int servingSize, int servings)&#123;</span><br><span class="line">		this(servingSize, servings, 0);</span><br><span class="line">	&#125;</span><br><span class="line">	public NutritionFacts(int servingSize, int servings, int calories)&#123;</span><br><span class="line">		this(servingSize, servings, calories, 0);</span><br><span class="line">	&#125;</span><br><span class="line">	public NutritionFacts(int servingSize, int servings, int calories,</span><br><span class="line">						  int fat)&#123;</span><br><span class="line">		this(servingSize, servings, calories, fat, 0);</span><br><span class="line">	&#125;</span><br><span class="line">	public NutritionFacts(int servingSize, int servings, int calories,</span><br><span class="line">						  int fat, int sodium)&#123;</span><br><span class="line">		this(servingSize, servings, calories, fat, sodium, 0);</span><br><span class="line">	&#125;</span><br><span class="line">	public NutritionFacts(int servingSize, int servings, int calories,</span><br><span class="line">						  int fat, int sodium, int carbohydrate)&#123;</span><br><span class="line">		this.servingSize = servingSize;</span><br><span class="line">		this.servings = servings;</span><br><span class="line">		this.calories = calories;</span><br><span class="line">		this.fat = fat;</span><br><span class="line">		this.sodium = sodium;</span><br><span class="line">		this.carbohydrate = carbohydrate;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>如果想要创建实例对象的时候，就利用参数列表最短的构造方法：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">NutritionFacts cocaCola = new NutritionFacts(240, 8, 100, 0, 35, 27);</span><br></pre></td></tr></table></figure>

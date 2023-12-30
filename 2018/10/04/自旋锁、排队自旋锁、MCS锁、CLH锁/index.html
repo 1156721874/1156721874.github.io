@@ -30,13 +30,13 @@
 <meta property="og:site_name" content="南贺神社">
 <meta property="og:description" content="自旋锁（Spin lock）自旋锁是指当一个线程尝试获取某个锁时，如果该锁已被其他线程占用，就一直循环检测锁是否被释放，而不是进入线程挂起或睡眠状态。">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://ceaser.wang/20160821171227925.png">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/%E8%87%AA%E6%97%8B%E9%94%81%E3%80%81%E6%8E%92%E9%98%9F%E8%87%AA%E6%97%8B%E9%94%81%E3%80%81MCS%E9%94%81%E3%80%81CLH%E9%94%81/20160821171227925.png">
 <meta property="article:published_time" content="2018-10-04T09:57:29.000Z">
-<meta property="article:modified_time" content="2023-12-30T08:31:13.014Z">
+<meta property="article:modified_time" content="2023-12-30T14:30:27.423Z">
 <meta property="article:author" content="CeaserWang">
 <meta property="article:tag" content="自旋锁 排队自旋锁 MCS锁 CLH锁">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://ceaser.wang/20160821171227925.png">
+<meta name="twitter:image" content="https://ceaser.wang/2018/10/04/%E8%87%AA%E6%97%8B%E9%94%81%E3%80%81%E6%8E%92%E9%98%9F%E8%87%AA%E6%97%8B%E9%94%81%E3%80%81MCS%E9%94%81%E3%80%81CLH%E9%94%81/20160821171227925.png">
 
 
 <link rel="canonical" href="https://ceaser.wang/2018/10/04/%E8%87%AA%E6%97%8B%E9%94%81%E3%80%81%E6%8E%92%E9%98%9F%E8%87%AA%E6%97%8B%E9%94%81%E3%80%81MCS%E9%94%81%E3%80%81CLH%E9%94%81/">
@@ -92,7 +92,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">208</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">217</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">209</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">221</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
         </a>
@@ -163,7 +163,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">217</span>
+          <span class="site-state-item-count">221</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -174,7 +174,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">208</span>
+        <span class="site-state-item-count">209</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -289,7 +289,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:13" itemprop="dateModified" datetime="2023-12-30T08:31:13+00:00">2023-12-30</time>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -336,7 +336,7 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">import java.util.concurrent.atomic.AtomicReferenceFieldUpdater;</span><br><span class="line"></span><br><span class="line">public class MCSLock &#123;</span><br><span class="line">    public static class MCSNode &#123;</span><br><span class="line">        volatile MCSNode next;</span><br><span class="line">        volatile boolean isBlock = true; // 默认是在等待锁</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    volatile MCSNode queue;// 指向最后一个申请锁的MCSNode</span><br><span class="line">    private static final AtomicReferenceFieldUpdater UPDATER = AtomicReferenceFieldUpdater</span><br><span class="line">            .newUpdater(MCSLock.class, MCSNode.class, &quot;queue&quot;);</span><br><span class="line"></span><br><span class="line">    public void lock(MCSNode currentThread) &#123;</span><br><span class="line">        MCSNode predecessor = UPDATER.getAndSet(this, currentThread);// step 1</span><br><span class="line">        if (predecessor != null) &#123;</span><br><span class="line">            predecessor.next = currentThread;// step 2</span><br><span class="line"></span><br><span class="line">            while (currentThread.isBlock) &#123;// step 3</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void unlock(MCSNode currentThread) &#123;</span><br><span class="line">        if (currentThread.isBlock) &#123;// 锁拥有者进行释放锁才有意义</span><br><span class="line">            return;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        if (currentThread.next == null) &#123;// 检查是否有人排在自己后面</span><br><span class="line">            if (UPDATER.compareAndSet(this, currentThread, null)) &#123;// step 4</span><br><span class="line">                // compareAndSet返回true表示确实没有人排在自己后面</span><br><span class="line">                return;</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                // 突然有人排在自己后面了，可能还不知道是谁，下面是等待后续者</span><br><span class="line">                // 这里之所以要忙等是因为：step 1执行完后，step 2可能还没执行完</span><br><span class="line">                while (currentThread.next == null) &#123; // step 5</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        currentThread.next.isBlock = false;</span><br><span class="line">        currentThread.next = null;// for GC</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><strong>CLH锁</strong><br>CLH锁也是一种基于链表的可扩展、高性能、公平的自旋锁，申请线程只在本地变量上自旋，它不断轮询前驱的状态，如果发现前驱释放了锁就结束自旋。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">import java.util.concurrent.atomic.AtomicReferenceFieldUpdater;</span><br><span class="line"></span><br><span class="line">public class CLHLock &#123;</span><br><span class="line">    public static class CLHNode &#123;</span><br><span class="line">        private boolean isLocked = true; // 默认是在等待锁</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @SuppressWarnings(&quot;unused&quot; )</span><br><span class="line">    private volatile CLHNode tail ;</span><br><span class="line">    private static final AtomicReferenceFieldUpdater&lt;CLHLock, CLHNode&gt; UPDATER = AtomicReferenceFieldUpdater</span><br><span class="line">                  . newUpdater(CLHLock.class, CLHNode .class , &quot;tail&quot; );</span><br><span class="line"></span><br><span class="line">    public void lock(CLHNode currentThread) &#123;</span><br><span class="line">        CLHNode preNode = UPDATER.getAndSet( this, currentThread);</span><br><span class="line">        if(preNode != null) &#123;//已有线程占用了锁，进入自旋</span><br><span class="line">            while(preNode.isLocked ) &#123;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void unlock(CLHNode currentThread) &#123;</span><br><span class="line">        // 如果队列里只有当前线程，则释放对当前线程的引用（for GC）。</span><br><span class="line">        if (!UPDATER .compareAndSet(this, currentThread, null)) &#123;</span><br><span class="line">            // 还有后续线程</span><br><span class="line">            currentThread. isLocked = false ;// 改变状态，让后续线程结束自旋</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><strong>CLH锁 与 MCS锁 的比较</strong><br>下图是CLH锁和MCS锁队列图示：<br><img src="/20160821171227925.png" alt="这里写图片描述"><br>差异：</p>
+<p><strong>CLH锁 与 MCS锁 的比较</strong><br>下图是CLH锁和MCS锁队列图示：<br><img src="/2018/10/04/%E8%87%AA%E6%97%8B%E9%94%81%E3%80%81%E6%8E%92%E9%98%9F%E8%87%AA%E6%97%8B%E9%94%81%E3%80%81MCS%E9%94%81%E3%80%81CLH%E9%94%81/20160821171227925.png" alt="这里写图片描述"><br>差异：</p>
 <ol>
 <li>从代码实现来看，CLH比MCS要简单得多。</li>
 <li>从自旋的条件来看，CLH是在前驱节点的属性上自旋，而MCS是在本地属性变量上自旋。</li>

@@ -30,17 +30,17 @@
 <meta property="og:site_name" content="南贺神社">
 <meta property="og:description" content="上一节解析完了常量池，接下来是访问标记，">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://ceaser.wang/20180804134250848.png">
-<meta property="og:image" content="https://ceaser.wang/2018082613275196.png">
-<meta property="og:image" content="https://ceaser.wang/20180826132829940.png">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8829%EF%BC%89%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95%E4%B8%8E%E9%9D%99%E6%80%81%E4%BB%A3%E7%A0%81%E5%9D%97%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E8%AF%A6%E8%A7%A3/20180804134250848.png">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8829%EF%BC%89%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95%E4%B8%8E%E9%9D%99%E6%80%81%E4%BB%A3%E7%A0%81%E5%9D%97%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E8%AF%A6%E8%A7%A3/2018082613275196.png">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8829%EF%BC%89%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95%E4%B8%8E%E9%9D%99%E6%80%81%E4%BB%A3%E7%A0%81%E5%9D%97%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E8%AF%A6%E8%A7%A3/20180826132829940.png">
 <meta property="article:published_time" content="2018-10-04T17:08:33.000Z">
-<meta property="article:modified_time" content="2023-12-30T08:31:12.878Z">
+<meta property="article:modified_time" content="2023-12-30T14:30:27.287Z">
 <meta property="article:author" content="CeaserWang">
 <meta property="article:tag" content="静态方法">
 <meta property="article:tag" content="构造方法">
 <meta property="article:tag" content="字节码指令">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://ceaser.wang/20180804134250848.png">
+<meta name="twitter:image" content="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8829%EF%BC%89%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95%E4%B8%8E%E9%9D%99%E6%80%81%E4%BB%A3%E7%A0%81%E5%9D%97%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E8%AF%A6%E8%A7%A3/20180804134250848.png">
 
 
 <link rel="canonical" href="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8829%EF%BC%89%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95%E4%B8%8E%E9%9D%99%E6%80%81%E4%BB%A3%E7%A0%81%E5%9D%97%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E8%AF%A6%E8%A7%A3/">
@@ -96,7 +96,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">208</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">217</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">209</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">221</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
         </a>
@@ -167,7 +167,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">217</span>
+          <span class="site-state-item-count">221</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -178,7 +178,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">208</span>
+        <span class="site-state-item-count">209</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -293,7 +293,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -322,14 +322,14 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <p>上一节解析完了常量池，接下来是<strong>访问标记</strong>，<br><img src="/20180804134250848.png" alt="这里写图片描述"></p>
+        <p>上一节解析完了常量池，接下来是<strong>访问标记</strong>，<br><img src="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8829%EF%BC%89%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95%E4%B8%8E%E9%9D%99%E6%80%81%E4%BB%A3%E7%A0%81%E5%9D%97%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E8%AF%A6%E8%A7%A3/20180804134250848.png" alt="这里写图片描述"></p>
 <span id="more"></span>
 <p>00 21 ： ACC_SUPPER + ACC_PUBLIC<br>紧接着是<strong>类的名字</strong>，2个字节：00 05 是5号常量 【#5 &#x3D; Class              #49            &#x2F;&#x2F; com&#x2F;twodragonlake&#x2F;jvm&#x2F;bytecode&#x2F;MyTest2】<br><strong>父类的名字</strong>，占2个字节：00 0D 是13号常量：【#13 &#x3D; Class              #59            &#x2F;&#x2F; java&#x2F;lang&#x2F;Object】<br><strong>接口的信息</strong>：00 00 没有接口。<br><strong>成员变量信息</strong>：00 03 有三个成员变量。<br>第一个字段：<br>访问标记：00 00 为默认访问标记。<br>名字索引：00 0E 是14号常量：【#14 &#x3D; Utf8               str】<br> 描述符索引：00 0F 是15号常量：【#15 &#x3D; Utf8               Ljava&#x2F;lang&#x2F;String;】<br> 字段属性数量：00 00 没有属性<br> 第二个字段：<br> 访问标记：00 02 私有的，private<br> 名字索引：00 10 是16号常量：【#16 &#x3D; Utf8               x】<br> 描述符索引：00 11 是17号常量：【 #17 &#x3D; Utf8               I】<br> 字段属性数量：00 00 没有字段属性<br> 第三个字段：<br>  访问标记：00 09 是public + static<br>  名字索引：00 12是18号常量：【#18 &#x3D; Utf8               in】<br>  描述符索引：00 13 是19号常量：【#19 &#x3D; Utf8               Ljava&#x2F;lang&#x2F;Integer;】<br>  字段属性数量：00 00 没有<br>然后是方法：<br>方法的数量：00 06 是6个方法：<br>init 、 main、setX、test、test2、clinit（静态代码块）<br>第一方法：<br>访问标记：00 01 是public<br>名字索引：00 14 是20号常量：【#20 &#x3D; Utf8               <code>&lt;init&gt;</code>】<br>描述符索引：00 15 是21号常量：【#21 &#x3D; Utf8               ()V】<br>方法属性数量：00 01 包含一个属性<br>第一个属性：<br>属性名字索引：00 16是22号索引：【#22 &#x3D; Utf8               Code】<br>属性长度：00 00  0 42 为66个长度，默认构造方法完成了成员变量的赋值，注意只是对非静态的赋值：</p>
 <p>PS：对于字节码文件来说，在方法区的字节码这里可以不包含任何含有初始化构造方法的字节码，很多人认为java代码如果没有默认的构造器，那么java编译器<br>会生成一个没有参数的构造方法，但是这是错误的，字节码规范里边没有要求，方法区必须要有默认的构造方法，java语言规范和jvm规范是不一样的。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"> 0 aload_0</span><br><span class="line"> 1 invokespecial #1 &lt;java/lang/Object.&lt;init&gt;&gt; 调用父类构造器</span><br><span class="line"> 4 aload_0</span><br><span class="line"> 5 ldc #2 &lt;Welcome&gt;  加载字符串Welcome</span><br><span class="line"> 7 putfield #3 &lt;com/twodragonlake/jvm/bytecode/MyTest2.str&gt;  把字符窜Welcome赋值给str变量</span><br><span class="line">10 aload_0</span><br><span class="line">11 iconst_5  加载整数5</span><br><span class="line">12 putfield #4 &lt;com/twodragonlake/jvm/bytecode/MyTest2.x&gt; 把整数5赋值给x变量</span><br><span class="line">15 return  方法返回</span><br></pre></td></tr></table></figure>
 <p>如果我们自己声明一个构造方法，是不是也会存在对成员变量的赋值？我们加入一个有参数的构造方法：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public MyTest2()&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public MyTest2(int i)&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><img src="/2018082613275196.png" alt="这里写图片描述"><br><img src="/20180826132829940.png" alt="这里写图片描述"></p>
+<p><img src="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8829%EF%BC%89%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95%E4%B8%8E%E9%9D%99%E6%80%81%E4%BB%A3%E7%A0%81%E5%9D%97%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E8%AF%A6%E8%A7%A3/2018082613275196.png" alt="这里写图片描述"><br><img src="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8829%EF%BC%89%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95%E4%B8%8E%E9%9D%99%E6%80%81%E4%BB%A3%E7%A0%81%E5%9D%97%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E8%AF%A6%E8%A7%A3/20180826132829940.png" alt="这里写图片描述"></p>
 <p>可以看到默认的无参构造器和有参数的构造器字节码是一样的，都会对成员变量进行赋值。<br>其他的方法的字节码解析和之前的程序大致相同，不再熬述。<br>着重说一下test方法：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"> 0 aload_1</span><br><span class="line"> 1 dup</span><br><span class="line"> 2 astore_2</span><br><span class="line"> 3 monitorenter  </span><br><span class="line"> 4 getstatic #10 &lt;java/lang/System.out&gt;</span><br><span class="line"> 7 ldc #11 &lt;hello world&gt;</span><br><span class="line"> 9 invokevirtual #12 &lt;java/io/PrintStream.println&gt;</span><br><span class="line">12 aload_2</span><br><span class="line">13 monitorexit</span><br><span class="line">14 goto 22 (+8)</span><br><span class="line">17 astore_3</span><br><span class="line">18 aload_2</span><br><span class="line">19 monitorexit</span><br><span class="line">20 aload_3</span><br><span class="line">21 athrow</span><br><span class="line">22 return</span><br></pre></td></tr></table></figure>
 <p><span class="exturl" data-url="aHR0cHM6Ly9kb2NzLm9yYWNsZS5jb20vamF2YXNlL3NwZWNzL2p2bXMvc2U4L2h0bWwvanZtcy02Lmh0bWwjanZtcy02LjUubW9uaXRvcmVudGVy">monitorenter<i class="fa fa-external-link-alt"></i></span>  是synchronized的监视器加锁的地方，oracle的官方doc：<br><strong>monitorenter</strong></p>

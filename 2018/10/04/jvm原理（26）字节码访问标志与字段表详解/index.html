@@ -30,19 +30,19 @@
 <meta property="og:site_name" content="南贺神社">
 <meta property="og:description" content="先看一下java字节码的结构：图1：">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://ceaser.wang/20180804134250848.png">
-<meta property="og:image" content="https://ceaser.wang/20180804134458717.png">
-<meta property="og:image" content="https://ceaser.wang/20180804134805248.png">
-<meta property="og:image" content="https://ceaser.wang/20180728182044938.png">
-<meta property="og:image" content="https://ceaser.wang/20180804141459924.png">
-<meta property="og:image" content="https://ceaser.wang/20180804141952577.png">
-<meta property="og:image" content="https://ceaser.wang/20180804145016193.png">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8826%EF%BC%89%E5%AD%97%E8%8A%82%E7%A0%81%E8%AE%BF%E9%97%AE%E6%A0%87%E5%BF%97%E4%B8%8E%E5%AD%97%E6%AE%B5%E8%A1%A8%E8%AF%A6%E8%A7%A3/20180804134250848.png">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8826%EF%BC%89%E5%AD%97%E8%8A%82%E7%A0%81%E8%AE%BF%E9%97%AE%E6%A0%87%E5%BF%97%E4%B8%8E%E5%AD%97%E6%AE%B5%E8%A1%A8%E8%AF%A6%E8%A7%A3/20180804134458717.png">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8826%EF%BC%89%E5%AD%97%E8%8A%82%E7%A0%81%E8%AE%BF%E9%97%AE%E6%A0%87%E5%BF%97%E4%B8%8E%E5%AD%97%E6%AE%B5%E8%A1%A8%E8%AF%A6%E8%A7%A3/20180804134805248.png">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8826%EF%BC%89%E5%AD%97%E8%8A%82%E7%A0%81%E8%AE%BF%E9%97%AE%E6%A0%87%E5%BF%97%E4%B8%8E%E5%AD%97%E6%AE%B5%E8%A1%A8%E8%AF%A6%E8%A7%A3/20180728182044938.png">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8826%EF%BC%89%E5%AD%97%E8%8A%82%E7%A0%81%E8%AE%BF%E9%97%AE%E6%A0%87%E5%BF%97%E4%B8%8E%E5%AD%97%E6%AE%B5%E8%A1%A8%E8%AF%A6%E8%A7%A3/20180804141459924.png">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8826%EF%BC%89%E5%AD%97%E8%8A%82%E7%A0%81%E8%AE%BF%E9%97%AE%E6%A0%87%E5%BF%97%E4%B8%8E%E5%AD%97%E6%AE%B5%E8%A1%A8%E8%AF%A6%E8%A7%A3/20180804141952577.png">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8826%EF%BC%89%E5%AD%97%E8%8A%82%E7%A0%81%E8%AE%BF%E9%97%AE%E6%A0%87%E5%BF%97%E4%B8%8E%E5%AD%97%E6%AE%B5%E8%A1%A8%E8%AF%A6%E8%A7%A3/20180804145016193.png">
 <meta property="article:published_time" content="2018-10-04T16:50:57.000Z">
-<meta property="article:modified_time" content="2023-12-30T08:31:12.866Z">
+<meta property="article:modified_time" content="2023-12-30T14:30:27.271Z">
 <meta property="article:author" content="CeaserWang">
 <meta property="article:tag" content="字节码访问标识 字段表">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://ceaser.wang/20180804134250848.png">
+<meta name="twitter:image" content="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8826%EF%BC%89%E5%AD%97%E8%8A%82%E7%A0%81%E8%AE%BF%E9%97%AE%E6%A0%87%E5%BF%97%E4%B8%8E%E5%AD%97%E6%AE%B5%E8%A1%A8%E8%AF%A6%E8%A7%A3/20180804134250848.png">
 
 
 <link rel="canonical" href="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8826%EF%BC%89%E5%AD%97%E8%8A%82%E7%A0%81%E8%AE%BF%E9%97%AE%E6%A0%87%E5%BF%97%E4%B8%8E%E5%AD%97%E6%AE%B5%E8%A1%A8%E8%AF%A6%E8%A7%A3/">
@@ -98,7 +98,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">208</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">217</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">209</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">221</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
         </a>
@@ -169,7 +169,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">217</span>
+          <span class="site-state-item-count">221</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -180,7 +180,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">208</span>
+        <span class="site-state-item-count">209</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -295,7 +295,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -326,18 +326,18 @@
     <div class="post-body" itemprop="articleBody">
         <p>先看一下java字节码的结构：<br>图1：</p>
 <span id="more"></span>
-<p><img src="/20180804134250848.png" alt="这里写图片描述"><br>图2：<br><img src="/20180804134458717.png" alt="这里写图片描述"><br>图3：<br><img src="/20180804134805248.png" alt="这里写图片描述"></p>
+<p><img src="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8826%EF%BC%89%E5%AD%97%E8%8A%82%E7%A0%81%E8%AE%BF%E9%97%AE%E6%A0%87%E5%BF%97%E4%B8%8E%E5%AD%97%E6%AE%B5%E8%A1%A8%E8%AF%A6%E8%A7%A3/20180804134250848.png" alt="这里写图片描述"><br>图2：<br><img src="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8826%EF%BC%89%E5%AD%97%E8%8A%82%E7%A0%81%E8%AE%BF%E9%97%AE%E6%A0%87%E5%BF%97%E4%B8%8E%E5%AD%97%E6%AE%B5%E8%A1%A8%E8%AF%A6%E8%A7%A3/20180804134458717.png" alt="这里写图片描述"><br>图3：<br><img src="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8826%EF%BC%89%E5%AD%97%E8%8A%82%E7%A0%81%E8%AE%BF%E9%97%AE%E6%A0%87%E5%BF%97%E4%B8%8E%E5%AD%97%E6%AE%B5%E8%A1%A8%E8%AF%A6%E8%A7%A3/20180804134805248.png" alt="这里写图片描述"></p>
 <ul>
 <li><p>Class字节码中有2中数据结构</p>
 </li>
 <li><p>字节数据直接量：这是基本的数据类型。共细分为u1、u2、u4、u8四种，分别代表连续的1个字节<br>、2个字节、四个字节、8个字节组成的整体数据。</p>
 </li>
-<li><p>表（数组）：表示由多个基本数据或其他表，按照既定顺序组成的大的数据集合。表是有结构的，<br>   它的结构体现在：组成表的成分所在的位置和顺序都是已经严格定义好的。<br>   图4：<br>   <img src="/20180728182044938.png" alt="这里写图片描述"></p>
+<li><p>表（数组）：表示由多个基本数据或其他表，按照既定顺序组成的大的数据集合。表是有结构的，<br>   它的结构体现在：组成表的成分所在的位置和顺序都是已经严格定义好的。<br>   图4：<br>   <img src="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8826%EF%BC%89%E5%AD%97%E8%8A%82%E7%A0%81%E8%AE%BF%E9%97%AE%E6%A0%87%E5%BF%97%E4%B8%8E%E5%AD%97%E6%AE%B5%E8%A1%A8%E8%AF%A6%E8%A7%A3/20180728182044938.png" alt="这里写图片描述"></p>
 </li>
 <li><p>上面的表中描述了11种数据类型的结构，其实在jdk1.7之后又增加了3种(CONSTANT_Method_info\CONSTANT_Method_Type\CONSTANT_InvokeDynamic_info).<br>这样一共是14种。</p>
 </li>
 </ul>
-<p>Access_Flag访问标志<br>   访问标志信息包括该Class文件是类还是接口，是否被定义成public，是否是abstract，如果是类<br>   是否被声明成final，通过上面的源代码（MyTest1），我们知道该文件是类并且是public。<br>   图5：<br>   <img src="/20180804141459924.png" alt="这里写图片描述"><br>那接下来看一下access_flag：<br>图6：<br><img src="/20180804141952577.png" alt="这里写图片描述"><br>从00 21 开始就是访问修饰符：00 21 我们去图5里边找不到，那是因为00 21是由0x0001|0x0020&#x3D;0x0021得到的，即，java不会穷举所有的访问修饰组合，而是用并集的方式得到的。当前表示我们的MyTest1是一个acc_public和acc_super。<br>然后是this Class Name，也是占据2个字节：00 03（十进制3） ：对应的是常量池里边的3号常量：<br>【#3 &#x3D; Class              #22            &#x2F;&#x2F; com&#x2F;twodragonlake&#x2F;jvm&#x2F;bytecode&#x2F;MyTest1】<br>接下来是父类的名字，占2个字节，00 04 （十进制4），指向的是常量池的4号常量：【#4 &#x3D; Class              #23            &#x2F;&#x2F; java&#x2F;lang&#x2F;Object】<br>接口:当前MyTest1没有实现人很接口，所以说接口的数量是0，即：00 00 所以接口表就不会再出现了。<br>成员变量：由成员变量数量加成员变量表组成。成员变量数量：00 01 （十进制，即一个成员变量），然后是成员变量表：00 02 (十进制2，即常量池的2号常量)：<br>【#2 &#x3D; Fieldref           #3.#21         &#x2F;&#x2F; com&#x2F;twodragonlake&#x2F;jvm&#x2F;bytecode&#x2F;MyTest1.a:I】<br>字段表集合<strong>重点内容</strong><br>字段表用于描述类和接口中声明的变量。<br>这里的字段包含了类级别变量以及实例变量，但是不包括方法内部声明的局部变量。</p>
+<p>Access_Flag访问标志<br>   访问标志信息包括该Class文件是类还是接口，是否被定义成public，是否是abstract，如果是类<br>   是否被声明成final，通过上面的源代码（MyTest1），我们知道该文件是类并且是public。<br>   图5：<br>   <img src="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8826%EF%BC%89%E5%AD%97%E8%8A%82%E7%A0%81%E8%AE%BF%E9%97%AE%E6%A0%87%E5%BF%97%E4%B8%8E%E5%AD%97%E6%AE%B5%E8%A1%A8%E8%AF%A6%E8%A7%A3/20180804141459924.png" alt="这里写图片描述"><br>那接下来看一下access_flag：<br>图6：<br><img src="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8826%EF%BC%89%E5%AD%97%E8%8A%82%E7%A0%81%E8%AE%BF%E9%97%AE%E6%A0%87%E5%BF%97%E4%B8%8E%E5%AD%97%E6%AE%B5%E8%A1%A8%E8%AF%A6%E8%A7%A3/20180804141952577.png" alt="这里写图片描述"><br>从00 21 开始就是访问修饰符：00 21 我们去图5里边找不到，那是因为00 21是由0x0001|0x0020&#x3D;0x0021得到的，即，java不会穷举所有的访问修饰组合，而是用并集的方式得到的。当前表示我们的MyTest1是一个acc_public和acc_super。<br>然后是this Class Name，也是占据2个字节：00 03（十进制3） ：对应的是常量池里边的3号常量：<br>【#3 &#x3D; Class              #22            &#x2F;&#x2F; com&#x2F;twodragonlake&#x2F;jvm&#x2F;bytecode&#x2F;MyTest1】<br>接下来是父类的名字，占2个字节，00 04 （十进制4），指向的是常量池的4号常量：【#4 &#x3D; Class              #23            &#x2F;&#x2F; java&#x2F;lang&#x2F;Object】<br>接口:当前MyTest1没有实现人很接口，所以说接口的数量是0，即：00 00 所以接口表就不会再出现了。<br>成员变量：由成员变量数量加成员变量表组成。成员变量数量：00 01 （十进制，即一个成员变量），然后是成员变量表：00 02 (十进制2，即常量池的2号常量)：<br>【#2 &#x3D; Fieldref           #3.#21         &#x2F;&#x2F; com&#x2F;twodragonlake&#x2F;jvm&#x2F;bytecode&#x2F;MyTest1.a:I】<br>字段表集合<strong>重点内容</strong><br>字段表用于描述类和接口中声明的变量。<br>这里的字段包含了类级别变量以及实例变量，但是不包括方法内部声明的局部变量。</p>
 <table>
 <thead>
 <tr>
@@ -372,7 +372,7 @@
 <td>1</td>
 </tr>
 </tbody></table>
-<p>图7：<br><img src="/20180804145016193.png" alt="这里写图片描述"><br>所以接下里的00 01 表示的就是属性表的数量，此处表示由有一个字段，然后数量之后是访问标示：  00 02 ，00 02 在图5里边没有列出，表示的是私有的private。<br>紧接着是名字的索引和描述符的索引： 00 05 00 06 分别指向的是常量池的:<br>[#5 &#x3D; Utf8               a]<br>[#6 &#x3D; Utf8               I ]<br>然后是attributes_count  ： 00 00 是0个，所以attributes表就不会出现。<br>ok，字段信息，到此梭哈完毕，下一章搞一下方法表。</p>
+<p>图7：<br><img src="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8826%EF%BC%89%E5%AD%97%E8%8A%82%E7%A0%81%E8%AE%BF%E9%97%AE%E6%A0%87%E5%BF%97%E4%B8%8E%E5%AD%97%E6%AE%B5%E8%A1%A8%E8%AF%A6%E8%A7%A3/20180804145016193.png" alt="这里写图片描述"><br>所以接下里的00 01 表示的就是属性表的数量，此处表示由有一个字段，然后数量之后是访问标示：  00 02 ，00 02 在图5里边没有列出，表示的是私有的private。<br>紧接着是名字的索引和描述符的索引： 00 05 00 06 分别指向的是常量池的:<br>[#5 &#x3D; Utf8               a]<br>[#6 &#x3D; Utf8               I ]<br>然后是attributes_count  ： 00 00 是0个，所以attributes表就不会出现。<br>ok，字段信息，到此梭哈完毕，下一章搞一下方法表。</p>
 
     </div>
 

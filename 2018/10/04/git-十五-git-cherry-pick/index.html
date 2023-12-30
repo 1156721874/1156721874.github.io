@@ -30,16 +30,16 @@
 <meta property="og:site_name" content="南贺神社">
 <meta property="og:description" content="cherry-pick：现在有哦2个分支和dev和master，我们在dev下边进行了2此提交，我们这个时候发现这个2个提交不应该发生在dev分支，应该在master分支进行，于是我们把dev当前修改的内容的文件被备份到其他的地方存储，然后将dev回退到之前没有修改的状态，紧接着切换到master分支，将备份的文件覆盖master上对应的文件，完成修正，这种方法能解决问题，但是效率太低了，并且容易">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://ceaser.wang/20170805121857928.png">
-<meta property="og:image" content="https://ceaser.wang/20170805122325346.png">
-<meta property="og:image" content="https://ceaser.wang/20170805133311617.png">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/git-%E5%8D%81%E4%BA%94-git-cherry-pick/20170805121857928.png">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/git-%E5%8D%81%E4%BA%94-git-cherry-pick/20170805122325346.png">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/git-%E5%8D%81%E4%BA%94-git-cherry-pick/20170805133311617.png">
 <meta property="article:published_time" content="2018-10-04T14:00:35.000Z">
-<meta property="article:modified_time" content="2023-12-30T08:31:12.754Z">
+<meta property="article:modified_time" content="2023-12-30T14:30:27.159Z">
 <meta property="article:author" content="CeaserWang">
 <meta property="article:tag" content="git">
 <meta property="article:tag" content="cherry-pack">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://ceaser.wang/20170805121857928.png">
+<meta name="twitter:image" content="https://ceaser.wang/2018/10/04/git-%E5%8D%81%E4%BA%94-git-cherry-pick/20170805121857928.png">
 
 
 <link rel="canonical" href="https://ceaser.wang/2018/10/04/git-%E5%8D%81%E4%BA%94-git-cherry-pick/">
@@ -95,7 +95,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">208</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">217</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">209</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">221</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
         </a>
@@ -166,7 +166,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">217</span>
+          <span class="site-state-item-count">221</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -177,7 +177,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">208</span>
+        <span class="site-state-item-count">209</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -292,7 +292,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -323,18 +323,18 @@
     <div class="post-body" itemprop="articleBody">
         <p>cherry-pick：现在有哦2个分支和dev和master，我们在dev下边进行了2此提交，我们这个时候发现这个2个提交不应该发生在dev分支，应该在master分支进行，于是我们把dev当前修改的内容的文件被备份到其他的地方存储，然后将dev回退到之前没有修改的状态，紧接着切换到master分支，将备份的文件覆盖master上对应的文件，完成修正，这种方法能解决问题，但是效率太低了，并且容易出现问题。此时我们可以使用cherry-pick将这2次提交应用到master分支。<br>演示：</p>
 <span id="more"></span>
-<p>在dev分支做2次提交<br><img src="/20170805121857928.png" alt="这里写图片描述"></p>
+<p>在dev分支做2次提交<br><img src="/2018/10/04/git-%E5%8D%81%E4%BA%94-git-cherry-pick/20170805121857928.png" alt="这里写图片描述"></p>
 <p>出线2次提交的id：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">dministrator@CeaserWang MINGW64 /e/Study/child (dev)</span><br><span class="line">$ git log -3</span><br><span class="line">commit db37ad8478eea03a8315fc74bd6f9e16d71b6e43 (HEAD -&gt; dev)</span><br><span class="line">Author: zhangsan &lt;zhangsan@git.com&gt;</span><br><span class="line">Date:   Sat Aug 5 12:16:11 2017 +0800</span><br><span class="line"></span><br><span class="line">    add line2</span><br><span class="line"></span><br><span class="line">commit f46e43054c20537fbecbc0502223015a61eef957</span><br><span class="line">Author: zhangsan &lt;zhangsan@git.com&gt;</span><br><span class="line">Date:   Sat Aug 5 12:15:34 2017 +0800</span><br><span class="line"></span><br><span class="line">    add line 1</span><br><span class="line"></span><br><span class="line">commit 4a510291d57a857337d567a43401e3b636da0a0c (origin/master, master)</span><br><span class="line">Author: zhangsan &lt;zhangsan@git.com&gt;</span><br><span class="line">Date:   Sat Aug 5 11:48:40 2017 +0800</span><br><span class="line"></span><br><span class="line">    add child4 and child5</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <p> 此时返现分支搞错了，不应该在dev下边做这2次提交，应该是在master下做，解决方式：</p>
 <p>在master使用 git cherry-pick 《dev提交id》</p>
-<p> <img src="/20170805122325346.png" alt="这里写图片描述"><br>我们能否直接 git cherry-pick   db37ad8478eea03a8315fc74bd6f9e16d71b6e43  这个id呢？做个试验，在dev新增2个提交：</p>
+<p> <img src="/2018/10/04/git-%E5%8D%81%E4%BA%94-git-cherry-pick/20170805122325346.png" alt="这里写图片描述"><br>我们能否直接 git cherry-pick   db37ad8478eea03a8315fc74bd6f9e16d71b6e43  这个id呢？做个试验，在dev新增2个提交：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">commit 6525f476721e83d0254a785b1d3b8a44d3ad2400 (HEAD -&gt; dev)</span><br><span class="line">Author: zhangsan &lt;zhangsan@git.com&gt;</span><br><span class="line">Date:   Sat Aug 5 13:18:54 2017 +0800</span><br><span class="line"></span><br><span class="line">    add 2 lines</span><br><span class="line"></span><br><span class="line">commit db37ad8478eea03a8315fc74bd6f9e16d71b6e43</span><br><span class="line">Author: zhangsan &lt;zhangsan@git.com&gt;</span><br><span class="line">Date:   Sat Aug 5 12:16:11 2017 +0800</span><br><span class="line"></span><br><span class="line">    add line2</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <p>然后切换到master分支，我们直接 git cherry-pick 6525f476721e83d0254a785b1d3b8a44d3ad2400 :</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"> git cherry-pick 6525f476721e83d0254a785b1d3b8a44d3ad2400</span><br><span class="line">[master 27ffd95] add 2 lines</span><br><span class="line"> Date: Sat Aug 5 13:18:54 2017 +0800</span><br><span class="line"> 1 file changed, 2 insertions(+)</span><br><span class="line"></span><br><span class="line">Administrator@CeaserWang MINGW64 /e/Study/child (master)</span><br><span class="line">$ cat line.txt</span><br><span class="line">line 1</span><br><span class="line">line2</span><br><span class="line"> line 4</span><br><span class="line"> line 5</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <p>可以看到可以直接跨commit id 进行操作。</p>
-<p>还有一个遗留问题：<br>dev分支需要还原到初始状态，<br>初始状态所在位置：<br><img src="/20170805133311617.png" alt="这里写图片描述"><br>1、 git checkout aa261fee67458af84f3406d4f132232ca3c8825b</p>
+<p>还有一个遗留问题：<br>dev分支需要还原到初始状态，<br>初始状态所在位置：<br><img src="/2018/10/04/git-%E5%8D%81%E4%BA%94-git-cherry-pick/20170805133311617.png" alt="这里写图片描述"><br>1、 git checkout aa261fee67458af84f3406d4f132232ca3c8825b</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout aa261fee67458af84f3406d4f132232ca3c8825b</span><br><span class="line">Note: checking out &#x27;aa261fee67458af84f3406d4f132232ca3c8825b&#x27;.</span><br><span class="line"></span><br><span class="line">You are in &#x27;detached HEAD&#x27; state. You can look around, make experimental</span><br><span class="line">changes and commit them, and you can discard any commits you make in this</span><br><span class="line">state without impacting any branches by performing another checkout.</span><br><span class="line"></span><br><span class="line">If you want to create a new branch to retain commits you create, you may</span><br><span class="line">do so (now or later) by using -b with the checkout command again. Example:</span><br><span class="line"></span><br><span class="line">  git checkout -b &lt;new-branch-name&gt;</span><br><span class="line"></span><br><span class="line">HEAD is now at aa261fe... add welcome in hello.txt</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <p>2、 git branch -D dev<br>3、 git checkout -b dev</p>

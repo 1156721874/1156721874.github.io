@@ -30,17 +30,17 @@
 <meta property="og:site_name" content="南贺神社">
 <meta property="og:description" content="在执行git gc之前我们看一下.git目录的一些信息：refs目录下边有三个文件夹：">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://ceaser.wang/20170802195110448.png">
-<meta property="og:image" content="https://ceaser.wang/20170802195304125.png">
-<meta property="og:image" content="https://ceaser.wang/20170802200643650.png">
-<meta property="og:image" content="https://ceaser.wang/20170802202341094.png">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/git-%E5%8D%81%E4%BA%8C-git-gc/20170802195110448.png">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/git-%E5%8D%81%E4%BA%8C-git-gc/20170802195304125.png">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/git-%E5%8D%81%E4%BA%8C-git-gc/20170802200643650.png">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/git-%E5%8D%81%E4%BA%8C-git-gc/20170802202341094.png">
 <meta property="article:published_time" content="2018-10-04T13:52:13.000Z">
-<meta property="article:modified_time" content="2023-12-30T08:31:12.750Z">
+<meta property="article:modified_time" content="2023-12-30T14:30:27.159Z">
 <meta property="article:author" content="CeaserWang">
 <meta property="article:tag" content="git">
 <meta property="article:tag" content="gitgc">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://ceaser.wang/20170802195110448.png">
+<meta name="twitter:image" content="https://ceaser.wang/2018/10/04/git-%E5%8D%81%E4%BA%8C-git-gc/20170802195110448.png">
 
 
 <link rel="canonical" href="https://ceaser.wang/2018/10/04/git-%E5%8D%81%E4%BA%8C-git-gc/">
@@ -96,7 +96,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">208</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">217</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">209</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">221</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
         </a>
@@ -167,7 +167,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">217</span>
+          <span class="site-state-item-count">221</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -178,7 +178,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">208</span>
+        <span class="site-state-item-count">209</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -293,7 +293,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -324,10 +324,10 @@
     <div class="post-body" itemprop="articleBody">
         <p>在执行git gc之前我们看一下.git目录的一些信息：<br>refs目录下边有三个文件夹：</p>
 <span id="more"></span>
-<p><img src="/20170802195110448.png" alt="这里写图片描述"><br>此三个文件夹下边都存在一些本地、远程分支的信息，以及标签的 信息。</p>
-<p>执行git gc：<br>执行完毕之后，heads、remotes、tags下边的内容消失，git并不是删除了这些信息，而是存放在 .git&#x2F;packed-refs文件里边，即进行了压缩。<br><img src="/20170802195304125.png" alt="这里写图片描述"><br>通过里边的内容我们还可以验证带有注释标签的一些信息，v1.0只有一个id指向的就是一个commitid，而带有注释的v2.0有两个id第一id是其本身，第二个是指向的commitid，可以看到id前边有个“^”符号。</p>
-<p>此时我们如果在进行一次提交和推送，那么又会在.git&#x2F;refs&#x2F;下边出现新的内容记录git的信息：<br><img src="/20170802200643650.png" alt="这里写图片描述"><br>如图我们对test.txt进行了提交，在.git&#x2F;refs&#x2F;heads和.git&#x2F;refs&#x2F;remotes下边出现了新的内容，而不是放在.git&#x2F;packed-refs文件里边。</p>
-<p>此外git gc还会对每次提交的文件进行压缩，我们知道git和svn的区别就是git是全量记录文件的提交，而svn是记录变化量，既然git 记录的是全量的文件，那是不是会很大，占用空间，并且是怎么存放的呢？<br>其实所有的提交文件记录都在.git&#x2F;objects&#x2F;里边：<br><img src="/20170802202341094.png" alt="这里写图片描述"><br>执行git gc之后文件都会&#x3D;消失，转而放在pack目录下：</p>
+<p><img src="/2018/10/04/git-%E5%8D%81%E4%BA%8C-git-gc/20170802195110448.png" alt="这里写图片描述"><br>此三个文件夹下边都存在一些本地、远程分支的信息，以及标签的 信息。</p>
+<p>执行git gc：<br>执行完毕之后，heads、remotes、tags下边的内容消失，git并不是删除了这些信息，而是存放在 .git&#x2F;packed-refs文件里边，即进行了压缩。<br><img src="/2018/10/04/git-%E5%8D%81%E4%BA%8C-git-gc/20170802195304125.png" alt="这里写图片描述"><br>通过里边的内容我们还可以验证带有注释标签的一些信息，v1.0只有一个id指向的就是一个commitid，而带有注释的v2.0有两个id第一id是其本身，第二个是指向的commitid，可以看到id前边有个“^”符号。</p>
+<p>此时我们如果在进行一次提交和推送，那么又会在.git&#x2F;refs&#x2F;下边出现新的内容记录git的信息：<br><img src="/2018/10/04/git-%E5%8D%81%E4%BA%8C-git-gc/20170802200643650.png" alt="这里写图片描述"><br>如图我们对test.txt进行了提交，在.git&#x2F;refs&#x2F;heads和.git&#x2F;refs&#x2F;remotes下边出现了新的内容，而不是放在.git&#x2F;packed-refs文件里边。</p>
+<p>此外git gc还会对每次提交的文件进行压缩，我们知道git和svn的区别就是git是全量记录文件的提交，而svn是记录变化量，既然git 记录的是全量的文件，那是不是会很大，占用空间，并且是怎么存放的呢？<br>其实所有的提交文件记录都在.git&#x2F;objects&#x2F;里边：<br><img src="/2018/10/04/git-%E5%8D%81%E4%BA%8C-git-gc/20170802202341094.png" alt="这里写图片描述"><br>执行git gc之后文件都会&#x3D;消失，转而放在pack目录下：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">$ git gc</span><br><span class="line">Counting objects: 18, done.</span><br><span class="line">Delta compression using up to 8 threads.</span><br><span class="line">Compressing objects: 100% (10/10), done.</span><br><span class="line">Writing objects: 100% (18/18), done.</span><br><span class="line">Total 18 (delta 4), reused 15 (delta 4)</span><br><span class="line"></span><br><span class="line">Administrator@CeaserWang MINGW64 /e/Study/mygit (master)</span><br><span class="line">$ ls .git/objects/</span><br><span class="line">info/  pack/</span><br><span class="line">Administrator@CeaserWang MINGW64 /e/Study/mygit (master)</span><br><span class="line">$ ls .git/objects/pack/</span><br><span class="line">pack-94d0a6b4da258363c6f774e525a8615469b64e03.idx  pack-94d0a6b4da258363c6f774e525a8615469b64e03.pack</span><br></pre></td></tr></table></figure>
 
 <p>复习：<br>将一个文件从暂存区删除，但是保存在工作区：<br>git rm –cached test.txt<br>重命名文件：<br>git mv  test.txt test2.txt &#x3D; git rm test.txt  + git add  test2.txt<br>重命名远程仓库：<br>git remote rename origin origin2<br>删除远程仓库:<br>git remote rm origin</p>

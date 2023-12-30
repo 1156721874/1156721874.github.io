@@ -30,13 +30,13 @@
 <meta property="og:site_name" content="南贺神社">
 <meta property="og:description" content="我们在之前写过的一个自定义类加载器:我们修改一下程序的findClass方法：">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://ceaser.wang/20180318164433605.png">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8812%EF%BC%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%89%98%E6%9C%BA%E5%88%B6%E5%AE%9E%E4%BE%8B%E6%B7%B1%E5%BA%A6%E5%89%96%E6%9E%90/20180318164433605.png">
 <meta property="article:published_time" content="2018-10-04T16:01:41.000Z">
-<meta property="article:modified_time" content="2023-12-30T08:31:12.850Z">
+<meta property="article:modified_time" content="2023-12-30T14:30:27.255Z">
 <meta property="article:author" content="CeaserWang">
 <meta property="article:tag" content="双亲委托">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://ceaser.wang/20180318164433605.png">
+<meta name="twitter:image" content="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8812%EF%BC%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%89%98%E6%9C%BA%E5%88%B6%E5%AE%9E%E4%BE%8B%E6%B7%B1%E5%BA%A6%E5%89%96%E6%9E%90/20180318164433605.png">
 
 
 <link rel="canonical" href="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8812%EF%BC%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%89%98%E6%9C%BA%E5%88%B6%E5%AE%9E%E4%BE%8B%E6%B7%B1%E5%BA%A6%E5%89%96%E6%9E%90/">
@@ -92,7 +92,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">208</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">217</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">209</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">221</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
         </a>
@@ -163,7 +163,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">217</span>
+          <span class="site-state-item-count">221</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -174,7 +174,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">208</span>
+        <span class="site-state-item-count">209</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -289,7 +289,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -341,7 +341,7 @@
 <p>我们new了2个自定义加载器，结果可以看到使用了系统类加载器加载的，并且第二次加载使用了之前加载出来的结果，这是因为myClassLoader 和myClassLoader1 的父类加载器都是应用类加载器， 这个在<span class="exturl" data-url="aHR0cDovL2Jsb2cuY3Nkbi5uZXQvd3pxNjU3ODcwMi9hcnRpY2xlL2RldGFpbHMvNzk2MDA0MzU=">之前的loadClass方法的介绍<i class="fa fa-external-link-alt"></i></span>里边说过，中间会有一个判断是否加载过的方法 ，loadClass会去调用这个判重方法。</p>
 <p>之后我们删除当前工程的MyTest.class文件，再去运行这个main方法:</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">findClass invoked com.twodragonlake.jvm.classloader.MyTest</span><br><span class="line"> this.classLoaderName : myClassLoader</span><br><span class="line">class :21685669</span><br><span class="line">com.twodragonlake.jvm.classloader.MyTest@7f31245a</span><br><span class="line">-----------------------------------------</span><br><span class="line">findClass invoked com.twodragonlake.jvm.classloader.MyTest</span><br><span class="line"> this.classLoaderName : myClassLoader1</span><br><span class="line">class :1173230247</span><br><span class="line">com.twodragonlake.jvm.classloader.MyTest@330bedb4</span><br></pre></td></tr></table></figure>
-<p>首先使用了我们自定义的类加载器加载的，并且被加载了2次！！因为类的hashCode编码不同。这两个class(clazz 和clazza )不是同一个class对象，这个和我们之前说过的一个类只能被加载一次是相互矛盾的，这个怎么解释呢，其实是不矛盾的，这里有一个命名空间的问题：<br><img src="/20180318164433605.png" alt="这里写图片描述"><br>在我们这个例子中myClassLoader和myClassLoader1虽然都是同一个类，但是他们是不同的2个对象，而且他们都去尝试用应用类加载器加载的时候都会失败，因为当前工程下的MyTest.class被删除了，导致应用类加载器加载MyTest.class失败，从而让我们自定义的类加载器有机会执行加载逻辑，myClassLoader和myClassLoader1不同的2个对象，同时对应不同的2个命名空间，在不同的命名空间里边，因此加载出来的类也是不同的。</p>
+<p>首先使用了我们自定义的类加载器加载的，并且被加载了2次！！因为类的hashCode编码不同。这两个class(clazz 和clazza )不是同一个class对象，这个和我们之前说过的一个类只能被加载一次是相互矛盾的，这个怎么解释呢，其实是不矛盾的，这里有一个命名空间的问题：<br><img src="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8812%EF%BC%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%89%98%E6%9C%BA%E5%88%B6%E5%AE%9E%E4%BE%8B%E6%B7%B1%E5%BA%A6%E5%89%96%E6%9E%90/20180318164433605.png" alt="这里写图片描述"><br>在我们这个例子中myClassLoader和myClassLoader1虽然都是同一个类，但是他们是不同的2个对象，而且他们都去尝试用应用类加载器加载的时候都会失败，因为当前工程下的MyTest.class被删除了，导致应用类加载器加载MyTest.class失败，从而让我们自定义的类加载器有机会执行加载逻辑，myClassLoader和myClassLoader1不同的2个对象，同时对应不同的2个命名空间，在不同的命名空间里边，因此加载出来的类也是不同的。</p>
 
     </div>
 

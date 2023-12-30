@@ -30,17 +30,17 @@
 <meta property="og:site_name" content="南贺神社">
 <meta property="og:description" content="一个EventLoopGroup当中会包含一个或多个EventLoop。 一个EventLoop在它的整个生命周期当中都只会与唯一一个Thread进行绑定。">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://ceaser.wang/20171111111532427.png">
-<meta property="og:image" content="https://ceaser.wang/20171111111707281.png">
-<meta property="og:image" content="https://ceaser.wang/20171111123724142.png">
-<meta property="og:image" content="https://ceaser.wang/20171111143540741.png">
-<meta property="og:image" content="https://ceaser.wang/20171111154834954.png">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%8D%81%E5%85%AB-Netty%E5%BA%95%E5%B1%82%E6%9E%B6%E6%9E%84%E7%B3%BB%E7%BB%9F%E6%80%BB%E7%BB%93%E4%B8%8E%E5%BA%94%E7%94%A8%E5%AE%9E%E8%B7%B5/20171111111532427.png">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%8D%81%E5%85%AB-Netty%E5%BA%95%E5%B1%82%E6%9E%B6%E6%9E%84%E7%B3%BB%E7%BB%9F%E6%80%BB%E7%BB%93%E4%B8%8E%E5%BA%94%E7%94%A8%E5%AE%9E%E8%B7%B5/20171111111707281.png">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%8D%81%E5%85%AB-Netty%E5%BA%95%E5%B1%82%E6%9E%B6%E6%9E%84%E7%B3%BB%E7%BB%9F%E6%80%BB%E7%BB%93%E4%B8%8E%E5%BA%94%E7%94%A8%E5%AE%9E%E8%B7%B5/20171111123724142.png">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%8D%81%E5%85%AB-Netty%E5%BA%95%E5%B1%82%E6%9E%B6%E6%9E%84%E7%B3%BB%E7%BB%9F%E6%80%BB%E7%BB%93%E4%B8%8E%E5%BA%94%E7%94%A8%E5%AE%9E%E8%B7%B5/20171111143540741.png">
+<meta property="og:image" content="https://ceaser.wang/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%8D%81%E5%85%AB-Netty%E5%BA%95%E5%B1%82%E6%9E%B6%E6%9E%84%E7%B3%BB%E7%BB%9F%E6%80%BB%E7%BB%93%E4%B8%8E%E5%BA%94%E7%94%A8%E5%AE%9E%E8%B7%B5/20171111154834954.png">
 <meta property="article:published_time" content="2018-10-04T14:53:04.000Z">
-<meta property="article:modified_time" content="2023-12-30T08:31:12.966Z">
+<meta property="article:modified_time" content="2023-12-30T14:30:27.375Z">
 <meta property="article:author" content="CeaserWang">
 <meta property="article:tag" content="总结">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://ceaser.wang/20171111111532427.png">
+<meta name="twitter:image" content="https://ceaser.wang/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%8D%81%E5%85%AB-Netty%E5%BA%95%E5%B1%82%E6%9E%B6%E6%9E%84%E7%B3%BB%E7%BB%9F%E6%80%BB%E7%BB%93%E4%B8%8E%E5%BA%94%E7%94%A8%E5%AE%9E%E8%B7%B5/20171111111532427.png">
 
 
 <link rel="canonical" href="https://ceaser.wang/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%8D%81%E5%85%AB-Netty%E5%BA%95%E5%B1%82%E6%9E%B6%E6%9E%84%E7%B3%BB%E7%BB%9F%E6%80%BB%E7%BB%93%E4%B8%8E%E5%BA%94%E7%94%A8%E5%AE%9E%E8%B7%B5/">
@@ -96,7 +96,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">208</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">217</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">209</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">221</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
         </a>
@@ -167,7 +167,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">217</span>
+          <span class="site-state-item-count">221</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -178,7 +178,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">208</span>
+        <span class="site-state-item-count">209</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -293,7 +293,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -332,15 +332,15 @@
 </ol>
 <p>重要结论：在netty的实现当中一定是线程安全的，基于此我们可以存储存储一个channel的引用，并且在需要向远程端点发送数据时，通过这个引用来调用Channel相应的方法；即便当时有很多线程在使用它也不会出现多线程问题，而且消息一定会按照顺序发送出去。</p>
 <p>重要结论：我们在业务开发中，不要将长时间执行的耗时任务放入到EventLoop的执行队列中，因为它将会一直阻塞该线程所对应的所有Channel上的其他执行任务，如果我们需要进行阻塞调用或是耗时的操作（实际开发中很常见），那么我们就需要使用一个专门的EventExecutor（业务线程池）。</p>
-<p>通常会有2种实现方式：<br>1、在ChannelHandler的回调方法中，使用自己定义的业务线程池，这样就可以实现异步调用。<br><img src="/20171111111532427.png" alt="这里写图片描述"><br>2、借助于netty提供的向ChannelPipeLine添加ChannelHandler时调用的addLast方法来传递EventExecutor。<br>说明：默认情况下（调用addLast(handler)），ChannelHandler中的回调方法都是由I&#x2F;O线程所执行，如果调用了ChannelPipeline addLast(EventExecutorGroup group, ChannelHandler… handlers);方法，那么ChannelHandler中的回调方法就是由参数中的group线程组来执行。<br><img src="/20171111111707281.png" alt="这里写图片描述">  </p>
-<p>netty的异步：<br><img src="/20171111123724142.png" alt="这里写图片描述">  </p>
+<p>通常会有2种实现方式：<br>1、在ChannelHandler的回调方法中，使用自己定义的业务线程池，这样就可以实现异步调用。<br><img src="/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%8D%81%E5%85%AB-Netty%E5%BA%95%E5%B1%82%E6%9E%B6%E6%9E%84%E7%B3%BB%E7%BB%9F%E6%80%BB%E7%BB%93%E4%B8%8E%E5%BA%94%E7%94%A8%E5%AE%9E%E8%B7%B5/20171111111532427.png" alt="这里写图片描述"><br>2、借助于netty提供的向ChannelPipeLine添加ChannelHandler时调用的addLast方法来传递EventExecutor。<br>说明：默认情况下（调用addLast(handler)），ChannelHandler中的回调方法都是由I&#x2F;O线程所执行，如果调用了ChannelPipeline addLast(EventExecutorGroup group, ChannelHandler… handlers);方法，那么ChannelHandler中的回调方法就是由参数中的group线程组来执行。<br><img src="/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%8D%81%E5%85%AB-Netty%E5%BA%95%E5%B1%82%E6%9E%B6%E6%9E%84%E7%B3%BB%E7%BB%9F%E6%80%BB%E7%BB%93%E4%B8%8E%E5%BA%94%E7%94%A8%E5%AE%9E%E8%B7%B5/20171111111707281.png" alt="这里写图片描述">  </p>
+<p>netty的异步：<br><img src="/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%8D%81%E5%85%AB-Netty%E5%BA%95%E5%B1%82%E6%9E%B6%E6%9E%84%E7%B3%BB%E7%BB%9F%E6%80%BB%E7%BB%93%E4%B8%8E%E5%BA%94%E7%94%A8%E5%AE%9E%E8%B7%B5/20171111123724142.png" alt="这里写图片描述">  </p>
 <p>从上图可以看到，ChannelPromise继承了Promise 接口，而Promise是可以写的(writable)，什么是可以写的，之前的Future都是get，isSuccess之类的方法，在ChannelPromise里边可以看到setSuccess(Void result)【setSuccess只能写一次，下一次写报错】之类的写方法。ChannelPromise字面意思是承诺的意思，不管是成功还是失败会承诺给你一个结果。</p>
-<p>JDK所提供的Future只能通过手工方式检查执行结果，而这个操作是会阻塞的；Netty则对ChannelFuture进行了增强，这里涉及到的是观察者模式，通过ChannelFutureListener以回调的方式来获取执行结果，去除了手工检查阻塞的操作，值得注意的是：ChannelFutureListener的operationcomplete方法是由I&#x2F;O线程执行的，因此要注意的是不要再这里执行耗时操作，否则需要需要通过另外的线程或线程池来执行。<br><img src="/20171111143540741.png" alt="这里写图片描述"><br>举例：jdk的Future得到返回结果是使用get或者isDone获取，而这两个方式是阻塞的，即使是用超时时间的方法如果时间到了获取不到也是返回null，这些事情都是开发人员自己做的，而Netty解决了这个弊端，netty通过在Future上加入了监听器的模式，注册到Future上若干Listner，Future持有Channel，当某一个事件发生的时候，Future调用对应的Listner的方法，方法入参会有当前Future的引用，所以在Listener里边就会得到Future的Channel，之后在Listener里边得到Channel的数据进行处理，这也是上边说的不要再Listener的方法里边处理耗时的业务的原因。</p>
+<p>JDK所提供的Future只能通过手工方式检查执行结果，而这个操作是会阻塞的；Netty则对ChannelFuture进行了增强，这里涉及到的是观察者模式，通过ChannelFutureListener以回调的方式来获取执行结果，去除了手工检查阻塞的操作，值得注意的是：ChannelFutureListener的operationcomplete方法是由I&#x2F;O线程执行的，因此要注意的是不要再这里执行耗时操作，否则需要需要通过另外的线程或线程池来执行。<br><img src="/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%8D%81%E5%85%AB-Netty%E5%BA%95%E5%B1%82%E6%9E%B6%E6%9E%84%E7%B3%BB%E7%BB%9F%E6%80%BB%E7%BB%93%E4%B8%8E%E5%BA%94%E7%94%A8%E5%AE%9E%E8%B7%B5/20171111143540741.png" alt="这里写图片描述"><br>举例：jdk的Future得到返回结果是使用get或者isDone获取，而这两个方式是阻塞的，即使是用超时时间的方法如果时间到了获取不到也是返回null，这些事情都是开发人员自己做的，而Netty解决了这个弊端，netty通过在Future上加入了监听器的模式，注册到Future上若干Listner，Future持有Channel，当某一个事件发生的时候，Future调用对应的Listner的方法，方法入参会有当前Future的引用，所以在Listener里边就会得到Future的Channel，之后在Listener里边得到Channel的数据进行处理，这也是上边说的不要再Listener的方法里边处理耗时的业务的原因。</p>
 <p>再说一下ChannelHandler，ChannelHandler有入栈和出栈的Handler，就拿ChannelInboundHandlerAdapter 来说，我们要写一个入栈处理器，需要必须重写接口里边的所有方法，但是我们只用一部分方法，而Adapter是一种适配器模式，会把所有方法实现，我们在用的时候直接用适配的类（要么重写要么直接使用）去实现业务逻辑就可以了，大大方便了开发者以及减轻来了开发者的工作量。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public class ChannelInboundHandlerAdapter extends ChannelHandlerAdapter implements ChannelInboundHandler &#123;</span><br><span class="line">...略</span><br><span class="line">   public ChannelInboundHandlerAdapter() &#123;</span><br><span class="line">   &#125;</span><br><span class="line">   public void channelRegistered(ChannelHandlerContext ctx) throws Exception &#123;</span><br><span class="line">       ctx.fireChannelRegistered();</span><br><span class="line">   &#125;</span><br><span class="line">   public void channelUnregistered(ChannelHandlerContext ctx) throws Exception &#123;</span><br><span class="line">       ctx.fireChannelUnregistered();</span><br><span class="line">   &#125;</span><br><span class="line">   ...略</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>ChannelInboundHandlerAdapter 的具体实现类有SimpleChannelInboundHandler,他和ChannelInboundHandlerAdapter 有什么区别呢？</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">public abstract class SimpleChannelInboundHandler&lt;I&gt; extends ChannelInboundHandlerAdapter</span><br><span class="line">&#123;</span><br><span class="line">...略</span><br><span class="line"> protected abstract void channelRead0(ChannelHandlerContext ctx, I msg) throws Exception;</span><br><span class="line"> //开发者必须实现该方法，因为是静态的（模板设计模式）</span><br><span class="line"> ...略</span><br><span class="line"></span><br><span class="line">     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception &#123;</span><br><span class="line">       boolean release = true;</span><br><span class="line">       try &#123;</span><br><span class="line">           if (acceptInboundMessage(msg)) &#123;</span><br><span class="line">               @SuppressWarnings(&quot;unchecked&quot;)</span><br><span class="line">               I imsg = (I) msg;//强制转换</span><br><span class="line">               channelRead0(ctx, imsg);//暴露给开发者的接口，带有泛型</span><br><span class="line">           &#125; else &#123;</span><br><span class="line">               release = false;</span><br><span class="line">               ctx.fireChannelRead(msg);</span><br><span class="line">           &#125;</span><br><span class="line">       &#125; finally &#123;</span><br><span class="line">           if (autoRelease &amp;&amp; release) &#123;</span><br><span class="line">               ReferenceCountUtil.release(msg);//引用数减一，将资源释放掉，因此消息的引用我们不要再外围引用，</span><br><span class="line">               //因为消息在这里被释放掉了</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>很直观就是加了一个泛型I，I就是接受的消息的类型，比如String，Object等，而在ChannelInboundHandlerAdapter 里边四需要把消息 强制类型转换的，这是他们最大的区别。除此之外SimpleChannelInboundHandler会对消息执行ReferenceCountUtil.release(Object)和ReferenceCountUtil.retain(Object)  分别是释放一个消息引用和保持一个消息引用（流到下一个handler）.<br>我们一般会使用ChannelInboundHandlerAdapter 和SimpleChannelInboundHandler处理入栈数据。<br>实际应用：<br><img src="/20171111154834954.png" alt="这里写图片描述"></p>
+<p>很直观就是加了一个泛型I，I就是接受的消息的类型，比如String，Object等，而在ChannelInboundHandlerAdapter 里边四需要把消息 强制类型转换的，这是他们最大的区别。除此之外SimpleChannelInboundHandler会对消息执行ReferenceCountUtil.release(Object)和ReferenceCountUtil.retain(Object)  分别是释放一个消息引用和保持一个消息引用（流到下一个handler）.<br>我们一般会使用ChannelInboundHandlerAdapter 和SimpleChannelInboundHandler处理入栈数据。<br>实际应用：<br><img src="/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%8D%81%E5%85%AB-Netty%E5%BA%95%E5%B1%82%E6%9E%B6%E6%9E%84%E7%B3%BB%E7%BB%9F%E6%80%BB%E7%BB%93%E4%B8%8E%E5%BA%94%E7%94%A8%E5%AE%9E%E8%B7%B5/20171111154834954.png" alt="这里写图片描述"></p>
 <p>ReferenceCountUtil的release方法：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public static boolean release(Object msg) &#123;</span><br><span class="line">    if (msg instanceof ReferenceCounted) &#123;</span><br><span class="line">        return ((ReferenceCounted) msg).release();</span><br><span class="line">    &#125;</span><br><span class="line">    return false;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>最终使用的是ReferenceCounted类操作的：</p>

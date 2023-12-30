@@ -85,7 +85,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">208</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">217</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">209</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">221</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
         </a>
@@ -156,7 +156,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">217</span>
+          <span class="site-state-item-count">221</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -167,7 +167,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">208</span>
+        <span class="site-state-item-count">209</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -245,6 +245,416 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/09/28/SPRING%E6%8A%80%E6%9C%AF%E5%86%85%E5%B9%95-%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AB%EF%BC%89SpringMVC%E7%9A%84%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
+      <meta itemprop="name" content="CeaserWang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2018/09/28/SPRING%E6%8A%80%E6%9C%AF%E5%86%85%E5%B9%95-%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AB%EF%BC%89SpringMVC%E7%9A%84%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/" class="post-title-link" itemprop="url">SPRING技术内幕-笔记（八）SpringMVC的设计与实现</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-09-28 19:47:57" itemprop="dateCreated datePublished" datetime="2018-09-28T19:47:57+00:00">2018-09-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/spring/" itemprop="url" rel="index"><span itemprop="name">spring</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2018/09/28/SPRING%E6%8A%80%E6%9C%AF%E5%86%85%E5%B9%95-%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AB%EF%BC%89SpringMVC%E7%9A%84%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/" class="post-meta-item leancloud_visitors" data-flag-title="SPRING技术内幕-笔记（八）SpringMVC的设计与实现" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>8.1SPringMVC设置概览<br>在web.xml文件里边配置的DispatcherServlet是web请求的入口，它的处理过程如下：<br><img src="/2018/09/28/SPRING%E6%8A%80%E6%9C%AF%E5%86%85%E5%B9%95-%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AB%EF%BC%89SpringMVC%E7%9A%84%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/20150613213240218.png" alt="这里写图片描述"></p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2018/09/28/SPRING%E6%8A%80%E6%9C%AF%E5%86%85%E5%B9%95-%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AB%EF%BC%89SpringMVC%E7%9A%84%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/09/28/SPRING%E6%8A%80%E6%9C%AF%E5%86%85%E5%B9%95-%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%83%EF%BC%89WEB%E7%8E%AF%E5%A2%83%E4%B8%AD%E7%9A%84springMVC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
+      <meta itemprop="name" content="CeaserWang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2018/09/28/SPRING%E6%8A%80%E6%9C%AF%E5%86%85%E5%B9%95-%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%83%EF%BC%89WEB%E7%8E%AF%E5%A2%83%E4%B8%AD%E7%9A%84springMVC/" class="post-title-link" itemprop="url">SPRING技术内幕-笔记（七）WEB环境中的springMVC</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-09-28 19:43:25" itemprop="dateCreated datePublished" datetime="2018-09-28T19:43:25+00:00">2018-09-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/spring/" itemprop="url" rel="index"><span itemprop="name">spring</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2018/09/28/SPRING%E6%8A%80%E6%9C%AF%E5%86%85%E5%B9%95-%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%83%EF%BC%89WEB%E7%8E%AF%E5%A2%83%E4%B8%AD%E7%9A%84springMVC/" class="post-meta-item leancloud_visitors" data-flag-title="SPRING技术内幕-笔记（七）WEB环境中的springMVC" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><strong>7.1Tomcat的web.XML对springMVC 的描述</strong>：<br><img src="/2018/09/28/SPRING%E6%8A%80%E6%9C%AF%E5%86%85%E5%B9%95-%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%83%EF%BC%89WEB%E7%8E%AF%E5%A2%83%E4%B8%AD%E7%9A%84springMVC/20150610221403198.png" alt="这里写图片描述"></p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2018/09/28/SPRING%E6%8A%80%E6%9C%AF%E5%86%85%E5%B9%95-%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%83%EF%BC%89WEB%E7%8E%AF%E5%A2%83%E4%B8%AD%E7%9A%84springMVC/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/09/28/%E5%87%A0%E7%A7%8D%E5%B8%B8%E8%A7%81%E7%9A%84%E3%80%90%E6%8E%92%E5%BA%8F%E3%80%91%E4%B8%8E%E3%80%90%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E3%80%91/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
+      <meta itemprop="name" content="CeaserWang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2018/09/28/%E5%87%A0%E7%A7%8D%E5%B8%B8%E8%A7%81%E7%9A%84%E3%80%90%E6%8E%92%E5%BA%8F%E3%80%91%E4%B8%8E%E3%80%90%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E3%80%91/" class="post-title-link" itemprop="url">几种常见的【排序】与【数据结构】</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-09-28 19:37:57" itemprop="dateCreated datePublished" datetime="2018-09-28T19:37:57+00:00">2018-09-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/algorithm/" itemprop="url" rel="index"><span itemprop="name">algorithm</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2018/09/28/%E5%87%A0%E7%A7%8D%E5%B8%B8%E8%A7%81%E7%9A%84%E3%80%90%E6%8E%92%E5%BA%8F%E3%80%91%E4%B8%8E%E3%80%90%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E3%80%91/" class="post-meta-item leancloud_visitors" data-flag-title="几种常见的【排序】与【数据结构】" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><strong>（一）常见排序</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&lt;!-- more --&gt;</span><br><span class="line">import java.util.Arrays;</span><br><span class="line"></span><br><span class="line">public class Sort &#123;</span><br><span class="line">//快速排序</span><br><span class="line">	private static int partition(int[] arr, int low, int hight) &#123;</span><br><span class="line">		int pivotkey = arr[low];</span><br><span class="line">		while (low &lt; hight) &#123;</span><br><span class="line">			while (low &lt; hight &amp;&amp; pivotkey &lt;= arr[hight])</span><br><span class="line">				--hight;</span><br><span class="line">			int temp1 = arr[low];</span><br><span class="line">			arr[low]=arr[hight];</span><br><span class="line">			arr[hight]=temp1;</span><br><span class="line">			//arr[low] = arr[hight];</span><br><span class="line">			while (low &lt; hight &amp;&amp; pivotkey &gt;= arr[low])</span><br><span class="line">				++low;</span><br><span class="line">			int temp2 = arr[low];</span><br><span class="line">			arr[low]=arr[hight];</span><br><span class="line">			arr[hight]=temp2;</span><br><span class="line">			//arr[hight] = arr[low];</span><br><span class="line">		&#125;</span><br><span class="line">		return low;</span><br><span class="line">	&#125;</span><br><span class="line">//快速排序</span><br><span class="line">	public static void qSort(int[] arr, int low, int hight) &#123;</span><br><span class="line">		if (low &lt; hight) &#123;</span><br><span class="line">			int pivotkey = partition(arr, low, hight);</span><br><span class="line">			qSort(arr, low, pivotkey - 1);</span><br><span class="line">			qSort(arr, pivotkey + 1, hight);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">//插入排序</span><br><span class="line">	public static int[] insertOrder(int a[])&#123;</span><br><span class="line">		for (int i = 1; i &lt; a.length; i++) &#123;</span><br><span class="line">			int k = a[i];</span><br><span class="line">			int j;</span><br><span class="line">			for (j = i - 1; j &gt;= 0 &amp;&amp; k &lt; a[j]; j--) &#123;</span><br><span class="line">				a[j + 1] = a[j];</span><br><span class="line">			&#125;</span><br><span class="line">			a[j + 1] = k;</span><br><span class="line">			//System.out.println(Arrays.toString(a));</span><br><span class="line">		&#125;</span><br><span class="line">		return a;</span><br><span class="line">	&#125;</span><br><span class="line">	//冒泡排序</span><br><span class="line">	public static int[] maopao(int[] a)&#123;</span><br><span class="line"></span><br><span class="line">		for(int i=0;i&lt;a.length-1;i++)&#123;//i 代表伦次</span><br><span class="line">			for(int j=0;j&lt;a.length-i-1;j++)&#123;//j和j+1代表相邻元素</span><br><span class="line">				if(a[j]&gt;a[j+1])&#123;</span><br><span class="line">					int temp = a[j];</span><br><span class="line">					a[j]= a[j+1];</span><br><span class="line">					a[j+1]=temp;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			//System.out.println(Arrays.toString(a));</span><br><span class="line">			//Arrays.sort(a);</span><br><span class="line">		&#125;</span><br><span class="line">		return a;</span><br><span class="line">	&#125;</span><br><span class="line">	//选择排序</span><br><span class="line">	public int[] selectOrder(int arr[] ) &#123;</span><br><span class="line">		for (int i = 0; i &lt;arr.length; i++) &#123;</span><br><span class="line">			int max = arr[i];</span><br><span class="line">			for (int j = i + 1; j &lt; arr.length; j++) &#123;</span><br><span class="line">				if (arr[j] &lt; max) &#123;</span><br><span class="line">					int temp = arr[j];</span><br><span class="line">					arr[j] = max;</span><br><span class="line">					max = temp;</span><br><span class="line">					arr[i] = max;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		return arr;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	// 二分查找</span><br><span class="line">		public void binarySearch() &#123;</span><br><span class="line">			int b[] = &#123; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 &#125;;</span><br><span class="line">			int start = 0;</span><br><span class="line">			int end = b.length - 1;</span><br><span class="line">			int mid;</span><br><span class="line">			int target = 1;</span><br><span class="line">			while (true) &#123;</span><br><span class="line">				mid = ((end + start) / 2);</span><br><span class="line">				if (b[mid] == target) &#123;</span><br><span class="line">					System.out.println(mid);</span><br><span class="line">					break;</span><br><span class="line">				&#125;</span><br><span class="line">				if (target &lt; b[mid]) &#123;</span><br><span class="line">					end = mid;</span><br><span class="line">				&#125;</span><br><span class="line">				if (target &gt; b[mid]) &#123;</span><br><span class="line">					start = mid + 1;</span><br><span class="line">				&#125;</span><br><span class="line"></span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">	public static void main(String args[]) &#123;</span><br><span class="line">		int Arr[] = &#123; 10, 30, 20, 50, 90, 80, 60, 40, 70 &#125;;</span><br><span class="line">		System.out.println(Arrays.toString(Arr));</span><br><span class="line">		qSort(Arr, 0, Arr.length -1);</span><br><span class="line">		System.out.println(Arrays.toString(Arr));</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">希尔排序:</span><br><span class="line">算法思想</span><br><span class="line"></span><br><span class="line">它是对插入插入排序的改进</span><br><span class="line"></span><br><span class="line">搜索维基百科可知</span><br><span class="line">希尔排序，也称递减增量排序算法</span><br><span class="line">假设有这样一组数[ 13 14 94 33 82 25 59 94 65 23 45 27 73 25 39 10 ]</span><br><span class="line">，我们分别以步长为5，3，1进行排序（希尔排序最后的步长一定是1）</span><br><span class="line"></span><br><span class="line">步长为5，我们可以得到如下数据，</span><br><span class="line">13 14 94 33 82</span><br><span class="line">25 59 94 65 23</span><br><span class="line">45 27 73 25 39</span><br><span class="line">10</span><br><span class="line">然后 按照列排序</span><br><span class="line">10 14 73 25 23</span><br><span class="line">13 27 94 33 39</span><br><span class="line">25 59 94 65 82</span><br><span class="line">45</span><br><span class="line"></span><br><span class="line">将上述四行数字，依序接在一起时我们得到：[ 10 14 73 25 23 13 27 94 33 39 25 59 94 65 82 45 ].这时10已经移至正确位置了，然后再以3为步长进行排序：</span><br><span class="line">10 14 13</span><br><span class="line">25 23 33</span><br><span class="line">27 25 59</span><br><span class="line">39 65 73</span><br><span class="line">45 94 82</span><br><span class="line">94</span><br><span class="line">-最后以1步长进行排序（此时就是简单的插入排序了）。</span><br><span class="line"></span><br><span class="line">public static void shellPass(Integer[] array, int d) &#123;</span><br><span class="line">    for (int i = d; i &lt; array.length; i++) &#123;</span><br><span class="line">        int temp = array[i];</span><br><span class="line">        int j = i - d;</span><br><span class="line">        while (j &gt;= 0 &amp;&amp; array[j] &gt; temp) &#123;</span><br><span class="line">            array[j + d] = array[j];</span><br><span class="line">            j -= d;</span><br><span class="line">        &#125;</span><br><span class="line">        array[j + d] = temp;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public static void shellSort(Integer[] data) &#123;</span><br><span class="line">    int increment = 12;</span><br><span class="line">    do &#123;</span><br><span class="line">        increment = increment / 3 + 1;</span><br><span class="line">        shellPass(data, increment);</span><br><span class="line">    &#125; while (increment &gt; 1);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p><strong>（二）常见数据结构</strong><br>2.1 graph<br>2.1.1图节点</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">public class GraphNode &#123;</span><br><span class="line">	int val;</span><br><span class="line">    GraphNode next;</span><br><span class="line">    GraphNode[] neighbors;</span><br><span class="line">    boolean visited;</span><br><span class="line"></span><br><span class="line">    GraphNode(int x) &#123;</span><br><span class="line">        val = x;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    GraphNode(int x, GraphNode[] n)&#123;</span><br><span class="line">        val = x;</span><br><span class="line">        neighbors = n;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String toString()&#123;</span><br><span class="line">        return &quot;value: &quot;+ this.val;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>2.1.2队列</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">public class Queue &#123;</span><br><span class="line">	 GraphNode first, last;</span><br><span class="line"></span><br><span class="line">	    public void enqueue(GraphNode n)&#123;</span><br><span class="line">	        if(first == null)&#123;</span><br><span class="line">	            first = n;</span><br><span class="line">	            last = first;</span><br><span class="line">	        &#125;else&#123;</span><br><span class="line">	            last.next = n;</span><br><span class="line">	            last = n;</span><br><span class="line">	        &#125;</span><br><span class="line">	    &#125;</span><br><span class="line"></span><br><span class="line">	    public GraphNode dequeue()&#123;</span><br><span class="line">	        if(first == null)&#123;</span><br><span class="line">	            return null;</span><br><span class="line">	        &#125;else&#123;</span><br><span class="line">	            GraphNode temp = new GraphNode(first.val, first.neighbors);</span><br><span class="line">	            first = first.next;</span><br><span class="line">	            return temp;</span><br><span class="line">	        &#125;   </span><br><span class="line">	    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>2.1.3测试类</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">public class GraphTest &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        GraphNode n1 = new GraphNode(1);</span><br><span class="line">        GraphNode n2 = new GraphNode(2);</span><br><span class="line">        GraphNode n3 = new GraphNode(3);</span><br><span class="line">        GraphNode n4 = new GraphNode(4);</span><br><span class="line">        GraphNode n5 = new GraphNode(5);</span><br><span class="line"></span><br><span class="line">        n1.neighbors = new GraphNode[]&#123;n2,n3,n5&#125;;</span><br><span class="line">        n2.neighbors = new GraphNode[]&#123;n1,n4&#125;;</span><br><span class="line">        n3.neighbors = new GraphNode[]&#123;n1,n4,n5&#125;;</span><br><span class="line">        n4.neighbors = new GraphNode[]&#123;n2,n3,n5&#125;;</span><br><span class="line">        n5.neighbors = new GraphNode[]&#123;n1,n3,n4&#125;;</span><br><span class="line"></span><br><span class="line">        breathFirstSearch(n1, 5);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void breathFirstSearch(GraphNode root, int x)&#123;</span><br><span class="line">        if(root.val == x)</span><br><span class="line">            System.out.println(&quot;find in root&quot;);</span><br><span class="line"></span><br><span class="line">        Queue queue = new Queue();</span><br><span class="line">        root.visited = true;</span><br><span class="line">        queue.enqueue(root);</span><br><span class="line"></span><br><span class="line">        while(queue.first != null)&#123;</span><br><span class="line">            GraphNode c = (GraphNode) queue.dequeue();</span><br><span class="line">            for(GraphNode n: c.neighbors)&#123;</span><br><span class="line"></span><br><span class="line">                if(!n.visited)&#123;</span><br><span class="line">                    System.out.print(n + &quot; &quot;);</span><br><span class="line">                    n.visited = true;</span><br><span class="line">                    if(n.val == x)</span><br><span class="line">                        System.out.println(&quot;Find &quot;+n);</span><br><span class="line">                    queue.enqueue(n);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>2.2link<br>2.2.1链表实例节点</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public class Node &#123;</span><br><span class="line">    int val;</span><br><span class="line">    Node next;</span><br><span class="line"></span><br><span class="line">    Node(int x) &#123;</span><br><span class="line">        val = x;</span><br><span class="line">        next = null;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>2.3Queue<br>2.3.1队列节点</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public class Node &#123;</span><br><span class="line">    int val;</span><br><span class="line">    Node next;</span><br><span class="line"></span><br><span class="line">    Node(int x) &#123;</span><br><span class="line">        val = x;</span><br><span class="line">        next = null;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>2.3.2队列操作类</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">public class Queue &#123;</span><br><span class="line">	Node first, last;</span><br><span class="line"></span><br><span class="line">    public void enqueue(Node n)&#123;</span><br><span class="line">        if(first == null)&#123;</span><br><span class="line">            first = n;</span><br><span class="line">            last = first;</span><br><span class="line">        &#125;else&#123;</span><br><span class="line">            last.next = n;</span><br><span class="line">            last = n;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public Node dequeue()&#123;</span><br><span class="line">        if(first == null)&#123;</span><br><span class="line">            return null;</span><br><span class="line">        &#125;else&#123;</span><br><span class="line">            Node temp = new Node(first.val);</span><br><span class="line">            first = first.next;</span><br><span class="line">            return temp;</span><br><span class="line">        &#125;   </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>2.4stack<br>2.4.1栈的节点</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public class Node &#123;</span><br><span class="line">    int val;</span><br><span class="line">    Node next;</span><br><span class="line"></span><br><span class="line">    Node(int x) &#123;</span><br><span class="line">        val = x;</span><br><span class="line">        next = null;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>2.4.2栈的操作类</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">public class Stack &#123;</span><br><span class="line">	Node top;</span><br><span class="line"></span><br><span class="line">    public Node peek()&#123;</span><br><span class="line">        if(top != null)&#123;</span><br><span class="line">            return top;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        return null;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public Node pop()&#123;</span><br><span class="line">        if(top == null)&#123;</span><br><span class="line">            return null;</span><br><span class="line">        &#125;else&#123;</span><br><span class="line">            Node temp = new Node(top.val);</span><br><span class="line">            top = top.next;</span><br><span class="line">            return temp;    </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void push(Node n)&#123;</span><br><span class="line">        if(n != null)&#123;</span><br><span class="line">            n.next = top;</span><br><span class="line">            top = n;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>2.5Tree<br>2.5.1数的节点</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public class TreeNode &#123;</span><br><span class="line">    int value;</span><br><span class="line">    TreeNode left;</span><br><span class="line">    TreeNode right;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/09/28/SPRING%E6%8A%80%E6%9C%AF%E5%86%85%E5%B9%95%EF%BC%9A%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90SPRING%E6%9E%B6%E6%9E%84%E4%B8%8E%E8%AE%BE%E8%AE%A1%E5%8E%9F%E7%90%86-%E7%AC%AC2%E7%89%88-%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AD%EF%BC%89AOP%E6%8B%A6%E6%88%AA%E5%99%A8%E8%B0%83%E7%94%A8%E7%9A%84%E5%AE%9E%E7%8E%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
+      <meta itemprop="name" content="CeaserWang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2018/09/28/SPRING%E6%8A%80%E6%9C%AF%E5%86%85%E5%B9%95%EF%BC%9A%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90SPRING%E6%9E%B6%E6%9E%84%E4%B8%8E%E8%AE%BE%E8%AE%A1%E5%8E%9F%E7%90%86-%E7%AC%AC2%E7%89%88-%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AD%EF%BC%89AOP%E6%8B%A6%E6%88%AA%E5%99%A8%E8%B0%83%E7%94%A8%E7%9A%84%E5%AE%9E%E7%8E%B0/" class="post-title-link" itemprop="url">SPRING技术内幕：深入解析SPRING架构与设计原理(第2版)-笔记（六）AOP拦截器调用的实现</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-09-28 19:28:58" itemprop="dateCreated datePublished" datetime="2018-09-28T19:28:58+00:00">2018-09-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/spring/" itemprop="url" rel="index"><span itemprop="name">spring</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2018/09/28/SPRING%E6%8A%80%E6%9C%AF%E5%86%85%E5%B9%95%EF%BC%9A%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90SPRING%E6%9E%B6%E6%9E%84%E4%B8%8E%E8%AE%BE%E8%AE%A1%E5%8E%9F%E7%90%86-%E7%AC%AC2%E7%89%88-%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AD%EF%BC%89AOP%E6%8B%A6%E6%88%AA%E5%99%A8%E8%B0%83%E7%94%A8%E7%9A%84%E5%AE%9E%E7%8E%B0/" class="post-meta-item leancloud_visitors" data-flag-title="SPRING技术内幕：深入解析SPRING架构与设计原理(第2版)-笔记（六）AOP拦截器调用的实现" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><strong>JdkDynamicAopProxy</strong><br>JdkDynamicAopProxy代理对象的回调：<br>JdkDynamicAopProxy通过ReflectiveMethodInvocation完成拦截器链的调用，</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2018/09/28/SPRING%E6%8A%80%E6%9C%AF%E5%86%85%E5%B9%95%EF%BC%9A%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90SPRING%E6%9E%B6%E6%9E%84%E4%B8%8E%E8%AE%BE%E8%AE%A1%E5%8E%9F%E7%90%86-%E7%AC%AC2%E7%89%88-%E7%AC%94%E8%AE%B0%EF%BC%88%E5%85%AD%EF%BC%89AOP%E6%8B%A6%E6%88%AA%E5%99%A8%E8%B0%83%E7%94%A8%E7%9A%84%E5%AE%9E%E7%8E%B0/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
     <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/09/28/SPRING%E6%8A%80%E6%9C%AF%E5%86%85%E5%B9%95%EF%BC%9A%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90SPRING%E6%9E%B6%E6%9E%84%E4%B8%8E%E8%AE%BE%E8%AE%A1%E5%8E%9F%E7%90%86-%E7%AC%AC2%E7%89%88-%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%94%EF%BC%89-3-AOPProxy%E7%9A%84%E7%94%9F%E6%88%90%E8%BF%87%E7%A8%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -281,7 +691,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -310,7 +720,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <p>AOPProxy的生成过程：<br><img src="/20150519215814452.png" alt="这里写图片描述"></p>
+          <p>AOPProxy的生成过程：<br><img src="/2018/09/28/SPRING%E6%8A%80%E6%9C%AF%E5%86%85%E5%B9%95%EF%BC%9A%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90SPRING%E6%9E%B6%E6%9E%84%E4%B8%8E%E8%AE%BE%E8%AE%A1%E5%8E%9F%E7%90%86-%E7%AC%AC2%E7%89%88-%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%94%EF%BC%89-3-AOPProxy%E7%9A%84%E7%94%9F%E6%88%90%E8%BF%87%E7%A8%8B/20150519215814452.png" alt="这里写图片描述"></p>
 
       
     </div>
@@ -373,7 +783,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -402,7 +812,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <p>proxyConfig是一个数据基类，这个数据基类为proxyFactoryBean这样的子类提供配置属性，在另一个基类advisesupport的实现中，封装了AOP对通知和通知其的相关操作，这些操作对于不同AOP的代理对象的生成都是一样的，但对于具体的AOP代理对象的创建，advisedSupport把它交给他的子类们去完成，对于proxyCreatorsupport,可以将它看成是其子类创建AOP代理对象的一个辅助类。aspectJProxyBean起到集成Spring和AspectJ的作用；对于使用SpringAOP的应用，ProxyFactoryBean和ProxyFactory都提供了AOP功能的封装，只是使用ProxyFactory,可以在IOC容器中完成声明式配置，而使用ProxyFactory，则需要编程式的使用spring AOP<br><img src="/20150519215523554.png" alt="这里写图片描述"></p>
+          <p>proxyConfig是一个数据基类，这个数据基类为proxyFactoryBean这样的子类提供配置属性，在另一个基类advisesupport的实现中，封装了AOP对通知和通知其的相关操作，这些操作对于不同AOP的代理对象的生成都是一样的，但对于具体的AOP代理对象的创建，advisedSupport把它交给他的子类们去完成，对于proxyCreatorsupport,可以将它看成是其子类创建AOP代理对象的一个辅助类。aspectJProxyBean起到集成Spring和AspectJ的作用；对于使用SpringAOP的应用，ProxyFactoryBean和ProxyFactory都提供了AOP功能的封装，只是使用ProxyFactory,可以在IOC容器中完成声明式配置，而使用ProxyFactory，则需要编程式的使用spring AOP<br><img src="/2018/09/28/SPRING%E6%8A%80%E6%9C%AF%E5%86%85%E5%B9%95%EF%BC%9A%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90SPRING%E6%9E%B6%E6%9E%84%E4%B8%8E%E8%AE%BE%E8%AE%A1%E5%8E%9F%E7%90%86-%E7%AC%AC2%E7%89%88-%E7%AC%94%E8%AE%B0%EF%BC%88%E5%9B%9B%EF%BC%89AOP%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/20150519215523554.png" alt="这里写图片描述"></p>
 
       
     </div>
@@ -465,7 +875,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -494,7 +904,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <p>advice：<br><img src="/20150519214932869.png" alt="这里写图片描述"></p>
+          <p>advice：<br><img src="/2018/09/28/SPRING%E6%8A%80%E6%9C%AF%E5%86%85%E5%B9%95%EF%BC%9A%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90SPRING%E6%9E%B6%E6%9E%84%E4%B8%8E%E8%AE%BE%E8%AE%A1%E5%8E%9F%E7%90%86-%E7%AC%AC2%E7%89%88-%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%89%EF%BC%89AOP%E6%A6%82%E5%BF%B5/20150519214932869.png" alt="这里写图片描述"></p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2018/09/28/SPRING%E6%8A%80%E6%9C%AF%E5%86%85%E5%B9%95%EF%BC%9A%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90SPRING%E6%9E%B6%E6%9E%84%E4%B8%8E%E8%AE%BE%E8%AE%A1%E5%8E%9F%E7%90%86-%E7%AC%AC2%E7%89%88-%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%89%EF%BC%89AOP%E6%A6%82%E5%BF%B5/#more" rel="contents">
@@ -564,7 +974,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -593,7 +1003,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <p>IOC注入过程：<br><img src="/20150519213644221.png" alt="这里写图片描述"></p>
+          <p>IOC注入过程：<br><img src="/2018/09/28/SPRING%E6%8A%80%E6%9C%AF%E5%86%85%E5%B9%95%EF%BC%9A%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90SPRING%E6%9E%B6%E6%9E%84%E4%B8%8E%E8%AE%BE%E8%AE%A1%E5%8E%9F%E7%90%86-%E7%AC%AC2%E7%89%88-%E7%AC%94%E8%AE%B0%EF%BC%88%E4%BA%8C%EF%BC%89IOC%E6%B3%A8%E5%85%A5/20150519213644221.png" alt="这里写图片描述"></p>
 
       
     </div>
@@ -656,7 +1066,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -686,7 +1096,7 @@
     
     <div class="post-body" itemprop="articleBody">
           <p>开始之前先说一下Beanfactory的结构原理：</p>
-<p><img src="/20150610213912663.png" alt="这里写图片描述"></p>
+<p><img src="/2018/09/28/SPRING%E6%8A%80%E6%9C%AF%E5%86%85%E5%B9%95%EF%BC%9A%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90SPRING%E6%9E%B6%E6%9E%84%E4%B8%8E%E8%AE%BE%E8%AE%A1%E5%8E%9F%E7%90%86-%E7%AC%AC2%E7%89%88-%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%80%EF%BC%89IOC%E8%A7%A3%E6%9E%90/20150610213912663.png" alt="这里写图片描述"></p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2018/09/28/SPRING%E6%8A%80%E6%9C%AF%E5%86%85%E5%B9%95%EF%BC%9A%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90SPRING%E6%9E%B6%E6%9E%84%E4%B8%8E%E8%AE%BE%E8%AE%A1%E5%8E%9F%E7%90%86-%E7%AC%AC2%E7%89%88-%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%80%EF%BC%89IOC%E8%A7%A3%E6%9E%90/#more" rel="contents">
@@ -756,7 +1166,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:13" itemprop="dateModified" datetime="2023-12-30T08:31:13+00:00">2023-12-30</time>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -811,107 +1221,8 @@
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/09/27/java%E9%AB%98%E9%98%B6%E7%BC%96%E7%A8%8B%E7%9F%A5%E8%AF%86%E7%82%B9-The-road-of-alibaba/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
-      <meta itemprop="name" content="CeaserWang">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="南贺神社">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 南贺神社">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2018/09/27/java%E9%AB%98%E9%98%B6%E7%BC%96%E7%A8%8B%E7%9F%A5%E8%AF%86%E7%82%B9-The-road-of-alibaba/" class="post-title-link" itemprop="url">java高阶编程知识点---The road of alibaba</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2018-09-27 20:54:54" itemprop="dateCreated datePublished" datetime="2018-09-27T20:54:54+00:00">2018-09-27</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E6%8A%80%E6%9C%AF%E4%B9%8B%E8%B7%AF/" itemprop="url" rel="index"><span itemprop="name">技术之路</span></a>
-        </span>
-    </span>
-
-  
-    <span id="/2018/09/27/java%E9%AB%98%E9%98%B6%E7%BC%96%E7%A8%8B%E7%9F%A5%E8%AF%86%E7%82%B9-The-road-of-alibaba/" class="post-meta-item leancloud_visitors" data-flag-title="java高阶编程知识点---The road of alibaba" title="Views">
-      <span class="post-meta-item-icon">
-        <i class="far fa-eye"></i>
-      </span>
-      <span class="post-meta-item-text">Views: </span>
-      <span class="leancloud-visitors-count"></span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>第一部分   面试初级</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2018/09/27/java%E9%AB%98%E9%98%B6%E7%BC%96%E7%A8%8B%E7%9F%A5%E8%AF%86%E7%82%B9-The-road-of-alibaba/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/21/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/21/">21</a><span class="page-number current">22</span>
+    <a class="extend prev" rel="prev" href="/page/21/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/21/">21</a><span class="page-number current">22</span><a class="page-number" href="/page/23/">23</a><a class="extend next" rel="next" href="/page/23/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 </div>

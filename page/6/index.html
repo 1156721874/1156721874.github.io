@@ -85,7 +85,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">208</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">217</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">209</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">221</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
         </a>
@@ -156,7 +156,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">217</span>
+          <span class="site-state-item-count">221</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -167,7 +167,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">208</span>
+        <span class="site-state-item-count">209</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -245,6 +245,402 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2019/08/11/Concurrent/concurrency(1)Object%E7%B1%BB%E7%9B%B8%E5%85%B3%E6%96%B9%E6%B3%95%E8%A7%A3%E8%AF%BB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
+      <meta itemprop="name" content="CeaserWang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2019/08/11/Concurrent/concurrency(1)Object%E7%B1%BB%E7%9B%B8%E5%85%B3%E6%96%B9%E6%B3%95%E8%A7%A3%E8%AF%BB/" class="post-title-link" itemprop="url">concurrency(1)Object类相关方法解读</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2019-08-11 14:05:45" itemprop="dateCreated datePublished" datetime="2019-08-11T14:05:45+00:00">2019-08-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/concurrency/" itemprop="url" rel="index"><span itemprop="name">concurrency</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2019/08/11/Concurrent/concurrency(1)Object%E7%B1%BB%E7%9B%B8%E5%85%B3%E6%96%B9%E6%B3%95%E8%A7%A3%E8%AF%BB/" class="post-meta-item leancloud_visitors" data-flag-title="concurrency(1)Object类相关方法解读" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h3 id="Object类的并发相关方法"><a href="#Object类的并发相关方法" class="headerlink" title="Object类的并发相关方法"></a>Object类的并发相关方法</h3>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/08/11/Concurrent/concurrency(1)Object%E7%B1%BB%E7%9B%B8%E5%85%B3%E6%96%B9%E6%B3%95%E8%A7%A3%E8%AF%BB/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2019/08/10/spring_boot_and_cloud/spring_boot_cloud(11)Spring_Boot%E5%AF%B9%E4%BA%8ESpring_MVC%E7%9A%84%E6%95%B4%E5%90%88%E5%8E%9F%E7%90%86%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
+      <meta itemprop="name" content="CeaserWang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2019/08/10/spring_boot_and_cloud/spring_boot_cloud(11)Spring_Boot%E5%AF%B9%E4%BA%8ESpring_MVC%E7%9A%84%E6%95%B4%E5%90%88%E5%8E%9F%E7%90%86%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90/" class="post-title-link" itemprop="url">spring_boot_cloud(11)Spring_Boot对于Spring_MVC的整合原理深度解析</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2019-08-10 18:13:32" itemprop="dateCreated datePublished" datetime="2019-08-10T18:13:32+00:00">2019-08-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/spring-boot-cloud/" itemprop="url" rel="index"><span itemprop="name">spring_boot_cloud</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2019/08/10/spring_boot_and_cloud/spring_boot_cloud(11)Spring_Boot%E5%AF%B9%E4%BA%8ESpring_MVC%E7%9A%84%E6%95%B4%E5%90%88%E5%8E%9F%E7%90%86%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90/" class="post-meta-item leancloud_visitors" data-flag-title="spring_boot_cloud(11)Spring_Boot对于Spring_MVC的整合原理深度解析" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h3 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h3><p>现在我们使用spring boot搭建的工程和之前spring mvc的方式有一个很大的不同点就是：web.xml已经不需要配置，而之前的spring mvc需要配置web.xml，在里边配置DsipatcherServlet，spring boot之所以不需要这个配置是一位servlet的升级，之前用的是servlet2.5的标准，现在boot的方式是servlet3.0，而servlet3.0允许以spi的方式去实现servlet的初始化。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/08/10/spring_boot_and_cloud/spring_boot_cloud(11)Spring_Boot%E5%AF%B9%E4%BA%8ESpring_MVC%E7%9A%84%E6%95%B4%E5%90%88%E5%8E%9F%E7%90%86%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2019/07/28/spring_boot_and_cloud/spring_boot_cloud(10)Apache-Kafka%E7%9B%B8%E5%85%B3%E4%BB%8B%E7%BB%8D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
+      <meta itemprop="name" content="CeaserWang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2019/07/28/spring_boot_and_cloud/spring_boot_cloud(10)Apache-Kafka%E7%9B%B8%E5%85%B3%E4%BB%8B%E7%BB%8D/" class="post-title-link" itemprop="url">spring_boot_cloud(10)Apache-Kafka相关介绍</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2019-07-28 19:13:32" itemprop="dateCreated datePublished" datetime="2019-07-28T19:13:32+00:00">2019-07-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/spring-boot-cloud/" itemprop="url" rel="index"><span itemprop="name">spring_boot_cloud</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2019/07/28/spring_boot_and_cloud/spring_boot_cloud(10)Apache-Kafka%E7%9B%B8%E5%85%B3%E4%BB%8B%E7%BB%8D/" class="post-meta-item leancloud_visitors" data-flag-title="spring_boot_cloud(10)Apache-Kafka相关介绍" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>本片不对kafak原理做过多解释，只是介绍一下kafka和spring boot耦合的方式。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/07/28/spring_boot_and_cloud/spring_boot_cloud(10)Apache-Kafka%E7%9B%B8%E5%85%B3%E4%BB%8B%E7%BB%8D/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2019/07/28/spring_boot_and_cloud/spring_boot_cloud(9)Spring_Boot%E5%BC%80%E5%8F%91%E8%80%85%E5%B7%A5%E5%85%B7%E4%B8%8E%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95%E8%AF%A6%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
+      <meta itemprop="name" content="CeaserWang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2019/07/28/spring_boot_and_cloud/spring_boot_cloud(9)Spring_Boot%E5%BC%80%E5%8F%91%E8%80%85%E5%B7%A5%E5%85%B7%E4%B8%8E%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95%E8%AF%A6%E8%A7%A3/" class="post-title-link" itemprop="url">spring_boot_cloud(9)Spring_Boot开发者工具与单元测试详解</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2019-07-28 18:13:32" itemprop="dateCreated datePublished" datetime="2019-07-28T18:13:32+00:00">2019-07-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/spring-boot-cloud/" itemprop="url" rel="index"><span itemprop="name">spring_boot_cloud</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2019/07/28/spring_boot_and_cloud/spring_boot_cloud(9)Spring_Boot%E5%BC%80%E5%8F%91%E8%80%85%E5%B7%A5%E5%85%B7%E4%B8%8E%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95%E8%AF%A6%E8%A7%A3/" class="post-meta-item leancloud_visitors" data-flag-title="spring_boot_cloud(9)Spring_Boot开发者工具与单元测试详解" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h3 id="devtools准备"><a href="#devtools准备" class="headerlink" title="devtools准备"></a>devtools准备</h3>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/07/28/spring_boot_and_cloud/spring_boot_cloud(9)Spring_Boot%E5%BC%80%E5%8F%91%E8%80%85%E5%B7%A5%E5%85%B7%E4%B8%8E%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95%E8%AF%A6%E8%A7%A3/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
     <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2019/07/28/spring_boot_and_cloud/spring_boot_cloud(8)SpringBoot%E6%95%B4%E5%90%88WebSocket/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -281,7 +677,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:13" itemprop="dateModified" datetime="2023-12-30T08:31:13+00:00">2023-12-30</time>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -380,7 +776,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:13" itemprop="dateModified" datetime="2023-12-30T08:31:13+00:00">2023-12-30</time>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -479,7 +875,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:13" itemprop="dateModified" datetime="2023-12-30T08:31:13+00:00">2023-12-30</time>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -578,7 +974,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:13" itemprop="dateModified" datetime="2023-12-30T08:31:13+00:00">2023-12-30</time>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -730,7 +1126,7 @@
 <h3 id="Node-exporter访问地址"><a href="#Node-exporter访问地址" class="headerlink" title="Node_exporter访问地址"></a>Node_exporter访问地址</h3><p><span class="exturl" data-url="aHR0cDovLzE5Mi4xNjguMTM4LjE4OjkxMDAv">http://192.168.138.18:9100/<i class="fa fa-external-link-alt"></i></span></p>
 <p><a name="ea8acfdf"></a></p>
 <h3 id="grafana访问地址"><a href="#grafana访问地址" class="headerlink" title="grafana访问地址"></a>grafana访问地址</h3><p><span class="exturl" data-url="aHR0cDovLzE5Mi4xNjguMTM4LjE4OjMwMDAv">http://192.168.138.18:3000<i class="fa fa-external-link-alt"></i></span><br />用户名&#x2F;密码:admin&#x2F;admin<br /><img src="https://cdn.nlark.com/yuque/0/2019/png/186520/1564561812914-82ca10bb-9686-417e-af46-276341021cd9.png#align=left&display=inline&height=633&name=image.png&originHeight=633&originWidth=1360&size=88976&status=done&width=1360" alt="image.png"><br />指标解释：<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3BpbmdjYXAvZG9jcy1jbi9ibG9iL21hc3Rlci9kZXYvcmVmZXJlbmNlL2tleS1tb25pdG9yaW5nLW1ldHJpY3MvdGlkYi1kYXNoYm9hcmQubWQ=">https://github.com/pingcap/docs-cn/blob/master/dev/reference/key-monitoring-metrics/tidb-dashboard.md<i class="fa fa-external-link-alt"></i></span></p>
-<p><a name="5f2e4fbc"></a><br>binlog监控：<br><img src="/binlog.png" alt="binlog.png"><br>manager监控：<br><img src="/manager.png" alt="manager.png"></p>
+<p><a name="5f2e4fbc"></a><br>binlog监控：<br><img src="/2019/07/25/tidb-install-pit/binlog.png" alt="binlog.png"><br>manager监控：<br><img src="/2019/07/25/tidb-install-pit/manager.png" alt="manager.png"></p>
 <h3 id="全量备份与恢复"><a href="#全量备份与恢复" class="headerlink" title="全量备份与恢复"></a>全量备份与恢复</h3><p><span class="exturl" data-url="aHR0cHM6Ly9waW5nY2FwLmNvbS9kb2NzLWNuL3YzLjAvaG93LXRvL21haW50YWluL2JhY2t1cC1hbmQtcmVzdG9yZS8=">https://pingcap.com/docs-cn/v3.0/how-to/maintain/backup-and-restore/<i class="fa fa-external-link-alt"></i></span></p>
 <h3 id="增量备份与恢复"><a href="#增量备份与恢复" class="headerlink" title="增量备份与恢复"></a>增量备份与恢复</h3><h4 id="TiDB-Binlog从kafka收集binlog给Drainer"><a href="#TiDB-Binlog从kafka收集binlog给Drainer" class="headerlink" title="TiDB Binlog从kafka收集binlog给Drainer"></a>TiDB Binlog从kafka收集binlog给Drainer</h4><p><span class="exturl" data-url="aHR0cHM6Ly9waW5nY2FwLmNvbS9kb2NzLWNuL3YzLjAvcmVmZXJlbmNlL3RpZGItYmlubG9nLW92ZXJ2aWV3Lw==">https://pingcap.com/docs-cn/v3.0/reference/tidb-binlog-overview/<i class="fa fa-external-link-alt"></i></span></p>
 <h4 id="Reparo从Drainer得到数据恢复到mysql-x2F-tidb"><a href="#Reparo从Drainer得到数据恢复到mysql-x2F-tidb" class="headerlink" title="Reparo从Drainer得到数据恢复到mysql&#x2F;tidb"></a>Reparo从Drainer得到数据恢复到mysql&#x2F;tidb</h4><p><span class="exturl" data-url="aHR0cHM6Ly9waW5nY2FwLmNvbS9kb2NzLWNuL3YzLjAvcmVmZXJlbmNlL3Rvb2xzL3RpZGItYmlubG9nL3JlcGFyby8=">https://pingcap.com/docs-cn/v3.0/reference/tools/tidb-binlog/reparo/<i class="fa fa-external-link-alt"></i></span></p>
@@ -1141,7 +1537,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1240,7 +1636,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1295,404 +1691,8 @@
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2019/06/23/spring_boot_and_cloud/spring_boot_cloud(4)SpringBootApplication%E4%B8%8EConfiguration%E6%B3%A8%E8%A7%A3%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
-      <meta itemprop="name" content="CeaserWang">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="南贺神社">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 南贺神社">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2019/06/23/spring_boot_and_cloud/spring_boot_cloud(4)SpringBootApplication%E4%B8%8EConfiguration%E6%B3%A8%E8%A7%A3%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90/" class="post-title-link" itemprop="url">spring_boot_cloud(4)SpringBootApplication与Configuration注解深度解析</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2019-06-23 21:03:32" itemprop="dateCreated datePublished" datetime="2019-06-23T21:03:32+00:00">2019-06-23</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/spring-boot-cloud/" itemprop="url" rel="index"><span itemprop="name">spring_boot_cloud</span></a>
-        </span>
-    </span>
-
-  
-    <span id="/2019/06/23/spring_boot_and_cloud/spring_boot_cloud(4)SpringBootApplication%E4%B8%8EConfiguration%E6%B3%A8%E8%A7%A3%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90/" class="post-meta-item leancloud_visitors" data-flag-title="spring_boot_cloud(4)SpringBootApplication与Configuration注解深度解析" title="Views">
-      <span class="post-meta-item-icon">
-        <i class="far fa-eye"></i>
-      </span>
-      <span class="post-meta-item-text">Views: </span>
-      <span class="leancloud-visitors-count"></span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h3 id="SpringBootApplication"><a href="#SpringBootApplication" class="headerlink" title="@SpringBootApplication"></a>@SpringBootApplication</h3><p>有三个注解组成：</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/06/23/spring_boot_and_cloud/spring_boot_cloud(4)SpringBootApplication%E4%B8%8EConfiguration%E6%B3%A8%E8%A7%A3%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2019/06/08/spring_boot_and_cloud/spring_boot_cloud(3)JDWP%E8%BF%9C%E7%A8%8B%E8%B0%83%E8%AF%95%E8%AF%A6%E8%A7%A3%E4%BB%A5%E5%8F%8A%E8%B0%83%E8%AF%95spring-boot-loader%E7%9A%84%E5%90%AF%E5%8A%A8%E4%B8%8E%E5%8A%A0%E8%BD%BD%E5%85%A8%E6%B5%81%E7%A8%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
-      <meta itemprop="name" content="CeaserWang">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="南贺神社">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 南贺神社">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2019/06/08/spring_boot_and_cloud/spring_boot_cloud(3)JDWP%E8%BF%9C%E7%A8%8B%E8%B0%83%E8%AF%95%E8%AF%A6%E8%A7%A3%E4%BB%A5%E5%8F%8A%E8%B0%83%E8%AF%95spring-boot-loader%E7%9A%84%E5%90%AF%E5%8A%A8%E4%B8%8E%E5%8A%A0%E8%BD%BD%E5%85%A8%E6%B5%81%E7%A8%8B/" class="post-title-link" itemprop="url">spring_boot_cloud(3)JDWP远程调试详解以及调试spring-boot-loader的启动与加载全流程</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2019-06-08 21:05:32" itemprop="dateCreated datePublished" datetime="2019-06-08T21:05:32+00:00">2019-06-08</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/spring-boot-cloud/" itemprop="url" rel="index"><span itemprop="name">spring_boot_cloud</span></a>
-        </span>
-    </span>
-
-  
-    <span id="/2019/06/08/spring_boot_and_cloud/spring_boot_cloud(3)JDWP%E8%BF%9C%E7%A8%8B%E8%B0%83%E8%AF%95%E8%AF%A6%E8%A7%A3%E4%BB%A5%E5%8F%8A%E8%B0%83%E8%AF%95spring-boot-loader%E7%9A%84%E5%90%AF%E5%8A%A8%E4%B8%8E%E5%8A%A0%E8%BD%BD%E5%85%A8%E6%B5%81%E7%A8%8B/" class="post-meta-item leancloud_visitors" data-flag-title="spring_boot_cloud(3)JDWP远程调试详解以及调试spring-boot-loader的启动与加载全流程" title="Views">
-      <span class="post-meta-item-icon">
-        <i class="far fa-eye"></i>
-      </span>
-      <span class="post-meta-item-text">Views: </span>
-      <span class="leancloud-visitors-count"></span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="JDWP"><a href="#JDWP" class="headerlink" title="JDWP"></a>JDWP</h1><p>Java Debug Wire Protocol, Java调试协议</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/06/08/spring_boot_and_cloud/spring_boot_cloud(3)JDWP%E8%BF%9C%E7%A8%8B%E8%B0%83%E8%AF%95%E8%AF%A6%E8%A7%A3%E4%BB%A5%E5%8F%8A%E8%B0%83%E8%AF%95spring-boot-loader%E7%9A%84%E5%90%AF%E5%8A%A8%E4%B8%8E%E5%8A%A0%E8%BD%BD%E5%85%A8%E6%B5%81%E7%A8%8B/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2019/06/07/spring_boot_and_cloud/spring_boot_cloud(2)Spring_Boot%E6%89%93%E5%8C%85%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E6%B7%B1%E5%85%A5%E5%88%86%E6%9E%90%E6%BA%90%E7%A0%81%E8%AE%B2%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
-      <meta itemprop="name" content="CeaserWang">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="南贺神社">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 南贺神社">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2019/06/07/spring_boot_and_cloud/spring_boot_cloud(2)Spring_Boot%E6%89%93%E5%8C%85%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E6%B7%B1%E5%85%A5%E5%88%86%E6%9E%90%E6%BA%90%E7%A0%81%E8%AE%B2%E8%A7%A3/" class="post-title-link" itemprop="url">spring_boot_cloud(2)Spring_Boot打包文件结构深入分析源码讲解</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2019-06-07 15:56:32" itemprop="dateCreated datePublished" datetime="2019-06-07T15:56:32+00:00">2019-06-07</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/spring-boot-cloud/" itemprop="url" rel="index"><span itemprop="name">spring_boot_cloud</span></a>
-        </span>
-    </span>
-
-  
-    <span id="/2019/06/07/spring_boot_and_cloud/spring_boot_cloud(2)Spring_Boot%E6%89%93%E5%8C%85%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E6%B7%B1%E5%85%A5%E5%88%86%E6%9E%90%E6%BA%90%E7%A0%81%E8%AE%B2%E8%A7%A3/" class="post-meta-item leancloud_visitors" data-flag-title="spring_boot_cloud(2)Spring_Boot打包文件结构深入分析源码讲解" title="Views">
-      <span class="post-meta-item-icon">
-        <i class="far fa-eye"></i>
-      </span>
-      <span class="post-meta-item-text">Views: </span>
-      <span class="leancloud-visitors-count"></span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h3 id="gradle-的打包task"><a href="#gradle-的打包task" class="headerlink" title="gradle 的打包task"></a>gradle 的打包task</h3><p>在使用gradle构建springboot的项目时，可以查看当前项目由那些gradle的任务，我们在<span class="exturl" data-url="aHR0cHM6Ly9zdGFydC5zcHJpbmcuaW8v">springboot的初始化页面<i class="fa fa-external-link-alt"></i></span> 构建一个简单的springboot项目，然后在本地我们用vscode打开，执行.&#x2F;gradlew task得到如下输出：</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/06/07/spring_boot_and_cloud/spring_boot_cloud(2)Spring_Boot%E6%89%93%E5%8C%85%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E6%B7%B1%E5%85%A5%E5%88%86%E6%9E%90%E6%BA%90%E7%A0%81%E8%AE%B2%E8%A7%A3/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2019/06/07/jvm%E5%8E%9F%E7%90%86%EF%BC%8847%EF%BC%89G1%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8%E7%B3%BB%E5%88%97%E6%B7%B1%E5%85%A5%E8%AE%B2%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
-      <meta itemprop="name" content="CeaserWang">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="南贺神社">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 南贺神社">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2019/06/07/jvm%E5%8E%9F%E7%90%86%EF%BC%8847%EF%BC%89G1%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8%E7%B3%BB%E5%88%97%E6%B7%B1%E5%85%A5%E8%AE%B2%E8%A7%A3/" class="post-title-link" itemprop="url">jvm原理（47）G1垃圾收集器系列深入讲解</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2019-06-07 08:55:13" itemprop="dateCreated datePublished" datetime="2019-06-07T08:55:13+00:00">2019-06-07</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/jvm/" itemprop="url" rel="index"><span itemprop="name">jvm</span></a>
-        </span>
-    </span>
-
-  
-    <span id="/2019/06/07/jvm%E5%8E%9F%E7%90%86%EF%BC%8847%EF%BC%89G1%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8%E7%B3%BB%E5%88%97%E6%B7%B1%E5%85%A5%E8%AE%B2%E8%A7%A3/" class="post-meta-item leancloud_visitors" data-flag-title="jvm原理（47）G1垃圾收集器系列深入讲解" title="Views">
-      <span class="post-meta-item-icon">
-        <i class="far fa-eye"></i>
-      </span>
-      <span class="post-meta-item-text">Views: </span>
-      <span class="leancloud-visitors-count"></span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h3 id="G1"><a href="#G1" class="headerlink" title="G1"></a>G1</h3><p>Garage First Collector</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/06/07/jvm%E5%8E%9F%E7%90%86%EF%BC%8847%EF%BC%89G1%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8%E7%B3%BB%E5%88%97%E6%B7%B1%E5%85%A5%E8%AE%B2%E8%A7%A3/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/5/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/22/">22</a><a class="extend next" rel="next" href="/page/7/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/5/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/23/">23</a><a class="extend next" rel="next" href="/page/7/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 </div>

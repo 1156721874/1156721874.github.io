@@ -85,7 +85,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">208</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">217</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">209</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">221</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
         </a>
@@ -156,7 +156,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">217</span>
+          <span class="site-state-item-count">221</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -167,7 +167,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">208</span>
+        <span class="site-state-item-count">209</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -245,6 +245,402 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E4%BA%8C%E5%8D%81%E4%BA%8C-Netty%E7%BC%96%E8%A7%A3%E7%A0%81%E5%99%A8%E5%89%96%E6%9E%90%E4%B8%8E%E5%85%A5%E7%AB%99%E5%87%BA%E7%AB%99%E5%A4%84%E7%90%86%E5%99%A8%E8%AF%A6%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
+      <meta itemprop="name" content="CeaserWang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E4%BA%8C%E5%8D%81%E4%BA%8C-Netty%E7%BC%96%E8%A7%A3%E7%A0%81%E5%99%A8%E5%89%96%E6%9E%90%E4%B8%8E%E5%85%A5%E7%AB%99%E5%87%BA%E7%AB%99%E5%A4%84%E7%90%86%E5%99%A8%E8%AF%A6%E8%A7%A3/" class="post-title-link" itemprop="url">netty源码分析(二十二)Netty编解码器剖析与入站出站处理器详解</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-10-04 15:14:32" itemprop="dateCreated datePublished" datetime="2018-10-04T15:14:32+00:00">2018-10-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/netty/" itemprop="url" rel="index"><span itemprop="name">netty</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E4%BA%8C%E5%8D%81%E4%BA%8C-Netty%E7%BC%96%E8%A7%A3%E7%A0%81%E5%99%A8%E5%89%96%E6%9E%90%E4%B8%8E%E5%85%A5%E7%AB%99%E5%87%BA%E7%AB%99%E5%A4%84%E7%90%86%E5%99%A8%E8%AF%A6%E8%A7%A3/" class="post-meta-item leancloud_visitors" data-flag-title="netty源码分析(二十二)Netty编解码器剖析与入站出站处理器详解" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>Netty处理器重要概念：<br>1、Netty的处理器可以分为两类：入栈处理器和出栈处理器。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E4%BA%8C%E5%8D%81%E4%BA%8C-Netty%E7%BC%96%E8%A7%A3%E7%A0%81%E5%99%A8%E5%89%96%E6%9E%90%E4%B8%8E%E5%85%A5%E7%AB%99%E5%87%BA%E7%AB%99%E5%A4%84%E7%90%86%E5%99%A8%E8%AF%A6%E8%A7%A3/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E4%BA%8C%E5%8D%81%E4%B8%80-Netty%E6%95%B0%E6%8D%AE%E5%AE%B9%E5%99%A8ByteBuf%E5%BA%95%E5%B1%82%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%B7%B1%E5%BA%A6%E5%89%96%E6%9E%90%E4%B8%8EReferenceCounted%E5%88%9D%E6%8E%A2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
+      <meta itemprop="name" content="CeaserWang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E4%BA%8C%E5%8D%81%E4%B8%80-Netty%E6%95%B0%E6%8D%AE%E5%AE%B9%E5%99%A8ByteBuf%E5%BA%95%E5%B1%82%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%B7%B1%E5%BA%A6%E5%89%96%E6%9E%90%E4%B8%8EReferenceCounted%E5%88%9D%E6%8E%A2/" class="post-title-link" itemprop="url">netty源码分析(二十一)Netty数据容器ByteBuf底层数据结构深度剖析与ReferenceCounted初探</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-10-04 15:09:42" itemprop="dateCreated datePublished" datetime="2018-10-04T15:09:42+00:00">2018-10-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/netty/" itemprop="url" rel="index"><span itemprop="name">netty</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E4%BA%8C%E5%8D%81%E4%B8%80-Netty%E6%95%B0%E6%8D%AE%E5%AE%B9%E5%99%A8ByteBuf%E5%BA%95%E5%B1%82%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%B7%B1%E5%BA%A6%E5%89%96%E6%9E%90%E4%B8%8EReferenceCounted%E5%88%9D%E6%8E%A2/" class="post-meta-item leancloud_visitors" data-flag-title="netty源码分析(二十一)Netty数据容器ByteBuf底层数据结构深度剖析与ReferenceCounted初探" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><strong>ByteBuf</strong><br>ByteBuf是Netty提供的代替jdk的ByteBuffer的一个容器，首先看一下他的具体用法：</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E4%BA%8C%E5%8D%81%E4%B8%80-Netty%E6%95%B0%E6%8D%AE%E5%AE%B9%E5%99%A8ByteBuf%E5%BA%95%E5%B1%82%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%B7%B1%E5%BA%A6%E5%89%96%E6%9E%90%E4%B8%8EReferenceCounted%E5%88%9D%E6%8E%A2/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/10/04/Redis-%E5%9C%A8Centos7%E4%B8%8B%E9%85%8D%E7%BD%AE%E5%BC%80%E6%9C%BA%E8%87%AA%E5%90%AF%E5%8A%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
+      <meta itemprop="name" content="CeaserWang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2018/10/04/Redis-%E5%9C%A8Centos7%E4%B8%8B%E9%85%8D%E7%BD%AE%E5%BC%80%E6%9C%BA%E8%87%AA%E5%90%AF%E5%8A%A8/" class="post-title-link" itemprop="url">Redis 在Centos7下配置开机自启动</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-10-04 15:06:58" itemprop="dateCreated datePublished" datetime="2018-10-04T15:06:58+00:00">2018-10-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/redis/" itemprop="url" rel="index"><span itemprop="name">redis</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2018/10/04/Redis-%E5%9C%A8Centos7%E4%B8%8B%E9%85%8D%E7%BD%AE%E5%BC%80%E6%9C%BA%E8%87%AA%E5%90%AF%E5%8A%A8/" class="post-meta-item leancloud_visitors" data-flag-title="Redis 在Centos7下配置开机自启动" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>来源：<span class="exturl" data-url="aHR0cDovL3d3dy5qaWFuc2h1LmNvbS9wLzIwYjc2MWFlOTkzYw==">http://www.jianshu.com/p/20b761ae993c<i class="fa fa-external-link-alt"></i></span><br>设置Redis开机启动需要如下几个步骤：</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2018/10/04/Redis-%E5%9C%A8Centos7%E4%B8%8B%E9%85%8D%E7%BD%AE%E5%BC%80%E6%9C%BA%E8%87%AA%E5%90%AF%E5%8A%A8/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/10/04/git-%E5%85%AB-%E8%BF%9C%E7%A8%8B%E5%88%86%E6%94%AF%E3%80%81%E5%88%AB%E5%90%8D%E3%80%81gitk%E4%B8%8Egit-gui/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
+      <meta itemprop="name" content="CeaserWang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2018/10/04/git-%E5%85%AB-%E8%BF%9C%E7%A8%8B%E5%88%86%E6%94%AF%E3%80%81%E5%88%AB%E5%90%8D%E3%80%81gitk%E4%B8%8Egit-gui/" class="post-title-link" itemprop="url">git(八)-远程分支、别名、gitk与git gui</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-10-04 15:04:04" itemprop="dateCreated datePublished" datetime="2018-10-04T15:04:04+00:00">2018-10-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/git/" itemprop="url" rel="index"><span itemprop="name">git</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2018/10/04/git-%E5%85%AB-%E8%BF%9C%E7%A8%8B%E5%88%86%E6%94%AF%E3%80%81%E5%88%AB%E5%90%8D%E3%80%81gitk%E4%B8%8Egit-gui/" class="post-meta-item leancloud_visitors" data-flag-title="git(八)-远程分支、别名、gitk与git gui" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>gitk<br>在命令模式输入gitk弹出git窗口页面;</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2018/10/04/git-%E5%85%AB-%E8%BF%9C%E7%A8%8B%E5%88%86%E6%94%AF%E3%80%81%E5%88%AB%E5%90%8D%E3%80%81gitk%E4%B8%8Egit-gui/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
     <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E4%BA%8C%E5%8D%81-NIO%E5%A0%86%E5%A4%96%E5%86%85%E5%AD%98%E4%B8%8E%E9%9B%B6%E6%8B%B7%E8%B4%9D%E6%B7%B1%E5%85%A5%E8%AE%B2%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -281,7 +677,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -310,7 +706,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <p><img src="/20171118184319019.png" alt="这里写图片描述"></p>
+          <p><img src="/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E4%BA%8C%E5%8D%81-NIO%E5%A0%86%E5%A4%96%E5%86%85%E5%AD%98%E4%B8%8E%E9%9B%B6%E6%8B%B7%E8%B4%9D%E6%B7%B1%E5%85%A5%E8%AE%B2%E8%A7%A3/20171118184319019.png" alt="这里写图片描述"></p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E4%BA%8C%E5%8D%81-NIO%E5%A0%86%E5%A4%96%E5%86%85%E5%AD%98%E4%B8%8E%E9%9B%B6%E6%8B%B7%E8%B4%9D%E6%B7%B1%E5%85%A5%E8%AE%B2%E8%A7%A3/#more" rel="contents">
@@ -380,7 +776,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -409,7 +805,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <p>一、服务端在回写数据到客户端的时候可以有一下2中方式：<br><img src="/20171118104445662.png" alt="这里写图片描述"></p>
+          <p>一、服务端在回写数据到客户端的时候可以有一下2中方式：<br><img src="/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%8D%81%E4%B9%9D-Netty%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91%E8%BF%87%E7%A8%8B%E4%B8%AD%E5%B8%B8%E8%A7%81%E4%B8%94%E9%87%8D%E8%A6%81%E4%BA%8B%E9%A1%B9%E5%88%86%E6%9E%90/20171118104445662.png" alt="这里写图片描述"></p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%8D%81%E4%B9%9D-Netty%E9%A1%B9%E7%9B%AE%E5%BC%80%E5%8F%91%E8%BF%87%E7%A8%8B%E4%B8%AD%E5%B8%B8%E8%A7%81%E4%B8%94%E9%87%8D%E8%A6%81%E4%BA%8B%E9%A1%B9%E5%88%86%E6%9E%90/#more" rel="contents">
@@ -479,7 +875,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -580,7 +976,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -611,7 +1007,7 @@
     <div class="post-body" itemprop="articleBody">
           <p>上次分析到：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- more --&gt;</span><br><span class="line">public abstract class SingleThreadEventLoop extends SingleThreadEventExecutor implements EventLoop</span><br><span class="line">  public ChannelFuture register(final ChannelPromise promise) &#123;</span><br><span class="line">      ObjectUtil.checkNotNull(promise, &quot;promise&quot;);</span><br><span class="line">      promise.channel().unsafe().register(this, promise);</span><br><span class="line">      return promise;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>之前提到的ChannelPromise 结构，其实是一个异步返回结果的封装，它持有channel和当前的SingleThreadEventLoop :<br><img src="/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90(%E5%8D%81%E4%B8%83)Netty%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B%E6%B7%B1%E5%BA%A6%E8%A7%A3%E8%AF%BB%E4%B8%8E%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/20171105134757100.png" alt="这里写图片描述"></p>
+<p>之前提到的ChannelPromise 结构，其实是一个异步返回结果的封装，它持有channel和当前的SingleThreadEventLoop :<br><img src="/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%8D%81%E4%B8%83-Netty%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B%E6%B7%B1%E5%BA%A6%E8%A7%A3%E8%AF%BB%E4%B8%8E%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/20171105134757100.png" alt="这里写图片描述"></p>
 <p>进入unsafe实现类AbstractUnsafe的register方法：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">protected abstract class AbstractUnsafe implements Unsafe &#123;</span><br><span class="line"></span><br><span class="line">      private volatile ChannelOutboundBuffer outboundBuffer = new ChannelOutboundBuffer(AbstractChannel.this);</span><br><span class="line">      private RecvByteBufAllocator.Handle recvHandle;</span><br><span class="line">      private boolean inFlush0;</span><br><span class="line">      /** true if the channel has never been registered, false otherwise */</span><br><span class="line">      private boolean neverRegistered = true;</span><br><span class="line">public final void register(EventLoop eventLoop, final ChannelPromise promise) &#123;</span><br><span class="line">          if (eventLoop == null) &#123;</span><br><span class="line">              throw new NullPointerException(&quot;eventLoop&quot;);</span><br><span class="line">          &#125;</span><br><span class="line">          if (isRegistered()) &#123;</span><br><span class="line">              promise.setFailure(new IllegalStateException(&quot;registered to an event loop already&quot;));</span><br><span class="line">              return;</span><br><span class="line">          &#125;</span><br><span class="line">          if (!isCompatible(eventLoop)) &#123;</span><br><span class="line">              promise.setFailure(</span><br><span class="line">                      new IllegalStateException(&quot;incompatible event loop type: &quot; + eventLoop.getClass().getName()));</span><br><span class="line">              return;</span><br><span class="line">          &#125;</span><br><span class="line">           //上边的逻辑主要是一些非空判断之类的东西</span><br><span class="line">          AbstractChannel.this.eventLoop = eventLoop;</span><br><span class="line">    //主要的注册逻辑分支，if和else分支可以看到最后调用的都是register0，但是else里边加了一个外壳---线程</span><br><span class="line">          if (eventLoop.inEventLoop()) &#123;</span><br><span class="line">              register0(promise);</span><br><span class="line">          &#125; else &#123;</span><br><span class="line">              try &#123;</span><br><span class="line">                  eventLoop.execute(new Runnable() &#123;</span><br><span class="line">                      @Override</span><br><span class="line">                      public void run() &#123;</span><br><span class="line">                          register0(promise);</span><br><span class="line">                      &#125;</span><br><span class="line">                  &#125;);</span><br><span class="line">              &#125; catch (Throwable t) &#123;</span><br><span class="line">                  logger.warn(</span><br><span class="line">                          &quot;Force-closing a channel whose registration task was not accepted by an event loop: &#123;&#125;&quot;,</span><br><span class="line">                          AbstractChannel.this, t);</span><br><span class="line">                  closeForcibly();</span><br><span class="line">                  closeFuture.setClosed();</span><br><span class="line">                  safeSetFailure(promise, t);</span><br><span class="line">              &#125;</span><br><span class="line">          &#125;</span><br><span class="line">      &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>eventLoop.inEventLoop()是分支逻辑的主要判断依据(eventLoop实体是SingleThreadEventExecutor):</p>
@@ -695,7 +1091,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -794,7 +1190,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
+      <time title="Modified: 2023-12-30 14:30:27" itemprop="dateModified" datetime="2023-12-30T14:30:27+00:00">2023-12-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -849,418 +1245,8 @@
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%8D%81%E5%9B%9B-Netty%E5%88%9D%E5%A7%8B%E5%8C%96%E6%B5%81%E7%A8%8B%E6%80%BB%E7%BB%93%E5%8F%8AChannel%E4%B8%8EChannelHandlerContext%E4%BD%9C%E7%94%A8%E5%9F%9F%E5%88%86%E6%9E%90/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
-      <meta itemprop="name" content="CeaserWang">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="南贺神社">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 南贺神社">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%8D%81%E5%9B%9B-Netty%E5%88%9D%E5%A7%8B%E5%8C%96%E6%B5%81%E7%A8%8B%E6%80%BB%E7%BB%93%E5%8F%8AChannel%E4%B8%8EChannelHandlerContext%E4%BD%9C%E7%94%A8%E5%9F%9F%E5%88%86%E6%9E%90/" class="post-title-link" itemprop="url">netty源码分析(十四)Netty初始化流程总结及Channel与ChannelHandlerContext作用域分析</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2018-10-04 14:42:27" itemprop="dateCreated datePublished" datetime="2018-10-04T14:42:27+00:00">2018-10-04</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/netty/" itemprop="url" rel="index"><span itemprop="name">netty</span></a>
-        </span>
-    </span>
-
-  
-    <span id="/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%8D%81%E5%9B%9B-Netty%E5%88%9D%E5%A7%8B%E5%8C%96%E6%B5%81%E7%A8%8B%E6%80%BB%E7%BB%93%E5%8F%8AChannel%E4%B8%8EChannelHandlerContext%E4%BD%9C%E7%94%A8%E5%9F%9F%E5%88%86%E6%9E%90/" class="post-meta-item leancloud_visitors" data-flag-title="netty源码分析(十四)Netty初始化流程总结及Channel与ChannelHandlerContext作用域分析" title="Views">
-      <span class="post-meta-item-icon">
-        <i class="far fa-eye"></i>
-      </span>
-      <span class="post-meta-item-text">Views: </span>
-      <span class="leancloud-visitors-count"></span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>我们回到ServerBootstrap的init方法，之前介绍过Attribute的设置，那么Attribute的具体设置是怎样的呢：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">    void init(Channel channel) throws Exception &#123;</span><br><span class="line">&lt;!-- more --&gt;</span><br><span class="line">        final Map&lt;ChannelOption&lt;?&gt;, Object&gt; options = options0();</span><br><span class="line">        synchronized (options) &#123;</span><br><span class="line">            setChannelOptions(channel, options, logger);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        final Map&lt;AttributeKey&lt;?&gt;, Object&gt; attrs = attrs0();</span><br><span class="line">        synchronized (attrs) &#123;</span><br><span class="line">            for (Entry&lt;AttributeKey&lt;?&gt;, Object&gt; e: attrs.entrySet()) &#123;</span><br><span class="line">                @SuppressWarnings(&quot;unchecked&quot;)</span><br><span class="line">                AttributeKey&lt;Object&gt; key = (AttributeKey&lt;Object&gt;) e.getKey();</span><br><span class="line">                channel.attr(key).set(e.getValue());//channel的实例是NioServerSocketChannel</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
-<p>我们在NioServerSocketChannel里边并没有找到attr方法，那么看一下NioServerSocketChannel层次关系：<br><img src="/20171029153531008.png" alt="这里写图片描述"><br>在DefaultAttributeMap找到：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public class DefaultAttributeMap implements AttributeMap &#123;</span><br><span class="line">    private volatile AtomicReferenceArray&lt;DefaultAttribute&lt;?&gt;&gt; attributes;</span><br><span class="line">    public &lt;T&gt; Attribute&lt;T&gt; attr(AttributeKey&lt;T&gt; key) &#123;</span><br><span class="line">....略</span><br><span class="line">    &#125;</span><br><span class="line">    ....略</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>attr(AttributeKey<T> key)方法在DefaultAttributeMap 里边。<br>在NioServerSocketChannel还有一个    private final ServerSocketChannelConfig config;这样的一个生命，ServerSocketChannelConfig 用来设置ServerSocketChannel的一些配置信息的，可以看到ServerSocketChannelConfig 和Attribute共同完成了channel的配置。<br>类似：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">class Channel&#123;</span><br><span class="line"> private final ServerSocketChannelConfig config;</span><br><span class="line">  private volatile AtomicReferenceArray&lt;DefaultAttribute&lt;?&gt;&gt; attributes;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>Channel与ChannelHandlerContext作用域分析</strong><br>首先我们要知道netty4.0和netty4.1是不同的，4.1对ChannelHandlerContext.attr(..) 和 Channel.attr(..)的改进：<br><span class="exturl" data-url="aHR0cDovL25ldHR5LmlvL3dpa2kvbmV3LWFuZC1ub3Rld29ydGh5LWluLTQuMS5odG1s">http://netty.io/wiki/new-and-noteworthy-in-4.1.html<i class="fa fa-external-link-alt"></i></span></p>
-<p>ChannelHandlerContext.attr(..) &#x3D;&#x3D; Channel.attr(..)<br>Both Channel and ChannelHandlerContext implement the interface AttributeMap to enable a user to attach one or more user-defined attributes to them. What sometimes made a user confused was that a Channel and a ChannelHandlerContext had its own storage for the user-defined attributes. For example, even if you put an attribute ‘KEY_X’ via Channel.attr(KEY_X).set(valueX), you will never find it via ChannelHandlerContext.attr(KEY_X).get() and vice versa. This behavior is not only confusing but also is waste of memory.<br>Channel 和ChannelHandlerContext都 实现了AttributeMap 用来设置用户自定义的属性。有时候Channel 和ChannelHandlerContext 都有自己的一套用户定义的属性（相互之间没有任何关系，即Channel 有自己的map，ChannelHandlerContext 也有自己的map）让用户感到非常困惑，比如我们使用 Channel.attr(KEY_X).set(valueX)设置一个key和value，但是没法通过ChannelHandlerContext.attr(KEY_X).get()方式获得，而且这样还浪费内存。<br>To address this issue, we decided to keep only one map per Channel internally. AttributeMap always uses AttributeKey as its key. AttributeKey ensures uniqueness between each key, and thus there’s no point of having more than one attribute map per Channel. As long as a user defines its own AttributeKey as a private static final field of his or her ChannelHandler, there will be no risk of duplicate keys.<br>为了解决这个问题，我们决定在每个Channel 内部只维护一个map，AttributeMap 永远使用AttributeKey 作为他的key，AttributeKey 保证在所有key之中是唯一的，这样就没有必要每个Channel定义多个属性，这样每个用户在ChannelHandler里边定义私有的静态属性的key（AttributeKey ）就没有重复键的问题。</p>
-<p> 我们看一下实际的代码是怎么写的：<br> Channel的实现类NioServerSocketChannel的父类DefaultAttributeMap的attr方法：<br> <img src="/20171029161754857.png" alt="这里写图片描述"></p>
-<p> ChannelHandlerContext 实现类AbstractChannelHandlerContext的attr方法:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">abstract class AbstractChannelHandlerContext extends DefaultAttributeMap</span><br><span class="line">        implements ChannelHandlerContext, ResourceLeakHint &#123;</span><br><span class="line">        ...略</span><br><span class="line">     public &lt;T&gt; Attribute&lt;T&gt; attr(AttributeKey&lt;T&gt; key) &#123;</span><br><span class="line">        return channel().attr(key);//直接使用的是channel的attr属性</span><br><span class="line">    &#125;</span><br><span class="line">    ...略</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>可以看到ChannelHandlerContext 和Channel用的都是Channel的attr，即：ChannelHandlerContext.attr(..) &#x3D;&#x3D; Channel.attr(..)<br>到此为止netty的2大模块（初始化和注册）的初始流程解析完毕。接下来说一下注册流程。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">final ChannelFuture initAndRegister() &#123;</span><br><span class="line">       Channel channel = null;</span><br><span class="line">       try &#123;</span><br><span class="line">           channel = channelFactory.newChannel();</span><br><span class="line">           init(channel);//初始化</span><br><span class="line">       &#125; catch (Throwable t) &#123;</span><br><span class="line">           if (channel != null) &#123;</span><br><span class="line">               // channel can be null if newChannel crashed (eg SocketException(&quot;too many open files&quot;))</span><br><span class="line">               channel.unsafe().closeForcibly();</span><br><span class="line">           &#125;</span><br><span class="line">           // as the Channel is not registered yet we need to force the usage of the GlobalEventExecutor</span><br><span class="line">           return new DefaultChannelPromise(channel, GlobalEventExecutor.INSTANCE).setFailure(t);</span><br><span class="line">       &#125;</span><br><span class="line">       ChannelFuture regFuture = config().group().register(channel);//注册</span><br><span class="line">       if (regFuture.cause() != null) &#123;</span><br><span class="line">           if (channel.isRegistered()) &#123;</span><br><span class="line">               channel.close();</span><br><span class="line">           &#125; else &#123;</span><br><span class="line">               channel.unsafe().closeForcibly();</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">       return regFuture;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%8D%81%E4%B8%89-Netty%E6%A0%B8%E5%BF%83%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6%E5%85%B3%E7%B3%BB%E4%B8%8E%E6%9E%84%E5%BB%BA%E6%96%B9%E5%BC%8F%E6%B7%B1%E5%BA%A6%E8%A7%A3%E8%AF%BB/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
-      <meta itemprop="name" content="CeaserWang">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="南贺神社">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 南贺神社">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%8D%81%E4%B8%89-Netty%E6%A0%B8%E5%BF%83%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6%E5%85%B3%E7%B3%BB%E4%B8%8E%E6%9E%84%E5%BB%BA%E6%96%B9%E5%BC%8F%E6%B7%B1%E5%BA%A6%E8%A7%A3%E8%AF%BB/" class="post-title-link" itemprop="url">netty源码分析(十三)Netty核心四大组件关系与构建方式深度解读</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2018-10-04 14:39:50" itemprop="dateCreated datePublished" datetime="2018-10-04T14:39:50+00:00">2018-10-04</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/netty/" itemprop="url" rel="index"><span itemprop="name">netty</span></a>
-        </span>
-    </span>
-
-  
-    <span id="/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%8D%81%E4%B8%89-Netty%E6%A0%B8%E5%BF%83%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6%E5%85%B3%E7%B3%BB%E4%B8%8E%E6%9E%84%E5%BB%BA%E6%96%B9%E5%BC%8F%E6%B7%B1%E5%BA%A6%E8%A7%A3%E8%AF%BB/" class="post-meta-item leancloud_visitors" data-flag-title="netty源码分析(十三)Netty核心四大组件关系与构建方式深度解读" title="Views">
-      <span class="post-meta-item-icon">
-        <i class="far fa-eye"></i>
-      </span>
-      <span class="post-meta-item-text">Views: </span>
-      <span class="leancloud-visitors-count"></span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>上一节主要看了一下ChannelHandlerContext，中间我们走到DefaultChannelPipeline的addLast方法，这一节我们从addLast方法切入：<br>其中group为null，name为null</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%8D%81%E4%B8%89-Netty%E6%A0%B8%E5%BF%83%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6%E5%85%B3%E7%B3%BB%E4%B8%8E%E6%9E%84%E5%BB%BA%E6%96%B9%E5%BC%8F%E6%B7%B1%E5%BA%A6%E8%A7%A3%E8%AF%BB/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%8D%81%E4%BA%8C-Channel%E4%B8%8EChannelHandler%E5%8F%8AChannelHandlerContext%E4%B9%8B%E9%97%B4%E7%9A%84%E5%85%B3%E7%B3%BB%E5%88%86%E6%9E%90/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
-      <meta itemprop="name" content="CeaserWang">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="南贺神社">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 南贺神社">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%8D%81%E4%BA%8C-Channel%E4%B8%8EChannelHandler%E5%8F%8AChannelHandlerContext%E4%B9%8B%E9%97%B4%E7%9A%84%E5%85%B3%E7%B3%BB%E5%88%86%E6%9E%90/" class="post-title-link" itemprop="url">netty源码分析(十二)Channel与ChannelHandler及ChannelHandlerContext之间的关系分析</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2018-10-04 14:38:13" itemprop="dateCreated datePublished" datetime="2018-10-04T14:38:13+00:00">2018-10-04</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/netty/" itemprop="url" rel="index"><span itemprop="name">netty</span></a>
-        </span>
-    </span>
-
-  
-    <span id="/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%8D%81%E4%BA%8C-Channel%E4%B8%8EChannelHandler%E5%8F%8AChannelHandlerContext%E4%B9%8B%E9%97%B4%E7%9A%84%E5%85%B3%E7%B3%BB%E5%88%86%E6%9E%90/" class="post-meta-item leancloud_visitors" data-flag-title="netty源码分析(十二)Channel与ChannelHandler及ChannelHandlerContext之间的关系分析" title="Views">
-      <span class="post-meta-item-icon">
-        <i class="far fa-eye"></i>
-      </span>
-      <span class="post-meta-item-text">Views: </span>
-      <span class="leancloud-visitors-count"></span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>还是之前的init代码入口，上一节我们介绍了ChannelOption和AttributeKey，本次我们说下Channel与ChannelHandler及ChannelHandlerContext之间的关系分析。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- more --&gt;</span><br><span class="line">void init(Channel channel) throws Exception &#123;</span><br><span class="line">        final Map&lt;ChannelOption&lt;?&gt;, Object&gt; options = options0();</span><br><span class="line">        synchronized (options) &#123;</span><br><span class="line">            setChannelOptions(channel, options, logger);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        final Map&lt;AttributeKey&lt;?&gt;, Object&gt; attrs = attrs0();</span><br><span class="line">        synchronized (attrs) &#123;</span><br><span class="line">            for (Entry&lt;AttributeKey&lt;?&gt;, Object&gt; e: attrs.entrySet()) &#123;</span><br><span class="line">                @SuppressWarnings(&quot;unchecked&quot;)</span><br><span class="line">                AttributeKey&lt;Object&gt; key = (AttributeKey&lt;Object&gt;) e.getKey();</span><br><span class="line">                channel.attr(key).set(e.getValue());</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        ChannelPipeline p = channel.pipeline();</span><br><span class="line"></span><br><span class="line">        final EventLoopGroup currentChildGroup = childGroup;</span><br><span class="line">        final ChannelHandler currentChildHandler = childHandler;</span><br><span class="line">        final Entry&lt;ChannelOption&lt;?&gt;, Object&gt;[] currentChildOptions;</span><br><span class="line">        final Entry&lt;AttributeKey&lt;?&gt;, Object&gt;[] currentChildAttrs;</span><br><span class="line">        synchronized (childOptions) &#123;</span><br><span class="line">            currentChildOptions = childOptions.entrySet().toArray(newOptionArray(childOptions.size()));</span><br><span class="line">        &#125;</span><br><span class="line">        synchronized (childAttrs) &#123;</span><br><span class="line">            currentChildAttrs = childAttrs.entrySet().toArray(newAttrArray(childAttrs.size()));</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        p.addLast(new ChannelInitializer&lt;Channel&gt;() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public void initChannel(final Channel ch) throws Exception &#123;</span><br><span class="line">                final ChannelPipeline pipeline = ch.pipeline();</span><br><span class="line">                ChannelHandler handler = config.handler();</span><br><span class="line">                if (handler != null) &#123;</span><br><span class="line">                    pipeline.addLast(handler);</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                ch.eventLoop().execute(new Runnable() &#123;</span><br><span class="line">                    @Override</span><br><span class="line">                    public void run() &#123;</span><br><span class="line">                        pipeline.addLast(new ServerBootstrapAcceptor(</span><br><span class="line">                                ch, currentChildGroup, currentChildHandler, currentChildOptions, currentChildAttrs));</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<p>先从ChannelInitializer，我们看下它的doc：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * A special &#123;@link ChannelInboundHandler&#125; which offers an easy way to initialize a &#123;@link Channel&#125; once it was</span><br><span class="line"> * registered to its &#123;@link EventLoop&#125;.</span><br><span class="line"> * 一个特殊的ChannelInboundHandler，提供了简单的方式来初始化Channel，通过注册到EventLoop里边来实现的。</span><br><span class="line"> * Implementations are most often used in the context of &#123;@link Bootstrap#handler(ChannelHandler)&#125; ,</span><br><span class="line"> * &#123;@link ServerBootstrap#handler(ChannelHandler)&#125; and &#123;@link ServerBootstrap#childHandler(ChannelHandler)&#125; to</span><br><span class="line"> * setup the &#123;@link ChannelPipeline&#125; of a &#123;@link Channel&#125;.</span><br><span class="line"> * 具体实现经常使用在Bootstrap#handler(ChannelHandler)、ServerBootstrap#handler(ChannelHandler)、</span><br><span class="line"> * ServerBootstrap#childHandler(ChannelHandler)等来初始化Channel的ChannelPipeline</span><br><span class="line"> * &lt;pre&gt;</span><br><span class="line"> *  使用举例：</span><br><span class="line"> * public class MyChannelInitializer extends &#123;@link ChannelInitializer&#125; &#123;</span><br><span class="line"> *     public void initChannel(&#123;@link Channel&#125; channel) &#123;</span><br><span class="line"> *         channel.pipeline().addLast(&quot;myHandler&quot;, new MyHandler());</span><br><span class="line"> *     &#125;</span><br><span class="line"> * &#125;</span><br><span class="line"> *</span><br><span class="line"> * &#123;@link ServerBootstrap&#125; bootstrap = ...;</span><br><span class="line"> * ...</span><br><span class="line"> * bootstrap.childHandler(new MyChannelInitializer());</span><br><span class="line"> * ...</span><br><span class="line"> * &lt;/pre&gt;</span><br><span class="line"> * Be aware that this class is marked as &#123;@link Sharable&#125; and so the implementation must be safe to be re-used.</span><br><span class="line"> *注意这个类是标记为Sharable的，所以在实现的时候必须是线程安全的。</span><br><span class="line"> * @param &lt;C&gt;   A sub-type of &#123;@link Channel&#125;</span><br><span class="line"> */</span><br><span class="line">@Sharable</span><br><span class="line">public abstract class ChannelInitializer&lt;C extends Channel&gt; extends ChannelInboundHandlerAdapter &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>程序调用p.addLast(new ChannelInitializer<Channel>() ……这样的方式把ChannelInitializer放到ChannelPipeline当中，那么ChannelPipeline.addLast()的逻辑是怎样的呢？</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Inserts &#123;@link ChannelHandler&#125;s at the last position of this pipeline.</span><br><span class="line"> * 在pipeline的最后一个位置插入一个ChannelHandler</span><br><span class="line"> * @param handlers  the handlers to insert last</span><br><span class="line"> */</span><br><span class="line">ChannelPipeline addLast(ChannelHandler... handlers);</span><br></pre></td></tr></table></figure>
-<p>查看ChannelPipeline 的实现类DefaultChannelPipeline：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public class DefaultChannelPipeline implements ChannelPipeline &#123;</span><br><span class="line">...略</span><br><span class="line">    @Override</span><br><span class="line">    public final ChannelPipeline addLast(ChannelHandler... handlers) &#123;</span><br><span class="line">        return addLast(null, handlers);</span><br><span class="line">    &#125;</span><br><span class="line">    ...略</span><br></pre></td></tr></table></figure>
-<p>调用了addLast(null, handlers),第一个参数为null：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">即executor为null</span><br><span class="line">    public final ChannelPipeline addLast(EventExecutorGroup executor, ChannelHandler... handlers) &#123;</span><br><span class="line">        if (handlers == null) &#123;</span><br><span class="line">            throw new NullPointerException(&quot;handlers&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">//循环遍历，调用addLast(executor, null, h)方法，第二个参数也为null</span><br><span class="line">        for (ChannelHandler h: handlers) &#123;</span><br><span class="line">            if (h == null) &#123;</span><br><span class="line">                break;</span><br><span class="line">            &#125;</span><br><span class="line">            addLast(executor, null, h);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        return this;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<p>进入最终的方法，其中group为null，name为null：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">public final ChannelPipeline addLast(EventExecutorGroup group, String name, ChannelHandler handler) &#123;</span><br><span class="line">    final AbstractChannelHandlerContext newCtx;//首先声明一个AbstractChannelHandlerContext</span><br><span class="line">    synchronized (this) &#123;</span><br><span class="line">        checkMultiplicity(handler);</span><br><span class="line">        newCtx = newContext(group, filterName(name, handler), handler);</span><br><span class="line">        addLast0(newCtx);</span><br><span class="line"></span><br><span class="line">        // If the registered is false it means that the channel was not registered on an eventloop yet.</span><br><span class="line">        // In this case we add the context to the pipeline and add a task that will call</span><br><span class="line">        // ChannelHandler.handlerAdded(...) once the channel is registered.</span><br><span class="line">        if (!registered) &#123;</span><br><span class="line">            newCtx.setAddPending();</span><br><span class="line">            callHandlerCallbackLater(newCtx, true);</span><br><span class="line">            return this;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        EventExecutor executor = newCtx.executor();</span><br><span class="line">        if (!executor.inEventLoop()) &#123;</span><br><span class="line">            newCtx.setAddPending();</span><br><span class="line">            executor.execute(new Runnable() &#123;</span><br><span class="line">                @Override</span><br><span class="line">                public void run() &#123;</span><br><span class="line">                    callHandlerAdded0(newCtx);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line">            return this;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    callHandlerAdded0(newCtx);</span><br><span class="line">    return this;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>上文提到AbstractChannelHandlerContext ，那么看下AbstractChannelHandlerContext 的doc是怎么一个东西：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">abstract class AbstractChannelHandlerContext extends DefaultAttributeMap</span><br><span class="line">        implements ChannelHandlerContext, ResourceLeakHint &#123;</span><br></pre></td></tr></table></figure>
-<p>进入他的接口ChannelHandlerContext：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * Enables a &#123;@link ChannelHandler&#125; to interact with its &#123;@link ChannelPipeline&#125;</span><br><span class="line"> * and other handlers. Among other things a handler can notify the next &#123;@link ChannelHandler&#125; in the</span><br><span class="line"> * &#123;@link ChannelPipeline&#125; as well as modify the &#123;@link ChannelPipeline&#125; it belongs to dynamically.</span><br><span class="line"> * 使ChannelHandler和它的ChannelPipeline以及其他的处理器之间进行交互，可以通知ChannelPipeline里的下一个ChannelHandler，</span><br><span class="line"> * 以及动态的修改它属的ChannelPipeline</span><br><span class="line"> * &lt;h3&gt;Notify&lt;/h3&gt;</span><br><span class="line"> *  通知</span><br><span class="line"> * You can notify the closest handler in the same &#123;@link ChannelPipeline&#125; by calling one of the various methods</span><br><span class="line"> * provided here.</span><br><span class="line"> *你可以通过调用各种方法来通知ChannelPipeline里边最近的一个handler</span><br><span class="line"> * Please refer to &#123;@link ChannelPipeline&#125; to understand how an event flows.</span><br><span class="line"> * 请参考ChannelPipeline来理解事件的过程。</span><br><span class="line"> * &lt;h3&gt;Modifying a pipeline&lt;/h3&gt;</span><br><span class="line"> * 修改一个pipeline</span><br><span class="line"> * You can get the &#123;@link ChannelPipeline&#125; your handler belongs to by calling</span><br><span class="line"> * &#123;@link #pipeline()&#125;.  A non-trivial application could insert, remove, or</span><br><span class="line"> * replace handlers in the pipeline dynamically at runtime.</span><br><span class="line"> *你可以调用所属处理器的pipeline()方法得到ChannelPipeline，一个应用可以在pipeline 里边动态的插入，删除或者替换处理器。</span><br><span class="line"> * &lt;h3&gt;Retrieving for later use&lt;/h3&gt;</span><br><span class="line"> *  获取为了以后使用</span><br><span class="line"> * You can keep the &#123;@link ChannelHandlerContext&#125; for later use, such as</span><br><span class="line"> * triggering an event outside the handler methods, even from a different thread.</span><br><span class="line"> * 你可以持有ChannelHandlerContext为了后续使用，比如在handler 方法之外触发一个事件，甚至是不同的线程。</span><br><span class="line"> * &lt;pre&gt;</span><br><span class="line"> * public class MyHandler extends &#123;@link ChannelDuplexHandler&#125; &#123;</span><br><span class="line"> *</span><br><span class="line"> *     &lt;b&gt;private &#123;@link ChannelHandlerContext&#125; ctx;&lt;/b&gt;</span><br><span class="line"> *</span><br><span class="line"> *     public void beforeAdd(&#123;@link ChannelHandlerContext&#125; ctx) &#123;</span><br><span class="line"> *         &lt;b&gt;this.ctx = ctx;&lt;/b&gt;//提前获得ChannelHandlerContext</span><br><span class="line"> *     &#125;</span><br><span class="line"> *</span><br><span class="line"> *     public void login(String username, password) &#123;</span><br><span class="line"> *         ctx.write(new LoginMessage(username, password));//之后的业务逻辑再去使用</span><br><span class="line"> *     &#125;</span><br><span class="line"> *     ...</span><br><span class="line"> * &#125;</span><br><span class="line"> * &lt;/pre&gt;</span><br><span class="line"> *</span><br><span class="line"> * &lt;h3&gt;Storing stateful information&lt;/h3&gt;</span><br><span class="line"> *  存储状态信息</span><br><span class="line"> * &#123;@link #attr(AttributeKey)&#125; allow you to</span><br><span class="line"> * store and access stateful information that is related with a handler and its</span><br><span class="line"> * context.  Please refer to &#123;@link ChannelHandler&#125; to learn various recommended</span><br><span class="line"> * ways to manage stateful information.</span><br><span class="line"> * AttributeKey允许你存储和它有关联的handler 以及它的上下文的状态信息，可以参考ChannelHandler学习不同的方式来管理状态信息</span><br><span class="line"> * &lt;h3&gt;A handler can have more than one context&lt;/h3&gt;</span><br><span class="line"> *  一个handler 可以有多个上下文</span><br><span class="line"> * Please note that a &#123;@link ChannelHandler&#125; instance can be added to more than</span><br><span class="line"> * one &#123;@link ChannelPipeline&#125;.  It means a single &#123;@link ChannelHandler&#125;</span><br><span class="line"> * instance can have more than one &#123;@link ChannelHandlerContext&#125; and therefore</span><br><span class="line"> * the single instance can be invoked with different</span><br><span class="line"> * &#123;@link ChannelHandlerContext&#125;s if it is added to one or more</span><br><span class="line"> * &#123;@link ChannelPipeline&#125;s more than once.</span><br><span class="line"> * 注意，一个ChannelHandler可以被添加多次在一个ChannelPipeline里边，意味着一个单独的ChannelHandler实例可以有多个</span><br><span class="line"> * ChannelHandlerContext以及因此一个单独的实例可以被多个ChannelHandlerContext多次调用，如果ChannelHandler实例被添加了多次。</span><br><span class="line"> * &lt;p&gt;</span><br><span class="line"> * For example, the following handler will have as many independent &#123;@link AttributeKey&#125;s</span><br><span class="line"> * as how many times it is added to pipelines, regardless if it is added to the</span><br><span class="line"> * same pipeline multiple times or added to different pipelines multiple times:</span><br><span class="line"> * &lt;pre&gt;</span><br><span class="line"> * public class FactorialHandler extends &#123;@link ChannelInboundHandlerAdapter&#125; &#123;</span><br><span class="line"> *</span><br><span class="line"> *   private final &#123;@link AttributeKey&#125;&amp;lt;&#123;@link Integer&#125;&amp;gt; counter = &#123;@link AttributeKey&#125;.valueOf(&quot;counter&quot;);</span><br><span class="line"> *</span><br><span class="line"> *   // This handler will receive a sequence of increasing integers starting</span><br><span class="line"> *   // from 1.</span><br><span class="line"> *   &#123;@code @Override&#125;</span><br><span class="line"> *   public void channelRead(&#123;@link ChannelHandlerContext&#125; ctx, Object msg) &#123;</span><br><span class="line"> *     Integer a = ctx.attr(counter).get();</span><br><span class="line"> *</span><br><span class="line"> *     if (a == null) &#123;</span><br><span class="line"> *       a = 1;</span><br><span class="line"> *     &#125;</span><br><span class="line"> *</span><br><span class="line"> *     attr.set(a * (Integer) msg);</span><br><span class="line"> *   &#125;</span><br><span class="line"> * &#125;</span><br><span class="line"> *</span><br><span class="line"> * // Different context objects are given to &quot;f1&quot;, &quot;f2&quot;, &quot;f3&quot;, and &quot;f4&quot; even if</span><br><span class="line"> * // they refer to the same handler instance.  Because the FactorialHandler</span><br><span class="line"> * // stores its state in a context object (using an &#123;@link AttributeKey&#125;), the factorial is</span><br><span class="line"> * // calculated correctly 4 times once the two pipelines (p1 and p2) are active.</span><br><span class="line"> * 给出&quot;f1&quot;, &quot;f2&quot;, &quot;f3&quot;, and &quot;f4&quot;不同的上下文对象，但是他们来自同一个实例，因为FactorialHandler存储了他们的状态在上下文对象里边</span><br><span class="line"> * （使用AttributeKey），当处于活动状态的factorial ，factorial 被计算了四次在2个pipelines （p1 和 p2）中。</span><br><span class="line"> * FactorialHandler fh = new FactorialHandler();</span><br><span class="line"> *</span><br><span class="line"> * &#123;@link ChannelPipeline&#125; p1 = &#123;@link Channels&#125;.pipeline();</span><br><span class="line"> * p1.addLast(&quot;f1&quot;, fh);</span><br><span class="line"> * p1.addLast(&quot;f2&quot;, fh);</span><br><span class="line"> *</span><br><span class="line"> * &#123;@link ChannelPipeline&#125; p2 = &#123;@link Channels&#125;.pipeline();</span><br><span class="line"> * p2.addLast(&quot;f3&quot;, fh);</span><br><span class="line"> * p2.addLast(&quot;f4&quot;, fh);</span><br><span class="line"> * &lt;/pre&gt;</span><br><span class="line"> *</span><br><span class="line"> * &lt;h3&gt;Additional resources worth reading&lt;/h3&gt;</span><br><span class="line"> * &lt;p&gt;</span><br><span class="line"> * Please refer to the &#123;@link ChannelHandler&#125;, and</span><br><span class="line"> * &#123;@link ChannelPipeline&#125; to find out more about inbound and outbound operations,</span><br><span class="line"> * what fundamental differences they have, how they flow in a  pipeline,  and how to handle</span><br><span class="line"> * the operation in your application.</span><br><span class="line"> * 请参考ChannelHandler和ChannelPipeline来找出更多的关于出栈和入栈的操作、他们之间最基本的不同、怎样在pipeline流动，怎么使用在应用当中</span><br><span class="line"> */</span><br><span class="line">public interface ChannelHandlerContext extends AttributeMap, ChannelInboundInvoker, ChannelOutboundInvoker &#123;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%8D%81%E4%B8%80-Netty%E5%B8%B8%E9%87%8F%E6%B1%A0%E5%AE%9E%E7%8E%B0%E5%8F%8AChannelOption%E4%B8%8EAttribute%E4%BD%9C%E7%94%A8%E5%88%86%E6%9E%90/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
-      <meta itemprop="name" content="CeaserWang">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="南贺神社">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 南贺神社">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%8D%81%E4%B8%80-Netty%E5%B8%B8%E9%87%8F%E6%B1%A0%E5%AE%9E%E7%8E%B0%E5%8F%8AChannelOption%E4%B8%8EAttribute%E4%BD%9C%E7%94%A8%E5%88%86%E6%9E%90/" class="post-title-link" itemprop="url">netty源码分析(十一)Netty常量池实现及ChannelOption与Attribute作用分析</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2018-10-04 14:36:33" itemprop="dateCreated datePublished" datetime="2018-10-04T14:36:33+00:00">2018-10-04</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-30 08:31:12" itemprop="dateModified" datetime="2023-12-30T08:31:12+00:00">2023-12-30</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/netty/" itemprop="url" rel="index"><span itemprop="name">netty</span></a>
-        </span>
-    </span>
-
-  
-    <span id="/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%8D%81%E4%B8%80-Netty%E5%B8%B8%E9%87%8F%E6%B1%A0%E5%AE%9E%E7%8E%B0%E5%8F%8AChannelOption%E4%B8%8EAttribute%E4%BD%9C%E7%94%A8%E5%88%86%E6%9E%90/" class="post-meta-item leancloud_visitors" data-flag-title="netty源码分析(十一)Netty常量池实现及ChannelOption与Attribute作用分析" title="Views">
-      <span class="post-meta-item-icon">
-        <i class="far fa-eye"></i>
-      </span>
-      <span class="post-meta-item-text">Views: </span>
-      <span class="leancloud-visitors-count"></span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>ServerBootstrap的init方法是服务初始的关键逻辑：</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%8D%81%E4%B8%80-Netty%E5%B8%B8%E9%87%8F%E6%B1%A0%E5%AE%9E%E7%8E%B0%E5%8F%8AChannelOption%E4%B8%8EAttribute%E4%BD%9C%E7%94%A8%E5%88%86%E6%9E%90/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/12/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><span class="page-number current">13</span><a class="page-number" href="/page/14/">14</a><span class="space">&hellip;</span><a class="page-number" href="/page/22/">22</a><a class="extend next" rel="next" href="/page/14/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/12/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><span class="page-number current">13</span><a class="page-number" href="/page/14/">14</a><span class="space">&hellip;</span><a class="page-number" href="/page/23/">23</a><a class="extend next" rel="next" href="/page/14/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 </div>

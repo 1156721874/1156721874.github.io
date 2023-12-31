@@ -245,7 +245,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/10/04/jdk8-Collector%E6%94%B6%E9%9B%86%E5%99%A8%E4%B9%8B%E5%B9%B6%E8%A1%8C%E6%B5%81%E9%99%B7%E9%98%B1%E4%B8%8E%E5%8E%9F%E7%90%86/">
+    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/10/04/jdk8%E6%96%B0%E5%8A%A0%E5%85%A5%E7%9A%84default%E6%96%B9%E6%B3%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
@@ -263,7 +263,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2018/10/04/jdk8-Collector%E6%94%B6%E9%9B%86%E5%99%A8%E4%B9%8B%E5%B9%B6%E8%A1%8C%E6%B5%81%E9%99%B7%E9%98%B1%E4%B8%8E%E5%8E%9F%E7%90%86/" class="post-title-link" itemprop="url">jdk8-Collector收集器之并行流陷阱与原理</a>
+          <a href="/2018/10/04/jdk8%E6%96%B0%E5%8A%A0%E5%85%A5%E7%9A%84default%E6%96%B9%E6%B3%95/" class="post-title-link" itemprop="url">jdk8新加入的default方法</a>
         </h2>
 
         <div class="post-meta-container">
@@ -281,7 +281,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-31 02:21:04" itemprop="dateModified" datetime="2023-12-31T02:21:04+00:00">2023-12-31</time>
+      <time title="Modified: 2023-12-31 02:34:06" itemprop="dateModified" datetime="2023-12-31T02:34:06+00:00">2023-12-31</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -294,7 +294,7 @@
     </span>
 
   
-    <span id="/2018/10/04/jdk8-Collector%E6%94%B6%E9%9B%86%E5%99%A8%E4%B9%8B%E5%B9%B6%E8%A1%8C%E6%B5%81%E9%99%B7%E9%98%B1%E4%B8%8E%E5%8E%9F%E7%90%86/" class="post-meta-item leancloud_visitors" data-flag-title="jdk8-Collector收集器之并行流陷阱与原理" title="Views">
+    <span id="/2018/10/04/jdk8%E6%96%B0%E5%8A%A0%E5%85%A5%E7%9A%84default%E6%96%B9%E6%B3%95/" class="post-meta-item leancloud_visitors" data-flag-title="jdk8新加入的default方法" title="Views">
       <span class="post-meta-item-icon">
         <i class="far fa-eye"></i>
       </span>
@@ -310,10 +310,10 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <p>收集器Collector是jdk8中最为重要的接口之一，一个Collector可分为5个部分（第五个是我自己加上的）：<br>1、supplier</p>
+          <p>default方法的加入是为了兼容jdk8以前的版本的需要。<br>（1）当前有两个接口MyInterface和MyInterface1，它们都有相同名字的default方法，之后实现类Myclass同时implements了MyInterface和MyInterface1，同时Myclass实现了default方法，此时Myclass调用default调的是谁的？</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2018/10/04/jdk8-Collector%E6%94%B6%E9%9B%86%E5%99%A8%E4%B9%8B%E5%B9%B6%E8%A1%8C%E6%B5%81%E9%99%B7%E9%98%B1%E4%B8%8E%E5%8E%9F%E7%90%86/#more" rel="contents">
+              <a class="btn" href="/2018/10/04/jdk8%E6%96%B0%E5%8A%A0%E5%85%A5%E7%9A%84default%E6%96%B9%E6%B3%95/#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -380,7 +380,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-31 02:21:04" itemprop="dateModified" datetime="2023-12-31T02:21:04+00:00">2023-12-31</time>
+      <time title="Modified: 2023-12-31 02:34:07" itemprop="dateModified" datetime="2023-12-31T02:34:07+00:00">2023-12-31</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -479,7 +479,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-31 02:21:04" itemprop="dateModified" datetime="2023-12-31T02:21:04+00:00">2023-12-31</time>
+      <time title="Modified: 2023-12-31 02:34:07" itemprop="dateModified" datetime="2023-12-31T02:34:07+00:00">2023-12-31</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -578,7 +578,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-31 02:21:04" itemprop="dateModified" datetime="2023-12-31T02:21:04+00:00">2023-12-31</time>
+      <time title="Modified: 2023-12-31 02:34:06" itemprop="dateModified" datetime="2023-12-31T02:34:06+00:00">2023-12-31</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -677,7 +677,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-31 02:21:04" itemprop="dateModified" datetime="2023-12-31T02:21:04+00:00">2023-12-31</time>
+      <time title="Modified: 2023-12-31 02:34:06" itemprop="dateModified" datetime="2023-12-31T02:34:06+00:00">2023-12-31</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -776,7 +776,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-31 02:21:04" itemprop="dateModified" datetime="2023-12-31T02:21:04+00:00">2023-12-31</time>
+      <time title="Modified: 2023-12-31 02:34:07" itemprop="dateModified" datetime="2023-12-31T02:34:07+00:00">2023-12-31</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -875,7 +875,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-31 02:21:04" itemprop="dateModified" datetime="2023-12-31T02:21:04+00:00">2023-12-31</time>
+      <time title="Modified: 2023-12-31 02:34:06" itemprop="dateModified" datetime="2023-12-31T02:34:06+00:00">2023-12-31</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -974,7 +974,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-31 02:21:04" itemprop="dateModified" datetime="2023-12-31T02:21:04+00:00">2023-12-31</time>
+      <time title="Modified: 2023-12-31 02:34:06" itemprop="dateModified" datetime="2023-12-31T02:34:06+00:00">2023-12-31</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1073,7 +1073,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-31 02:21:04" itemprop="dateModified" datetime="2023-12-31T02:21:04+00:00">2023-12-31</time>
+      <time title="Modified: 2023-12-31 02:34:06" itemprop="dateModified" datetime="2023-12-31T02:34:06+00:00">2023-12-31</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1164,7 +1164,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-31 02:21:04" itemprop="dateModified" datetime="2023-12-31T02:21:04+00:00">2023-12-31</time>
+      <time title="Modified: 2023-12-31 02:34:07" itemprop="dateModified" datetime="2023-12-31T02:34:07+00:00">2023-12-31</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">

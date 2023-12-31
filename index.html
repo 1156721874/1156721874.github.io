@@ -281,7 +281,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-31 02:20:36" itemprop="dateModified" datetime="2023-12-31T02:20:36+00:00">2023-12-31</time>
+      <time title="Modified: 2023-12-31 02:21:04" itemprop="dateModified" datetime="2023-12-31T02:21:04+00:00">2023-12-31</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -381,7 +381,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-31 02:20:36" itemprop="dateModified" datetime="2023-12-31T02:20:36+00:00">2023-12-31</time>
+      <time title="Modified: 2023-12-31 02:21:04" itemprop="dateModified" datetime="2023-12-31T02:21:04+00:00">2023-12-31</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -481,7 +481,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-31 02:20:36" itemprop="dateModified" datetime="2023-12-31T02:20:36+00:00">2023-12-31</time>
+      <time title="Modified: 2023-12-31 02:21:04" itemprop="dateModified" datetime="2023-12-31T02:21:04+00:00">2023-12-31</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -521,42 +521,14 @@
 </ul>
 </li>
 </ul>
-<h1 id="gcc常用编译选项"><a href="#gcc常用编译选项" class="headerlink" title="gcc常用编译选项"></a>gcc常用编译选项</h1><p>gcc和arm-linux-gcc的常用选项</p>
-<h3 id="gcc的使用方法："><a href="#gcc的使用方法：" class="headerlink" title="gcc的使用方法："></a>gcc的使用方法：</h3><p>gcc  [选项]   文件名</p>
-<p>gcc常用选项：<br>  -v：查看gcc编译器的版本，显示gcc执行时的详细过程<br>  -o <file>                Place the output into <file><br>                           指定输出文件名为file，这个名称不能跟源文件名同名<br>  -E                       Preprocess only; do not compile, assemble or link<br>                           只预处理，不会编译、汇编、链接<br>  -S                       Compile only; do not assemble or link<br>                           只编译，不会汇编、链接<br>  -c                       Compile and assemble, but do not link<br>                           编译和汇编，不会链接<br>&#x2F;&#x2F;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;<br>gcc  -v：查看gcc编译器的版本</p>
-<h4 id="方式1："><a href="#方式1：" class="headerlink" title="方式1："></a>方式1：</h4><p>gcc hello.c  输出一个a.out，然后.&#x2F;a.out来执行该应用程序。</p>
-<p>gcc -o hello hello.c  输出hello，然后.&#x2F;hello来执行该应用程序。</p>
-<h4 id="方式2："><a href="#方式2：" class="headerlink" title="方式2："></a>方式2：</h4><p>gcc -E -o hello.i hello.c<br>gcc -S -o hello.s hello.i<br>gcc -c -o hello.o hello.s<br>gcc -o hello hello.o</p>
-<p>.o:object file(OBJ文件)<br>小结：<br>1）输入文件的后缀名和选项共同决定gcc到底执行那些操作。<br>2）在编译过程中，除非使用了-E、-S、-c选项(或者编译出错阻止了完整的编译过程)<br>   否则最后的步骤都是链接。</p>
-<h4 id="方式3："><a href="#方式3：" class="headerlink" title="方式3："></a>方式3：</h4><p>gcc -c -o hello.o hello.c<br>gcc -o hello hello.o</p>
-<p>gcc会对.c文件默认进行预处理操作，-c再来指明了编译、汇编，从而得到.o文件<br>再通过gcc -o hello hello.o将.o文件进行链接，得到可执行应用程序。</p>
-<p>链接就是将汇编生成的OBJ文件、系统库的OBJ文件、库文件链接起来，<br>最终生成可以在特定平台运行的可执行程序。</p>
-<p>crt1.o、crti.o、crtbegin.o、crtend.o、crtn.o是gcc加入的系统标准启动文件，<br>对于一般应用程序，这些启动是必需的。</p>
-<p>-lc：链接libc库文件，其中libc库文件中就实现了printf等函数。</p>
-<p>gcc -v -nostdlib -o hello hello.o会提示因为没有链接系统标准启动文件和标准库文件，而链接失败。<br>这个-nostdlib选项常用于裸机&#x2F;bootloader、linux内核等程序，因为它们不需要启动文件、标准库文件。</p>
-<p>一般应用程序才需要系统标准启动文件和标准库文件。<br>裸机&#x2F;bootloader、linux内核等程序不需要启动文件、标准库文件。</p>
-<p>动态链接使用动态链接库进行链接，生成的程序在执行的时候需要加载所需的动态库才能运行。<br>动态链接生成的程序体积较小，但是必须依赖所需的动态库，否则无法执行。</p>
-<p>静态链接使用静态库进行链接，生成的程序包含程序运行所需要的全部库，可以直接运行，<br>不过静态链接生成的程序体积较大。</p>
-<p>gcc -c -o hello.o hello.c<br>gcc -o hello_shared  hello.o<br>gcc -static -o hello_static hello.o</p>
-<h1 id="makeFile"><a href="#makeFile" class="headerlink" title="makeFile"></a>makeFile</h1><h2 id="Makefile的引入及规则"><a href="#Makefile的引入及规则" class="headerlink" title="Makefile的引入及规则"></a>Makefile的引入及规则</h2><p>使用keil, mdk, avr等工具开发程序时点点鼠标就可以编译了，<br>它的内部机制是什么？它怎么组织管理程序？怎么决定编译哪一个文件？</p>
-<p>gcc -o test a.c b.c<br>&#x2F;&#x2F; 简单,<br>&#x2F;&#x2F; 但是会对所有文件都处理一次,<br>&#x2F;&#x2F; 文件多时如果只修改其中一个文件会导致效率低</p>
-<p>Makefile的核心—规则 :</p>
-<p>目标 : 依赖1 依赖2 …<br>[TAB]命令</p>
-<p>当”目标文件”不存在,<br>或<br>某个依赖文件比目标文件”新”,<br>则: 执行”命令”</p>
-<h1 id="C语言复习"><a href="#C语言复习" class="headerlink" title="C语言复习"></a>C语言复习</h1><h2 id="Makefile的语法"><a href="#Makefile的语法" class="headerlink" title="Makefile的语法"></a>Makefile的语法</h2><p>a. 通配符: %.o<br>   $@ 表示目标<br>   $&lt; 表示第1个依赖文件<br>   $^ 表示所有依赖文件</p>
-<p>b. 假想目标: .PHONY</p>
-<p>c. 即时变量、延时变量, export<br>简单变量(即时变量) :<br>A :&#x3D; xxx   # A的值即刻确定，在定义时即确定<br>B &#x3D; xxx    # B的值使用到时才确定</p>
-<p>:&#x3D;   # 即时变量<br>&#x3D;    # 延时变量<br>?&#x3D;   # 延时变量, 如果是第1次定义才起效, 如果在前面该变量已定义则忽略这句<br>+&#x3D;   # 附加, 它是即时变量还是延时变量取决于前面的定义</p>
-<p>参考文档:<br>a. 百度搜 “gnu make 于凤昌”<br>b. 官方文档: <span class="exturl" data-url="aHR0cDovL3d3dy5nbnUub3JnL3NvZnR3YXJlL21ha2UvbWFudWFsLw==">http://www.gnu.org/software/make/manual/<i class="fa fa-external-link-alt"></i></span></p>
-<p>如果想深入, 可以学习这视频:<br>第3期视频项目1, 第1课第4节_数码相框_编写通用的Makefile_P</p>
-<h2 id="Makefile函数"><a href="#Makefile函数" class="headerlink" title="Makefile函数"></a>Makefile函数</h2><p>a. $(foreach var,list,text)<br>b. $(filter pattern…,text)      # 在text中取出符合patten格式的值<br>   $(filter-out pattern…,text)  # 在text中取出不符合patten格式的值</p>
-<p>c. $(wildcard pattern)            # pattern定义了文件名的格式,<br>                                  # wildcard取出其中存在的文件<br>d. $(patsubst pattern,replacement,$(var))  # 从列表中取出每一个值<br>                                           # 如果符合pattern<br>                                           # 则替换为replacement</p>
-<h2 id="Makefile实例"><a href="#Makefile实例" class="headerlink" title="Makefile实例"></a>Makefile实例</h2><p>a. 改进: 支持头文件依赖<br><span class="exturl" data-url="aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXExNDUyMDA4L2FydGljbGUvZGV0YWlscy81MDg1NTgxMA==">http://blog.csdn.net/qq1452008/article/details/50855810<i class="fa fa-external-link-alt"></i></span></p>
-<p>gcc -M c.c &#x2F;&#x2F; 打印出依赖</p>
-<p>gcc -M -MF c.d c.c  &#x2F;&#x2F; 把依赖写入文件c.d</p>
-<p>gcc -c -o c.o c.c -MD -MF c.d  &#x2F;&#x2F; 编译c.o, 把依赖写入文件c.d</p>
-<p>b. 添加CFLAGS<br>c. 分析裸板Makefile</p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/11/19/embed/gcc_makeFile/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -618,7 +590,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-31 02:20:36" itemprop="dateModified" datetime="2023-12-31T02:20:36+00:00">2023-12-31</time>
+      <time title="Modified: 2023-12-31 02:21:04" itemprop="dateModified" datetime="2023-12-31T02:21:04+00:00">2023-12-31</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -721,7 +693,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-31 02:20:36" itemprop="dateModified" datetime="2023-12-31T02:20:36+00:00">2023-12-31</time>
+      <time title="Modified: 2023-12-31 02:21:04" itemprop="dateModified" datetime="2023-12-31T02:21:04+00:00">2023-12-31</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -755,105 +727,6 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2023/04/24/embed/kaifabanshuxihetiyan/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2022/12/30/life/2022_end_desc/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
-      <meta itemprop="name" content="CeaserWang">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="南贺神社">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 南贺神社">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/12/30/life/2022_end_desc/" class="post-title-link" itemprop="url">2022 year-end review</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2022-12-30 19:43:45" itemprop="dateCreated datePublished" datetime="2022-12-30T19:43:45+00:00">2022-12-30</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-31 02:20:36" itemprop="dateModified" datetime="2023-12-31T02:20:36+00:00">2023-12-31</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/life/" itemprop="url" rel="index"><span itemprop="name">life</span></a>
-        </span>
-    </span>
-
-  
-    <span id="/2022/12/30/life/2022_end_desc/" class="post-meta-item leancloud_visitors" data-flag-title="2022 year-end review" title="Views">
-      <span class="post-meta-item-icon">
-        <i class="far fa-eye"></i>
-      </span>
-      <span class="post-meta-item-text">Views: </span>
-      <span class="leancloud-visitors-count"></span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>说来惭愧，博客一年没怎么更新了，说什么理由都是借口，哈哈哈，其实在Java领域玩了这么多年，对于技术细节探索和新技术兴趣，没有刚开始进入这个领域热情高涨了，转而对技术架构设计产生了极大的热情，<br>但是技术架构探索和积累是完全通过理论加实践实际操作搅拌出来了，第二个是在做嵌入式相关的学习，目前还没有输出像样子的东西，不好意思写博客，今年的复盘如下：<br><img src="https://s3.bmp.ovh/imgs/2023/01/02/096480c43775a0d3.png"></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/12/30/life/2022_end_desc/#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -920,7 +793,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-31 02:20:36" itemprop="dateModified" datetime="2023-12-31T02:20:36+00:00">2023-12-31</time>
+      <time title="Modified: 2023-12-31 02:21:04" itemprop="dateModified" datetime="2023-12-31T02:21:04+00:00">2023-12-31</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -953,6 +826,105 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2022/12/30/life/2022_end_review/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2022/12/30/life/2022_end_desc/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
+      <meta itemprop="name" content="CeaserWang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/12/30/life/2022_end_desc/" class="post-title-link" itemprop="url">2022 year-end review</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2022-12-30 19:43:45" itemprop="dateCreated datePublished" datetime="2022-12-30T19:43:45+00:00">2022-12-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-12-31 02:21:04" itemprop="dateModified" datetime="2023-12-31T02:21:04+00:00">2023-12-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/life/" itemprop="url" rel="index"><span itemprop="name">life</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2022/12/30/life/2022_end_desc/" class="post-meta-item leancloud_visitors" data-flag-title="2022 year-end review" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>说来惭愧，博客一年没怎么更新了，说什么理由都是借口，哈哈哈，其实在Java领域玩了这么多年，对于技术细节探索和新技术兴趣，没有刚开始进入这个领域热情高涨了，转而对技术架构设计产生了极大的热情，<br>但是技术架构探索和积累是完全通过理论加实践实际操作搅拌出来了，第二个是在做嵌入式相关的学习，目前还没有输出像样子的东西，不好意思写博客，今年的复盘如下：<br><img src="https://s3.bmp.ovh/imgs/2023/01/02/096480c43775a0d3.png"></p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/12/30/life/2022_end_desc/#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -1019,7 +991,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-31 02:20:36" itemprop="dateModified" datetime="2023-12-31T02:20:36+00:00">2023-12-31</time>
+      <time title="Modified: 2023-12-31 02:21:04" itemprop="dateModified" datetime="2023-12-31T02:21:04+00:00">2023-12-31</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1127,7 +1099,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-31 02:20:36" itemprop="dateModified" datetime="2023-12-31T02:20:36+00:00">2023-12-31</time>
+      <time title="Modified: 2023-12-31 02:21:04" itemprop="dateModified" datetime="2023-12-31T02:21:04+00:00">2023-12-31</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1231,7 +1203,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-31 02:20:36" itemprop="dateModified" datetime="2023-12-31T02:20:36+00:00">2023-12-31</time>
+      <time title="Modified: 2023-12-31 02:21:04" itemprop="dateModified" datetime="2023-12-31T02:21:04+00:00">2023-12-31</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">

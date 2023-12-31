@@ -23,15 +23,15 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"ceaser.wang","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.12.1","exturl":true,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":true,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":true,"preload":true}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="gcc常用选项 x86平台 windos应用程序:建立工程-编辑-编译(vc6.0)-运行 ubuntu应用程序:编辑-编译(gcc)-运行   arm裸机：编辑-编译(arm-linux-gcc)-烧写-运行 hello.c —预处理—&gt; hello.i —编译—&gt; hello.s —汇编—&gt; hello.o —连接—&gt; hello    gcc常用编译选项gcc和arm">
+    <meta name="description" content="gcc常用选项 x86平台 windos应用程序:建立工程-编辑-编译(vc6.0)-运行 ubuntu应用程序:编辑-编译(gcc)-运行   arm裸机：编辑-编译(arm-linux-gcc)-烧写-运行 hello.c —预处理—&gt; hello.i —编译—&gt; hello.s —汇编—&gt; hello.o —连接—&gt; hello">
 <meta property="og:type" content="article">
 <meta property="og:title" content="gcc编译器和makeFile详解">
 <meta property="og:url" content="https://ceaser.wang/2023/11/19/embed/gcc_makeFile/index.html">
 <meta property="og:site_name" content="南贺神社">
-<meta property="og:description" content="gcc常用选项 x86平台 windos应用程序:建立工程-编辑-编译(vc6.0)-运行 ubuntu应用程序:编辑-编译(gcc)-运行   arm裸机：编辑-编译(arm-linux-gcc)-烧写-运行 hello.c —预处理—&gt; hello.i —编译—&gt; hello.s —汇编—&gt; hello.o —连接—&gt; hello    gcc常用编译选项gcc和arm">
+<meta property="og:description" content="gcc常用选项 x86平台 windos应用程序:建立工程-编辑-编译(vc6.0)-运行 ubuntu应用程序:编辑-编译(gcc)-运行   arm裸机：编辑-编译(arm-linux-gcc)-烧写-运行 hello.c —预处理—&gt; hello.i —编译—&gt; hello.s —汇编—&gt; hello.o —连接—&gt; hello">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2023-11-19T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-12-31T02:20:36.286Z">
+<meta property="article:modified_time" content="2023-12-31T02:21:04.427Z">
 <meta property="article:author" content="CeaserWang">
 <meta property="article:tag" content="embed">
 <meta name="twitter:card" content="summary">
@@ -288,7 +288,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-12-31 02:20:36" itemprop="dateModified" datetime="2023-12-31T02:20:36+00:00">2023-12-31</time>
+      <time title="Modified: 2023-12-31 02:21:04" itemprop="dateModified" datetime="2023-12-31T02:21:04+00:00">2023-12-31</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -328,6 +328,8 @@
 </ul>
 </li>
 </ul>
+<span id="more"></span>
+
 <h1 id="gcc常用编译选项"><a href="#gcc常用编译选项" class="headerlink" title="gcc常用编译选项"></a>gcc常用编译选项</h1><p>gcc和arm-linux-gcc的常用选项</p>
 <h3 id="gcc的使用方法："><a href="#gcc的使用方法：" class="headerlink" title="gcc的使用方法："></a>gcc的使用方法：</h3><p>gcc  [选项]   文件名</p>
 <p>gcc常用选项：<br>  -v：查看gcc编译器的版本，显示gcc执行时的详细过程<br>  -o <file>                Place the output into <file><br>                           指定输出文件名为file，这个名称不能跟源文件名同名<br>  -E                       Preprocess only; do not compile, assemble or link<br>                           只预处理，不会编译、汇编、链接<br>  -S                       Compile only; do not assemble or link<br>                           只编译，不会汇编、链接<br>  -c                       Compile and assemble, but do not link<br>                           编译和汇编，不会链接<br>&#x2F;&#x2F;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;<br>gcc  -v：查看gcc编译器的版本</p>

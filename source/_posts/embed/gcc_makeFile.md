@@ -13,6 +13,7 @@ categories: embed
 - arm裸机：编辑-编译(arm-linux-gcc)-烧写-运行
   - hello.c ---预处理---> hello.i ---编译---> hello.s ---汇编---> hello.o ---连接---> hello
 
+<!-- more -->
 
 # gcc常用编译选项
 
@@ -112,9 +113,6 @@ Makefile的核心---规则 :
 
 
 # C语言复习
-
-
-
 
 
 ## Makefile的语法

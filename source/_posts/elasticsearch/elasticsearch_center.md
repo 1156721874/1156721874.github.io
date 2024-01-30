@@ -14,7 +14,7 @@ categories: cloud
 
 ##### 之前的架构设计
   针对于每一个mysql数据库实例都对接一个[canal](https://github.com/alibaba/canal)服务,canal监听mysql的binlog日志，然后将日志push到mq（canal支持kafka和rocketmq）里边，然后我们的app就是mq的消费者，消费mq的消息，消费的过程就是从mq的broker执行poll，拉取消息，然后将消息解析，得到消息里边的业务id，通过业务id去真实的mysql数据查询数据（重新查询一次mysql，这么做的原因是保证数据的强一致性），然后将数据刷新到es集群，完成消息的消费。
-  ![old_structure.png](old_structure.png)
+  ![old_structure.png](2019/07/16/elasticsearch/elasticsearch_center/old_structure.png)
 
 #### 现有系统存在的问题
   - 新增表需要进行针对性编码
@@ -22,9 +22,9 @@ categories: cloud
   - 新增加数据库需要进行针对性编码
   - 索引的版本管理混乱
     - 需要手动掉es的http api切换别名(开发人员在使用es的搜索api查询的时候都是使用的别名，一个别名只能同时指向一个索引，如果发生索引升级，需要指向新的索引版本，别名的存在就是为了做无缝切换)
-  ![remappinh_reindex.png](remappinh_reindex.png)
+  ![remappinh_reindex.png](2019/07/16/elasticsearch/elasticsearch_center/remappinh_reindex.png)
   - 数据类型映射管理刀工火种，人工做jdbc到es的数据类型映射太繁琐，还容易出错。
-  ![dataTypeMapping.png](dataTypeMapping.png)
+  ![dataTypeMapping.png](2019/07/16/elasticsearch/elasticsearch_center/dataTypeMapping.png)
 
 #### 现有轮子考察
   - Elasticsearch-jdbc
@@ -74,22 +74,22 @@ categories: cloud
 
   - topic
     - topic 列表
-    ![topic-list.png](topic-list.png)
+    ![topic-list.png](2019/07/16/elasticsearch/elasticsearch_center/topic-list.png)
     - topic 新增或者修改
-    ![topic-insert-edit.png](topic-insert-edit.png)
+    ![topic-insert-edit.png](2019/07/16/elasticsearch/elasticsearch_center/topic-insert-edit.png)
   - 数据库操作
       - 数据库列表
-      ![database-list.png](database-list.png)
+      ![database-list.png](2019/07/16/elasticsearch/elasticsearch_center/database-list.png)
       - 数据库新增和修改
-      ![database-insert-edit.png](database-insert-edit.png)
+      ![database-insert-edit.png](2019/07/16/elasticsearch/elasticsearch_center/database-insert-edit.png)
   - 表
     - 表的列表
-      ![table-list.png](table-list.png)
+      ![table-list.png](2019/07/16/elasticsearch/elasticsearch_center/table-list.png)
       一张表对应es里边的一个索引;
       如果是parent-child关系，是多张表映射到一个索引上，每一张表代表一个类型;
 
     - 表新增修改
-      ![table-insert.png](table-insert.png)
+      ![table-insert.png](2019/07/16/elasticsearch/elasticsearch_center/table-insert.png)
       IndexName：表对应的索引名称
       IndexType：索引的type，一个索引有多个type
       IndexAlias：索引的别名，线上都是用的别名，如果索引发生了升级，只需要将别名指向新的索引版本即可，完成无缝切换
@@ -103,7 +103,7 @@ categories: cloud
       Auto Gen Column: 根据左侧填写的表名，自动拉取所有的列
 
     - 表字段添加
-      ![table-column-insert.png](table-column-insert.png)
+      ![table-column-insert.png](2019/07/16/elasticsearch/elasticsearch_center/table-column-insert.png)
       ColumnName：字段名称
       ColumnType：字段的数据类型
       EsDataType：es的数据类型
@@ -114,7 +114,7 @@ categories: cloud
       IsKey：标识当前字段是主键
       ExtendIsNest：扩展对象是否是嵌套的，可以被字段关系覆盖，参考官方doc：https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-nested-query.html
     - 字段关联(支持多级嵌套)
-      ![table-column-relation.png](table-column-relation.png)
+      ![table-column-relation.png](2019/07/16/elasticsearch/elasticsearch_center/table-column-relation.png)
       SearchColumnName：当前要关联的字段名称。
       ExtendName：关联的对象在当前表里边的扩展名称，此处可以覆盖字段上的  ExtendName
       RelationTableName：关联的表
@@ -126,26 +126,26 @@ categories: cloud
       refreshParent: 当子表数据发生变化，而且子表在索引里边是nest的内嵌的方式，那么子表的数据变化会触发所在文档的更新
       AreaUpdate:当子表数据发生变化，而且子表在索引里边是nest的内嵌的方式，那么子表的数据变化会触发所在文档的更新，更新方式采用区域更新的方式，和refreshParent的差别是少了很多无关的数据的查询，区域更新采用es的脚本更新文档的方式进行的
     - 表的状态和操作
-      ![table-list-operation.png](table-list-operation.png)
+      ![table-list-operation.png](2019/07/16/elasticsearch/elasticsearch_center/table-list-operation.png)
       另外表的状态在history和avaiable状态的时候会有deleteAll操作权限，deleteAll会把抽象和es当中的索引全部删除，危险操作；
       表的抽象创建完毕之后状态是unavailable状态，表在创建新的索引之后，首先是changing状态，标识正在创建新的索引版本，版本会自动加一，上一个版本的索引会置为history，新的索引的状态是available状态，标识正在同步mysql。
       Reset：状态置为可用、版本号清空、索引任务删除、当前版本索引删除，如果当前索引正在创建将会被强制终止，主要作用是用于创建异常的人工恢复。
       AddDelayEffect: 当前表的变化不会立刻刷新到索引文档里边去，而是由调度任务去完成，一般元数据的表，并且这种元数据经常发生改变。
     - 分布式治理
-      ![distribute.png](distribute.png)
+      ![distribute.png](2019/07/16/elasticsearch/elasticsearch_center/distribute.png)
       refresh: 刷新列表
       Rebalance: 重新执行负载均衡
     - 延时刷新
       - 打标了延迟处理的表：
-        ![delay-list.png](delay-list.png)
+        ![delay-list.png](2019/07/16/elasticsearch/elasticsearch_center/delay-list.png)
       - 元数据影响的顶层表的关系维护
-        ![delay-top-view.png](delay-top-view.png)
+        ![delay-top-view.png](2019/07/16/elasticsearch/elasticsearch_center/delay-top-view.png)
       - 添加的顶层表top黏连关系
-        ![delay-top-view.png](delay-top-view.png)
+        ![delay-top-view.png](2019/07/16/elasticsearch/elasticsearch_center/delay-top-view.png)
       - 查询和管理快照列表
-        ![snapshot_list.png](snapshot_list.png)
+        ![snapshot_list.png](2019/07/16/elasticsearch/elasticsearch_center/snapshot_list.png)
     - 动态词库
-        ![dynamic_words.png](dynamic_words.png)
+        ![dynamic_words.png](2019/07/16/elasticsearch/elasticsearch_center/dynamic_words.png)
         词库状态分为初始化和发布完毕2种，只有发布完毕的才会进入es的动态词库。
         词库分为扩展词库和停用词词库。
         一个单词没有发布之前可以修改，发布完毕之后不可以修改，只能删除。
@@ -155,7 +155,7 @@ categories: cloud
 ### 架构设计
 
 #### 整体架构图
-  ![new_structure.png](new_structure.png)
+  ![new_structure.png](2019/07/16/elasticsearch/elasticsearch_center/new_structure.png)
   每个节点都有一个searchContext，首先解释下searchContext，searchContext是这个上下文，里边存储了当前可以同步的主题，数据库，表，以及正在changing的tableId，还有同步线程的引用等等，ListenTopicTask会每隔三分钟刷新一次上下文；
   整个轮子有2条主线，以searchContext为中心，searchContext下面是索引创建流程，上面是消息监听流程（索引已经创建完毕，mysql数据变化监听，然后将变化推送到es集群）；
   索引创建流程将索引创建完毕之后，会更新上下文，然后消息监听流程会使用更新之后的上下文。
@@ -405,7 +405,7 @@ categories: cloud
 ```
 
 ##### 分片策略
- ![delay.png](delay.png)
+ ![delay.png](2019/07/16/elasticsearch/elasticsearch_center/delay.png)
 
 ###### 方案一【基于抽象】
   首先根据我们保存的表关系的抽象模型，找到标签表关联了那张业务表，比如标签通过标签关系表关联了product表，那么我们的调度任务就要把整个product表所有数据刷新一遍，造成没有受到标签影响的product也刷新了，资源浪费，但是对已有程序复用性高。
@@ -472,13 +472,13 @@ categories: cloud
     - 数据延迟生效调度：针对于引起蝴蝶效应的数据进行生效;
 
 #### 类图
-  ![SearchCenterCLassDiagram.jpg](SearchCenterCLassDiagram.jpg)
+  ![SearchCenterCLassDiagram.jpg](2019/07/16/elasticsearch/elasticsearch_center/SearchCenterCLassDiagram.jpg)
 #### 启动流程图
-  ![boot-sequence.png](boot-sequence.png)
+  ![boot-sequence.png](2019/07/16/elasticsearch/elasticsearch_center/boot-sequence.png)
 #### 索引创建流程图
-  ![SerarchCenterJobSequenceDiagram.jpg](SerarchCenterJobSequenceDiagram.jpg)
+  ![SerarchCenterJobSequenceDiagram.jpg](2019/07/16/elasticsearch/elasticsearch_center/SerarchCenterJobSequenceDiagram.jpg)
 #### 消息消费流程图
-  ![SerarchCenterConsumerSequenceDiagram.jpg](SerarchCenterConsumerSequenceDiagram.jpg)
+  ![SerarchCenterConsumerSequenceDiagram.jpg](2019/07/16/elasticsearch/elasticsearch_center/SerarchCenterConsumerSequenceDiagram.jpg)
 #### DDL-SQL
   [tnp_search_tnp_kafka_offset.sql](sql/tnp_search_tnp_kafka_offset.sql)
   [tnp_search_tnp_search_change_snapshot.sql](sql/tnp_search_tnp_search_change_snapshot.sql)

@@ -85,7 +85,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">209</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">220</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">210</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">221</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
         </a>
@@ -156,7 +156,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">220</span>
+          <span class="site-state-item-count">221</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -167,7 +167,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">209</span>
+        <span class="site-state-item-count">210</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -245,6 +245,111 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%8D%81%E5%9B%9B-Netty%E5%88%9D%E5%A7%8B%E5%8C%96%E6%B5%81%E7%A8%8B%E6%80%BB%E7%BB%93%E5%8F%8AChannel%E4%B8%8EChannelHandlerContext%E4%BD%9C%E7%94%A8%E5%9F%9F%E5%88%86%E6%9E%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
+      <meta itemprop="name" content="CeaserWang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%8D%81%E5%9B%9B-Netty%E5%88%9D%E5%A7%8B%E5%8C%96%E6%B5%81%E7%A8%8B%E6%80%BB%E7%BB%93%E5%8F%8AChannel%E4%B8%8EChannelHandlerContext%E4%BD%9C%E7%94%A8%E5%9F%9F%E5%88%86%E6%9E%90/" class="post-title-link" itemprop="url">netty源码分析(十四)Netty初始化流程总结及Channel与ChannelHandlerContext作用域分析</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-10-04 14:42:27" itemprop="dateCreated datePublished" datetime="2018-10-04T14:42:27+00:00">2018-10-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2024-04-24 05:29:46" itemprop="dateModified" datetime="2024-04-24T05:29:46+00:00">2024-04-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/netty/" itemprop="url" rel="index"><span itemprop="name">netty</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%8D%81%E5%9B%9B-Netty%E5%88%9D%E5%A7%8B%E5%8C%96%E6%B5%81%E7%A8%8B%E6%80%BB%E7%BB%93%E5%8F%8AChannel%E4%B8%8EChannelHandlerContext%E4%BD%9C%E7%94%A8%E5%9F%9F%E5%88%86%E6%9E%90/" class="post-meta-item leancloud_visitors" data-flag-title="netty源码分析(十四)Netty初始化流程总结及Channel与ChannelHandlerContext作用域分析" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>我们回到ServerBootstrap的init方法，之前介绍过Attribute的设置，那么Attribute的具体设置是怎样的呢：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">    void init(Channel channel) throws Exception &#123;</span><br><span class="line">&lt;!-- more --&gt;</span><br><span class="line">        final Map&lt;ChannelOption&lt;?&gt;, Object&gt; options = options0();</span><br><span class="line">        synchronized (options) &#123;</span><br><span class="line">            setChannelOptions(channel, options, logger);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        final Map&lt;AttributeKey&lt;?&gt;, Object&gt; attrs = attrs0();</span><br><span class="line">        synchronized (attrs) &#123;</span><br><span class="line">            for (Entry&lt;AttributeKey&lt;?&gt;, Object&gt; e: attrs.entrySet()) &#123;</span><br><span class="line">                @SuppressWarnings(&quot;unchecked&quot;)</span><br><span class="line">                AttributeKey&lt;Object&gt; key = (AttributeKey&lt;Object&gt;) e.getKey();</span><br><span class="line">                channel.attr(key).set(e.getValue());//channel的实例是NioServerSocketChannel</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+<p>我们在NioServerSocketChannel里边并没有找到attr方法，那么看一下NioServerSocketChannel层次关系：<br><img src="/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%8D%81%E5%9B%9B-Netty%E5%88%9D%E5%A7%8B%E5%8C%96%E6%B5%81%E7%A8%8B%E6%80%BB%E7%BB%93%E5%8F%8AChannel%E4%B8%8EChannelHandlerContext%E4%BD%9C%E7%94%A8%E5%9F%9F%E5%88%86%E6%9E%90/20171029153531008.png" alt="这里写图片描述"><br>在DefaultAttributeMap找到：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public class DefaultAttributeMap implements AttributeMap &#123;</span><br><span class="line">    private volatile AtomicReferenceArray&lt;DefaultAttribute&lt;?&gt;&gt; attributes;</span><br><span class="line">    public &lt;T&gt; Attribute&lt;T&gt; attr(AttributeKey&lt;T&gt; key) &#123;</span><br><span class="line">....略</span><br><span class="line">    &#125;</span><br><span class="line">    ....略</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>attr(AttributeKey<T> key)方法在DefaultAttributeMap 里边。<br>在NioServerSocketChannel还有一个    private final ServerSocketChannelConfig config;这样的一个生命，ServerSocketChannelConfig 用来设置ServerSocketChannel的一些配置信息的，可以看到ServerSocketChannelConfig 和Attribute共同完成了channel的配置。<br>类似：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">class Channel&#123;</span><br><span class="line"> private final ServerSocketChannelConfig config;</span><br><span class="line">  private volatile AtomicReferenceArray&lt;DefaultAttribute&lt;?&gt;&gt; attributes;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>Channel与ChannelHandlerContext作用域分析</strong><br>首先我们要知道netty4.0和netty4.1是不同的，4.1对ChannelHandlerContext.attr(..) 和 Channel.attr(..)的改进：<br><span class="exturl" data-url="aHR0cDovL25ldHR5LmlvL3dpa2kvbmV3LWFuZC1ub3Rld29ydGh5LWluLTQuMS5odG1s">http://netty.io/wiki/new-and-noteworthy-in-4.1.html<i class="fa fa-external-link-alt"></i></span></p>
+<p>ChannelHandlerContext.attr(..) &#x3D;&#x3D; Channel.attr(..)<br>Both Channel and ChannelHandlerContext implement the interface AttributeMap to enable a user to attach one or more user-defined attributes to them. What sometimes made a user confused was that a Channel and a ChannelHandlerContext had its own storage for the user-defined attributes. For example, even if you put an attribute ‘KEY_X’ via Channel.attr(KEY_X).set(valueX), you will never find it via ChannelHandlerContext.attr(KEY_X).get() and vice versa. This behavior is not only confusing but also is waste of memory.<br>Channel 和ChannelHandlerContext都 实现了AttributeMap 用来设置用户自定义的属性。有时候Channel 和ChannelHandlerContext 都有自己的一套用户定义的属性（相互之间没有任何关系，即Channel 有自己的map，ChannelHandlerContext 也有自己的map）让用户感到非常困惑，比如我们使用 Channel.attr(KEY_X).set(valueX)设置一个key和value，但是没法通过ChannelHandlerContext.attr(KEY_X).get()方式获得，而且这样还浪费内存。<br>To address this issue, we decided to keep only one map per Channel internally. AttributeMap always uses AttributeKey as its key. AttributeKey ensures uniqueness between each key, and thus there’s no point of having more than one attribute map per Channel. As long as a user defines its own AttributeKey as a private static final field of his or her ChannelHandler, there will be no risk of duplicate keys.<br>为了解决这个问题，我们决定在每个Channel 内部只维护一个map，AttributeMap 永远使用AttributeKey 作为他的key，AttributeKey 保证在所有key之中是唯一的，这样就没有必要每个Channel定义多个属性，这样每个用户在ChannelHandler里边定义私有的静态属性的key（AttributeKey ）就没有重复键的问题。</p>
+<p> 我们看一下实际的代码是怎么写的：<br> Channel的实现类NioServerSocketChannel的父类DefaultAttributeMap的attr方法：<br> <img src="/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%8D%81%E5%9B%9B-Netty%E5%88%9D%E5%A7%8B%E5%8C%96%E6%B5%81%E7%A8%8B%E6%80%BB%E7%BB%93%E5%8F%8AChannel%E4%B8%8EChannelHandlerContext%E4%BD%9C%E7%94%A8%E5%9F%9F%E5%88%86%E6%9E%90/20171029161754857.png" alt="这里写图片描述"></p>
+<p> ChannelHandlerContext 实现类AbstractChannelHandlerContext的attr方法:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">abstract class AbstractChannelHandlerContext extends DefaultAttributeMap</span><br><span class="line">        implements ChannelHandlerContext, ResourceLeakHint &#123;</span><br><span class="line">        ...略</span><br><span class="line">     public &lt;T&gt; Attribute&lt;T&gt; attr(AttributeKey&lt;T&gt; key) &#123;</span><br><span class="line">        return channel().attr(key);//直接使用的是channel的attr属性</span><br><span class="line">    &#125;</span><br><span class="line">    ...略</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到ChannelHandlerContext 和Channel用的都是Channel的attr，即：ChannelHandlerContext.attr(..) &#x3D;&#x3D; Channel.attr(..)<br>到此为止netty的2大模块（初始化和注册）的初始流程解析完毕。接下来说一下注册流程。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">final ChannelFuture initAndRegister() &#123;</span><br><span class="line">       Channel channel = null;</span><br><span class="line">       try &#123;</span><br><span class="line">           channel = channelFactory.newChannel();</span><br><span class="line">           init(channel);//初始化</span><br><span class="line">       &#125; catch (Throwable t) &#123;</span><br><span class="line">           if (channel != null) &#123;</span><br><span class="line">               // channel can be null if newChannel crashed (eg SocketException(&quot;too many open files&quot;))</span><br><span class="line">               channel.unsafe().closeForcibly();</span><br><span class="line">           &#125;</span><br><span class="line">           // as the Channel is not registered yet we need to force the usage of the GlobalEventExecutor</span><br><span class="line">           return new DefaultChannelPromise(channel, GlobalEventExecutor.INSTANCE).setFailure(t);</span><br><span class="line">       &#125;</span><br><span class="line">       ChannelFuture regFuture = config().group().register(channel);//注册</span><br><span class="line">       if (regFuture.cause() != null) &#123;</span><br><span class="line">           if (channel.isRegistered()) &#123;</span><br><span class="line">               channel.close();</span><br><span class="line">           &#125; else &#123;</span><br><span class="line">               channel.unsafe().closeForcibly();</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">       return regFuture;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
     <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%8D%81%E4%B8%89-Netty%E6%A0%B8%E5%BF%83%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6%E5%85%B3%E7%B3%BB%E4%B8%8E%E6%9E%84%E5%BB%BA%E6%96%B9%E5%BC%8F%E6%B7%B1%E5%BA%A6%E8%A7%A3%E8%AF%BB/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -281,7 +386,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-01-30 14:58:27" itemprop="dateModified" datetime="2024-01-30T14:58:27+00:00">2024-01-30</time>
+      <time title="Modified: 2024-04-24 05:29:46" itemprop="dateModified" datetime="2024-04-24T05:29:46+00:00">2024-04-24</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -380,7 +485,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-01-30 14:58:27" itemprop="dateModified" datetime="2024-01-30T14:58:27+00:00">2024-01-30</time>
+      <time title="Modified: 2024-04-24 05:29:46" itemprop="dateModified" datetime="2024-04-24T05:29:46+00:00">2024-04-24</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -487,7 +592,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-01-30 14:58:27" itemprop="dateModified" datetime="2024-01-30T14:58:27+00:00">2024-01-30</time>
+      <time title="Modified: 2024-04-24 05:29:46" itemprop="dateModified" datetime="2024-04-24T05:29:46+00:00">2024-04-24</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -586,7 +691,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-01-30 14:58:27" itemprop="dateModified" datetime="2024-01-30T14:58:27+00:00">2024-01-30</time>
+      <time title="Modified: 2024-04-24 05:29:46" itemprop="dateModified" datetime="2024-04-24T05:29:46+00:00">2024-04-24</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -685,7 +790,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-01-30 14:58:27" itemprop="dateModified" datetime="2024-01-30T14:58:27+00:00">2024-01-30</time>
+      <time title="Modified: 2024-04-24 05:29:46" itemprop="dateModified" datetime="2024-04-24T05:29:46+00:00">2024-04-24</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -784,7 +889,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-01-30 14:58:27" itemprop="dateModified" datetime="2024-01-30T14:58:27+00:00">2024-01-30</time>
+      <time title="Modified: 2024-04-24 05:29:46" itemprop="dateModified" datetime="2024-04-24T05:29:46+00:00">2024-04-24</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -883,7 +988,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-01-30 14:58:27" itemprop="dateModified" datetime="2024-01-30T14:58:27+00:00">2024-01-30</time>
+      <time title="Modified: 2024-04-24 05:29:46" itemprop="dateModified" datetime="2024-04-24T05:29:46+00:00">2024-04-24</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -982,7 +1087,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-01-30 14:58:27" itemprop="dateModified" datetime="2024-01-30T14:58:27+00:00">2024-01-30</time>
+      <time title="Modified: 2024-04-24 05:29:46" itemprop="dateModified" datetime="2024-04-24T05:29:46+00:00">2024-04-24</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1081,7 +1186,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-01-30 14:58:27" itemprop="dateModified" datetime="2024-01-30T14:58:27+00:00">2024-01-30</time>
+      <time title="Modified: 2024-04-24 05:29:46" itemprop="dateModified" datetime="2024-04-24T05:29:46+00:00">2024-04-24</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1136,107 +1241,8 @@
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%9B%9B-Netty%E6%8F%90%E4%BE%9B%E7%9A%84Future%E4%B8%8EChannelFuture%E4%BC%98%E5%8A%BF%E5%88%86%E6%9E%90%E4%B8%8E%E6%BA%90%E7%A0%81%E8%AE%B2%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
-      <meta itemprop="name" content="CeaserWang">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="南贺神社">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 南贺神社">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%9B%9B-Netty%E6%8F%90%E4%BE%9B%E7%9A%84Future%E4%B8%8EChannelFuture%E4%BC%98%E5%8A%BF%E5%88%86%E6%9E%90%E4%B8%8E%E6%BA%90%E7%A0%81%E8%AE%B2%E8%A7%A3/" class="post-title-link" itemprop="url">netty源码分析(四)Netty提供的Future与ChannelFuture优势分析与源码讲解</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2018-10-04 14:20:15" itemprop="dateCreated datePublished" datetime="2018-10-04T14:20:15+00:00">2018-10-04</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-01-30 14:58:27" itemprop="dateModified" datetime="2024-01-30T14:58:27+00:00">2024-01-30</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/netty/" itemprop="url" rel="index"><span itemprop="name">netty</span></a>
-        </span>
-    </span>
-
-  
-    <span id="/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%9B%9B-Netty%E6%8F%90%E4%BE%9B%E7%9A%84Future%E4%B8%8EChannelFuture%E4%BC%98%E5%8A%BF%E5%88%86%E6%9E%90%E4%B8%8E%E6%BA%90%E7%A0%81%E8%AE%B2%E8%A7%A3/" class="post-meta-item leancloud_visitors" data-flag-title="netty源码分析(四)Netty提供的Future与ChannelFuture优势分析与源码讲解" title="Views">
-      <span class="post-meta-item-icon">
-        <i class="far fa-eye"></i>
-      </span>
-      <span class="post-meta-item-text">Views: </span>
-      <span class="leancloud-visitors-count"></span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>上一节我们讲到netty启动服务类AbstractBootstrap的doBind的方法：</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2018/10/04/netty%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E5%9B%9B-Netty%E6%8F%90%E4%BE%9B%E7%9A%84Future%E4%B8%8EChannelFuture%E4%BC%98%E5%8A%BF%E5%88%86%E6%9E%90%E4%B8%8E%E6%BA%90%E7%A0%81%E8%AE%B2%E8%A7%A3/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/13/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><span class="page-number current">14</span><a class="page-number" href="/page/15/">15</a><span class="space">&hellip;</span><a class="page-number" href="/page/22/">22</a><a class="extend next" rel="next" href="/page/15/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/13/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><span class="page-number current">14</span><a class="page-number" href="/page/15/">15</a><span class="space">&hellip;</span><a class="page-number" href="/page/23/">23</a><a class="extend next" rel="next" href="/page/15/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 </div>

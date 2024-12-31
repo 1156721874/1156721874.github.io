@@ -85,7 +85,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">210</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">221</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">210</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">222</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
         </a>
@@ -156,7 +156,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">221</span>
+          <span class="site-state-item-count">222</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -245,6 +245,105 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8828%EF%BC%89synchronized%E5%85%B3%E9%94%AE%E5%AD%97%E6%89%80%E7%94%9F%E6%88%90%E7%9A%84%E5%AD%97%E8%8A%82%E7%A0%81%E8%AF%A6%E7%BB%86%E5%88%86%E6%9E%90-%E5%A4%8D%E6%9D%82%E5%AD%97%E8%8A%82%E7%A0%81%E6%96%87%E4%BB%B6%E7%9A%84%E5%88%86%E6%9E%90%E8%BF%87%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
+      <meta itemprop="name" content="CeaserWang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8828%EF%BC%89synchronized%E5%85%B3%E9%94%AE%E5%AD%97%E6%89%80%E7%94%9F%E6%88%90%E7%9A%84%E5%AD%97%E8%8A%82%E7%A0%81%E8%AF%A6%E7%BB%86%E5%88%86%E6%9E%90-%E5%A4%8D%E6%9D%82%E5%AD%97%E8%8A%82%E7%A0%81%E6%96%87%E4%BB%B6%E7%9A%84%E5%88%86%E6%9E%90%E8%BF%87%E7%A8%8B/" class="post-title-link" itemprop="url">jvm原理（28）synchronized关键字所生成的字节码详细分析&&复杂字节码文件的分析过程</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-10-04 17:04:42" itemprop="dateCreated datePublished" datetime="2018-10-04T17:04:42+00:00">2018-10-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2024-12-31 05:29:12" itemprop="dateModified" datetime="2024-12-31T05:29:12+00:00">2024-12-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/jvm/" itemprop="url" rel="index"><span itemprop="name">jvm</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8828%EF%BC%89synchronized%E5%85%B3%E9%94%AE%E5%AD%97%E6%89%80%E7%94%9F%E6%88%90%E7%9A%84%E5%AD%97%E8%8A%82%E7%A0%81%E8%AF%A6%E7%BB%86%E5%88%86%E6%9E%90-%E5%A4%8D%E6%9D%82%E5%AD%97%E8%8A%82%E7%A0%81%E6%96%87%E4%BB%B6%E7%9A%84%E5%88%86%E6%9E%90%E8%BF%87%E7%A8%8B/" class="post-meta-item leancloud_visitors" data-flag-title="jvm原理（28）synchronized关键字所生成的字节码详细分析&&复杂字节码文件的分析过程" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>前边我们解析了一个字节码文件，现在我们做一个比较复杂的字节码文件的解析，程序如下：</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8828%EF%BC%89synchronized%E5%85%B3%E9%94%AE%E5%AD%97%E6%89%80%E7%94%9F%E6%88%90%E7%9A%84%E5%AD%97%E8%8A%82%E7%A0%81%E8%AF%A6%E7%BB%86%E5%88%86%E6%9E%90-%E5%A4%8D%E6%9D%82%E5%AD%97%E8%8A%82%E7%A0%81%E6%96%87%E4%BB%B6%E7%9A%84%E5%88%86%E6%9E%90%E8%BF%87%E7%A8%8B/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
     <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8827%EF%BC%89Java%E5%AD%97%E8%8A%82%E7%A0%81%E6%96%B9%E6%B3%95%E8%A1%A8%E4%B8%8E%E5%B1%9E%E6%80%A7%E8%A1%A8%E6%B7%B1%E5%BA%A6%E5%89%96%E6%9E%90/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -281,7 +380,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-04-24 05:55:28" itemprop="dateModified" datetime="2024-04-24T05:55:28+00:00">2024-04-24</time>
+      <time title="Modified: 2024-12-31 05:29:12" itemprop="dateModified" datetime="2024-12-31T05:29:12+00:00">2024-12-31</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -380,7 +479,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-04-24 05:55:28" itemprop="dateModified" datetime="2024-04-24T05:55:28+00:00">2024-04-24</time>
+      <time title="Modified: 2024-12-31 05:29:12" itemprop="dateModified" datetime="2024-12-31T05:29:12+00:00">2024-12-31</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -479,7 +578,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-04-24 05:55:28" itemprop="dateModified" datetime="2024-04-24T05:55:28+00:00">2024-04-24</time>
+      <time title="Modified: 2024-12-31 05:29:12" itemprop="dateModified" datetime="2024-12-31T05:29:12+00:00">2024-12-31</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -607,7 +706,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-04-24 05:55:28" itemprop="dateModified" datetime="2024-04-24T05:55:28+00:00">2024-04-24</time>
+      <time title="Modified: 2024-12-31 05:29:12" itemprop="dateModified" datetime="2024-12-31T05:29:12+00:00">2024-12-31</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -720,7 +819,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-04-24 05:55:28" itemprop="dateModified" datetime="2024-04-24T05:55:28+00:00">2024-04-24</time>
+      <time title="Modified: 2024-12-31 05:29:12" itemprop="dateModified" datetime="2024-12-31T05:29:12+00:00">2024-12-31</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -819,7 +918,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-04-24 05:55:28" itemprop="dateModified" datetime="2024-04-24T05:55:28+00:00">2024-04-24</time>
+      <time title="Modified: 2024-12-31 05:29:12" itemprop="dateModified" datetime="2024-12-31T05:29:12+00:00">2024-12-31</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -918,7 +1017,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-04-24 05:55:28" itemprop="dateModified" datetime="2024-04-24T05:55:28+00:00">2024-04-24</time>
+      <time title="Modified: 2024-12-31 05:29:12" itemprop="dateModified" datetime="2024-12-31T05:29:12+00:00">2024-12-31</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1017,7 +1116,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-04-24 05:55:28" itemprop="dateModified" datetime="2024-04-24T05:55:28+00:00">2024-04-24</time>
+      <time title="Modified: 2024-12-31 05:29:12" itemprop="dateModified" datetime="2024-12-31T05:29:12+00:00">2024-12-31</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1116,7 +1215,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-04-24 05:55:28" itemprop="dateModified" datetime="2024-04-24T05:55:28+00:00">2024-04-24</time>
+      <time title="Modified: 2024-12-31 05:29:12" itemprop="dateModified" datetime="2024-12-31T05:29:12+00:00">2024-12-31</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1149,105 +1248,6 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8819%EF%BC%89%E5%B9%B3%E5%8F%B0%E7%89%B9%E5%AE%9A%E7%9A%84%E5%90%AF%E5%8A%A8%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E6%B7%B1%E5%85%A5%E5%88%86%E6%9E%90%E4%B8%8E%E8%87%AA%E5%AE%9A%E4%B9%89%E7%B3%BB%E7%BB%9F%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E8%AF%A6%E8%A7%A3/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8818%EF%BC%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E6%80%BB%E7%BB%93%E4%B8%8E%E6%89%A9%E5%B1%95%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E8%A6%81%E7%82%B9%E5%88%86%E6%9E%90/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
-      <meta itemprop="name" content="CeaserWang">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="南贺神社">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 南贺神社">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8818%EF%BC%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E6%80%BB%E7%BB%93%E4%B8%8E%E6%89%A9%E5%B1%95%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E8%A6%81%E7%82%B9%E5%88%86%E6%9E%90/" class="post-title-link" itemprop="url">jvm原理（18）类加载器命名空间总结与扩展类加载器要点分析</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2018-10-04 16:13:07" itemprop="dateCreated datePublished" datetime="2018-10-04T16:13:07+00:00">2018-10-04</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-04-24 05:55:28" itemprop="dateModified" datetime="2024-04-24T05:55:28+00:00">2024-04-24</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/jvm/" itemprop="url" rel="index"><span itemprop="name">jvm</span></a>
-        </span>
-    </span>
-
-  
-    <span id="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8818%EF%BC%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E6%80%BB%E7%BB%93%E4%B8%8E%E6%89%A9%E5%B1%95%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E8%A6%81%E7%82%B9%E5%88%86%E6%9E%90/" class="post-meta-item leancloud_visitors" data-flag-title="jvm原理（18）类加载器命名空间总结与扩展类加载器要点分析" title="Views">
-      <span class="post-meta-item-icon">
-        <i class="far fa-eye"></i>
-      </span>
-      <span class="post-meta-item-text">Views: </span>
-      <span class="leancloud-visitors-count"></span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p><strong>类加载双亲委托模型的好处：</strong><br>1、可以确保Java核心库的类型安全：所有的Java应用都至少会引用Java.lang.Object类，也就是说在运行期，java.lang.Object这个类会被加载到Java虚拟机中，如果这个加载过程是由Java应用自己的类加载器所完成的，</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2018/10/04/jvm%E5%8E%9F%E7%90%86%EF%BC%8818%EF%BC%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E6%80%BB%E7%BB%93%E4%B8%8E%E6%89%A9%E5%B1%95%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E8%A6%81%E7%82%B9%E5%88%86%E6%9E%90/#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>

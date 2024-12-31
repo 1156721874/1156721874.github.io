@@ -85,7 +85,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">210</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">221</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">210</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">26</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">222</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
         </a>
@@ -156,7 +156,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">221</span>
+          <span class="site-state-item-count">222</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -245,6 +245,105 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/09/28/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%8814%EF%BC%89-%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
+      <meta itemprop="name" content="CeaserWang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2018/09/28/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%8814%EF%BC%89-%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F/" class="post-title-link" itemprop="url">设计模式（14）-享元模式</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2018-09-28 21:32:25" itemprop="dateCreated datePublished" datetime="2018-09-28T21:32:25+00:00">2018-09-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2024-12-31 05:29:13" itemprop="dateModified" datetime="2024-12-31T05:29:13+00:00">2024-12-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/DesignPatterns/" itemprop="url" rel="index"><span itemprop="name">DesignPatterns</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2018/09/28/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%8814%EF%BC%89-%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F/" class="post-meta-item leancloud_visitors" data-flag-title="设计模式（14）-享元模式" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><strong>思想</strong>：说Flyweight可 能有的朋友第一次看到想象不到是什么样子，其实说他就是一个Pool，你可能就明白了。也就是由一 个Flyweight Factory来管理一族一定数目逻辑上经常需要构建和销毁的细颗粒对象， 例如我们常见的数据库连接池。在Factory内部，并不物理销毁这些对象，而在接到实例化请求时 返回这些被关系对象的实例，从而减少创建销毁这些细颗粒对象的开销。<br><strong>场景</strong>：基 本上所有的需要Pool这个概念的环境都能应用。<br><strong>实现</strong>：实现的底层方式可以千变万化，在接口上就是如上图所示，花样不多。这里就不多解释。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2018/09/28/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%8814%EF%BC%89-%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
     <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/09/28/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%EF%BC%8813%EF%BC%89-%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -281,7 +380,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-04-24 05:55:28" itemprop="dateModified" datetime="2024-04-24T05:55:28+00:00">2024-04-24</time>
+      <time title="Modified: 2024-12-31 05:29:13" itemprop="dateModified" datetime="2024-12-31T05:29:13+00:00">2024-12-31</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -380,7 +479,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-04-24 05:55:28" itemprop="dateModified" datetime="2024-04-24T05:55:28+00:00">2024-04-24</time>
+      <time title="Modified: 2024-12-31 05:29:13" itemprop="dateModified" datetime="2024-12-31T05:29:13+00:00">2024-12-31</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -479,7 +578,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-04-24 05:55:28" itemprop="dateModified" datetime="2024-04-24T05:55:28+00:00">2024-04-24</time>
+      <time title="Modified: 2024-12-31 05:29:13" itemprop="dateModified" datetime="2024-12-31T05:29:13+00:00">2024-12-31</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -578,7 +677,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-04-24 05:55:28" itemprop="dateModified" datetime="2024-04-24T05:55:28+00:00">2024-04-24</time>
+      <time title="Modified: 2024-12-31 05:29:12" itemprop="dateModified" datetime="2024-12-31T05:29:12+00:00">2024-12-31</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -678,7 +777,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-04-24 05:55:28" itemprop="dateModified" datetime="2024-04-24T05:55:28+00:00">2024-04-24</time>
+      <time title="Modified: 2024-12-31 05:29:12" itemprop="dateModified" datetime="2024-12-31T05:29:12+00:00">2024-12-31</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -777,7 +876,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-04-24 05:55:28" itemprop="dateModified" datetime="2024-04-24T05:55:28+00:00">2024-04-24</time>
+      <time title="Modified: 2024-12-31 05:29:13" itemprop="dateModified" datetime="2024-12-31T05:29:13+00:00">2024-12-31</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -876,7 +975,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-04-24 05:55:28" itemprop="dateModified" datetime="2024-04-24T05:55:28+00:00">2024-04-24</time>
+      <time title="Modified: 2024-12-31 05:29:13" itemprop="dateModified" datetime="2024-12-31T05:29:13+00:00">2024-12-31</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -975,7 +1074,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-04-24 05:55:28" itemprop="dateModified" datetime="2024-04-24T05:55:28+00:00">2024-04-24</time>
+      <time title="Modified: 2024-12-31 05:29:13" itemprop="dateModified" datetime="2024-12-31T05:29:13+00:00">2024-12-31</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1078,7 +1177,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-04-24 05:55:28" itemprop="dateModified" datetime="2024-04-24T05:55:28+00:00">2024-04-24</time>
+      <time title="Modified: 2024-12-31 05:29:13" itemprop="dateModified" datetime="2024-12-31T05:29:13+00:00">2024-12-31</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1111,105 +1210,6 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2018/09/28/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-8-%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2018/09/28/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-7-%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
-      <meta itemprop="name" content="CeaserWang">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="南贺神社">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 南贺神社">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2018/09/28/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-7-%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/" class="post-title-link" itemprop="url"> 设计模式(7)-原型模式</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2018-09-28 20:38:35" itemprop="dateCreated datePublished" datetime="2018-09-28T20:38:35+00:00">2018-09-28</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-04-24 05:55:28" itemprop="dateModified" datetime="2024-04-24T05:55:28+00:00">2024-04-24</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/DesignPatterns/" itemprop="url" rel="index"><span itemprop="name">DesignPatterns</span></a>
-        </span>
-    </span>
-
-  
-    <span id="/2018/09/28/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-7-%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/" class="post-meta-item leancloud_visitors" data-flag-title=" 设计模式(7)-原型模式" title="Views">
-      <span class="post-meta-item-icon">
-        <i class="far fa-eye"></i>
-      </span>
-      <span class="post-meta-item-text">Views: </span>
-      <span class="leancloud-visitors-count"></span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p><img src="/2018/09/28/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-7-%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/20151011162526441.png" alt="这里写图片描述"><br><strong>思想：</strong>克 隆一个已有的类的实例（大家相比都用过甚至写过类的Clone实现，应该很容易理解了）。<br><strong>场景：</strong>应 用Clone的场景应该说非常多，理想情况下我当然希望任何类都能Clone， 需要的时候就能Clone一份一模一样的出来。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2018/09/28/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-7-%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>

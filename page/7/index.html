@@ -85,7 +85,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">211</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">27</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">224</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">211</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">27</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">223</span></a></li><li class="menu-item menu-item-0xcc"><a href="/0xcc/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>0XCC</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
         </a>
@@ -156,7 +156,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">224</span>
+          <span class="site-state-item-count">223</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -245,569 +245,6 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2019/07/25/tidb/tidb-install-pit/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
-      <meta itemprop="name" content="CeaserWang">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="南贺神社">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 南贺神社">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2019/07/25/tidb/tidb-install-pit/" class="post-title-link" itemprop="url">tidb-install-pit</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2019-07-25 14:05:45" itemprop="dateCreated datePublished" datetime="2019-07-25T14:05:45+00:00">2019-07-25</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2025-02-09 05:47:47" itemprop="dateModified" datetime="2025-02-09T05:47:47+00:00">2025-02-09</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/cloud/" itemprop="url" rel="index"><span itemprop="name">cloud</span></a>
-        </span>
-    </span>
-
-  
-    <span id="/2019/07/25/tidb/tidb-install-pit/" class="post-meta-item leancloud_visitors" data-flag-title="tidb-install-pit" title="Views">
-      <span class="post-meta-item-icon">
-        <i class="far fa-eye"></i>
-      </span>
-      <span class="post-meta-item-text">Views: </span>
-      <span class="leancloud-visitors-count"></span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p><a name="df368884"></a></p>
-<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>近期随着公司的业务发展，现有的mysql分库分表，无缝动态扩容，分布式事物，分布式id等等一些问题得不到满足，为此我们做了一次对tidb的考察，此文是记录tidb的安装遇到的坑进行记录,并做了一些功能性和性能方面的测试，详情按照官方doc进行。</p>
-<p><a name="fa405f59"></a></p>
-<h3 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h3><p>集群规模：<br>node1 192.168.138.18  PD1, TiDB1        4c16G 200GHHD<br>node2 192.168.138.19  PD2, TiDB2        4c16G 200GHHD<br>node3 192.168.138.21  PD3               2c16G 200GHHD<br>node4 192.168.138.22  TiKV1,zk,kakfka   2c16G 200GHHD<br>node5 192.168.138.23  TiKV2,zk,kakfka   2c16G 200GHHD<br>node6 192.168.138.24  TiKV3,zk,kakfka   2c16G 200GHHD<br>当前os环境：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># cat /etc/redhat-release</span><br><span class="line">CentOS Linux release 7.5.1804 (Core)</span><br></pre></td></tr></table></figure>
-
-<p>磁盘分布情况：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"># lsblk -f</span><br><span class="line">NAME            FSTYPE      LABEL UUID                                   MOUNTPOINT</span><br><span class="line">sda                                                                      </span><br><span class="line">├─sda1          xfs               70b07712-9842-4618-9680-a9e8f7617bf0   /boot</span><br><span class="line">└─sda2          LVM2_member       etR92Z-w9Jt-Cxao-louw-Lgb2-hveD-knEFcQ</span><br><span class="line">  ├─centos-root xfs               dda73e1e-afd7-4d76-9ac7-c30ed0ace8d4   /</span><br><span class="line">  └─centos-swap swap              93faea67-8660-4c7d-85c1-a67ba4c4aad0   [SWAP]</span><br><span class="line">sdb                                                                      </span><br><span class="line">├─sdb1                                                                   </span><br><span class="line">└─sdb5          ext4              055154ea-fafd-4ddf-8a8b-7d26de10f98f   /data</span><br><span class="line">sr0</span><br><span class="line">【sdb5是一块ext4文件系统格式的，这个是tidb要求的】</span><br><span class="line"># fdisk -l</span><br><span class="line"></span><br><span class="line">Disk /dev/sda: 107.4 GB, 107374182400 bytes, 209715200 sectors</span><br><span class="line">Units = sectors of 1 * 512 = 512 bytes</span><br><span class="line">Sector size (logical/physical): 512 bytes / 512 bytes</span><br><span class="line">I/O size (minimum/optimal): 512 bytes / 512 bytes</span><br><span class="line">Disk label type: dos</span><br><span class="line">Disk identifier: 0x000d73fc</span><br><span class="line"></span><br><span class="line">   Device Boot      Start         End      Blocks   Id  System</span><br><span class="line">/dev/sda1   *        2048      411647      204800   83  Linux</span><br><span class="line">/dev/sda2          411648   209715199   104651776   8e  Linux LVM</span><br><span class="line"></span><br><span class="line">Disk /dev/mapper/centos-root: 90.0 GB, 89980403712 bytes, 175742976 sectors</span><br><span class="line">Units = sectors of 1 * 512 = 512 bytes</span><br><span class="line">Sector size (logical/physical): 512 bytes / 512 bytes</span><br><span class="line">I/O size (minimum/optimal): 512 bytes / 512 bytes</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Disk /dev/mapper/centos-swap: 17.2 GB, 17179869184 bytes, 33554432 sectors</span><br><span class="line">Units = sectors of 1 * 512 = 512 bytes</span><br><span class="line">Sector size (logical/physical): 512 bytes / 512 bytes</span><br><span class="line">I/O size (minimum/optimal): 512 bytes / 512 bytes</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Disk /dev/sdb: 107.4 GB, 107374182400 bytes, 209715200 sectors</span><br><span class="line">Units = sectors of 1 * 512 = 512 bytes</span><br><span class="line">Sector size (logical/physical): 512 bytes / 512 bytes</span><br><span class="line">I/O size (minimum/optimal): 512 bytes / 512 bytes</span><br><span class="line">Disk label type: dos</span><br><span class="line">Disk identifier: 0x6ee43510</span><br><span class="line"></span><br><span class="line">   Device Boot      Start         End      Blocks   Id  System</span><br><span class="line">/dev/sdb1            2048   209715199   104856576    5  Extended</span><br><span class="line">/dev/sdb5            4096   209715199   104855552   83  Linux</span><br></pre></td></tr></table></figure>
-
-<p>每台机器有2块硬盘，按照官方要求外挂的那块文件系统是ext4的。<br />然后机器需要安装git。</p>
-<p><a name="374d66be"></a></p>
-<h3 id="官方安装doc"><a href="#官方安装doc" class="headerlink" title="官方安装doc"></a>官方安装doc</h3><p><span class="exturl" data-url="aHR0cHM6Ly9waW5nY2FwLmNvbS9kb2NzLWNuL3YzLjAvaG93LXRvL2RlcGxveS9vcmNoZXN0cmF0ZWQvYW5zaWJsZS8=">https://pingcap.com/docs-cn/v3.0/how-to/deploy/orchestrated/ansible/<i class="fa fa-external-link-alt"></i></span></p>
-<p>首先执行的是:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># yum -y install epel-release git curl sshpass</span><br><span class="line">Loaded plugins: fastestmirror, langpacks</span><br><span class="line">Loading mirror speeds from cached hostfile</span><br><span class="line">No package epel-release available.【lib未找到】</span><br><span class="line">Package git-1.8.3.1-13.el7.x86_64 already installed and latest version</span><br><span class="line">Package curl-7.29.0-46.el7.x86_64 already installed and latest version</span><br><span class="line">No package sshpass available.【lib未找到】</span><br><span class="line">Nothing to do</span><br></pre></td></tr></table></figure>
-
-<p><a name="34916830"></a></p>
-<h4 id="坑-No-package-epel-release-available"><a href="#坑-No-package-epel-release-available" class="headerlink" title="[坑]No package epel-release available"></a>[坑]No package epel-release available</h4><p>根据<span class="exturl" data-url="aHR0cHM6Ly93d3cuc2hlbGxoYWNrcy5jb20vZXBlbC1yZXBvLWNlbnRvcy03LTYtaW5zdGFsbC8=">epel-repo-centos-7<i class="fa fa-external-link-alt"></i></span>指南需要执行:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm</span><br></pre></td></tr></table></figure>
-
-<p>然后在执行[yum -y install epel-release git curl sshpass]才会成功.</p>
-<p><a name="129fc895"></a></p>
-<h4 id="坑-提前配置Grafana-Dashboard-上的-Report-按钮可用来生成-PDF-文件"><a href="#坑-提前配置Grafana-Dashboard-上的-Report-按钮可用来生成-PDF-文件" class="headerlink" title="[坑]提前配置Grafana Dashboard 上的 Report 按钮可用来生成 PDF 文件"></a>[坑]提前配置Grafana Dashboard 上的 Report 按钮可用来生成 PDF 文件</h4><p>在Grafana部署的机器上执行:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo yum install fontconfig open-sans-fonts</span><br></pre></td></tr></table></figure>
-
-<p><a name="5c9f0649"></a></p>
-<h4 id="坑-PD-和-TiDB-同时部署的机器要求要有8个cpu-core"><a href="#坑-PD-和-TiDB-同时部署的机器要求要有8个cpu-core" class="headerlink" title="[坑]PD 和 TiDB 同时部署的机器要求要有8个cpu core"></a>[坑]PD 和 TiDB 同时部署的机器要求要有8个cpu core</h4><p>异常如下：<br />[192.168.138.18]: Ansible FAILED! &#x3D;&gt; playbook: bootstrap.yml; TASK: check_system_optional : Preflight check - Check TiDB server’s CPU; message: {“changed”: false, “msg”: “This machine does not have sufficient CPU to run TiDB, at least 8 cores.”}</p>
-<p>[192.168.138.19]: Ansible FAILED! &#x3D;&gt; playbook: bootstrap.yml; TASK: check_system_optional : Preflight check - Check TiDB server’s CPU; message: {“changed”: false, “msg”: “This machine does not have sufficient CPU to run TiDB, at least 8 cores.”}<br />解决方式：</p>
-<ul>
-<li>找运维增加虚拟机的cpu core数量</li>
-<li>修改参数：vi roles&#x2F;check_system_optional&#x2F;defaults&#x2F;main.yml</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">tidb_min_cpu: 2</span><br><span class="line">tikv_min_cpu: 2</span><br><span class="line">pd_min_cpu: 2</span><br><span class="line">monitor_min_cpu: 2</span><br></pre></td></tr></table></figure>
-
-<p>其他的内存和硬盘的检查参数也在这个文件配置。</p>
-<ul>
-<li>参考： <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3BpbmdjYXAvdGlkYi9pc3N1ZXMvNjQyMw==">https://github.com/pingcap/tidb/issues/6423<i class="fa fa-external-link-alt"></i></span></li>
-</ul>
-<p><a name="e1df35e7"></a></p>
-<h4 id="坑-磁盘检查异常"><a href="#坑-磁盘检查异常" class="headerlink" title="[坑]磁盘检查异常"></a>[坑]磁盘检查异常</h4><p>异常信息：<br />[192.168.138.22]: Ansible FAILED! &#x3D;&gt; playbook: bootstrap.yml; TASK: machine_benchmark : Preflight check - Does fio randread iops of tikv_data_dir disk meet requirement; message: {“changed”: false, “msg”: “fio: randread iops of tikv_data_dir disk is too low: 7748 &lt; 40000, it is strongly recommended to use SSD disks for TiKV and PD, or there might be performance issues.”}</p>
-<p>[192.168.138.23]: Ansible FAILED! &#x3D;&gt; playbook: bootstrap.yml; TASK: machine_benchmark : Preflight check - Does fio randread iops of tikv_data_dir disk meet requirement; message: {“changed”: false, “msg”: “fio: randread iops of tikv_data_dir disk is too low: 3128 &lt; 40000, it is strongly recommended to use SSD disks for TiKV and PD, or there might be performance issues.”}</p>
-<p>[192.168.138.24]: Ansible FAILED! &#x3D;&gt; playbook: bootstrap.yml; TASK: machine_benchmark : Preflight check - Does fio randread iops of tikv_data_dir disk meet requirement; message: {“changed”: false, “msg”: “fio: randread iops of tikv_data_dir disk is too low: 8847 &lt; 40000, it is strongly recommended to use SSD disks for TiKV and PD, or there might be performance issues.”}</p>
-<p>解决方式：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># vi roles/machine_benchmark/defaults/main.yml</span><br></pre></td></tr></table></figure>
-
-<p>修改min_ssd_randread_iops的大小。</p>
-<p><a name="244e1822"></a></p>
-<h4 id="跳过cpu、mem、disk检查"><a href="#跳过cpu、mem、disk检查" class="headerlink" title="跳过cpu、mem、disk检查"></a>跳过cpu、mem、disk检查</h4><p>有些企业由于成本问题，在开发测试环境都是HHD，没法满足tidb的硬件要求，因此我们可以使用开发模式，跳过cpu、内存、硬盘的检查。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># ansible-playbook bootstrap.yml --extra-vars &quot;dev_mode=True&quot;</span><br></pre></td></tr></table></figure>
-
-<p><a name="f023e41c"></a></p>
-<h4 id="注意事项-TiDB的binlog开启"><a href="#注意事项-TiDB的binlog开启" class="headerlink" title="[注意事项]TiDB的binlog开启"></a>[注意事项]TiDB的binlog开启</h4><p>&#x2F;home&#x2F;tidb&#x2F;tidb-ansible&#x2F;inventory.ini配置如果【enable_binlog &#x3D; True 】<br>意味着需要配置<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3BpbmdjYXAvZG9jcy1jbi9ibG9iL21hc3Rlci92My4wL2hvdy10by9kZXBsb3kvdGlkYi1iaW5sb2cubWQ=">TiDB-Binlog<i class="fa fa-external-link-alt"></i></span>,当前集群按照<span class="exturl" data-url="aHR0cHM6Ly9waW5nY2FwLmNvbS9kb2NzLWNuL3YzLjAvaG93LXRvL2RlcGxveS90aWRiLWJpbmxvZy8=">官方doc<i class="fa fa-external-link-alt"></i></span>搭建了zk和kafka集群，然后部署了pump（抓取tidb的binlog塞到kafka集群）。</p>
-<p><a name="f20fc258"></a></p>
-<h4 id="坑-启动之后grafana进程没有"><a href="#坑-启动之后grafana进程没有" class="headerlink" title="[坑]启动之后grafana进程没有"></a>[坑]启动之后grafana进程没有</h4><p>切换到部署目录&#x2F;data&#x2F;deploy&#x2F;scripts<br />手动执行: .&#x2F;start_grafana.sh</p>
-<p><a name="bcf29c71"></a></p>
-<h4 id="tidb在navicat下修改表结构问题"><a href="#tidb在navicat下修改表结构问题" class="headerlink" title="tidb在navicat下修改表结构问题"></a>tidb在navicat下修改表结构问题</h4><p>tidb在navicat下修改表结构一次性不允许修改(添加或者修改)多个列，否则报错：<br /><img src="https://cdn.nlark.com/yuque/0/2019/png/186520/1564467485930-4cbeac67-1485-488b-850a-d4744af936dc.png#align=left&display=inline&height=746&name=mutil-schema-error.png&originHeight=746&originWidth=1366&size=74707&status=done&width=1366" alt="mutil-schema-error.png"></p>
-<p><a name="bb1c734e"></a></p>
-<h3 id="登陆"><a href="#登陆" class="headerlink" title="登陆"></a>登陆</h3><ul>
-<li>使用mysql客户端登陆<ul>
-<li>使用tidb(密码：tidb)登陆开发机，注意：必须是tidb用户。<ul>
-<li>mysql -u root -proot  -h 192.168.138.18 -P 4000</li>
-<li>mysql -u tnp_test -ptnp_test  -h 192.168.138.18 -P 4000</li>
-<li>PS:192.168.138.19 和 192.168.138.18都可以链接</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<p><a name="1346328c"></a></p>
-<h3 id="修改集群配置之后重启步骤-x2F-集群启动-x2F-集群关闭"><a href="#修改集群配置之后重启步骤-x2F-集群启动-x2F-集群关闭" class="headerlink" title="修改集群配置之后重启步骤&#x2F;集群启动&#x2F;集群关闭"></a>修改集群配置之后重启步骤&#x2F;集群启动&#x2F;集群关闭</h3><ul>
-<li><p>配置<br /><br>对【&#x2F;home&#x2F;tidb&#x2F;tidb-ansible&#x2F;inventory.ini】进行修改后需要执行：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># ansible-playbook deploy.yml</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>目的是把配置下放到所有的机器。</p>
-</li>
-<li><p>启动集群<br /><br>ansible-playbook start.yml</p>
-</li>
-<li><p>关闭集群<br /><br>ansible-playbook stop.yml <br/></p>
-</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>启动集群</th>
-<th>ansible-playbook start.yml</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>停止集群</td>
-<td>ansible-playbook stop.yml</td>
-</tr>
-<tr>
-<td>销毁集群</td>
-<td>ansible-playbook unsafe_cleanup.yml (若部署目录为挂载点，会报错，可忽略）</td>
-</tr>
-<tr>
-<td>清除数据(测试用)</td>
-<td>ansible-playbook cleanup_data.yml</td>
-</tr>
-<tr>
-<td>滚动升级</td>
-<td>ansible-playbook rolling_update.yml</td>
-</tr>
-<tr>
-<td>滚动升级 TiKV</td>
-<td>ansible-playbook rolling_update.yml –tags&#x3D;tikv</td>
-</tr>
-<tr>
-<td>滚动升级除 PD 外模块</td>
-<td>ansible-playbook rolling_update.yml –skip-tags&#x3D;pd</td>
-</tr>
-<tr>
-<td>滚动升级监控组件</td>
-<td>ansible-playbook rolling_update_monitor.yml</td>
-</tr>
-</tbody></table>
-<p><a name="5fca6be2"></a></p>
-<h3 id="Prometheus访问地址"><a href="#Prometheus访问地址" class="headerlink" title="Prometheus访问地址"></a>Prometheus访问地址</h3><p><span class="exturl" data-url="aHR0cDovLzE5Mi4xNjguMTM4LjE4OjkwOTAvZ3JhcGg=">http://192.168.138.18:9090/graph<i class="fa fa-external-link-alt"></i></span></p>
-<p><a name="d3a39edf"></a></p>
-<h3 id="Pushgateway访问地址"><a href="#Pushgateway访问地址" class="headerlink" title="Pushgateway访问地址"></a>Pushgateway访问地址</h3><p><span class="exturl" data-url="aHR0cDovLzE5Mi4xNjguMTM4LjE4OjkwOTEv">http://192.168.138.18:9091/<i class="fa fa-external-link-alt"></i></span></p>
-<p><a name="26614728"></a></p>
-<h3 id="Node-exporter访问地址"><a href="#Node-exporter访问地址" class="headerlink" title="Node_exporter访问地址"></a>Node_exporter访问地址</h3><p><span class="exturl" data-url="aHR0cDovLzE5Mi4xNjguMTM4LjE4OjkxMDAv">http://192.168.138.18:9100/<i class="fa fa-external-link-alt"></i></span></p>
-<p><a name="ea8acfdf"></a></p>
-<h3 id="grafana访问地址"><a href="#grafana访问地址" class="headerlink" title="grafana访问地址"></a>grafana访问地址</h3><p><span class="exturl" data-url="aHR0cDovLzE5Mi4xNjguMTM4LjE4OjMwMDAv">http://192.168.138.18:3000<i class="fa fa-external-link-alt"></i></span><br />用户名&#x2F;密码:admin&#x2F;admin<br /><img src="https://cdn.nlark.com/yuque/0/2019/png/186520/1564561812914-82ca10bb-9686-417e-af46-276341021cd9.png#align=left&display=inline&height=633&name=image.png&originHeight=633&originWidth=1360&size=88976&status=done&width=1360" alt="image.png"><br />指标解释：<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3BpbmdjYXAvZG9jcy1jbi9ibG9iL21hc3Rlci9kZXYvcmVmZXJlbmNlL2tleS1tb25pdG9yaW5nLW1ldHJpY3MvdGlkYi1kYXNoYm9hcmQubWQ=">https://github.com/pingcap/docs-cn/blob/master/dev/reference/key-monitoring-metrics/tidb-dashboard.md<i class="fa fa-external-link-alt"></i></span></p>
-<p><a name="5f2e4fbc"></a><br>binlog监控：<br><img src="/2019/07/25/tidb-install-pit/binlog.png" alt="binlog.png"><br>manager监控：<br><img src="/2019/07/25/tidb-install-pit/manager.png" alt="manager.png"></p>
-<h3 id="全量备份与恢复"><a href="#全量备份与恢复" class="headerlink" title="全量备份与恢复"></a>全量备份与恢复</h3><p><span class="exturl" data-url="aHR0cHM6Ly9waW5nY2FwLmNvbS9kb2NzLWNuL3YzLjAvaG93LXRvL21haW50YWluL2JhY2t1cC1hbmQtcmVzdG9yZS8=">https://pingcap.com/docs-cn/v3.0/how-to/maintain/backup-and-restore/<i class="fa fa-external-link-alt"></i></span></p>
-<h3 id="增量备份与恢复"><a href="#增量备份与恢复" class="headerlink" title="增量备份与恢复"></a>增量备份与恢复</h3><h4 id="TiDB-Binlog从kafka收集binlog给Drainer"><a href="#TiDB-Binlog从kafka收集binlog给Drainer" class="headerlink" title="TiDB Binlog从kafka收集binlog给Drainer"></a>TiDB Binlog从kafka收集binlog给Drainer</h4><p><span class="exturl" data-url="aHR0cHM6Ly9waW5nY2FwLmNvbS9kb2NzLWNuL3YzLjAvcmVmZXJlbmNlL3RpZGItYmlubG9nLW92ZXJ2aWV3Lw==">https://pingcap.com/docs-cn/v3.0/reference/tidb-binlog-overview/<i class="fa fa-external-link-alt"></i></span></p>
-<h4 id="Reparo从Drainer得到数据恢复到mysql-x2F-tidb"><a href="#Reparo从Drainer得到数据恢复到mysql-x2F-tidb" class="headerlink" title="Reparo从Drainer得到数据恢复到mysql&#x2F;tidb"></a>Reparo从Drainer得到数据恢复到mysql&#x2F;tidb</h4><p><span class="exturl" data-url="aHR0cHM6Ly9waW5nY2FwLmNvbS9kb2NzLWNuL3YzLjAvcmVmZXJlbmNlL3Rvb2xzL3RpZGItYmlubG9nL3JlcGFyby8=">https://pingcap.com/docs-cn/v3.0/reference/tools/tidb-binlog/reparo/<i class="fa fa-external-link-alt"></i></span></p>
-<h4 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h4><p>db-type &#x3D; “file”是为了Reparo做恢复用，和官方文档不同的是要创建<br>drainer_file_drainer-cluster.toml文件，而不是drainer_file_drainer.toml。<br>相关问答：<span class="exturl" data-url="aHR0cHM6Ly9hc2t0dWcuY29tL3QvZHJhaW5lci1maWxlLWRyYWluZXItY2x1c3Rlci10b21sLzQwNi8z">https://asktug.com/t/drainer-file-drainer-cluster-toml/406/3<i class="fa fa-external-link-alt"></i></span></p>
-<h3 id="定位慢查询"><a href="#定位慢查询" class="headerlink" title="定位慢查询"></a>定位慢查询</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select `Query_time`, query from INFORMATION_SCHEMA.`SLOW_QUERY` where `Is_internal`=false order by `Query_time` desc limit 2;</span><br></pre></td></tr></table></figure>
-
-<p>官方doc：<span class="exturl" data-url="aHR0cHM6Ly9waW5nY2FwLmNvbS9kb2NzLWNuL3YzLjAvaG93LXRvL21haW50YWluL2lkZW50aWZ5LXNsb3ctcXVlcmllcy8=">https://pingcap.com/docs-cn/v3.0/how-to/maintain/identify-slow-queries/<i class="fa fa-external-link-alt"></i></span></p>
-<p><a name="531e2324"></a></p>
-<h3 id="扩容缩容"><a href="#扩容缩容" class="headerlink" title="扩容缩容"></a>扩容缩容</h3><p><span class="exturl" data-url="aHR0cHM6Ly9waW5nY2FwLmNvbS9kb2NzLWNuL3YzLjAvaG93LXRvL3NjYWxlL3dpdGgtYW5zaWJsZS8=">https://pingcap.com/docs-cn/v3.0/how-to/scale/with-ansible/<i class="fa fa-external-link-alt"></i></span></p>
-<p><a name="888fb2f9"></a></p>
-<h3 id="与-MySQL-安全特性差异"><a href="#与-MySQL-安全特性差异" class="headerlink" title="与 MySQL 安全特性差异"></a>与 MySQL 安全特性差异</h3><p>仅支持 mysql_native_password 身份验证方案。<br />不支持外部身份验证方式（如 LDAP）。<br />不支持列级别权限设置。<br />不支持使用证书验证身份。#9708<br />不支持密码过期，最后一次密码变更记录以及密码生存期。#9709<br />不支持权限属性 max_questions，max_updated，max_connections 以及 max_user_connections。<br />不支持密码验证。#9741<br />不支持透明数据加密（TDE）。</p>
-<p><a name="DOG0X"></a></p>
-<h3 id="对mysql的支持"><a href="#对mysql的支持" class="headerlink" title="对mysql的支持"></a>对mysql的支持</h3><p>TiDB 目前还不支持触发器、存储过程、自定义函数、外键，除此之外，TiDB 支持绝大部分 MySQL 5.7 的语法。</p>
-<ul>
-<li>支持分布式事物</li>
-<li>TiDB 字符集默认就是 UTF8 而且目前只支持 UTF8，字符串就是 memcomparable 格式的。</li>
-<li>自增id只保证自增和唯一，不保证顺序性(段式分配导致)。</li>
-</ul>
-<br />
-
-<p><a name="gCrcg"></a></p>
-<h3 id="事物"><a href="#事物" class="headerlink" title="事物"></a>事物</h3><p><a name="qA8ds"></a></p>
-<h4 id="事物隔离级别Snapshot-Isolation"><a href="#事物隔离级别Snapshot-Isolation" class="headerlink" title="事物隔离级别Snapshot Isolation"></a>事物隔离级别Snapshot Isolation</h4><p>tidb只支持Snapshot Isolation事物隔离级别，TiDB 实现了快照隔离 (Snapshot Isolation) 级别的一致性。为与 MySQL 保持一致，又称其为“可重复读”。MySQL 可重复读隔离级别的一致性要弱于 Snapshot 隔离级别，也弱于 TiDB 的可重复读隔离级别。<br />另外多线程操作同一行数据，一定会有一个失败，失败的事物默认不会重试，而是以异常的形式抛出，是否重试交给应用来判断，但是也可以开启自动重试，只不过开启之后，重试事务可能会导致更新丢失，因为 TiDB 自动重试机制会把事务第一次执行的所有语句重新执行一遍，当一个事务里的后续语句是否执行取决于前面语句执行结果的时候，自动重试会违反快照隔离，导致更新丢失。<br />doc：<span class="exturl" data-url="aHR0cHM6Ly9waW5nY2FwLmNvbS9kb2NzLWNuL3YzLjAvcmVmZXJlbmNlL3RyYW5zYWN0aW9ucy90cmFuc2FjdGlvbi1pc29sYXRpb24v">https://pingcap.com/docs-cn/v3.0/reference/transactions/transaction-isolation/<i class="fa fa-external-link-alt"></i></span></p>
-<p><a name="MII0H"></a></p>
-<h4 id="乐观锁"><a href="#乐观锁" class="headerlink" title="乐观锁"></a>乐观锁</h4><ul>
-<li>数据操作冲突比较验证不适，会产生大量的重试，如果访问冲突并不十分严重，那么乐观锁模型具备较高的效率。</li>
-<li>在冲突严重的场景下，推荐在系统架构层面解决问题，比如将计数器放在 Redis 中。</li>
-</ul>
-<p><a name="Z2FSN"></a></p>
-<h4 id="事务大小限制"><a href="#事务大小限制" class="headerlink" title="事务大小限制"></a>事务大小限制</h4><ul>
-<li>单个事务包含的 SQL 语句不超过 5000 条（默认）</li>
-<li>单条 KV entry 不超过 6MB</li>
-<li>KV entry 的总条数不超过 30W</li>
-<li>KV entry 的总大小不超过 100MB</li>
-</ul>
-<p>建议无论是 Insert，Update 还是 Delete 语句，都通过分 Batch 或者是加 Limit 的方式限制。<br />具体罗亿乔之前的sql技术分享。</p>
-<p><a name="NTzxl"></a></p>
-<h4 id="支持悲观锁，但是官方不建议生产环境使用，因为在官方将其定义为实验性的特性"><a href="#支持悲观锁，但是官方不建议生产环境使用，因为在官方将其定义为实验性的特性" class="headerlink" title="支持悲观锁，但是官方不建议生产环境使用，因为在官方将其定义为实验性的特性"></a>支持悲观锁，但是官方不建议生产环境使用，因为在官方将其定义为实验性的特性</h4><ul>
-<li>不支持 GAP Lock 和 Next Key Lock 在悲观事务内通过范围条件来更新多行数据的时候，其他的事务可以在这个范围内插入数据而不会被阻塞。<br /></li>
-<li>不支持 SELECT LOCK IN SHARE MODE。</li>
-</ul>
-<p><a name="IPbGO"></a></p>
-<h4 id="事物限制"><a href="#事物限制" class="headerlink" title="事物限制"></a>事物限制</h4><ul>
-<li>小事物比单机mysql性能要低，以为有网络参与，用显式事务代替 <code>auto_commit</code>，可优化该性能。</li>
-<li>事物惰性检查，执行insert语句，不在 <code>INSERT</code> 语句执行时进行唯一约束的检查，而在事务提交时进行唯一约束的检查。<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE T (I INT KEY);</span><br><span class="line">INSERT INTO T VALUES (1);</span><br><span class="line">BEGIN;</span><br><span class="line">INSERT INTO T VALUES (1); -- MySQL 返回错误；TiDB 返回成功</span><br><span class="line">INSERT INTO T VALUES (2);</span><br><span class="line">COMMIT; -- MySQL 提交成功；TiDB 返回错误，事务回滚</span><br><span class="line">SELECT * FROM T; -- MySQL 返回 1 2；TiDB 返回 1</span><br></pre></td></tr></table></figure></li>
-</ul>
-<p>这样做的目的是为了减少网络开销。</p>
-<p><a name="UX5Mw"></a></p>
-<h4 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h4><p>总的来说事物这方面的最贱实践是：乐观锁+事物失败应用级别处理+分布式锁加强，不建议开启事物失败重试机制（除非事物之间没有任何关系）。事物结束之后(commit之后)要判断返回值是否成功.</p>
-<p><a name="BuZyL"></a></p>
-<h3 id="存在数据热点问题"><a href="#存在数据热点问题" class="headerlink" title="存在数据热点问题"></a>存在数据热点问题</h3><p>相同的表数据会优先聚集到TiKV节点，如果某个表的数据比较热，那么TiKV很有可能成为系统的瓶颈，尤其是在很小范围的数据频繁操作，某个region会成为系统的热点。<br /><span class="exturl" data-url="aHR0cHM6Ly9waW5nY2FwLmNvbS9ibG9nLWNuL3RpZGItYmVzdC1wcmFjdGljZS8=">https://pingcap.com/blog-cn/tidb-best-practice/<i class="fa fa-external-link-alt"></i></span><br />解决之道（通过设置 <code>SHARD_ROW_ID_BITS</code> 来适度分解 Region 分片）：<span class="exturl" data-url="aHR0cHM6Ly9waW5nY2FwLmNvbS9kb2NzLWNuL3YzLjAvcmVmZXJlbmNlL2NvbmZpZ3VyYXRpb24vdGlkYi1zZXJ2ZXIvdGlkYi1zcGVjaWZpYy12YXJpYWJsZXMvI3NoYXJkLXJvdy1pZC1iaXRz">https://pingcap.com/docs-cn/v3.0/reference/configuration/tidb-server/tidb-specific-variables/#shard-row-id-bits<i class="fa fa-external-link-alt"></i></span><br />热点问题官方FAQ：<span class="exturl" data-url="aHR0cHM6Ly9hc2t0dWcuY29tL3QvdGlkYi8zNTg=">https://asktug.com/t/tidb/358<i class="fa fa-external-link-alt"></i></span></p>
-<p><a name="IOKxo"></a></p>
-<h3 id="GC-垃圾回收"><a href="#GC-垃圾回收" class="headerlink" title="GC 垃圾回收"></a>GC 垃圾回收</h3><p>tidb使用MVCC关林数据的版本，老版本的数据通过垃圾收集器进行删除，时间默认是10分钟执行一次回收，回收线程和频率可以在系统表设置。</p>
-<p><a name="KKFlJ"></a></p>
-<h3 id="TiDB-的最佳适用场景"><a href="#TiDB-的最佳适用场景" class="headerlink" title="TiDB 的最佳适用场景"></a>TiDB 的最佳适用场景</h3><ul>
-<li>数据量大，单机保存不下</li>
-<li>不希望做 Sharding 或者懒得做 Sharding</li>
-<li>访问模式上没有明显的热点</li>
-<li>需要事务、需要强一致、需要灾备</li>
-</ul>
-<p><a name="mlgPE"></a></p>
-<h3 id="在单台tidb做sybench"><a href="#在单台tidb做sybench" class="headerlink" title="在单台tidb做sybench"></a>在单台tidb做sybench</h3><p>参考官方doc:<span class="exturl" data-url="aHR0cHM6Ly9waW5nY2FwLmNvbS9kb2NzLWNuL3YzLjAvYmVuY2htYXJrL2hvdy10by1ydW4tc3lzYmVuY2gv">https://pingcap.com/docs-cn/v3.0/benchmark/how-to-run-sysbench/<i class="fa fa-external-link-alt"></i></span></p>
-<p><a name="0f4b6559"></a></p>
-<h4 id="坑-导入数据耗时较长，导入数据的命令要使用nohu执行"><a href="#坑-导入数据耗时较长，导入数据的命令要使用nohu执行" class="headerlink" title="[坑]导入数据耗时较长，导入数据的命令要使用nohu执行"></a>[坑]导入数据耗时较长，导入数据的命令要使用nohu执行</h4><p>官方doc导入数据的命令会执行很长一段时间，当xshell超时的时候，我们没法监控命令的执行日志，因此要使用nohup：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">nohup sysbench --config-file=config oltp_point_select --tables=32 --table-size=1000000 prepare 2&gt;&amp;1 &amp;</span><br><span class="line">nohup sysbench --config-file=config oltp_point_select --tables=32 --table-size=1000000 run 2&gt;&amp;1 &amp;</span><br><span class="line">nohup sysbench --config-file=config oltp_update_index --tables=32 --table-size=1000000 run 2&gt;&amp;1 &amp;</span><br></pre></td></tr></table></figure>
-
-
-
-<ul>
-<li>样本数据<ul>
-<li>32张表、每张表100万条数据，每张表大约1M数据。</li>
-</ul>
-</li>
-<li>集群规模</li>
-</ul>
-<p>node1 192.168.138.18  PD1, TiDB1   4c16G 200GHHD<br />node2 192.168.138.19  PD2, TiDB2   4c16G 200GHHD<br />node3 192.168.138.21  PD3              2c16G 200GHHD<br />node4 192.168.138.22  TiKV1           2c16G 200GHHD<br />node5 192.168.138.23  TiKV2           2c16G 200GHHD<br />node6 192.168.138.24  TiKV3           2c16G 200GHHD<br /> <br />sysbench所有测试结果详情在[192.168.138.18]: vi &#x2F;home&#x2F;tidb&#x2F;tidb-bench&#x2F;nohup.out<br><a name="oltp-point-select"></a><br>###<br><a name="FMg4L"></a></p>
-<h4 id="oltp-point-select"><a href="#oltp-point-select" class="headerlink" title="oltp_point_select"></a>oltp_point_select</h4><ul>
-<li>nohup sysbench –config-file&#x3D;config oltp_point_select –tables&#x3D;32 –table-size&#x3D;1000000 prepare 2&gt;&amp;1 &amp;</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>threads</th>
-<th>read</th>
-<th>write</th>
-<th>tps</th>
-<th>qps</th>
-<th>total time</th>
-<th>min</th>
-<th>avg</th>
-<th>max</th>
-<th>95th</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>8</td>
-<td>5937332</td>
-<td>0</td>
-<td>5937332 (9895.26 per sec.)</td>
-<td>5937332 (9895.26 per sec.)</td>
-<td>600.0156s</td>
-<td>0.40</td>
-<td>0.81</td>
-<td>223.17</td>
-<td>1.03</td>
-</tr>
-<tr>
-<td>16</td>
-<td>9396775</td>
-<td>0</td>
-<td>9396775 (15660.86 per sec.)</td>
-<td>9396775 (15660.86 per sec.)</td>
-<td>600.0148</td>
-<td>0.39</td>
-<td>1.02</td>
-<td>177.08</td>
-<td>1.52</td>
-</tr>
-<tr>
-<td>32</td>
-<td>12217819</td>
-<td>0</td>
-<td>12217819 (20362.72 per sec.)</td>
-<td>12217819 (20362.72 per sec.)</td>
-<td>600.0075s</td>
-<td>0.39</td>
-<td>1.57</td>
-<td>119.33</td>
-<td>3.75</td>
-</tr>
-<tr>
-<td>64</td>
-<td>13085444</td>
-<td>0</td>
-<td>13085444 (21808.49 per sec.)</td>
-<td>13085444 (21808.49 per sec.)</td>
-<td>600.0142s</td>
-<td>0.41</td>
-<td>2.93</td>
-<td>270.10</td>
-<td>8.43</td>
-</tr>
-<tr>
-<td>128</td>
-<td>13680931</td>
-<td>0</td>
-<td>13680931 (22800.08 per sec.)</td>
-<td>13680931 (22800.08 per sec.)</td>
-<td>600.0370s</td>
-<td>0.43</td>
-<td>5.61</td>
-<td>1033.14</td>
-<td>13.70</td>
-</tr>
-</tbody></table>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/png/186520/1564482895735-883dcc49-2e4a-422b-be32-bd7ffa706d08.png#align=left&display=inline&height=400&name=oltp_point_select.png&originHeight=400&originWidth=1312&size=33302&status=done&width=1312" alt="oltp_point_select.png"></p>
-<p>95th :<span class="exturl" data-url="aHR0cHM6Ly93d3cuemhpaHUuY29tL3F1ZXN0aW9uLzIwNTc1Mjkx">https://www.zhihu.com/question/20575291<i class="fa fa-external-link-alt"></i></span></p>
-<p><a name="tHki6"></a></p>
-<h4 id="oltp-update-index"><a href="#oltp-update-index" class="headerlink" title="oltp_update_index"></a>oltp_update_index</h4><ul>
-<li>nohup sysbench –config-file&#x3D;config oltp_update_index –tables&#x3D;32 –table-size&#x3D;10000000 run 2&gt;&amp;1 &amp;</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>threads</th>
-<th>read</th>
-<th>write</th>
-<th>tps</th>
-<th>qps</th>
-<th>total time</th>
-<th>min</th>
-<th>avg</th>
-<th>max</th>
-<th>95th</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>8</td>
-<td>0</td>
-<td>149902</td>
-<td>149902 (249.82 per sec.)</td>
-<td>149902 (249.82 per sec.)</td>
-<td>600.0418s</td>
-<td>10.26</td>
-<td>32.02</td>
-<td>475.79</td>
-<td>46.63</td>
-</tr>
-<tr>
-<td>16</td>
-<td>0</td>
-<td>213850</td>
-<td>213850 (356.39 per sec.)</td>
-<td>213850 (356.39 per sec.)</td>
-<td>600.0444s</td>
-<td>9.30</td>
-<td>44.89</td>
-<td>659.85</td>
-<td>142.39</td>
-</tr>
-<tr>
-<td>32</td>
-<td>0</td>
-<td>483912</td>
-<td>483912 (806.47 per sec.)</td>
-<td>483912 (806.47 per sec.)</td>
-<td>600.0370s</td>
-<td>10.34</td>
-<td>39.68</td>
-<td>689.26</td>
-<td>54.83</td>
-</tr>
-<tr>
-<td>64</td>
-<td>0</td>
-<td>880168</td>
-<td>880168 (1466.72 per sec.)</td>
-<td>880168 (1466.72 per sec.)</td>
-<td>600.0897s</td>
-<td>10.60</td>
-<td>43.63</td>
-<td>1109.14</td>
-<td>58.92</td>
-</tr>
-<tr>
-<td>128</td>
-<td>0</td>
-<td>1344814</td>
-<td>1344814 (2241.17 per sec.)</td>
-<td>1344814 (2241.17 per sec.)</td>
-<td>600.0473s</td>
-<td>9.90</td>
-<td>57.11</td>
-<td>8177.34</td>
-<td>75.82</td>
-</tr>
-<tr>
-<td>256</td>
-<td>0</td>
-<td>1882603</td>
-<td>1882603 (3137.16 per sec.)</td>
-<td>1882603 (3137.16 per sec.)</td>
-<td>600.0950s</td>
-<td>11.88</td>
-<td>81.59</td>
-<td>1418.85</td>
-<td>211.60</td>
-</tr>
-</tbody></table>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/png/186520/1564483495647-455b41ad-0547-47dd-aa64-439eba7858e7.png#align=left&display=inline&height=400&name=oltp_update_index.png&originHeight=400&originWidth=1312&size=35286&status=done&width=1312" alt="oltp_update_index.png"><br><a name="c1OR4"></a></p>
-<h4 id="oltp-read-only"><a href="#oltp-read-only" class="headerlink" title="oltp_read_only"></a>oltp_read_only</h4><ul>
-<li>nohup sysbench –config-file&#x3D;config oltp_read_only –tables&#x3D;32 –table-size&#x3D;10000000 run 2&gt;&amp;1 &amp;</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>threads</th>
-<th>total</th>
-<th>tps</th>
-<th>qps</th>
-<th>total time</th>
-<th>min</th>
-<th>avg</th>
-<th>max</th>
-<th>95th</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>8</td>
-<td>6204464</td>
-<td>387779 (646.28 per sec.)</td>
-<td>6204464 (10340.44 per sec.)</td>
-<td>600.0174s</td>
-<td>8.88</td>
-<td>12.38</td>
-<td>427.50</td>
-<td>16.41</td>
-</tr>
-<tr>
-<td>16</td>
-<td>9270576</td>
-<td>579411 (965.65 per sec.)</td>
-<td>9270576 (15450.37 per sec.)</td>
-<td>600.0211s</td>
-<td>10.03</td>
-<td>16.57</td>
-<td>1203.28</td>
-<td>26.20</td>
-</tr>
-<tr>
-<td>32</td>
-<td>11644768</td>
-<td>727798 (1212.92 per sec.)</td>
-<td>11644768 (19406.73 per sec.)</td>
-<td>600.0359s</td>
-<td>9.18</td>
-<td>26.38</td>
-<td>1132.08</td>
-<td>46.63</td>
-</tr>
-<tr>
-<td>64</td>
-<td>12632864</td>
-<td>789554 (1315.79 per sec.)</td>
-<td>12632864 (21052.63 per sec.)</td>
-<td>600.0590s</td>
-<td>11.66</td>
-<td>48.63</td>
-<td>423.32</td>
-<td>84.47</td>
-</tr>
-<tr>
-<td>128</td>
-<td>12792912</td>
-<td>799557 (1332.37 per sec.)</td>
-<td>12792912 (21317.86 per sec.)</td>
-<td>600.1013s</td>
-<td>10.65</td>
-<td>96.06</td>
-<td>3153.57</td>
-<td>150.29</td>
-</tr>
-</tbody></table>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/png/186520/1564487404538-aa194ea1-8f25-411f-adc8-a92502c2a8e0.png#align=left&display=inline&height=400&name=oltp_read_only.png&originHeight=400&originWidth=1312&size=34084&status=done&width=1312" alt="oltp_read_only.png"><br><a name="fqVte"></a><br>#<br><a name="xBFtr"></a></p>
-<h3 id="TPC-C测试"><a href="#TPC-C测试" class="headerlink" title="TPC-C测试"></a>TPC-C测试</h3><p><span class="exturl" data-url="aHR0cHM6Ly9waW5nY2FwLmNvbS9kb2NzLWNuL3YzLjAvYmVuY2htYXJrL2hvdy10by1ydW4tdHBjYy8=">https://pingcap.com/docs-cn/v3.0/benchmark/how-to-run-tpcc/<i class="fa fa-external-link-alt"></i></span><br />TPC-C 是一个对 OLTP（联机交易处理）系统进行测试的规范，使用一个商品销售模型对 OLTP 系统进行测试。<br />TPC-C 使用 tpmC 值（Transactions per Minute）来衡量系统最大有效吞吐量 (MQTh, Max Qualified Throughput)，其中 Transactions 以 NewOrder Transaction 为准，即最终衡量单位为每分钟处理的新订单数。</p>
-<p><a name="feB7I"></a></p>
-<h4 id="BenchmarkSQL-配置"><a href="#BenchmarkSQL-配置" class="headerlink" title="BenchmarkSQL 配置"></a>BenchmarkSQL 配置</h4><p>修改 <code>benchmarksql/run/props.mysql</code></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">conn=jdbc:mysql://&#123;HAPROXY-HOST&#125;:&#123;HAPROXY-PORT&#125;/tpcc?useSSL=false&amp;useServerPrepStmts=true&amp;useConfigs=maxPerformance</span><br><span class="line">warehouses=1000 # 使用 1000 个 warehouse</span><br><span class="line">terminals=500   # 使用 500 个终端</span><br><span class="line">loadWorkers=32  # 导入数据的并发数</span><br></pre></td></tr></table></figure>
-<p><a name="3blds"></a></p>
-<h4 id="初始化数据库"><a href="#初始化数据库" class="headerlink" title="初始化数据库"></a>初始化数据库</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">create database tpcc</span><br></pre></td></tr></table></figure>
-
-<p>之后在 shell 中运行 BenchmarkSQL 建表脚本：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd run</span><br><span class="line">nohup  ./runSQL.sh props.mysql sql.mysql/tableCreates.sql  2&gt;&amp;1 &amp;</span><br><span class="line">nohup ./runSQL.sh props.mysql sql.mysql/indexCreates.sql 2&gt;&amp;1 &amp;</span><br></pre></td></tr></table></figure>
-
-<p>运行导入数据脚本：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nohup ./runLoader.sh props.mysql 2&gt;&amp;1 &amp;</span><br></pre></td></tr></table></figure>
-<p>这个过程时间会有点长（我们的测试环境集群这条命令运行了6个小时，等的花儿都谢了。。。）。<br />验证导入的数据：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nohup  ./runSQL.sh props.mysql  sql.common/test.sql 2&gt;&amp;1 &amp;</span><br></pre></td></tr></table></figure>
-
-<p><a name="lc6vK"></a></p>
-<h4 id="运行测试"><a href="#运行测试" class="headerlink" title="运行测试"></a>运行测试</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nohup ./runBenchmark.sh props.mysql &amp;&gt; test.log 2&gt;&amp;1 &amp;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p><a name="waCKQ"></a></p>
-<h4 id="测试结果"><a href="#测试结果" class="headerlink" title="测试结果"></a>测试结果</h4><p>[192.168.138.18]  vi &#x2F;home&#x2F;tidb&#x2F;benchmarksql&#x2F;run&#x2F;test.log</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/png/186520/1564626255512-417c0a26-cd7a-4af9-a6c3-ae48919b56c8.png#align=left&display=inline&height=92&name=tpc-c-result.png&originHeight=92&originWidth=659&size=9234&status=done&width=659" alt="tpc-c-result.png"></p>
-<p>系统每分钟的吞吐量是在4399.16(官方机器配置结果是：77373.25)，即集群每分钟能承载的订单数量是4399个订单。</p>
-<p><a name="FUbxC"></a></p>
-<h3 id="其他企业在tidb的实践与分享"><a href="#其他企业在tidb的实践与分享" class="headerlink" title="其他企业在tidb的实践与分享"></a>其他企业在tidb的实践与分享</h3><p><span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3BpbmdjYXAvcHJlc2VudGF0aW9ucw==">https://github.com/pingcap/presentations<i class="fa fa-external-link-alt"></i></span></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
     <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2019/07/16/elasticsearch/elasticsearch_center/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -844,7 +281,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2025-02-09 05:47:46" itemprop="dateModified" datetime="2025-02-09T05:47:46+00:00">2025-02-09</time>
+      <time title="Modified: 2025-02-09 06:13:40" itemprop="dateModified" datetime="2025-02-09T06:13:40+00:00">2025-02-09</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -943,7 +380,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2025-02-09 05:47:47" itemprop="dateModified" datetime="2025-02-09T05:47:47+00:00">2025-02-09</time>
+      <time title="Modified: 2025-02-09 06:13:41" itemprop="dateModified" datetime="2025-02-09T06:13:41+00:00">2025-02-09</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1042,7 +479,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2025-02-09 05:47:47" itemprop="dateModified" datetime="2025-02-09T05:47:47+00:00">2025-02-09</time>
+      <time title="Modified: 2025-02-09 06:13:41" itemprop="dateModified" datetime="2025-02-09T06:13:41+00:00">2025-02-09</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1141,7 +578,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2025-02-09 05:47:47" itemprop="dateModified" datetime="2025-02-09T05:47:47+00:00">2025-02-09</time>
+      <time title="Modified: 2025-02-09 06:13:41" itemprop="dateModified" datetime="2025-02-09T06:13:41+00:00">2025-02-09</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1240,7 +677,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2025-02-09 05:47:47" itemprop="dateModified" datetime="2025-02-09T05:47:47+00:00">2025-02-09</time>
+      <time title="Modified: 2025-02-09 06:13:41" itemprop="dateModified" datetime="2025-02-09T06:13:41+00:00">2025-02-09</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1339,7 +776,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2025-02-09 05:47:46" itemprop="dateModified" datetime="2025-02-09T05:47:46+00:00">2025-02-09</time>
+      <time title="Modified: 2025-02-09 06:13:41" itemprop="dateModified" datetime="2025-02-09T06:13:41+00:00">2025-02-09</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1438,7 +875,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2025-02-09 05:47:47" itemprop="dateModified" datetime="2025-02-09T05:47:47+00:00">2025-02-09</time>
+      <time title="Modified: 2025-02-09 06:13:41" itemprop="dateModified" datetime="2025-02-09T06:13:41+00:00">2025-02-09</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1538,7 +975,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2025-02-09 05:47:46" itemprop="dateModified" datetime="2025-02-09T05:47:46+00:00">2025-02-09</time>
+      <time title="Modified: 2025-02-09 06:13:41" itemprop="dateModified" datetime="2025-02-09T06:13:41+00:00">2025-02-09</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1638,7 +1075,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2025-02-09 05:47:46" itemprop="dateModified" datetime="2025-02-09T05:47:46+00:00">2025-02-09</time>
+      <time title="Modified: 2025-02-09 06:13:41" itemprop="dateModified" datetime="2025-02-09T06:13:41+00:00">2025-02-09</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1671,6 +1108,105 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2019/05/19/jvm%E5%8E%9F%E7%90%86%EF%BC%8845%EF%BC%89%E5%AE%89%E5%85%A8%E7%82%B9%E4%B8%8E%E5%AE%89%E5%85%A8%E5%8C%BA%E5%9F%9F%E8%AF%A6%E8%A7%A3/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://ceaser.wang/2019/05/18/jvm%E5%8E%9F%E7%90%86%EF%BC%8844%EF%BC%89%E9%98%88%E5%80%BC%E5%92%8C%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8%E7%B1%BB%E5%9E%8B%E5%AF%B9%E4%BA%8E%E5%AF%B9%E8%B1%A1%E5%88%86%E9%85%8D%E7%9A%84%E5%BD%B1%E5%93%8D%E5%AE%9E%E6%88%98%E5%88%86%E6%9E%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/../0xcc/index/Uchiha.jpg">
+      <meta itemprop="name" content="CeaserWang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 南贺神社">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2019/05/18/jvm%E5%8E%9F%E7%90%86%EF%BC%8844%EF%BC%89%E9%98%88%E5%80%BC%E5%92%8C%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8%E7%B1%BB%E5%9E%8B%E5%AF%B9%E4%BA%8E%E5%AF%B9%E8%B1%A1%E5%88%86%E9%85%8D%E7%9A%84%E5%BD%B1%E5%93%8D%E5%AE%9E%E6%88%98%E5%88%86%E6%9E%90/" class="post-title-link" itemprop="url">jvm原理（44）阈值和垃圾收集器类型对于对象分配的影响实战分析</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2019-05-18 14:27:24" itemprop="dateCreated datePublished" datetime="2019-05-18T14:27:24+00:00">2019-05-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2025-02-09 06:13:41" itemprop="dateModified" datetime="2025-02-09T06:13:41+00:00">2025-02-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/jvm/" itemprop="url" rel="index"><span itemprop="name">jvm</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/2019/05/18/jvm%E5%8E%9F%E7%90%86%EF%BC%8844%EF%BC%89%E9%98%88%E5%80%BC%E5%92%8C%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8%E7%B1%BB%E5%9E%8B%E5%AF%B9%E4%BA%8E%E5%AF%B9%E8%B1%A1%E5%88%86%E9%85%8D%E7%9A%84%E5%BD%B1%E5%93%8D%E5%AE%9E%E6%88%98%E5%88%86%E6%9E%90/" class="post-meta-item leancloud_visitors" data-flag-title="jvm原理（44）阈值和垃圾收集器类型对于对象分配的影响实战分析" title="Views">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h3 id="命令介绍："><a href="#命令介绍：" class="headerlink" title="命令介绍："></a>命令介绍：</h3><p>java -XX:+PrintCommandLineFlags -version</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/05/18/jvm%E5%8E%9F%E7%90%86%EF%BC%8844%EF%BC%89%E9%98%88%E5%80%BC%E5%92%8C%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8%E7%B1%BB%E5%9E%8B%E5%AF%B9%E4%BA%8E%E5%AF%B9%E8%B1%A1%E5%88%86%E9%85%8D%E7%9A%84%E5%BD%B1%E5%93%8D%E5%AE%9E%E6%88%98%E5%88%86%E6%9E%90/#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>

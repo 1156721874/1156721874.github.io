@@ -349,12 +349,12 @@ TMP_FIEL是输出路径，hive是基于mr的上层框架，mr必须要有一个�
 **SQL执行顺序**
 一个SQL大致分为以下7部分，按顺序执行
 
-(5)SELECT (6)DISTINCT <select list>
-(1)FROM <table source>
-(2)WHERE <condition>
-(3)GROUP BY <group by list>
-(4)HAVING <having condition>
-(7) ORDER BY <order by list>
+(5)SELECT (6)DISTINCT [select list]
+(1)FROM [table source]
+(2)WHERE [condition]
+(3)GROUP BY [group by list]
+(4)HAVING [having condition]
+(7) ORDER BY [order by list]
 **Operators对应SQL**
 ![这里写图片描述](2018/10/04/hive原理与源码分析-语法分析器和语义分析器（二）/20170507142034604.png)
 **Operator过程**

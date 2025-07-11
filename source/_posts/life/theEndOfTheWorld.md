@@ -3,6 +3,11 @@ title: 世界的尽头
 date: 2024-04-20 15:06:45
 tags: [2024]
 categories: life
+password: helloworld
+abstract: 该文章已加密, 请输入密码查看。
+message: 该文章已加密, 请输入密码查看。
+wrong_pass_message: 密码不正确，请重新输入！
+wrong_hash_message: 文章不能被校验, 不过您还是能看看解密后的内容！
 ---
 
 ![05b26de8a16f8b0794d598dd397f3643.jpg](https://s2.loli.net/2024/04/24/w6KByrsNFHIL9fq.jpg)
